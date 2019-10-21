@@ -1,5 +1,4 @@
-import 'package:arrancando/main_scaffold.dart';
-import 'package:arrancando/main_scaffold_weird.dart';
+import 'package:arrancando/home/index.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -11,9 +10,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Arrancando',
-      theme: ThemeData(fontFamily: 'Nunito'),
+      theme: ThemeData(
+        fontFamily: 'Nunito',
+        primaryColor: Color(0xffd12811),
+        accentColor: Color(0xffeab01e),
+      ),
       home: MainScaffold(),
-      // home: MainScaffoldWeird(),
     );
   }
 }

@@ -28,9 +28,19 @@ class _MainAppBarState extends State<MainAppBar> {
       ),
       floating: true,
       snap: false,
-      leading: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.menu),
+      leading: Material(
+        child: InkWell(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              CircleAvatar(
+                radius: 20,
+              ),
+            ],
+          ),
+          onTap: () {},
+        ),
       ),
       backgroundColor: Colors.transparent,
       title: _showSearch
