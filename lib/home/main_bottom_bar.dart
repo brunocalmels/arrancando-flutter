@@ -49,7 +49,6 @@ class MainBottomBar extends StatelessWidget {
                 child: Text(
                   item.text,
                   overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                   ),

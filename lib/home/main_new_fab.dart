@@ -32,7 +32,7 @@ class _MainNewFabState extends State<MainNewFab>
               opacity: _showAll ? 1 : 0,
               child: Container(
                 width: _showAll ? 200 : 0,
-                height: _showAll ? 115 : 0,
+                height: _showAll ? 90 : 0,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -79,10 +79,18 @@ class _MainNewFabState extends State<MainNewFab>
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FloatingActionButton(
-                onPressed: _toggleShow,
-                child: Icon(
-                  _showAll ? Icons.close : Icons.add,
+              Container(
+                width: 40,
+                height: 40,
+                child: FittedBox(
+                  child: FloatingActionButton(
+                    backgroundColor:
+                        _showAll ? Theme.of(context).primaryColor : null,
+                    onPressed: _toggleShow,
+                    child: Icon(
+                      _showAll ? Icons.close : Icons.add,
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -3,7 +3,7 @@ import 'package:arrancando/home/pages/_home_page.dart';
 import 'package:arrancando/home/pages/_poi_page.dart';
 import 'package:arrancando/home/pages/_publicaciones_page.dart';
 import 'package:arrancando/home/pages/_recetas_page.dart';
-import 'package:arrancando/home/main_app_bar.dart';
+import 'package:arrancando/home/app_bar/index.dart';
 import 'package:arrancando/home/main_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +38,9 @@ class _MainScaffoldState extends State<MainScaffold> {
         body: Container(
           child: CustomScrollView(
             slivers: <Widget>[
-              MainAppBar(),
+              MainAppBar(
+                activeItem: _activeItem,
+              ),
               SliverFillRemaining(
                 child: _getPage(_activeItem),
               ),
