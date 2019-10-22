@@ -1,10 +1,11 @@
-import 'package:arrancando/home/main_new_fab.dart';
-import 'package:arrancando/home/pages/_home_page.dart';
-import 'package:arrancando/home/pages/_poi_page.dart';
-import 'package:arrancando/home/pages/_publicaciones_page.dart';
-import 'package:arrancando/home/pages/_recetas_page.dart';
-import 'package:arrancando/home/app_bar/index.dart';
-import 'package:arrancando/home/main_bottom_bar.dart';
+import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/views/home/main_new_fab.dart';
+import 'package:arrancando/views/home/pages/_home_page.dart';
+import 'package:arrancando/views/home/pages/_poi_page.dart';
+import 'package:arrancando/views/home/pages/_publicaciones_page.dart';
+import 'package:arrancando/views/home/pages/_recetas_page.dart';
+import 'package:arrancando/views/home/app_bar/index.dart';
+import 'package:arrancando/views/home/main_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class MainScaffold extends StatefulWidget {
@@ -41,8 +42,14 @@ class _MainScaffoldState extends State<MainScaffold> {
               MainAppBar(
                 activeItem: _activeItem,
               ),
-              SliverFillRemaining(
-                child: _getPage(_activeItem),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Container(
+                      child: _getPage(_activeItem),
+                    )
+                  ],
+                ),
               ),
             ],
           ),

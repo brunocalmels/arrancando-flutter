@@ -1,4 +1,4 @@
-import 'package:arrancando/home/app_bar/_dialog_category_select.dart';
+import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:flutter/material.dart';
 
 class CategoriesChip extends StatefulWidget {

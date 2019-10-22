@@ -1,4 +1,4 @@
-import 'package:arrancando/home/index.dart';
+import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());

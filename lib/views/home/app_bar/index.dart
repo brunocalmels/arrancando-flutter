@@ -1,5 +1,5 @@
-import 'package:arrancando/home/app_bar/_categories_chip.dart';
-import 'package:arrancando/home/app_bar/_search_bar.dart';
+import 'package:arrancando/views/home/app_bar/_categories_chip.dart';
+import 'package:arrancando/views/home/app_bar/_search_bar.dart';
 import 'package:flutter/material.dart';
 
 class MainAppBar extends StatefulWidget {

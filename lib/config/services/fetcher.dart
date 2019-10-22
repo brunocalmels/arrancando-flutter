@@ -1,23 +1,44 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/my_globals.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Fetcher {
-  static Future get({
+  static _getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString("token");
+    return token;
+  }
+
+  static Future<ResponseObject> get({
     @required String url,
     bool throwError = false,
-  }) {
+  }) async {
     try {
-      return http.get(
-        url,
+      String token = await _getToken();
+      if (token == null) throw "Token null";
+
+      http.Response resp = await http.get(
+        "${MyGlobals.SERVER_URL}$url",
         headers: {
-          "Authorization": "",
+          "Authorization": token,
           "Content-type": "application/json",
         },
       );
+
+      if (resp.statusCode < 400) {
+        return ResponseObject(
+          body: resp.body,
+          status: resp.statusCode,
+        );
+      } else {
+        throw resp;
+      }
     } catch (e) {
-      print(e);
+      if (e is String) print(e);
+      if (e is http.Response) print(e.body);
       if (throwError)
         throw e;
       else
@@ -25,23 +46,39 @@ abstract class Fetcher {
     }
   }
 
-  static Future post({
+  static Future<ResponseObject> post({
     @required String url,
     @required dynamic body,
     bool throwError = false,
     bool unauthenticated = false,
-  }) {
+  }) async {
     try {
-      return http.post(
-        url,
+      String token = "";
+      if (!unauthenticated) {
+        token = await _getToken();
+        if (token == null) throw "Token null";
+      }
+
+      http.Response resp = await http.post(
+        "${MyGlobals.SERVER_URL}$url",
         headers: {
-          "Authorization": unauthenticated ? "" : "",
+          "Authorization": unauthenticated ? "" : token,
           "Content-type": "application/json",
         },
         body: json.encode(body),
       );
+
+      if (resp.statusCode < 400) {
+        return ResponseObject(
+          body: resp.body,
+          status: resp.statusCode,
+        );
+      } else {
+        throw resp;
+      }
     } catch (e) {
-      print(e);
+      if (e is String) print(e);
+      if (e is http.Response) print(e.body);
       if (throwError)
         throw e;
       else
@@ -49,22 +86,35 @@ abstract class Fetcher {
     }
   }
 
-  static Future put({
+  static Future<ResponseObject> put({
     @required String url,
     @required dynamic body,
     bool throwError = false,
-  }) {
+  }) async {
     try {
-      return http.put(
-        url,
+      String token = await _getToken();
+      if (token == null) throw "Token null";
+
+      http.Response resp = await http.put(
+        "${MyGlobals.SERVER_URL}$url",
         headers: {
-          "Authorization": "",
+          "Authorization": token,
           "Content-type": "application/json",
         },
         body: json.encode(body),
       );
+
+      if (resp.statusCode < 400) {
+        return ResponseObject(
+          body: resp.body,
+          status: resp.statusCode,
+        );
+      } else {
+        throw resp;
+      }
     } catch (e) {
-      print(e);
+      if (e is String) print(e);
+      if (e is http.Response) print(e.body);
       if (throwError)
         throw e;
       else
@@ -72,25 +122,48 @@ abstract class Fetcher {
     }
   }
 
-  static Future destroy({
+  static Future<ResponseObject> destroy({
     @required String url,
     @required dynamic body,
     bool throwError = false,
-  }) {
+  }) async {
     try {
-      return http.delete(
-        url,
+      String token = await _getToken();
+      if (token == null) throw "Token null";
+
+      http.Response resp = await http.delete(
+        "${MyGlobals.SERVER_URL}$url",
         headers: {
-          "Authorization": "",
+          "Authorization": token,
           "Content-type": "application/json",
         },
       );
+
+      if (resp.statusCode < 400) {
+        return ResponseObject(
+          body: resp.body,
+          status: resp.statusCode,
+        );
+      } else {
+        throw resp;
+      }
     } catch (e) {
-      print(e);
+      if (e is String) print(e);
+      if (e is http.Response) print(e.body);
       if (throwError)
         throw e;
       else
         return null;
     }
   }
+}
+
+class ResponseObject {
+  final String body;
+  final int status;
+
+  ResponseObject({
+    this.body,
+    this.status,
+  });
 }
