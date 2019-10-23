@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:arrancando/config/models/publicacion.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -25,9 +26,11 @@ class PublicacionesPage extends StatelessWidget {
                     .map(
                       (p) => {
                         "id": p['id'],
+                        "created_at": p['created_at'],
                         "titulo": p['nombre'],
-                        "cuerpo": (p['nombre'] + " ") * 15,
-                        "imagenes": [p["icon"]],
+                        "cuerpo":
+                            (p['nombre'] + " ") * (Random().nextInt(50) + 30),
+                        "imagenes": [p["get_icono"]],
                       },
                     )
                     // REMOVE THIS PART

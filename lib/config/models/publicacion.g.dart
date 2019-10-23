@@ -9,6 +9,12 @@ part of 'publicacion.dart';
 Publicacion _$PublicacionFromJson(Map<String, dynamic> json) {
   return Publicacion(
     json['id'] as int,
+    json['created_at'] == null
+        ? null
+        : DateTime.parse(json['created_at'] as String),
+    json['updated_at'] == null
+        ? null
+        : DateTime.parse(json['updated_at'] as String),
     json['titulo'] as String,
     json['cuerpo'] as String,
     json['ciudad_id'] as int,
@@ -19,6 +25,8 @@ Publicacion _$PublicacionFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$PublicacionToJson(Publicacion instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
       'titulo': instance.titulo,
       'cuerpo': instance.cuerpo,
       'ciudad_id': instance.ciudadId,
