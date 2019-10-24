@@ -4,9 +4,15 @@ import 'package:flutter/material.dart';
 
 class MainAppBar extends StatefulWidget {
   final int activeItem;
+  final bool sent;
+  final Function(bool) setSent;
+  final Function showSearchPage;
 
   MainAppBar({
     this.activeItem,
+    this.sent,
+    this.setSent,
+    this.showSearchPage,
   });
 
   @override
@@ -15,14 +21,14 @@ class MainAppBar extends StatefulWidget {
 
 class _MainAppBarState extends State<MainAppBar> {
   final TextEditingController _searchController = TextEditingController();
-  bool _sent = false;
   bool _showSearch = false;
 
   _toggleSearch() {
     _showSearch = !_showSearch;
     if (!_showSearch) {
       _searchController.clear();
-      _sent = false;
+      widget.setSent(false);
+      widget.showSearchPage(false);
     }
     if (mounted) setState(() {});
   }
@@ -53,15 +59,14 @@ class _MainAppBarState extends State<MainAppBar> {
       ),
       backgroundColor: Colors.transparent,
       title: _showSearch
-          ? SearchBar(
-              setSent: (bool val) {
-                setState(() {
-                  _sent = val;
-                });
-              },
-              sent: _sent,
-              searchController: _searchController,
-            )
+          ? widget.activeItem > 0
+              ? SearchBar(
+                  activeItem: widget.activeItem,
+                  setSent: widget.setSent,
+                  showSearchPage: widget.showSearchPage,
+                  searchController: _searchController,
+                )
+              : null
           : widget.activeItem > 0
               ? CategoriesChip(
                   activeItem: widget.activeItem,
@@ -70,7 +75,9 @@ class _MainAppBarState extends State<MainAppBar> {
       actions: <Widget>[
         IconButton(
           onPressed: _toggleSearch,
-          icon: Icon(Icons.search),
+          icon: Icon(
+            _showSearch ? Icons.close : Icons.search,
+          ),
         )
       ],
     );

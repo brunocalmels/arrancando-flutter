@@ -23,7 +23,7 @@ class _PoiPageState extends State<PoiPage> {
   List<PointOfInterest> _pois;
   bool _fetching = false;
 
-  _fetchPublicaciones() async {
+  _fetchPois() async {
     setState(() {
       _fetching = true;
     });
@@ -59,7 +59,7 @@ class _PoiPageState extends State<PoiPage> {
   @override
   void initState() {
     super.initState();
-    _fetchPublicaciones();
+    _fetchPois();
   }
 
   @override
@@ -82,11 +82,11 @@ class _PoiPageState extends State<PoiPage> {
               : _pois != null
                   ? _pois.length > 0
                       ? ListView.builder(
-                        padding: const EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
                           itemCount: _pois.length,
                           itemBuilder: (BuildContext context, int index) {
                             PointOfInterest p = _pois[index];
-                            return TilePoi(
+                            Widget item = TilePoi(
                               poi: p,
                               onTap: () {
                                 if (_mapController != null) {
@@ -102,6 +102,18 @@ class _PoiPageState extends State<PoiPage> {
                                 }
                               },
                             );
+                            if (index == _pois.length - 1)
+                              return Column(
+                                children: <Widget>[
+                                  item,
+                                  Container(
+                                    height: 200,
+                                    color: Color(0x05000000),
+                                  ),
+                                ],
+                              );
+                            else
+                              return item;
                           },
                         )
                       : Text("No hay puntos para mostrar")

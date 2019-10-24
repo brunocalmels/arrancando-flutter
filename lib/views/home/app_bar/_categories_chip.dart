@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 class CategoriesChip extends StatefulWidget {
   final int activeItem;
+  final bool small;
 
   CategoriesChip({
     this.activeItem,
+    this.small = false,
   });
 
   @override
@@ -13,6 +15,12 @@ class CategoriesChip extends StatefulWidget {
 }
 
 class _CategoriesChipState extends State<CategoriesChip> {
+  Map<int, IconData> _icons = {
+    1: Icons.public,
+    2: Icons.book,
+    3: Icons.map,
+  };
+
   Map<int, String> _selected = {
     1: "Neuquén",
     2: "Con carne",
@@ -42,22 +50,22 @@ class _CategoriesChipState extends State<CategoriesChip> {
           label: Row(
             children: <Widget>[
               Icon(
-                Icons.location_on,
-                size: 15,
+                _icons[widget.activeItem],
+                size: widget.small ? 12 : 15,
               ),
               SizedBox(
                 width: 5,
               ),
               Container(
                 constraints: BoxConstraints(
-                  maxWidth: 150,
+                  maxWidth: widget.small ? 20 : 150,
                 ),
                 child: Text(
                   _selected[widget.activeItem],
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 14,
+                    fontSize: widget.small ? 10 : 14,
                   ),
                 ),
               ),

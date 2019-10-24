@@ -1,3 +1,4 @@
+import 'package:arrancando/views/home/bottom_bar/_item.dart';
 import 'package:flutter/material.dart';
 
 class MainBottomBar extends StatelessWidget {
@@ -28,42 +29,6 @@ class MainBottomBar extends StatelessWidget {
     ),
   ];
 
-  Widget _buildItem(BuildContext context, int index, BBItem item) =>
-      Container(
-        height: 50,
-        child: Material(
-          color: Colors.transparent,
-          type: MaterialType.circle,
-          child: InkWell(
-            onTap: () => setActiveItem(index),
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Icon(
-                    item.icon,
-                    color: activeItem == index
-                        ? Theme.of(context).primaryColor
-                        : null,
-                  ),
-                ),
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 100),
-                  width: activeItem == index ? item.text.length * 8.0 : 0,
-                  child: Text(
-                    item.text,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -83,7 +48,9 @@ class MainBottomBar extends StatelessWidget {
             ],
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
+              bottomLeft: Radius.circular(30),
               topRight: Radius.circular(30),
+              bottomRight: Radius.circular(30),
             ),
           ),
           child: Row(
@@ -94,10 +61,11 @@ class MainBottomBar extends StatelessWidget {
                 .map(
                   (i, item) => MapEntry(
                     i,
-                    _buildItem(
-                      context,
-                      i,
-                      item,
+                    BBButtonItem(
+                      activeItem: activeItem,
+                      index: i,
+                      item: item,
+                      setActiveItem: setActiveItem,
                     ),
                   ),
                 )
@@ -108,14 +76,4 @@ class MainBottomBar extends StatelessWidget {
       ],
     );
   }
-}
-
-class BBItem {
-  IconData icon;
-  String text;
-
-  BBItem({
-    @required this.icon,
-    @required this.text,
-  });
 }

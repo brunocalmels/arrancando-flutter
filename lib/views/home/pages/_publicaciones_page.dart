@@ -6,16 +6,26 @@ import 'package:arrancando/views/cards/card_publicacion.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:flutter/material.dart';
 
-class PublicacionesPage extends StatelessWidget {
-  Future<List<Publicacion>> _fetchPublicaciones() async {
-    List<Publicacion> publicaciones;
+class PublicacionesPage extends StatefulWidget {
+  @override
+  _PublicacionesPageState createState() => _PublicacionesPageState();
+}
+
+class _PublicacionesPageState extends State<PublicacionesPage> {
+  List<Publicacion> _publicaciones;
+  bool _fetching = false;
+
+  _fetchPublicaciones() async {
+    setState(() {
+      _fetching = true;
+    });
 
     ResponseObject resp = await Fetcher.get(
       url: "/v2/deportes",
     );
 
     if (resp != null)
-      publicaciones = (json.decode(resp.body) as List)
+      _publicaciones = (json.decode(resp.body) as List)
           // REMOVE THIS PART
           .map(
             (p) => {
@@ -33,36 +43,38 @@ class PublicacionesPage extends StatelessWidget {
           )
           .toList();
 
-    return publicaciones;
+    _fetching = false;
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPublicaciones();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Publicacion>>(
-      future: _fetchPublicaciones(),
-      builder: (context, AsyncSnapshot<List<Publicacion>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return LoadingWidget();
-        } else {
-          if (snapshot.data != null) {
-            if (snapshot.data.length > 0) {
-              return Column(
-                children: snapshot.data
-                    .map(
-                      (p) => CardPublicacion(
-                        publicacion: p,
+    return _fetching
+        ? LoadingWidget()
+        : _publicaciones != null
+            ? _publicaciones.length > 0
+                ? Column(
+                    children: [
+                      ..._publicaciones
+                          .map(
+                            (p) => CardPublicacion(
+                              publicacion: p,
+                            ),
+                          )
+                          .toList(),
+                      Container(
+                        height: 100,
+                        color: Color(0x05000000),
                       ),
-                    )
-                    .toList(),
-              );
-            } else {
-              return Text("No hay publicaciones para mostrar");
-            }
-          } else {
-            return Text("Ocurrió un error");
-          }
-        }
-      },
-    );
+                    ],
+                  )
+                : Text("No hay publicaciones para mostrar")
+            : Text("Ocurrió un error");
   }
 }
