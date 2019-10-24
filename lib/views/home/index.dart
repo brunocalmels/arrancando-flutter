@@ -1,4 +1,3 @@
-import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
 import 'package:arrancando/views/home/pages/_home_page.dart';
 import 'package:arrancando/views/home/pages/_poi_page.dart';

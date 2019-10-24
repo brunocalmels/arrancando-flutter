@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       title: 'Arrancando',
       theme: ThemeData(
         fontFamily: 'Nunito',
-        primaryColor: Color(0xffd12811),
+        primaryColor: Color(0xff446622),
         accentColor: Color(0xffeab01e),
       ),
       home: MainScaffold(),

@@ -29,35 +29,39 @@ class MainBottomBar extends StatelessWidget {
   ];
 
   Widget _buildItem(BuildContext context, int index, BBItem item) =>
-      GestureDetector(
-        child: Container(
-          height: 50,
-          child: Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Icon(
-                  item.icon,
-                  color: activeItem == index
-                      ? Theme.of(context).primaryColor
-                      : null,
-                ),
-              ),
-              AnimatedContainer(
-                duration: Duration(milliseconds: 100),
-                width: activeItem == index ? item.text.length * 8.0 : 0,
-                child: Text(
-                  item.text,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+      Container(
+        height: 50,
+        child: Material(
+          color: Colors.transparent,
+          type: MaterialType.circle,
+          child: InkWell(
+            onTap: () => setActiveItem(index),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Icon(
+                    item.icon,
+                    color: activeItem == index
+                        ? Theme.of(context).primaryColor
+                        : null,
                   ),
                 ),
-              ),
-            ],
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 100),
+                  width: activeItem == index ? item.text.length * 8.0 : 0,
+                  child: Text(
+                    item.text,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        onTap: () => setActiveItem(index),
       );
 
   @override

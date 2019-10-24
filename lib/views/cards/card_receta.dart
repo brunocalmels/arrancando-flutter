@@ -1,13 +1,13 @@
-import 'package:arrancando/config/models/publicacion.dart';
+import 'package:arrancando/config/models/receta.dart';
 import 'package:arrancando/config/my_globals.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:flutter/material.dart';
 
-class CardPublicacion extends StatelessWidget {
-  final Publicacion publicacion;
+class CardReceta extends StatelessWidget {
+  final Receta receta;
 
-  CardPublicacion({
-    this.publicacion,
+  CardReceta({
+    this.receta,
   });
 
   @override
@@ -25,7 +25,7 @@ class CardPublicacion extends StatelessWidget {
                   Radius.circular(4),
                 ),
                 child: Image.network(
-                  "${MyGlobals.SERVER_URL}${publicacion.imagenes.first}",
+                  "${MyGlobals.SERVER_URL}${receta.imagenes.first}",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -52,7 +52,7 @@ class CardPublicacion extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        publicacion.fecha,
+                        receta.fecha,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -78,7 +78,7 @@ class CardPublicacion extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        publicacion.titulo,
+                        receta.titulo,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.white,
@@ -89,7 +89,7 @@ class CardPublicacion extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        publicacion.cuerpo,
+                        receta.cuerpo,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,
                         style: Theme.of(context).textTheme.body1.merge(

@@ -35,19 +35,21 @@ class _MainAppBarState extends State<MainAppBar> {
       ),
       floating: true,
       snap: false,
-      leading: Material(
-        child: InkWell(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              CircleAvatar(
-                radius: 20,
+      leading: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          CircleAvatar(
+            radius: 20,
+            child: Material(
+              color: Colors.transparent,
+              type: MaterialType.circle,
+              child: InkWell(
+                onTap: () {},
               ),
-            ],
+            ),
           ),
-          onTap: () {},
-        ),
+        ],
       ),
       backgroundColor: Colors.transparent,
       title: _showSearch
