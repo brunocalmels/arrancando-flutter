@@ -1,29 +1,30 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/point_of_interest.dart';
 import 'package:arrancando/config/models/publicacion.dart';
 import 'package:arrancando/config/models/receta.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/views/home/pages/_loading_widget.dart';
-import 'package:arrancando/views/home/pages/search/_content_tile.dart';
-import 'package:arrancando/views/home/pages/search/_data_group.dart';
+import 'package:arrancando/views/home/pages/fast_search/_content_tile.dart';
+import 'package:arrancando/views/home/pages/fast_search/_data_group.dart';
 import 'package:flutter/material.dart';
 
-class SearchPage extends StatefulWidget {
-  final int activeItem;
+class FastSearchPage extends StatefulWidget {
   final bool sent;
+  final TextEditingController searchController;
 
-  SearchPage({
-    this.activeItem,
+  FastSearchPage({
     this.sent,
+    this.searchController,
   });
 
   @override
-  _SearchPageState createState() => _SearchPageState();
+  _FastSearchPageState createState() => _FastSearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _FastSearchPageState extends State<FastSearchPage> {
   final String _lorem =
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam imperdiet nulla et aliquam convallis. Proin elementum enim non magna sollicitudin, id sollicitudin dui tincidunt. Aliquam maximus quam lectus, ut tempor dolor rhoncus eu. Donec quis diam lectus. Proin accumsan ac ipsum et congue. Mauris vitae lorem odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tincidunt eros at purus ultricies aliquet. Curabitur viverra metus venenatis quam ultricies, sit amet efficitur magna elementum.";
 
@@ -38,12 +39,16 @@ class _SearchPageState extends State<SearchPage> {
   };
 
   _fetchPublicaciones() async {
-    setState(() {
-      _fetching["publicaciones"] = true;
-    });
+    if (mounted)
+      setState(() {
+        _fetching["publicaciones"] = true;
+      });
 
     ResponseObject resp = await Fetcher.get(
-      url: "/v2/deportes",
+      url: widget.searchController.text != null &&
+              widget.searchController.text.isNotEmpty
+          ? "/v2/deportes/search/${widget.searchController.text}?limit=3"
+          : "/v2/deportes",
     );
 
     if (resp != null)
@@ -67,23 +72,26 @@ class _SearchPageState extends State<SearchPage> {
               id: p.id,
               title: p.titulo,
               image: p.imagenes.first,
-              type: "publicacion",
+              type: SectionType.publicaciones,
             ),
           )
-          .toList()
-          .sublist(0, 3);
+          .toList();
 
     _fetching["publicaciones"] = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   _fetchRecetas() async {
-    setState(() {
-      _fetching["recetas"] = true;
-    });
+    if (mounted)
+      setState(() {
+        _fetching["recetas"] = true;
+      });
 
     ResponseObject resp = await Fetcher.get(
-      url: "/v2/deportes123",
+      url: widget.searchController.text != null &&
+              widget.searchController.text.isNotEmpty
+          ? "/v2/deportes/search/${widget.searchController.text}?limit=3"
+          : "/v2/deportes",
     );
 
     if (resp != null)
@@ -107,23 +115,26 @@ class _SearchPageState extends State<SearchPage> {
               id: p.id,
               title: p.titulo,
               image: p.imagenes.first,
-              type: "receta",
+              type: SectionType.recetas,
             ),
           )
-          .toList()
-          .sublist(0, 3);
+          .toList();
 
     _fetching["recetas"] = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   _fetchPois() async {
-    setState(() {
-      _fetching["pois"] = true;
-    });
+    if (mounted)
+      setState(() {
+        _fetching["pois"] = true;
+      });
 
     ResponseObject resp = await Fetcher.get(
-      url: "/v2/deportes",
+      url: widget.searchController.text != null &&
+              widget.searchController.text.isNotEmpty
+          ? "/v2/deportes/search/${widget.searchController.text}?limit=3"
+          : "/v2/deportes",
     );
 
     if (resp != null)
@@ -149,14 +160,13 @@ class _SearchPageState extends State<SearchPage> {
               id: p.id,
               title: p.titulo,
               image: p.imagenes.first,
-              type: "poi",
+              type: SectionType.pois,
             ),
           )
-          .toList()
-          .sublist(0, 0);
+          .toList();
 
     _fetching["pois"] = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -165,6 +175,13 @@ class _SearchPageState extends State<SearchPage> {
     _fetchPublicaciones();
     _fetchRecetas();
     _fetchPois();
+    widget.searchController.addListener(() {
+      if (widget.searchController.text.isNotEmpty) {
+        _fetchPublicaciones();
+        _fetchRecetas();
+        _fetchPois();
+      }
+    });
   }
 
   @override
@@ -173,21 +190,27 @@ class _SearchPageState extends State<SearchPage> {
       children: <Widget>[
         DataGroup(
           fetching: _fetching["publicaciones"],
-          icon: Icons.public,
+          icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.publicaciones],
           title: "Publicaciones",
           items: _publicaciones,
+          type: SectionType.publicaciones,
+          searchController: widget.searchController,
         ),
         DataGroup(
           fetching: _fetching["recetas"],
-          icon: Icons.book,
+          icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.recetas],
           title: "Recetas",
           items: _recetas,
+          type: SectionType.recetas,
+          searchController: widget.searchController,
         ),
         DataGroup(
           fetching: _fetching["pois"],
-          icon: Icons.map,
+          icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.pois],
           title: "Ptos. Interés",
           items: _pois,
+          type: SectionType.pois,
+          searchController: widget.searchController,
         ),
         Container(
           height: 130,

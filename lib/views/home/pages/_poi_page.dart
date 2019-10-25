@@ -11,6 +11,12 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
 
 class PoiPage extends StatefulWidget {
+  final String searchTerm;
+
+  PoiPage({
+    this.searchTerm,
+  });
+
   @override
   _PoiPageState createState() => _PoiPageState();
 }
@@ -24,12 +30,15 @@ class _PoiPageState extends State<PoiPage> {
   bool _fetching = false;
 
   _fetchPois() async {
-    setState(() {
-      _fetching = true;
-    });
+    if (mounted)
+      setState(() {
+        _fetching = true;
+      });
 
     ResponseObject resp = await Fetcher.get(
-      url: "/v2/deportes",
+      url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
+          ? "/v2/deportes/search/${widget.searchTerm}"
+          : "/v2/deportes",
     );
 
     if (resp != null)
@@ -53,7 +62,7 @@ class _PoiPageState extends State<PoiPage> {
           )
           .toList();
     _fetching = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -98,7 +107,7 @@ class _PoiPageState extends State<PoiPage> {
                                       _zoom);
                                   _latitud = p.latitud;
                                   _longitud = p.longitud;
-                                  setState(() {});
+                                  if (mounted) setState(() {});
                                 }
                               },
                             );

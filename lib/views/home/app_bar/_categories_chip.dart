@@ -1,12 +1,13 @@
+import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CategoriesChip extends StatefulWidget {
-  final int activeItem;
   final bool small;
 
   CategoriesChip({
-    this.activeItem,
     this.small = false,
   });
 
@@ -15,20 +16,6 @@ class CategoriesChip extends StatefulWidget {
 }
 
 class _CategoriesChipState extends State<CategoriesChip> {
-  Map<int, IconData> _icons = {
-    0: Icons.select_all,
-    1: Icons.public,
-    2: Icons.book,
-    3: Icons.map,
-  };
-
-  Map<int, String> _selected = {
-    0: "Todos",
-    1: "Neuquén",
-    2: "Con carne",
-    3: "Carne",
-  };
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -39,20 +26,17 @@ class _CategoriesChipState extends State<CategoriesChip> {
           onSelected: (val) async {
             String res = await showDialog(
               context: context,
-              builder: (_) => DialogCategorySelect(
-                activeItem: widget.activeItem,
-              ),
+              builder: (_) => DialogCategorySelect(),
             );
             if (res != null) {
-              setState(() {
-                _selected[widget.activeItem] = res;
-              });
+              print(res);
             }
           },
           label: Row(
             children: <Widget>[
               Icon(
-                _icons[widget.activeItem],
+                MyGlobals.ICONOS_CATEGORIAS[
+                    Provider.of<MyState>(context).activePageHome],
                 size: widget.small ? 12 : 15,
               ),
               SizedBox(
@@ -63,7 +47,10 @@ class _CategoriesChipState extends State<CategoriesChip> {
                   maxWidth: widget.small ? 20 : 150,
                 ),
                 child: Text(
-                  _selected[widget.activeItem],
+                  MyGlobals
+                      .TIPOS_CATEGORIAS[
+                          Provider.of<MyState>(context).activePageHome]
+                      .first,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.black,

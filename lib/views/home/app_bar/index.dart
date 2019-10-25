@@ -1,37 +1,26 @@
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/app_bar/_categories_chip.dart';
 import 'package:arrancando/views/home/app_bar/_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class MainAppBar extends StatefulWidget {
-  final int activeItem;
+class MainAppBar extends StatelessWidget {
   final bool sent;
+  final bool showSearch;
   final Function(bool) setSent;
   final Function showSearchPage;
+  final Function toggleSearch;
+  final TextEditingController searchController;
 
   MainAppBar({
-    this.activeItem,
     this.sent,
+    this.showSearch,
     this.setSent,
     this.showSearchPage,
+    this.toggleSearch,
+    this.searchController,
   });
-
-  @override
-  _MainAppBarState createState() => _MainAppBarState();
-}
-
-class _MainAppBarState extends State<MainAppBar> {
-  final TextEditingController _searchController = TextEditingController();
-  bool _showSearch = false;
-
-  _toggleSearch() {
-    _showSearch = !_showSearch;
-    if (!_showSearch) {
-      _searchController.clear();
-      widget.setSent(false);
-      widget.showSearchPage(false);
-    }
-    if (mounted) setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,23 +47,20 @@ class _MainAppBarState extends State<MainAppBar> {
         ],
       ),
       backgroundColor: Colors.transparent,
-      title: _showSearch
+      title: showSearch
           ? SearchBar(
-              activeItem: widget.activeItem,
-              setSent: widget.setSent,
-              showSearchPage: widget.showSearchPage,
-              searchController: _searchController,
+              setSent: setSent,
+              showSearchPage: showSearchPage,
+              searchController: searchController,
             )
-          : widget.activeItem > 0
-              ? CategoriesChip(
-                  activeItem: widget.activeItem,
-                )
+          : Provider.of<MyState>(context).activePageHome != SectionType.home
+              ? CategoriesChip()
               : null,
       actions: <Widget>[
         IconButton(
-          onPressed: _toggleSearch,
+          onPressed: toggleSearch,
           icon: Icon(
-            _showSearch ? Icons.close : Icons.search,
+            showSearch ? Icons.close : Icons.search,
           ),
         )
       ],

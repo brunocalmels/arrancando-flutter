@@ -1,16 +1,13 @@
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/state/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BBButtonItem extends StatefulWidget {
-  final int activeItem;
-  final int index;
   final BBItem item;
-  final Function setActiveItem;
 
   BBButtonItem({
-    this.activeItem,
-    this.index,
     this.item,
-    this.setActiveItem,
   });
 
   @override
@@ -21,26 +18,30 @@ class _BBButtonItemState extends State<BBButtonItem> {
   double _width = 0;
 
   _setTextAnimation() async {
-    _width =
-        widget.activeItem == widget.index ? widget.item.text.length * 8.0 : 0;
-    setState(() {});
+    _width = Provider.of<MyState>(context).activePageHome == widget.item.value
+        ? widget.item.text.length * 8.0
+        : 0;
+    if (mounted) setState(() {});
     if (_width > 0) {
       await Future.delayed(Duration(milliseconds: 1500));
       _width = 0;
-      setState(() {});
+      if (mounted) setState(() {});
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _setTextAnimation();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setTextAnimation();
+    });
   }
 
   @override
   void didUpdateWidget(BBButtonItem oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.activeItem != widget.activeItem) _setTextAnimation();
+    if (Provider.of<MyState>(context).activePageHome == widget.item.value)
+      _setTextAnimation();
   }
 
   @override
@@ -51,14 +52,17 @@ class _BBButtonItemState extends State<BBButtonItem> {
         color: Colors.transparent,
         type: MaterialType.circle,
         child: InkWell(
-          onTap: () => widget.setActiveItem(widget.index),
+          // onTap: () => widget.setActiveItem(widget.index),
+          onTap: () => Provider.of<MyState>(context, listen: false)
+              .setActivePageHome(widget.item.value),
           child: Row(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Icon(
                   widget.item.icon,
-                  color: widget.activeItem == widget.index
+                  color: Provider.of<MyState>(context).activePageHome ==
+                          widget.item.value
                       ? Theme.of(context).primaryColor
                       : null,
                 ),
@@ -85,9 +89,11 @@ class _BBButtonItemState extends State<BBButtonItem> {
 class BBItem {
   IconData icon;
   String text;
+  SectionType value;
 
   BBItem({
     @required this.icon,
     @required this.text,
+    @required this.value,
   });
 }

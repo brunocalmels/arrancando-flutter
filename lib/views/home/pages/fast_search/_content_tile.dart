@@ -1,4 +1,5 @@
-import 'package:arrancando/config/my_globals.dart';
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:flutter/material.dart';
 
 class ContentTile extends StatelessWidget {
@@ -12,15 +13,15 @@ class ContentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        String type = "NONE";
+        String type = "HOME";
         switch (content.type) {
-          case "publicacion":
+          case SectionType.publicaciones:
             type = "PUBLICACION";
             break;
-          case "receta":
+          case SectionType.recetas:
             type = "RECETA";
             break;
-          case "poi":
+          case SectionType.pois:
             type = "POI";
             break;
           default:
@@ -43,7 +44,7 @@ class ContentWrapper {
   final int id;
   final String image;
   final String title;
-  final String type;
+  final SectionType type;
 
   ContentWrapper({
     this.id,

@@ -1,5 +1,7 @@
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
-import 'package:arrancando/views/home/pages/search/_content_tile.dart';
+import 'package:arrancando/views/home/pages/fast_search/_content_tile.dart';
+import 'package:arrancando/views/search/index.dart';
 import 'package:flutter/material.dart';
 
 class DataGroup extends StatelessWidget {
@@ -7,12 +9,16 @@ class DataGroup extends StatelessWidget {
   final IconData icon;
   final String title;
   final List<ContentWrapper> items;
+  final SectionType type;
+  final TextEditingController searchController;
 
   DataGroup({
     this.fetching,
     this.icon,
     this.title,
     this.items,
+    this.type,
+    this.searchController,
   });
 
   @override
@@ -61,7 +67,16 @@ class DataGroup extends StatelessWidget {
                               )
                               .toList(),
                           FlatButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => SearchPage(
+                                    originalType: type,
+                                    originalSearch: searchController.text
+                                  ),
+                                ),
+                              );
+                            },
                             child: Text("VER MÁS"),
                           ),
                         ],

@@ -7,6 +7,12 @@ import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class RecetasPage extends StatefulWidget {
+  final String searchTerm;
+
+  RecetasPage({
+    this.searchTerm,
+  });
+
   @override
   _RecetasPageState createState() => _RecetasPageState();
 }
@@ -16,12 +22,15 @@ class _RecetasPageState extends State<RecetasPage> {
   bool _fetching = false;
 
   _fetchRecetas() async {
-    setState(() {
-      _fetching = true;
-    });
+    if (mounted)
+      setState(() {
+        _fetching = true;
+      });
 
     ResponseObject resp = await Fetcher.get(
-      url: "/v2/deportes",
+      url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
+          ? "/v2/deportes/search/${widget.searchTerm}"
+          : "/v2/deportes",
     );
 
     if (resp != null)
@@ -44,7 +53,7 @@ class _RecetasPageState extends State<RecetasPage> {
           .toList();
 
     _fetching = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override

@@ -1,31 +1,28 @@
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/views/home/bottom_bar/_item.dart';
 import 'package:flutter/material.dart';
 
 class MainBottomBar extends StatelessWidget {
-  final int activeItem;
-  final Function setActiveItem;
-
-  MainBottomBar({
-    this.activeItem,
-    this.setActiveItem,
-  });
-
   final List<BBItem> _items = [
     BBItem(
       icon: Icons.home,
       text: 'Inicio',
+      value: SectionType.home,
     ),
     BBItem(
       icon: Icons.public,
       text: 'Publicaciones',
+      value: SectionType.publicaciones,
     ),
     BBItem(
       icon: Icons.book,
       text: 'Recetas',
+      value: SectionType.recetas,
     ),
     BBItem(
       icon: Icons.map,
       text: 'Ptos. Interés',
+      value: SectionType.pois,
     ),
   ];
 
@@ -57,19 +54,11 @@ class MainBottomBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: _items
-                .asMap()
                 .map(
-                  (i, item) => MapEntry(
-                    i,
-                    BBButtonItem(
-                      activeItem: activeItem,
-                      index: i,
-                      item: item,
-                      setActiveItem: setActiveItem,
-                    ),
+                  (i) => BBButtonItem(
+                    item: i,
                   ),
                 )
-                .values
                 .toList(),
           ),
         ),

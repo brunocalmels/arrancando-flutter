@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:arrancando/config/my_globals.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';

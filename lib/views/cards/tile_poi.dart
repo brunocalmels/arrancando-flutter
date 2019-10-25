@@ -1,7 +1,5 @@
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/point_of_interest.dart';
-import 'package:arrancando/config/my_globals.dart';
-// import 'package:arrancando/config/my_globals.dart';
-// import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:flutter/material.dart';
 
 class TilePoi extends StatelessWidget {

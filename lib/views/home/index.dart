@@ -1,3 +1,5 @@
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
 import 'package:arrancando/views/home/pages/_home_page.dart';
 import 'package:arrancando/views/home/pages/_poi_page.dart';
@@ -5,8 +7,9 @@ import 'package:arrancando/views/home/pages/_publicaciones_page.dart';
 import 'package:arrancando/views/home/pages/_recetas_page.dart';
 import 'package:arrancando/views/home/app_bar/index.dart';
 import 'package:arrancando/views/home/bottom_bar/index.dart';
-import 'package:arrancando/views/home/pages/search/index.dart';
+import 'package:arrancando/views/home/pages/fast_search/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainScaffold extends StatefulWidget {
   @override
@@ -14,40 +17,61 @@ class MainScaffold extends StatefulWidget {
 }
 
 class _MainScaffoldState extends State<MainScaffold> {
-  int _activeItem = 0;
+  final TextEditingController _searchController = TextEditingController();
+  bool _showSearch = false;
   bool _showSearchResults = false;
   bool _sent = false;
 
   _setSent(bool val) {
-    setState(() {
-      _sent = val;
-    });
+    if (mounted)
+      setState(() {
+        _sent = val;
+      });
   }
 
   _setShowSearchResults(bool val) {
-    setState(() {
-      _showSearchResults = val;
-    });
+    if (mounted)
+      setState(() {
+        _showSearchResults = val;
+      });
   }
 
-  Widget _getPage(int index) {
+  _toggleSearch() {
+    _showSearch = !_showSearch;
+    if (!_showSearch) {
+      _searchController.clear();
+      _setSent(false);
+      _setShowSearchResults(false);
+    }
+    if (mounted) setState(() {});
+  }
+
+  _hideSearch() {
+    _showSearch = false;
+    _searchController.clear();
+    _setSent(false);
+    _setShowSearchResults(false);
+    if (mounted) setState(() {});
+  }
+
+  Widget _getPage(SectionType value) {
     if (!_showSearchResults) {
-      switch (index) {
-        case 0:
+      switch (value) {
+        case SectionType.home:
           return HomePage();
-        case 1:
+        case SectionType.publicaciones:
           return PublicacionesPage();
-        case 2:
+        case SectionType.recetas:
           return RecetasPage();
-        case 3:
+        case SectionType.pois:
           return PoiPage();
         default:
           return HomePage();
       }
     } else {
-      return SearchPage(
-        activeItem: _activeItem,
+      return FastSearchPage(
         sent: _sent,
+        searchController: _searchController,
       );
     }
   }
@@ -55,7 +79,10 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async {
+        _hideSearch();
+        return false;
+      },
       child: Stack(
         fit: StackFit.passthrough,
         children: <Widget>[
@@ -64,16 +91,20 @@ class _MainScaffoldState extends State<MainScaffold> {
               child: CustomScrollView(
                 slivers: <Widget>[
                   MainAppBar(
-                    activeItem: _activeItem,
                     sent: _sent,
                     setSent: _setSent,
                     showSearchPage: _setShowSearchResults,
+                    searchController: _searchController,
+                    toggleSearch: _toggleSearch,
+                    showSearch: _showSearch,
                   ),
                   SliverList(
                     delegate: SliverChildListDelegate(
                       [
                         Container(
-                          child: _getPage(_activeItem),
+                          child: _getPage(
+                            Provider.of<MyState>(context).activePageHome,
+                          ),
                         )
                       ],
                     ),
@@ -96,14 +127,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                   SizedBox(
                     height: 15,
                   ),
-                  MainBottomBar(
-                    activeItem: _activeItem,
-                    setActiveItem: (int item) {
-                      setState(() {
-                        _activeItem = item;
-                      });
-                    },
-                  ),
+                  MainBottomBar(),
                   SizedBox(
                     height: 15,
                   ),

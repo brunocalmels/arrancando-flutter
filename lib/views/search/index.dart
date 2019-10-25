@@ -1,0 +1,112 @@
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/views/home/pages/_poi_page.dart';
+import 'package:arrancando/views/home/pages/_publicaciones_page.dart';
+import 'package:arrancando/views/home/pages/_recetas_page.dart';
+import 'package:arrancando/views/search/_search_field.dart';
+import 'package:arrancando/views/search/_selector_section_type.dart';
+import 'package:flutter/material.dart';
+
+class SearchPage extends StatefulWidget {
+  final SectionType originalType;
+  final String originalSearch;
+
+  SearchPage({
+    this.originalType,
+    this.originalSearch,
+  });
+
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  SectionType _type;
+  bool _sent = false;
+  Widget _page;
+  final TextEditingController _searchController = TextEditingController();
+
+  Widget _getPage(SectionType value, String term) {
+    switch (value) {
+      case SectionType.publicaciones:
+        return PublicacionesPage(
+          searchTerm: term,
+        );
+      case SectionType.recetas:
+        return RecetasPage(
+          searchTerm: term,
+        );
+      case SectionType.pois:
+        return PoiPage(
+          searchTerm: term,
+        );
+      default:
+        return PublicacionesPage(
+          searchTerm: term,
+        );
+    }
+  }
+
+  _reloadPage() async {
+    if (_searchController.text.isNotEmpty) {
+      _page = null;
+      if (mounted) setState(() {});
+      await Future.delayed(Duration(milliseconds: 300));
+      _page = _getPage(_type, _searchController.text);
+      if (mounted) setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _type = widget.originalType;
+    _searchController.text = widget.originalSearch;
+    _page = _getPage(_type, widget.originalSearch);
+    if (mounted) setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              iconTheme: IconThemeData(
+                color: Colors.black,
+              ),
+              floating: true,
+              snap: false,
+              backgroundColor: Colors.transparent,
+              title: SearchField(
+                searchController: _searchController,
+                onChanged: (val) {
+                  _reloadPage();
+                },
+              ),
+              actions: <Widget>[
+                SelectorSectionType(
+                  setActiveType: (type) {
+                    _type = type;
+                    if (mounted) setState(() {});
+                    _reloadPage();
+                  },
+                  activeType: _type,
+                ),
+              ],
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Container(
+                    child: _page,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

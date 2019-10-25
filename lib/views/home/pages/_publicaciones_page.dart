@@ -7,6 +7,12 @@ import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:flutter/material.dart';
 
 class PublicacionesPage extends StatefulWidget {
+  final String searchTerm;
+
+  PublicacionesPage({
+    this.searchTerm,
+  });
+
   @override
   _PublicacionesPageState createState() => _PublicacionesPageState();
 }
@@ -16,12 +22,15 @@ class _PublicacionesPageState extends State<PublicacionesPage> {
   bool _fetching = false;
 
   _fetchPublicaciones() async {
-    setState(() {
-      _fetching = true;
-    });
+    if (mounted)
+      setState(() {
+        _fetching = true;
+      });
 
     ResponseObject resp = await Fetcher.get(
-      url: "/v2/deportes",
+      url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
+          ? "/v2/deportes/search/${widget.searchTerm}"
+          : "/v2/deportes",
     );
 
     if (resp != null)
@@ -44,7 +53,7 @@ class _PublicacionesPageState extends State<PublicacionesPage> {
           .toList();
 
     _fetching = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override

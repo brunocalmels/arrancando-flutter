@@ -10,9 +10,10 @@ class _MainNewFabState extends State<MainNewFab>
   bool _showAll = false;
 
   _toggleShow() {
-    setState(() {
-      _showAll = !_showAll;
-    });
+    if (mounted)
+      setState(() {
+        _showAll = !_showAll;
+      });
   }
 
   @override
@@ -39,6 +40,7 @@ class _MainNewFabState extends State<MainNewFab>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     FloatingActionButton(
+                      heroTag: "new-publicaciones",
                       onPressed: () {},
                       child: Icon(
                         Icons.public,
@@ -50,6 +52,7 @@ class _MainNewFabState extends State<MainNewFab>
                     Column(
                       children: <Widget>[
                         FloatingActionButton(
+                          heroTag: "new-recetas",
                           onPressed: () {},
                           child: Icon(
                             Icons.book,
@@ -61,6 +64,7 @@ class _MainNewFabState extends State<MainNewFab>
                       width: 10,
                     ),
                     FloatingActionButton(
+                      heroTag: "new-pois",
                       onPressed: () {},
                       child: Icon(
                         Icons.map,
