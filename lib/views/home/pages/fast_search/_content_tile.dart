@@ -1,5 +1,6 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class ContentTile extends StatelessWidget {
@@ -31,25 +32,11 @@ class ContentTile extends StatelessWidget {
       trailing: Container(
         width: 40,
         child: Image.network(
-          "${MyGlobals.SERVER_URL}${content.image}",
+          "${MyGlobals.SERVER_URL}${content.imagenes.first}",
           fit: BoxFit.cover,
         ),
       ),
-      title: Text(content.title),
+      title: Text(content.titulo),
     );
   }
-}
-
-class ContentWrapper {
-  final int id;
-  final String image;
-  final String title;
-  final SectionType type;
-
-  ContentWrapper({
-    this.id,
-    this.image,
-    this.title,
-    this.type,
-  });
 }

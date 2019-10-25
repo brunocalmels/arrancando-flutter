@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/point_of_interest.dart';
 import 'package:arrancando/config/models/publicacion.dart';
 import 'package:arrancando/config/models/receta.dart';
@@ -68,12 +69,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
             (p) => Publicacion.fromJson(p),
           )
           .map(
-            (p) => ContentWrapper(
-              id: p.id,
-              title: p.titulo,
-              image: p.imagenes.first,
-              type: SectionType.publicaciones,
-            ),
+            (p) => ContentWrapper.fromOther(p, SectionType.publicaciones),
           )
           .toList();
 
@@ -111,12 +107,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
             (p) => Receta.fromJson(p),
           )
           .map(
-            (p) => ContentWrapper(
-              id: p.id,
-              title: p.titulo,
-              image: p.imagenes.first,
-              type: SectionType.recetas,
-            ),
+            (p) => ContentWrapper.fromOther(p, SectionType.recetas),
           )
           .toList();
 
@@ -156,12 +147,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
             (p) => PointOfInterest.fromJson(p),
           )
           .map(
-            (p) => ContentWrapper(
-              id: p.id,
-              title: p.titulo,
-              image: p.imagenes.first,
-              type: SectionType.pois,
-            ),
+            (p) => ContentWrapper.fromOther(p, SectionType.pois),
           )
           .toList();
 

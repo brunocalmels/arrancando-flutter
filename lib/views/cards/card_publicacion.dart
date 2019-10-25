@@ -1,6 +1,8 @@
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/publicacion.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
+import 'package:arrancando/views/show/index.dart';
 import 'package:flutter/material.dart';
 
 class CardPublicacion extends StatelessWidget {
@@ -35,7 +37,16 @@ class CardPublicacion extends StatelessWidget {
                 color: Color(0x77000000),
                 type: MaterialType.card,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ShowPage(
+                          contentId: publicacion.id,
+                          type: SectionType.publicaciones,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/fast_search/_content_tile.dart';
 import 'package:arrancando/views/search/index.dart';
