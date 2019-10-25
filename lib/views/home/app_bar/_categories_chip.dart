@@ -16,12 +16,14 @@ class CategoriesChip extends StatefulWidget {
 
 class _CategoriesChipState extends State<CategoriesChip> {
   Map<int, IconData> _icons = {
+    0: Icons.select_all,
     1: Icons.public,
     2: Icons.book,
     3: Icons.map,
   };
 
   Map<int, String> _selected = {
+    0: "Todos",
     1: "Neuquén",
     2: "Con carne",
     3: "Carne",

@@ -20,11 +20,6 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  Map<int, String> _selected = {
-    1: "Neuquén",
-    2: "Con carne",
-    3: "Carne",
-  };
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

@@ -40,7 +40,7 @@ class _BBButtonItemState extends State<BBButtonItem> {
   @override
   void didUpdateWidget(BBButtonItem oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _setTextAnimation();
+    if (oldWidget.activeItem != widget.activeItem) _setTextAnimation();
   }
 
   @override

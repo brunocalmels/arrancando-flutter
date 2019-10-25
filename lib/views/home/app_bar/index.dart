@@ -59,14 +59,12 @@ class _MainAppBarState extends State<MainAppBar> {
       ),
       backgroundColor: Colors.transparent,
       title: _showSearch
-          ? widget.activeItem > 0
-              ? SearchBar(
-                  activeItem: widget.activeItem,
-                  setSent: widget.setSent,
-                  showSearchPage: widget.showSearchPage,
-                  searchController: _searchController,
-                )
-              : null
+          ? SearchBar(
+              activeItem: widget.activeItem,
+              setSent: widget.setSent,
+              showSearchPage: widget.showSearchPage,
+              searchController: _searchController,
+            )
           : widget.activeItem > 0
               ? CategoriesChip(
                   activeItem: widget.activeItem,
