@@ -43,4 +43,7 @@ class ContentWrapper {
       imagenes: (json['imagenes'] as List)?.map((e) => e as String)?.toList(),
     );
   }
+
+  get fecha =>
+      "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}/${createdAt.toLocal().year.toString()}";
 }

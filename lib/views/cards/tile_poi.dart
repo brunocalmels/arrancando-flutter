@@ -1,5 +1,7 @@
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/point_of_interest.dart';
+import 'package:arrancando/views/show/index.dart';
 import 'package:flutter/material.dart';
 
 class TilePoi extends StatelessWidget {
@@ -69,7 +71,16 @@ class TilePoi extends StatelessWidget {
         ],
       ),
       trailing: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ShowPage(
+                contentId: poi.id,
+                type: SectionType.pois,
+              ),
+            ),
+          );
+        },
         icon: Icon(
           Icons.arrow_forward,
         ),

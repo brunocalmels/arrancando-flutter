@@ -10,6 +10,14 @@ abstract class MyGlobals {
     SectionType.recetas: Icons.book,
     SectionType.pois: Icons.map,
   };
+
+  static const NOMBRES_CATEGORIAS = {
+    SectionType.home: "Inicio",
+    SectionType.publicaciones: "Publicaciones",
+    SectionType.recetas: "Recetas",
+    SectionType.pois: "Ptos. Interés",
+  };
+
   static const TIPOS_CATEGORIAS = {
     SectionType.home: [
       'Todo',

@@ -1,6 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/views/show/index.dart';
 import 'package:flutter/material.dart';
 
 class ContentTile extends StatelessWidget {
@@ -14,20 +15,14 @@ class ContentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        String type = "HOME";
-        switch (content.type) {
-          case SectionType.publicaciones:
-            type = "PUBLICACION";
-            break;
-          case SectionType.recetas:
-            type = "RECETA";
-            break;
-          case SectionType.pois:
-            type = "POI";
-            break;
-          default:
-        }
-        print('GOTO $type ${content.id}');
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ShowPage(
+              contentId: content.id,
+              type: content.type,
+            ),
+          ),
+        );
       },
       trailing: Container(
         width: 40,

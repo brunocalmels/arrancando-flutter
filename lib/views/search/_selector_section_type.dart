@@ -15,10 +15,10 @@ class SelectorSectionType extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        VerticalDivider(),
         DropdownButton(
           onChanged: setActiveType,
           value: activeType,
+          isDense: true,
           items: SectionType.values
               .sublist(1)
               .map(
