@@ -4,8 +4,8 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/views/content_wrapper/show/_image_large.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
-import 'package:arrancando/views/show/_image_large.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 

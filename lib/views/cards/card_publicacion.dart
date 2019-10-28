@@ -2,7 +2,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/publicacion.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
-import 'package:arrancando/views/show/index.dart';
+import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
 
 class CardPublicacion extends StatelessWidget {
@@ -27,7 +27,8 @@ class CardPublicacion extends StatelessWidget {
                   Radius.circular(4),
                 ),
                 child: Image.network(
-                  "${MyGlobals.SERVER_URL}${publicacion.imagenes.first}",
+                  // "${MyGlobals.SERVER_URL}${publicacion.imagenes.first}",
+                  "${publicacion.imagenes.first}",
                   fit: BoxFit.cover,
                 ),
               ),

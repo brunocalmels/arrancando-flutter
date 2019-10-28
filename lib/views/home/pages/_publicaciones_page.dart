@@ -29,22 +29,20 @@ class _PublicacionesPageState extends State<PublicacionesPage> {
 
     ResponseObject resp = await Fetcher.get(
       url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
-          ? "/v2/deportes/search/${widget.searchTerm}"
-          : "/v2/deportes",
+          ? "/publicaciones/search?term=${widget.searchTerm}"
+          : "/publicaciones",
     );
 
     if (resp != null)
       _publicaciones = (json.decode(resp.body) as List)
           // REMOVE THIS PART
           .map(
-            (p) => {
-              "id": p['id'],
-              "created_at": p['created_at'],
-              "titulo": p['nombre'],
-              "cuerpo":
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam imperdiet nulla et aliquam convallis. Proin elementum enim non magna sollicitudin, id sollicitudin dui tincidunt. Aliquam maximus quam lectus, ut tempor dolor rhoncus eu. Donec quis diam lectus. Proin accumsan ac ipsum et congue. Mauris vitae lorem odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tincidunt eros at purus ultricies aliquet. Curabitur viverra metus venenatis quam ultricies, sit amet efficitur magna elementum.",
-              "imagenes": [p["get_icono"]],
-            },
+            (p) => json.decode(json.encode({
+              ...p,
+              "imagenes": [
+                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
+              ],
+            })),
           )
           // REMOVE THIS PART
           .map(

@@ -8,7 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class Fetcher {
   static _getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString("token");
+    String activeUser = prefs.getString("activeUser");
+    String token;
+    if (activeUser != null) token = json.decode(activeUser)['auth_token'];
     return token;
   }
 
@@ -21,7 +23,7 @@ abstract class Fetcher {
       if (token == null) throw "Token null";
 
       http.Response resp = await http.get(
-        "${MyGlobals.SERVER_URL}$url",
+        "${MyGlobals.SERVER_URL}$url.json",
         headers: {
           "Authorization": token,
           "Content-type": "application/json",
@@ -60,7 +62,7 @@ abstract class Fetcher {
       }
 
       http.Response resp = await http.post(
-        "${MyGlobals.SERVER_URL}$url",
+        "${MyGlobals.SERVER_URL}$url.json",
         headers: {
           "Authorization": unauthenticated ? "" : token,
           "Content-type": "application/json",
@@ -96,7 +98,7 @@ abstract class Fetcher {
       if (token == null) throw "Token null";
 
       http.Response resp = await http.put(
-        "${MyGlobals.SERVER_URL}$url",
+        "${MyGlobals.SERVER_URL}$url.json",
         headers: {
           "Authorization": token,
           "Content-type": "application/json",
@@ -132,7 +134,7 @@ abstract class Fetcher {
       if (token == null) throw "Token null";
 
       http.Response resp = await http.delete(
-        "${MyGlobals.SERVER_URL}$url",
+        "${MyGlobals.SERVER_URL}$url.json",
         headers: {
           "Authorization": token,
           "Content-type": "application/json",

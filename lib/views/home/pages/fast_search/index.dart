@@ -48,8 +48,8 @@ class _FastSearchPageState extends State<FastSearchPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/v2/deportes/search/${widget.searchController.text}?limit=3"
-          : "/v2/deportes",
+          ? "/publicaciones/search?term=${widget.searchController.text}?limit=3"
+          : "/publicaciones",
     );
 
     if (resp != null)
@@ -86,8 +86,8 @@ class _FastSearchPageState extends State<FastSearchPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/v2/deportes/search/${widget.searchController.text}?limit=3"
-          : "/v2/deportes",
+          ? "/recetas/search?term=${widget.searchController.text}?limit=3"
+          : "/recetas",
     );
 
     if (resp != null)
@@ -124,7 +124,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/v2/deportes/search/${widget.searchController.text}?limit=3"
+          ? "/v2/deportes/search?term=${widget.searchController.text}?limit=3"
           : "/v2/deportes",
     );
 

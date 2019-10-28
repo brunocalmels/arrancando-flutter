@@ -2,7 +2,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/receta.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
-import 'package:arrancando/views/show/index.dart';
+import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
 
 class CardReceta extends StatelessWidget {

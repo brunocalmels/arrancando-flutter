@@ -1,3 +1,5 @@
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/views/content_wrapper/new/index.dart';
 import 'package:flutter/material.dart';
 
 class MainNewFab extends StatefulWidget {
@@ -41,7 +43,15 @@ class _MainNewFabState extends State<MainNewFab>
                   children: <Widget>[
                     FloatingActionButton(
                       heroTag: "new-publicaciones",
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => NewContent(
+                              type: SectionType.publicaciones,
+                            ),
+                          ),
+                        );
+                      },
                       child: Icon(
                         Icons.public,
                       ),

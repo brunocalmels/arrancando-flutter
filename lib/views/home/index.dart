@@ -8,8 +8,10 @@ import 'package:arrancando/views/home/pages/_recetas_page.dart';
 import 'package:arrancando/views/home/app_bar/index.dart';
 import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
+import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScaffold extends StatefulWidget {
   @override
@@ -87,6 +89,28 @@ class _MainScaffoldState extends State<MainScaffold> {
         fit: StackFit.passthrough,
         children: <Widget>[
           Scaffold(
+            drawer: Drawer(
+              child: ListView(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(
+                      Icons.account_box,
+                    ),
+                    title: Text('Cerrar sesión'),
+                    onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.remove('activeUser');
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => LoginPage(),
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+            ),
             body: Container(
               child: CustomScrollView(
                 slivers: <Widget>[

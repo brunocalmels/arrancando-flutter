@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/index.dart';
+import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(
@@ -12,8 +17,37 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool _loaded = false;
+
+  _loadUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String activeUser = prefs.getString("activeUser");
+    if (activeUser != null) {
+      Provider.of<MyState>(context, listen: false).setActiveUser(
+        ActiveUser.fromJson(
+          json.decode(activeUser),
+        ),
+      );
+    }
+    if (mounted)
+      setState(() {
+        _loaded = true;
+      });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +58,11 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xff446622),
         accentColor: Color(0xffeab01e),
       ),
-      home: MainScaffold(),
+      home: !_loaded
+          ? Scaffold()
+          : Provider.of<MyState>(context).activeUser == null
+              ? LoginPage()
+              : MainScaffold(),
     );
   }
 }
