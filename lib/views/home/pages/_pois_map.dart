@@ -8,6 +8,7 @@ class PoisMap extends StatefulWidget {
   final double longitud;
   final double zoom;
   final Function(MapController) buildCallback;
+  final Function(MapPosition, bool) onPositionChanged;
 
   PoisMap({
     this.height,
@@ -15,6 +16,7 @@ class PoisMap extends StatefulWidget {
     this.longitud,
     this.zoom,
     this.buildCallback,
+    this.onPositionChanged,
   });
 
   @override
@@ -39,6 +41,9 @@ class _PoisMapState extends State<PoisMap> {
       child: FlutterMap(
         mapController: _controller,
         options: MapOptions(
+          onPositionChanged: widget.onPositionChanged == null
+              ? null
+              : widget.onPositionChanged,
           center: LatLng(
             widget.latitud,
             widget.longitud,

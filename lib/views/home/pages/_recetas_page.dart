@@ -29,8 +29,8 @@ class _RecetasPageState extends State<RecetasPage> {
 
     ResponseObject resp = await Fetcher.get(
       url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
-          ? "/recetas/search?term=${widget.searchTerm}"
-          : "/recetas",
+          ? "/recetas/search.json?term=${widget.searchTerm}"
+          : "/recetas.json",
     );
 
     if (resp != null)

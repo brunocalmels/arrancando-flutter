@@ -23,7 +23,7 @@ abstract class Fetcher {
       if (token == null) throw "Token null";
 
       http.Response resp = await http.get(
-        "${MyGlobals.SERVER_URL}$url.json",
+        "${MyGlobals.SERVER_URL}$url",
         headers: {
           "Authorization": token,
           "Content-type": "application/json",
@@ -62,7 +62,7 @@ abstract class Fetcher {
       }
 
       http.Response resp = await http.post(
-        "${MyGlobals.SERVER_URL}$url.json",
+        "${MyGlobals.SERVER_URL}$url",
         headers: {
           "Authorization": unauthenticated ? "" : token,
           "Content-type": "application/json",
@@ -98,7 +98,7 @@ abstract class Fetcher {
       if (token == null) throw "Token null";
 
       http.Response resp = await http.put(
-        "${MyGlobals.SERVER_URL}$url.json",
+        "${MyGlobals.SERVER_URL}$url",
         headers: {
           "Authorization": token,
           "Content-type": "application/json",
@@ -134,7 +134,7 @@ abstract class Fetcher {
       if (token == null) throw "Token null";
 
       http.Response resp = await http.delete(
-        "${MyGlobals.SERVER_URL}$url.json",
+        "${MyGlobals.SERVER_URL}$url",
         headers: {
           "Authorization": token,
           "Content-type": "application/json",

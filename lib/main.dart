@@ -1,6 +1,10 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
+import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
@@ -40,12 +44,63 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _loaded = true;
       });
+    return;
+  }
+
+  _loadCategories() async {
+    print('aca');
+    GlobalSingleton gs = GlobalSingleton();
+    try {
+      //////
+      ResponseObject res1 = await Fetcher.get(
+        url: "/ciudades.json",
+      );
+      if (res1.status == 200) {
+        gs.setCategories(
+            SectionType.publicaciones,
+            (json.decode(res1.body) as List)
+                .map((e) => CategoryWrapper.fromJson(e))
+                .toList());
+      }
+      //////
+      ResponseObject res2 = await Fetcher.get(
+        url: "/categoria_recetas.json",
+      );
+      if (res2.status == 200) {
+        gs.setCategories(
+            SectionType.recetas,
+            (json.decode(res2.body) as List)
+                .map((e) => CategoryWrapper.fromJson(e))
+                .toList());
+      }
+      //////
+      ResponseObject res3 = await Fetcher.get(
+        url: "/categoria_pois.json",
+      );
+      if (res3.status == 200) {
+        gs.setCategories(
+            SectionType.pois,
+            (json.decode(res3.body) as List)
+                .map((e) => CategoryWrapper.fromJson(e))
+                .toList());
+      }
+      //////
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  _initApp() async {
+    await _loadUser();
+    if (Provider.of<MyState>(context, listen: false).activeUser != null) {
+      _loadCategories();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _loadUser();
+    _initApp();
   }
 
   @override

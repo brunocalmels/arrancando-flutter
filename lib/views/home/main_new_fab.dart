@@ -63,7 +63,15 @@ class _MainNewFabState extends State<MainNewFab>
                       children: <Widget>[
                         FloatingActionButton(
                           heroTag: "new-recetas",
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => NewContent(
+                                  type: SectionType.recetas,
+                                ),
+                              ),
+                            );
+                          },
                           child: Icon(
                             Icons.book,
                           ),
@@ -75,7 +83,15 @@ class _MainNewFabState extends State<MainNewFab>
                     ),
                     FloatingActionButton(
                       heroTag: "new-pois",
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => NewContent(
+                              type: SectionType.pois,
+                            ),
+                          ),
+                        );
+                      },
                       child: Icon(
                         Icons.map,
                       ),
@@ -99,7 +115,7 @@ class _MainNewFabState extends State<MainNewFab>
                 child: FittedBox(
                   child: FloatingActionButton(
                     backgroundColor:
-                        _showAll ? Theme.of(context).primaryColor : null,
+                        _showAll ? Colors.red[700] : null,
                     onPressed: _toggleShow,
                     child: Icon(
                       _showAll ? Icons.close : Icons.add,

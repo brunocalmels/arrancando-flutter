@@ -29,8 +29,8 @@ class _PublicacionesPageState extends State<PublicacionesPage> {
 
     ResponseObject resp = await Fetcher.get(
       url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
-          ? "/publicaciones/search?term=${widget.searchTerm}"
-          : "/publicaciones",
+          ? "/publicaciones/search.json?term=${widget.searchTerm}"
+          : "/publicaciones.json",
     );
 
     if (resp != null)

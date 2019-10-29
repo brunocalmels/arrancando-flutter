@@ -37,8 +37,8 @@ class _PoiPageState extends State<PoiPage> {
 
     ResponseObject resp = await Fetcher.get(
       url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
-          ? "/v2/deportes/search/${widget.searchTerm}"
-          : "/v2/deportes",
+          ? "/pois/search.json?term=${widget.searchTerm}"
+          : "/pois.json",
     );
 
     if (resp != null)

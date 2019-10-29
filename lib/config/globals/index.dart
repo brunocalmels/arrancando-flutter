@@ -21,24 +21,10 @@ abstract class MyGlobals {
     SectionType.pois: "Ptos. Interés",
   };
 
-  static const TIPOS_CATEGORIAS = {
-    SectionType.home: [
-      'Todo',
-    ],
-    SectionType.publicaciones: [
-      'Neuquén',
-      'Cipolletti',
-      'Plottier',
-    ],
-    SectionType.recetas: [
-      'Con carne',
-      'Sin carne',
-      'Sin comida',
-    ],
-    SectionType.pois: [
-      'Carne',
-      'Leña',
-      'Artesanos del hierro (keeeh???)',
-    ],
+  static const NOMBRES_CATEGORIAS_SINGULAR = {
+    SectionType.home: "Inicio",
+    SectionType.publicaciones: "Publicación",
+    SectionType.recetas: "Receta",
+    SectionType.pois: "Pto. Interés",
   };
 }

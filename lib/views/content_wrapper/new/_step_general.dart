@@ -19,7 +19,6 @@ class StepGeneral extends StatelessWidget {
         children: <Widget>[
           TextFormField(
             decoration: InputDecoration(
-              hasFloatingPlaceholder: false,
               labelText: "Título",
             ),
             controller: tituloController,
@@ -30,10 +29,9 @@ class StepGeneral extends StatelessWidget {
             maxLines: 7,
             decoration: InputDecoration(
               alignLabelWithHint: true,
-              hasFloatingPlaceholder: false,
               labelText: "Cuerpo",
             ),
-            controller: tituloController,
+            controller: cuerpoController,
           ),
         ],
       ),

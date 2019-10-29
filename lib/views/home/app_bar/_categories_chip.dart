@@ -1,3 +1,4 @@
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
@@ -16,6 +17,8 @@ class CategoriesChip extends StatefulWidget {
 }
 
 class _CategoriesChipState extends State<CategoriesChip> {
+  final GlobalSingleton singleton = GlobalSingleton();
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -47,10 +50,10 @@ class _CategoriesChipState extends State<CategoriesChip> {
                   maxWidth: widget.small ? 20 : 150,
                 ),
                 child: Text(
-                  MyGlobals
-                      .TIPOS_CATEGORIAS[
-                          Provider.of<MyState>(context).activePageHome]
-                      .first,
+                  singleton
+                      .categories[Provider.of<MyState>(context).activePageHome]
+                      .first
+                      .nombre,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: Colors.black,

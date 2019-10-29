@@ -22,8 +22,7 @@ class DevLogin extends StatelessWidget {
           builder: (context) => FlatButton(
             onPressed: () {
               emailController.text = "i@m.c";
-              // passwordController.text = "123456";
-              passwordController.text = "ivaneidel";
+              passwordController.text = "123456";
               login(context);
             },
             child: Text(

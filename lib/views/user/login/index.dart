@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   Future attemptLogin(email, password) async {
     try {
       ResponseObject resp = await Fetcher.post(
-        url: "/authenticate",
+        url: "/authenticate.json",
         unauthenticated: true,
         throwError: true,
         body: {

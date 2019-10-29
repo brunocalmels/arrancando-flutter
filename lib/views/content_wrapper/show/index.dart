@@ -36,40 +36,31 @@ class _ShowPageState extends State<ShowPage> {
 
     switch (widget.type) {
       case SectionType.publicaciones:
-        url = "/v2/deportes";
+        url = "/publicaciones";
         break;
       case SectionType.recetas:
-        url = "/v2/deportes";
+        url = "/recetas";
         break;
       case SectionType.pois:
-        url = "/v2/deportes";
+        url = "/pois";
         break;
       default:
-        url = "/v2/deportes";
+        url = "/publicaciones";
     }
 
     ResponseObject resp = await Fetcher.get(
-      url: "$url/${widget.contentId}",
+      url: "$url/${widget.contentId}.json",
     );
 
     if (resp != null) {
       dynamic object = [json.decode(resp.body)]
           .map(
-            (o) => {
-              "id": o['id'],
-              "created_at": o['created_at'],
-              "titulo": o['nombre'],
-              "cuerpo":
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam imperdiet nulla et aliquam convallis. Proin elementum enim non magna sollicitudin, id sollicitudin dui tincidunt. Aliquam maximus quam lectus, ut tempor dolor rhoncus eu. Donec quis diam lectus. Proin accumsan ac ipsum et congue. Mauris vitae lorem odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tincidunt eros at purus ultricies aliquet. Curabitur viverra metus venenatis quam ultricies, sit amet efficitur magna elementum.",
+            (o) => json.decode(json.encode({
+              ...o,
               "imagenes": [
-                o["get_icono"],
-                o["get_icono"],
-                o["get_icono"],
-                o["get_icono"],
-                o["get_icono"],
-                o["get_icono"],
+                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
               ],
-            },
+            })),
           )
           .first;
       _content = ContentWrapper.fromOther(object, widget.type);
@@ -180,7 +171,8 @@ class _ShowPageState extends State<ShowPage> {
                                                 tag:
                                                     "${_content.imagenes[index]}-$index",
                                                 url:
-                                                    "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
+                                                    "${_content.imagenes[index]}",
+                                                    // "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
                                               ),
                                             ),
                                           );

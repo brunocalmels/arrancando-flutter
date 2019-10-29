@@ -48,21 +48,20 @@ class _FastSearchPageState extends State<FastSearchPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/publicaciones/search?term=${widget.searchController.text}?limit=3"
-          : "/publicaciones",
+          ? "/publicaciones/search.json?term=${widget.searchController.text}&limit=3"
+          : "/publicaciones.json",
     );
 
     if (resp != null)
       _publicaciones = (json.decode(resp.body) as List)
           // REMOVE THIS PART
           .map(
-            (p) => {
-              "id": p['id'],
-              "created_at": p['created_at'],
-              "titulo": p['nombre'],
-              "cuerpo": _lorem,
-              "imagenes": [p["get_icono"]],
-            },
+            (p) => json.decode(json.encode({
+              ...p,
+              "imagenes": [
+                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
+              ],
+            })),
           )
           // REMOVE THIS PART
           .map(
@@ -86,21 +85,20 @@ class _FastSearchPageState extends State<FastSearchPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/recetas/search?term=${widget.searchController.text}?limit=3"
-          : "/recetas",
+          ? "/recetas/search.json?term=${widget.searchController.text}&limit=3"
+          : "/recetas.json",
     );
 
     if (resp != null)
       _recetas = (json.decode(resp.body) as List)
           // REMOVE THIS PART
           .map(
-            (p) => {
-              "id": p['id'],
-              "created_at": p['created_at'],
-              "titulo": p['nombre'],
-              "cuerpo": _lorem,
-              "imagenes": [p["get_icono"]],
-            },
+            (p) => json.decode(json.encode({
+              ...p,
+              "imagenes": [
+                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
+              ],
+            })),
           )
           // REMOVE THIS PART
           .map(
@@ -124,23 +122,20 @@ class _FastSearchPageState extends State<FastSearchPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/v2/deportes/search?term=${widget.searchController.text}?limit=3"
-          : "/v2/deportes",
+          ? "/pois/search.json?term=${widget.searchController.text}&limit=3"
+          : "/pois.json",
     );
 
     if (resp != null)
       _pois = (json.decode(resp.body) as List)
           // REMOVE THIS PART
           .map(
-            (p) => {
-              "id": p['id'],
-              "created_at": p['created_at'],
-              "titulo": p['nombre'],
-              "cuerpo": _lorem,
-              "imagenes": [p["get_icono"]],
-              "latitud": double.parse("-38.95${(Random().nextInt(99))}"),
-              "longitud": double.parse("-68.05${(Random().nextInt(99))}"),
-            },
+            (p) => json.decode(json.encode({
+              ...p,
+              "imagenes": [
+                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
+              ],
+            })),
           )
           // REMOVE THIS PART
           .map(
