@@ -48,7 +48,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   _loadCategories() async {
-    print('aca');
     GlobalSingleton gs = GlobalSingleton();
     try {
       //////

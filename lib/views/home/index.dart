@@ -10,6 +10,7 @@ import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -92,6 +93,18 @@ class _MainScaffoldState extends State<MainScaffold> {
             drawer: Drawer(
               child: ListView(
                 children: <Widget>[
+                  DrawerHeader(
+                    padding: const EdgeInsets.all(0),
+                    child: Container(
+                      color: Colors.black12,
+                      child: Center(
+                        child: Text(
+                            Provider.of<MyState>(context).activeUser != null
+                                ? Provider.of<MyState>(context).activeUser.email
+                                : 'No user'),
+                      ),
+                    ),
+                  ),
                   ListTile(
                     leading: Icon(
                       Icons.account_box,
@@ -101,6 +114,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       prefs.remove('activeUser');
+                      Provider.of<MyState>(context).setActiveUser(null);
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (_) => LoginPage(),
@@ -151,7 +165,9 @@ class _MainScaffoldState extends State<MainScaffold> {
                   SizedBox(
                     height: 15,
                   ),
-                  MainBottomBar(),
+                  MainBottomBar(
+                    hideSearch: _hideSearch,
+                  ),
                   SizedBox(
                     height: 15,
                   ),

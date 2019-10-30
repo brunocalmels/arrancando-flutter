@@ -3,6 +3,12 @@ import 'package:arrancando/views/home/bottom_bar/_item.dart';
 import 'package:flutter/material.dart';
 
 class MainBottomBar extends StatelessWidget {
+  final Function hideSearch;
+
+  MainBottomBar({
+    this.hideSearch,
+  });
+
   final List<BBItem> _items = [
     BBItem(
       icon: Icons.home,
@@ -57,6 +63,7 @@ class MainBottomBar extends StatelessWidget {
                 .map(
                   (i) => BBButtonItem(
                     item: i,
+                    hideSearch: hideSearch,
                   ),
                 )
                 .toList(),

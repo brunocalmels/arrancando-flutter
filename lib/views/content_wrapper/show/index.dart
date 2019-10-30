@@ -53,17 +53,17 @@ class _ShowPageState extends State<ShowPage> {
     );
 
     if (resp != null) {
-      dynamic object = [json.decode(resp.body)]
-          .map(
-            (o) => json.decode(json.encode({
-              ...o,
-              "imagenes": [
-                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
-              ],
-            })),
-          )
-          .first;
-      _content = ContentWrapper.fromOther(object, widget.type);
+      // dynamic object = [json.decode(resp.body)]
+      //     .map(
+      //       (o) => json.decode(json.encode({
+      //         ...o,
+      //         "imagenes": [
+      //           "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
+      //         ],
+      //       })),
+      //     )
+      //     .first;
+      _content = ContentWrapper.fromOther(json.decode(resp.body), widget.type);
     }
 
     _fetching = false;
@@ -149,43 +149,53 @@ class _ShowPageState extends State<ShowPage> {
                         //       "${MyGlobals.SERVER_URL}${_content.imagenes[index]}");
                         // },
                         // ),
-                        child: Swiper(
-                          itemCount: _content.imagenes.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Hero(
-                              tag: "${_content.imagenes[index]}-$index",
-                              child: Stack(
-                                fit: StackFit.passthrough,
-                                children: <Widget>[
-                                  Image.network(
-                                    "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
+                        child: _content.imagenes == null ||
+                                _content.imagenes.length == 0
+                            ? Center(
+                                child: Text(
+                                  "No hay imágenes",
+                                  style: TextStyle(
+                                    color: Colors.white,
                                   ),
-                                  Positioned(
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (_) => ImageLarge(
-                                                tag:
-                                                    "${_content.imagenes[index]}-$index",
-                                                url:
-                                                    "${_content.imagenes[index]}",
-                                                    // "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
-                                              ),
+                                ),
+                              )
+                            : Swiper(
+                                itemCount: _content.imagenes.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Hero(
+                                    tag: "${_content.imagenes[index]}-$index",
+                                    child: Stack(
+                                      fit: StackFit.passthrough,
+                                      children: <Widget>[
+                                        Image.network(
+                                          "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
+                                        ),
+                                        Positioned(
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (_) => ImageLarge(
+                                                      tag:
+                                                          "${_content.imagenes[index]}-$index",
+                                                      url:
+                                                          // "${_content.imagenes[index]}",
+                                                          "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
-                                          );
-                                        },
-                                      ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                  );
+                                },
+                                pagination: SwiperPagination(),
                               ),
-                            );
-                          },
-                          pagination: SwiperPagination(),
-                        ),
                       ),
                       SizedBox(
                         height: 50,

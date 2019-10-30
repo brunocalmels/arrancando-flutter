@@ -25,46 +25,57 @@ class _CategoriesChipState extends State<CategoriesChip> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        ChoiceChip(
-          onSelected: (val) async {
-            String res = await showDialog(
-              context: context,
-              builder: (_) => DialogCategorySelect(),
-            );
-            if (res != null) {
-              print(res);
-            }
-          },
-          label: Row(
-            children: <Widget>[
-              Icon(
-                MyGlobals.ICONOS_CATEGORIAS[
-                    Provider.of<MyState>(context).activePageHome],
-                size: widget.small ? 12 : 15,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Container(
-                constraints: BoxConstraints(
-                  maxWidth: widget.small ? 20 : 150,
+        singleton.categories == null ||
+                singleton.categories[
+                        Provider.of<MyState>(context).activePageHome] ==
+                    null ||
+                singleton
+                        .categories[
+                            Provider.of<MyState>(context).activePageHome]
+                        .length ==
+                    0
+            ? Container()
+            : ChoiceChip(
+                onSelected: (val) async {
+                  String res = await showDialog(
+                    context: context,
+                    builder: (_) => DialogCategorySelect(),
+                  );
+                  if (res != null) {
+                    print(res);
+                  }
+                },
+                label: Row(
+                  children: <Widget>[
+                    Icon(
+                      MyGlobals.ICONOS_CATEGORIAS[
+                          Provider.of<MyState>(context).activePageHome],
+                      size: widget.small ? 12 : 15,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Container(
+                      constraints: BoxConstraints(
+                        maxWidth: widget.small ? 20 : 150,
+                      ),
+                      child: Text(
+                        singleton
+                            .categories[
+                                Provider.of<MyState>(context).activePageHome]
+                            .first
+                            .nombre,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: widget.small ? 10 : 14,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  singleton
-                      .categories[Provider.of<MyState>(context).activePageHome]
-                      .first
-                      .nombre,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: widget.small ? 10 : 14,
-                  ),
-                ),
+                selected: false,
               ),
-            ],
-          ),
-          selected: false,
-        ),
       ],
     );
   }

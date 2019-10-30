@@ -5,15 +5,14 @@ import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/index.dart';
-import 'package:arrancando/views/user/login/_dev_login.dart';
-import 'package:arrancando/views/user/signup/index.dart';
+import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
+class SignupPage extends StatefulWidget {
+  SignupPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -21,12 +20,16 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<SignupPage> {
   final formKey = GlobalKey<FormState>();
+  final TextEditingController nombreController = new TextEditingController();
+  final TextEditingController apellidoController = new TextEditingController();
+  final TextEditingController usernameController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
 
   bool sent = false;
+  bool _showAnimation = false;
   bool _obscurePassword = true;
 
   emailValidator(value) {
@@ -45,6 +48,21 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  usernameValidator(String value) {
+    if (value.isEmpty) {
+      return "El campo es obligatorio";
+    } else {
+      Pattern pattern =
+          r'^(?=.{6,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$';
+      RegExp regex = new RegExp(pattern);
+      if (!regex.hasMatch(value) || value.contains(".")) {
+        return "Ingrese un username válido";
+      } else {
+        return null;
+      }
+    }
+  }
+
   requiredValidator(value) {
     if (value.isEmpty) {
       return "El campo es obligatorio";
@@ -53,34 +71,46 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future attemptLogin(email, password) async {
+  Future attemptSignup(
+    nombre,
+    apellido,
+    username,
+    email,
+    password,
+  ) async {
     try {
       ResponseObject resp = await Fetcher.post(
-        url: "/authenticate.json",
+        url: "/users.json",
         unauthenticated: true,
         throwError: true,
         body: {
+          "nombre": nombre,
+          "apellido": apellido,
+          "username": username,
           "email": email,
           "password": password,
         },
       );
 
-      if (resp.status == 200) {
+      if (resp.status == 201) {
         return json.decode(resp.body);
       } else {
-        print("Login error");
+        print("Signup error");
       }
     } catch (e) {
       print(e);
     }
   }
 
-  _login(BuildContext buildContext) async {
+  _signup(BuildContext buildContext) async {
     if (formKey.currentState.validate()) {
       setState(() {
         sent = true;
       });
-      dynamic body = await attemptLogin(
+      dynamic body = await attemptSignup(
+        nombreController.text,
+        apellidoController.text,
+        usernameController.text,
         emailController.text,
         passwordController.text,
       );
@@ -103,13 +133,14 @@ class _LoginPageState extends State<LoginPage> {
         ///
       } else {
         Scaffold.of(buildContext).showSnackBar(SnackBar(
-          content: Text("Error al iniciar sesión"),
+          content: Text("Error al crear cuenta"),
         ));
       }
-      if (mounted)
+      if (mounted) {
         setState(() {
           sent = false;
         });
+      }
     }
   }
 
@@ -144,19 +175,54 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Scaffold(
         body: Center(
-          child: Form(
-            key: formKey,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(15),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    // Image.asset(
-                    //   "assets/images/icon.png",
-                    //   width: MediaQuery.of(context).size.width / 3,
-                    //   height: MediaQuery.of(context).size.height / 3,
-                    // ),
+                    SizedBox(
+                      height: 35,
+                    ),
+                    Text(
+                      'CREAR CUENTA',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 35,
+                    ),
+                    TextFormField(
+                      controller: nombreController,
+                      decoration: new InputDecoration(
+                        hasFloatingPlaceholder: true,
+                        labelText: "Nombre",
+                        hintText: "Pablo",
+                      ),
+                      validator: (value) => requiredValidator(value),
+                    ),
+                    TextFormField(
+                      controller: apellidoController,
+                      decoration: new InputDecoration(
+                        hasFloatingPlaceholder: true,
+                        labelText: "Apellido",
+                        hintText: 'Gomez',
+                      ),
+                      validator: (value) => requiredValidator(value),
+                    ),
+                    TextFormField(
+                      controller: usernameController,
+                      decoration: new InputDecoration(
+                        hasFloatingPlaceholder: true,
+                        labelText: "Nombre de usuario",
+                        hintText: 'pablo_gomez27',
+                      ),
+                      validator: (value) => usernameValidator(value),
+                    ),
                     TextFormField(
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -205,67 +271,43 @@ class _LoginPageState extends State<LoginPage> {
                       // NECESITA EL CONTEXT PARA EL SNACKBAR
                       builder: (context) => RaisedButton(
                         onPressed: () {
-                          _login(context);
+                          _signup(context);
                         },
                         child: Text(
-                          'Login',
+                          'Crear cuenta',
                         ),
                       ),
                     ),
                     if (MyGlobals.SHOW_DEV_LOGIN)
-                      DevLogin(
-                        emailController: emailController,
-                        passwordController: passwordController,
-                        login: _login,
+                      Builder(
+                        // NECESITA EL CONTEXT PARA EL SNACKBAR
+                        builder: (context) => FlatButton(
+                          onPressed: () {
+                            nombreController.text = "hola";
+                            apellidoController.text = "bai";
+                            usernameController.text = "holabai";
+                            emailController.text = "holabai@gm.co";
+                            passwordController.text = "123456";
+                            _signup(context);
+                          },
+                          child: Text(
+                            'holabai@gm.co',
+                          ),
+                        ),
                       ),
-                    // SizedBox(
-                    //   height: 25,
-                    // ),
-                    // RaisedButton(
-                    //   color: Color(0xffdddddd),
-                    //   onPressed: () async {
-                    //     const url =
-                    //         "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
-                    //     if (await canLaunch(url)) {
-                    //       await launch(
-                    //         url,
-                    //         forceSafariVC: false,
-                    //         forceWebView: false,
-                    //       );
-                    //       // SystemChannels.platform
-                    //       //     .invokeMethod('SystemNavigator.pop');
-                    //     } else {
-                    //       throw 'Could not launch $url';
-                    //     }
-                    //   },
-                    //   child: Row(
-                    //     mainAxisSize: MainAxisSize.min,
-                    //     children: <Widget>[
-                    //       Text(
-                    //         'Iniciar con',
-                    //         style: TextStyle(color: Colors.black),
-                    //       ),
-                    //       SizedBox(
-                    //         width: 5,
-                    //       ),
-                    //       Image.asset(
-                    //         "assets/images/logo-google.png",
-                    //         width: 22,
-                    //         height: 22,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
+                    SizedBox(
+                      height: 25,
+                    ),
                     FlatButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (_) => SignupPage(),
+                            builder: (_) => LoginPage(),
                           ),
                         );
                       },
                       child: Text(
-                        'Crear cuenta',
+                        'Ya tengo cuenta',
                       ),
                     ),
                     SizedBox(

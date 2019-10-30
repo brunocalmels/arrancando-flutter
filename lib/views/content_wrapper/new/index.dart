@@ -41,29 +41,63 @@ class _NewContentState extends State<NewContent> {
     });
 
     try {
+      Map<String, dynamic> body = {
+        "titulo": _tituloController.text,
+        "cuerpo": _cuerpoController.text,
+        "imagenes": await Future.wait(
+          _images.map(
+            (i) async => base64Encode(
+              (await i.getByteData(quality: 70)).buffer.asUint8List(),
+            ),
+          ),
+        ),
+      };
+
+      ResponseObject res;
+
       switch (widget.type) {
         case SectionType.publicaciones:
-          ResponseObject res = await Fetcher.post(
+          res = await Fetcher.post(
             url: "/publicaciones.json",
             body: {
-              "titulo": _tituloController.text,
-              "cuerpo": _cuerpoController.text,
+              ...body,
               "ciudad_id": _selectedCategory.id,
             },
           );
-
-          if (res.status == 201) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (_) => ShowPage(
-                  contentId: json.decode(res.body)['id'],
-                ),
-              ),
-            );
-          }
-
+          break;
+        case SectionType.recetas:
+          res = await Fetcher.post(
+            url: "/recetas.json",
+            body: {
+              ...body,
+              "categoria_receta_id": _selectedCategory.id,
+            },
+          );
+          break;
+        case SectionType.pois:
+          res = await Fetcher.post(
+            url: "/pois.json",
+            body: {
+              ...body,
+              "categoria_poi_id": _selectedCategory.id,
+              "lat": _selectedLatitud,
+              "long": _selectedLongitud,
+              "direccion": _selectedDireccion,
+            },
+          );
           break;
         default:
+      }
+
+      if (res != null && res.status == 201) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => ShowPage(
+              contentId: json.decode(res.body)['id'],
+              type: widget.type,
+            ),
+          ),
+        );
       }
     } catch (e) {
       print(e);

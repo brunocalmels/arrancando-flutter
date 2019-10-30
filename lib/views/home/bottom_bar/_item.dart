@@ -5,9 +5,11 @@ import 'package:provider/provider.dart';
 
 class BBButtonItem extends StatefulWidget {
   final BBItem item;
+  final Function hideSearch;
 
   BBButtonItem({
     this.item,
+    this.hideSearch,
   });
 
   @override
@@ -53,8 +55,11 @@ class _BBButtonItemState extends State<BBButtonItem> {
         type: MaterialType.circle,
         child: InkWell(
           // onTap: () => widget.setActiveItem(widget.index),
-          onTap: () => Provider.of<MyState>(context, listen: false)
-              .setActivePageHome(widget.item.value),
+          onTap: () {
+            widget.hideSearch();
+            Provider.of<MyState>(context, listen: false)
+                .setActivePageHome(widget.item.value);
+          },
           child: Row(
             children: <Widget>[
               Padding(
