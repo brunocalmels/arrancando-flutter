@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 abstract class MyGlobals {
   static const bool SHOW_DEV_LOGIN = true;
 
-  static const String SERVER_URL = "http://192.168.0.10:5000";
-  // static const String SERVER_URL = "http://192.168.0.11:5000";
+  // static const String SERVER_URL = "http://192.168.0.10:5000";
+  static const String SERVER_URL = "http://192.168.0.11:5000";
 
   static const ICONOS_CATEGORIAS = {
     SectionType.home: Icons.select_all,
@@ -27,4 +27,7 @@ abstract class MyGlobals {
     SectionType.recetas: "Receta",
     SectionType.pois: "Pto. Interés",
   };
+
+  static final GlobalKey<NavigatorState> mainNavigatorKey =
+      GlobalKey<NavigatorState>();
 }

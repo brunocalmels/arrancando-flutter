@@ -22,7 +22,7 @@ class DialogCategorySelect extends StatelessWidget {
 
             return ListTile(
               onTap: () {
-                Navigator.of(context).pop(_lista[index]);
+                Navigator.of(context).pop(_lista[index].id);
               },
               leading: Icon(Icons.location_on),
               title: Text(_lista[index].nombre),

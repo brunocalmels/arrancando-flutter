@@ -66,7 +66,7 @@ class CardReceta extends StatelessWidget {
                         receta.fecha,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       SizedBox(

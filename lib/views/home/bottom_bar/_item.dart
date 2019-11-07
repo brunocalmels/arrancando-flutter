@@ -25,7 +25,7 @@ class _BBButtonItemState extends State<BBButtonItem> {
         : 0;
     if (mounted) setState(() {});
     if (_width > 0) {
-      await Future.delayed(Duration(milliseconds: 1500));
+      await Future.delayed(Duration(milliseconds: 1000));
       _width = 0;
       if (mounted) setState(() {});
     }

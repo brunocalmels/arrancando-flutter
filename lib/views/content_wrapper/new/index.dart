@@ -164,6 +164,13 @@ class _NewContentState extends State<NewContent> {
           }
         }
         break;
+      case 3:
+        if (_selectedDireccion != null &&
+            _selectedLatitud != null &&
+            _selectedLongitud != null) {
+          _createContent();
+        }
+        break;
       default:
     }
   }

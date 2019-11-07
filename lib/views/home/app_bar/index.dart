@@ -24,18 +24,20 @@ class MainAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
+    return AppBar(
+      elevation: 0,
       iconTheme: IconThemeData(
         color: Colors.black,
       ),
-      floating: true,
-      snap: false,
       leading: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           CircleAvatar(
             radius: 20,
+            backgroundImage: NetworkImage(
+              "https://i.pinimg.com/originals/39/dc/46/39dc46a4e66b01245129a4ed0e1345ce.jpg",
+            ),
             child: Material(
               color: Colors.transparent,
               type: MaterialType.circle,

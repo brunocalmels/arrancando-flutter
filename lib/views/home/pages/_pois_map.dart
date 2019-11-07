@@ -11,10 +11,10 @@ class PoisMap extends StatefulWidget {
   final Function(MapPosition, bool) onPositionChanged;
 
   PoisMap({
-    this.height,
-    this.latitud,
-    this.longitud,
-    this.zoom,
+    @required this.height,
+    @required this.latitud,
+    @required this.longitud,
+    @required this.zoom,
     this.buildCallback,
     this.onPositionChanged,
   });
@@ -30,7 +30,7 @@ class _PoisMapState extends State<PoisMap> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.buildCallback(_controller);
+      if (widget.buildCallback != null) widget.buildCallback(_controller);
     });
   }
 

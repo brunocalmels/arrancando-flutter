@@ -25,10 +25,10 @@ class Receta {
     this.imagenes,
   );
 
-  factory Receta.fromJson(Map<String, dynamic> json) =>
-      _$RecetaFromJson(json);
+  factory Receta.fromJson(Map<String, dynamic> json) => _$RecetaFromJson(json);
 
   Map<String, dynamic> toJson() => _$RecetaToJson(this);
 
-  get fecha => "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}/${createdAt.toLocal().year.toString()}";
+  get fecha =>
+      "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
 }

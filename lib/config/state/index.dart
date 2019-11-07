@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 class MyState extends ChangeNotifier {
   ActiveUser activeUser;
   SectionType activePageHome = SectionType.home;
+  Map<SectionType, int> selectedCategoryHome = {};
+  Map<SectionType, int> preferredCategories = {};
 
   setActiveUser(ActiveUser val) {
     activeUser = val;
@@ -13,6 +15,16 @@ class MyState extends ChangeNotifier {
 
   setActivePageHome(SectionType val) {
     activePageHome = val;
+    notifyListeners();
+  }
+
+  setSelectedCategoryHome(SectionType type, int val) {
+    selectedCategoryHome[type] = val;
+    notifyListeners();
+  }
+
+  setPreferredCategories(SectionType type, int val) {
+    preferredCategories[type] = val;
     notifyListeners();
   }
 }

@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
@@ -8,7 +8,6 @@ import 'package:arrancando/config/models/point_of_interest.dart';
 import 'package:arrancando/config/models/publicacion.dart';
 import 'package:arrancando/config/models/receta.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/views/home/pages/fast_search/_content_tile.dart';
 import 'package:arrancando/views/home/pages/fast_search/_data_group.dart';
 import 'package:flutter/material.dart';
 
@@ -26,12 +25,10 @@ class FastSearchPage extends StatefulWidget {
 }
 
 class _FastSearchPageState extends State<FastSearchPage> {
-  final String _lorem =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam imperdiet nulla et aliquam convallis. Proin elementum enim non magna sollicitudin, id sollicitudin dui tincidunt. Aliquam maximus quam lectus, ut tempor dolor rhoncus eu. Donec quis diam lectus. Proin accumsan ac ipsum et congue. Mauris vitae lorem odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tincidunt eros at purus ultricies aliquet. Curabitur viverra metus venenatis quam ultricies, sit amet efficitur magna elementum.";
-
   List<ContentWrapper> _publicaciones;
   List<ContentWrapper> _recetas;
   List<ContentWrapper> _pois;
+  Timer _debounce;
 
   Map<String, bool> _fetching = {
     "publicaciones": false,
@@ -54,16 +51,16 @@ class _FastSearchPageState extends State<FastSearchPage> {
 
     if (resp != null)
       _publicaciones = (json.decode(resp.body) as List)
-          // REMOVE THIS PART
-          .map(
-            (p) => json.decode(json.encode({
-              ...p,
-              "imagenes": [
-                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
-              ],
-            })),
-          )
-          // REMOVE THIS PART
+          // // REMOVE THIS PART
+          // .map(
+          //   (p) => json.decode(json.encode({
+          //     ...p,
+          //     "imagenes": [
+          //       "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
+          //     ],
+          //   })),
+          // )
+          // // REMOVE THIS PART
           .map(
             (p) => Publicacion.fromJson(p),
           )
@@ -91,16 +88,16 @@ class _FastSearchPageState extends State<FastSearchPage> {
 
     if (resp != null)
       _recetas = (json.decode(resp.body) as List)
-          // REMOVE THIS PART
-          .map(
-            (p) => json.decode(json.encode({
-              ...p,
-              "imagenes": [
-                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
-              ],
-            })),
-          )
-          // REMOVE THIS PART
+          // // REMOVE THIS PART
+          // .map(
+          //   (p) => json.decode(json.encode({
+          //     ...p,
+          //     "imagenes": [
+          //       "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
+          //     ],
+          //   })),
+          // )
+          // // REMOVE THIS PART
           .map(
             (p) => Receta.fromJson(p),
           )
@@ -128,16 +125,16 @@ class _FastSearchPageState extends State<FastSearchPage> {
 
     if (resp != null)
       _pois = (json.decode(resp.body) as List)
-          // REMOVE THIS PART
-          .map(
-            (p) => json.decode(json.encode({
-              ...p,
-              "imagenes": [
-                "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
-              ],
-            })),
-          )
-          // REMOVE THIS PART
+          // // REMOVE THIS PART
+          // .map(
+          //   (p) => json.decode(json.encode({
+          //     ...p,
+          //     "imagenes": [
+          //       "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
+          //     ],
+          //   })),
+          // )
+          // // REMOVE THIS PART
           .map(
             (p) => PointOfInterest.fromJson(p),
           )
@@ -150,13 +147,9 @@ class _FastSearchPageState extends State<FastSearchPage> {
     if (mounted) setState(() {});
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _fetchPublicaciones();
-    _fetchRecetas();
-    _fetchPois();
-    widget.searchController.addListener(() {
+  _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(const Duration(milliseconds: 1000), () {
       if (widget.searchController.text.isNotEmpty) {
         _fetchPublicaciones();
         _fetchRecetas();
@@ -166,38 +159,61 @@ class _FastSearchPageState extends State<FastSearchPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _fetchPublicaciones();
+    _fetchRecetas();
+    _fetchPois();
+    widget.searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.searchController.removeListener(_onSearchChanged);
+    // widget.searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        DataGroup(
-          fetching: _fetching["publicaciones"],
-          icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.publicaciones],
-          title: "Publicaciones",
-          items: _publicaciones,
-          type: SectionType.publicaciones,
-          searchController: widget.searchController,
-        ),
-        DataGroup(
-          fetching: _fetching["recetas"],
-          icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.recetas],
-          title: "Recetas",
-          items: _recetas,
-          type: SectionType.recetas,
-          searchController: widget.searchController,
-        ),
-        DataGroup(
-          fetching: _fetching["pois"],
-          icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.pois],
-          title: "Ptos. Interés",
-          items: _pois,
-          type: SectionType.pois,
-          searchController: widget.searchController,
-        ),
-        Container(
-          height: 130,
-          color: Color(0x05000000),
-        ),
-      ],
+    return RefreshIndicator(
+      onRefresh: () async {
+        await _fetchPublicaciones();
+        await _fetchRecetas();
+        await _fetchPois();
+      },
+      child: ListView(
+        children: <Widget>[
+          DataGroup(
+            fetching: _fetching["publicaciones"],
+            icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.publicaciones],
+            title: "Publicaciones",
+            items: _publicaciones,
+            type: SectionType.publicaciones,
+            searchController: widget.searchController,
+          ),
+          DataGroup(
+            fetching: _fetching["recetas"],
+            icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.recetas],
+            title: "Recetas",
+            items: _recetas,
+            type: SectionType.recetas,
+            searchController: widget.searchController,
+          ),
+          DataGroup(
+            fetching: _fetching["pois"],
+            icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.pois],
+            title: "Ptos. Interés",
+            items: _pois,
+            type: SectionType.pois,
+            searchController: widget.searchController,
+          ),
+          Container(
+            height: 130,
+            color: Color(0x05000000),
+          ),
+        ],
+      ),
     );
   }
 }

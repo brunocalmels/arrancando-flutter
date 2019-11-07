@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/index.dart';
@@ -94,10 +95,13 @@ class _LoginPageState extends State<LoginPage> {
           ActiveUser.fromJson(body),
         );
 
-        Navigator.of(context).pushReplacement(
+        await CategoryWrapper.loadCategories();
+
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (_) => MainScaffold(),
           ),
+          (_) => false,
         );
 
         ///

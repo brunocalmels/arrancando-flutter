@@ -6,6 +6,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_large.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
+import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -53,17 +54,18 @@ class _ShowPageState extends State<ShowPage> {
     );
 
     if (resp != null) {
-      // dynamic object = [json.decode(resp.body)]
-      //     .map(
-      //       (o) => json.decode(json.encode({
-      //         ...o,
-      //         "imagenes": [
-      //           "https://info135.com.ar/wp-content/uploads/2019/08/macri-gato-1170x600-678x381.jpg"
-      //         ],
-      //       })),
-      //     )
-      //     .first;
+      dynamic object = [json.decode(resp.body)]
+          .map(
+            (o) => json.decode(json.encode({
+              ...o,
+              "imagenes": [
+                "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
+              ],
+            })),
+          )
+          .first;
       _content = ContentWrapper.fromOther(json.decode(resp.body), widget.type);
+      // _content = ContentWrapper.fromOther(object, widget.type);
     }
 
     _fetching = false;
@@ -123,9 +125,12 @@ class _ShowPageState extends State<ShowPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text(
-                                  "${_content.titulo}",
-                                  style: Theme.of(context).textTheme.title,
+                                Expanded(
+                                  child: Text(
+                                    "${_content.titulo}",
+                                    style: Theme.of(context).textTheme.title,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 Text("${_content.fecha}"),
                               ],
@@ -133,9 +138,27 @@ class _ShowPageState extends State<ShowPage> {
                             SizedBox(
                               height: 10,
                             ),
-                            Text("${_content.cuerpo}"),
                           ],
                         ),
+                      ),
+                      if (widget.type == SectionType.pois &&
+                          _content.latitud != null &&
+                          _content.longitud != null)
+                        PoisMap(
+                          height: 200,
+                          latitud: _content.latitud,
+                          longitud: _content.longitud,
+                          zoom: 15,
+                        ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Text("${_content.cuerpo}"),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,

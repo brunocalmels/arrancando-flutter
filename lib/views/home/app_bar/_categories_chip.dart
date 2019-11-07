@@ -37,12 +37,18 @@ class _CategoriesChipState extends State<CategoriesChip> {
             ? Container()
             : ChoiceChip(
                 onSelected: (val) async {
-                  String res = await showDialog(
+                  int selected = await showDialog(
                     context: context,
                     builder: (_) => DialogCategorySelect(),
                   );
-                  if (res != null) {
-                    print(res);
+                  if (selected != null) {
+                    Provider.of<MyState>(
+                      context,
+                      listen: false,
+                    ).setSelectedCategoryHome(
+                      Provider.of<MyState>(context).activePageHome,
+                      selected,
+                    );
                   }
                 },
                 label: Row(
@@ -60,10 +66,20 @@ class _CategoriesChipState extends State<CategoriesChip> {
                         maxWidth: widget.small ? 20 : 150,
                       ),
                       child: Text(
-                        singleton
-                            .categories[
-                                Provider.of<MyState>(context).activePageHome]
-                            .first
+                        singleton.categories[Provider.of<MyState>(context).activePageHome]
+                            .firstWhere((c) => Provider.of<MyState>(context)
+                                            .selectedCategoryHome[
+                                        Provider.of<MyState>(context)
+                                            .activePageHome] !=
+                                    null
+                                ? c.id ==
+                                    Provider.of<MyState>(context)
+                                            .selectedCategoryHome[
+                                        Provider.of<MyState>(context)
+                                            .activePageHome]
+                                : c.id ==
+                                    Provider.of<MyState>(context)
+                                        .preferredCategories[Provider.of<MyState>(context).activePageHome])
                             .nombre,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

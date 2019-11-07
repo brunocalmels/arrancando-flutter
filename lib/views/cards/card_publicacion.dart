@@ -27,8 +27,8 @@ class CardPublicacion extends StatelessWidget {
                   Radius.circular(4),
                 ),
                 child: Image.network(
-                  // "${MyGlobals.SERVER_URL}${publicacion.imagenes.first}",
-                  "${publicacion.imagenes.first}",
+                  "${MyGlobals.SERVER_URL}${publicacion.imagenes.first}",
+                  // "${publicacion.imagenes.first}",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -67,7 +67,7 @@ class CardPublicacion extends StatelessWidget {
                         publicacion.fecha,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       SizedBox(

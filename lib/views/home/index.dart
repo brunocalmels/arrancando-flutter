@@ -1,4 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
 import 'package:arrancando/views/home/pages/_home_page.dart';
@@ -10,7 +11,7 @@ import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
+// import 'package:flutter/material.dart' as prefix0;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -114,41 +115,32 @@ class _MainScaffoldState extends State<MainScaffold> {
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       prefs.remove('activeUser');
-                      Provider.of<MyState>(context).setActiveUser(null);
-                      Navigator.of(context).pushReplacement(
+                      Provider.of<MyState>(context, listen: false)
+                          .setActiveUser(null);
+                      Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (_) => LoginPage(),
                         ),
+                        (_) => false,
                       );
                     },
                   )
                 ],
               ),
             ),
-            body: Container(
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  MainAppBar(
-                    sent: _sent,
-                    setSent: _setSent,
-                    showSearchPage: _setShowSearchResults,
-                    searchController: _searchController,
-                    toggleSearch: _toggleSearch,
-                    showSearch: _showSearch,
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate(
-                      [
-                        Container(
-                          child: _getPage(
-                            Provider.of<MyState>(context).activePageHome,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(55),
+              child: MainAppBar(
+                sent: _sent,
+                setSent: _setSent,
+                showSearchPage: _setShowSearchResults,
+                searchController: _searchController,
+                toggleSearch: _toggleSearch,
+                showSearch: _showSearch,
               ),
+            ),
+            body: _getPage(
+              Provider.of<MyState>(context).activePageHome,
             ),
           ),
           Positioned(
