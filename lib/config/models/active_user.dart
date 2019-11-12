@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'active_user.g.dart';
 
@@ -27,4 +28,23 @@ class ActiveUser {
       _$ActiveUserFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActiveUserToJson(this);
+
+  static Future<bool> locationPermissionDenied() async {
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.location);
+
+    if (permission == PermissionStatus.denied) {
+      Map<PermissionGroup, PermissionStatus> permissions =
+          await PermissionHandler()
+              .requestPermissions([PermissionGroup.location]);
+
+      if (permissions.containsKey(PermissionGroup.location) &&
+          permissions[PermissionGroup.location] != PermissionStatus.granted) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+    return false;
+  }
 }

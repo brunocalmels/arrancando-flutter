@@ -1,6 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/views/home/_drawer.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
 import 'package:arrancando/views/home/pages/_content_card_page.dart';
 import 'package:arrancando/views/home/pages/_home_page.dart';
@@ -98,43 +99,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         children: <Widget>[
           Scaffold(
             key: MyGlobals.mainScaffoldKey,
-            drawer: Drawer(
-              child: ListView(
-                children: <Widget>[
-                  DrawerHeader(
-                    padding: const EdgeInsets.all(0),
-                    child: Container(
-                      color: Colors.black12,
-                      child: Center(
-                        child: Text(
-                            Provider.of<MyState>(context).activeUser != null
-                                ? Provider.of<MyState>(context).activeUser.email
-                                : 'No user'),
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.account_box,
-                    ),
-                    title: Text('Cerrar sesión'),
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.remove('activeUser');
-                      Provider.of<MyState>(context, listen: false)
-                          .setActiveUser(null);
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (_) => LoginPage(),
-                        ),
-                        (_) => false,
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
+            drawer: HomeDrawer(),
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(55),
               child: MainAppBar(

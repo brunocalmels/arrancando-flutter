@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
@@ -31,11 +32,18 @@ class _MyAppState extends State<MyApp> {
   _loadUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String activeUser = prefs.getString("activeUser");
+    int preferredCiudadId = prefs.getInt("preferredCiudadId");
     if (activeUser != null) {
       Provider.of<MyState>(context, listen: false).setActiveUser(
         ActiveUser.fromJson(
           json.decode(activeUser),
         ),
+      );
+    }
+    if (preferredCiudadId != null) {
+      Provider.of<MyState>(context, listen: false).setPreferredCategories(
+        SectionType.publicaciones,
+        preferredCiudadId,
       );
     }
     if (mounted)

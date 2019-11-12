@@ -7,84 +7,103 @@ import 'package:flutter/material.dart';
 class TilePoi extends StatelessWidget {
   final ContentWrapper poi;
   final Function onTap;
+  final bool locationDenied;
 
   TilePoi({
     this.poi,
     this.onTap,
+    this.locationDenied,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      leading: Container(
-        width: 40,
-        child: Image.network(
-          "${MyGlobals.SERVER_URL}${poi.imagenes.first}",
-          fit: BoxFit.cover,
-        ),
-      ),
-      title: Row(
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              poi.titulo,
-              overflow: TextOverflow.ellipsis,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        ListTile(
+          onTap: onTap,
+          leading: Container(
+            width: 40,
+            child: Image.network(
+              "${MyGlobals.SERVER_URL}${poi.imagenes.first}",
+              fit: BoxFit.cover,
             ),
           ),
-          Icon(
-            Icons.star,
-            color: Colors.yellow,
-            size: 14,
+          title: Text(
+            poi.titulo,
+            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(
-            width: 3,
-          ),
-          Text(
-            "4.3",
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black87,
-            ),
-          ),
-          Text(
-            " | ",
-            style: TextStyle(
-              color: Colors.black12,
-            ),
-          ),
-          Icon(
-            Icons.location_on,
-            color: Colors.black38,
-            size: 14,
-          ),
-          SizedBox(
-            width: 3,
-          ),
-          Text(
-            "3.5km",
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black87,
-            ),
-          ),
-        ],
-      ),
-      trailing: IconButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => ShowPage(
-                contentId: poi.id,
-                type: SectionType.pois,
+          subtitle: Row(
+            children: <Widget>[
+              Icon(
+                Icons.star,
+                color: Colors.yellow,
+                size: 14,
               ),
+              SizedBox(
+                width: 3,
+              ),
+              Text(
+                "${poi.puntajePromedio}",
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.black54,
+                ),
+              ),
+              Text(
+                " | ",
+                style: TextStyle(
+                  color: Colors.black12,
+                ),
+              ),
+              Icon(
+                Icons.location_on,
+                color: Colors.black38,
+                size: 14,
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              if (!locationDenied)
+                FutureBuilder(
+                  future: poi.distancia,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData && snapshot.data != null) {
+                      return Text(
+                        "${snapshot.data}",
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.black54,
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+            ],
+          ),
+          trailing: IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ShowPage(
+                    contentId: poi.id,
+                    type: SectionType.pois,
+                  ),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.arrow_forward,
             ),
-          );
-        },
-        icon: Icon(
-          Icons.arrow_forward,
+          ),
         ),
-      ),
+        Divider(
+          height: 2,
+        ),
+      ],
     );
   }
 }

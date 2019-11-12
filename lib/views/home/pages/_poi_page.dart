@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
@@ -31,6 +32,7 @@ class _PoiPageState extends State<PoiPage> {
   MapController _mapController;
   List<ContentWrapper> _pois;
   bool _fetching = true;
+  bool _locationDenied = false;
 
   Future<void> _fetchPois() async {
     int categoriaPoiId = Provider.of<MyState>(context, listen: false)
@@ -47,12 +49,17 @@ class _PoiPageState extends State<PoiPage> {
           : "/pois.json${categoriaPoiId != null ? '?categoria_poi_id=' + "$categoriaPoiId" : ''}",
     );
 
-    if (resp != null)
-      _pois = (json.decode(resp.body) as List)
-          .map(
-            (p) => ContentWrapper.fromJson(p),
-          )
-          .toList();
+    if (resp != null) {
+      _pois = (json.decode(resp.body) as List).map(
+        (p) {
+          var content = ContentWrapper.fromJson(p);
+          content.type = SectionType.pois;
+          return content;
+        },
+      ).toList();
+      _pois.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
+      _locationDenied = await ActiveUser.locationPermissionDenied();
+    }
     _fetching = false;
     if (mounted) setState(() {});
   }
@@ -108,6 +115,7 @@ class _PoiPageState extends State<PoiPage> {
                               ContentWrapper p = _pois[index];
                               Widget item = TilePoi(
                                 poi: p,
+                                locationDenied: _locationDenied,
                                 onTap: () {
                                   if (_mapController != null) {
                                     _mapController.move(

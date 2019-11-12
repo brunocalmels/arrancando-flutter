@@ -54,6 +54,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
           return content;
         },
       ).toList();
+    _items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
 
     _fetching = false;
     if (mounted) setState(() {});

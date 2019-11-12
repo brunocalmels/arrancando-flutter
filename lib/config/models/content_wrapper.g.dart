@@ -20,6 +20,7 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
     json['cuerpo'] as String,
     (json['latitud'] as num)?.toDouble(),
     (json['longitud'] as num)?.toDouble(),
+    json['direccion'] as String,
     json['ciudad_id'] as int,
     json['categoria_receta_id'] as int,
     json['categoria_poi_id'] as int,
@@ -28,6 +29,9 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : Puntaje.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['user'] == null
+        ? null
+        : Usuario.fromJson(json['user'] as Map<String, dynamic>),
   );
 }
 
@@ -44,8 +48,10 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'categoria_poi_id': instance.categoriaPoiId,
       'latitud': instance.latitud,
       'longitud': instance.longitud,
+      'direccion': instance.direccion,
       'imagenes': instance.imagenes,
       'puntajes': instance.puntajes,
+      'user': instance.user,
     };
 
 T _$enumDecode<T>(

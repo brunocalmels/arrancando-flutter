@@ -4,6 +4,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/views/content_wrapper/edit/index.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_large.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
@@ -15,8 +16,8 @@ class ShowPage extends StatefulWidget {
   final SectionType type;
 
   ShowPage({
-    this.contentId,
-    this.type,
+    @required this.contentId,
+    @required this.type,
   });
 
   @override
@@ -72,6 +73,20 @@ class _ShowPageState extends State<ShowPage> {
           color: Colors.black,
         ),
         actions: <Widget>[
+          if (_content != null && _content.esOwner(context))
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => EditPage(
+                      contentId: _content.id,
+                      type: _content.type,
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.edit),
+            ),
           IconButton(
             onPressed: () {
               print(

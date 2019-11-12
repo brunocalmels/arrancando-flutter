@@ -9,10 +9,16 @@ import 'package:latlong/latlong.dart';
 class StepMapa extends StatefulWidget {
   final Function(String) setDireccion;
   final Function(double, double) setLatLng;
+  final double latitud;
+  final double longitud;
+  final String direccion;
 
   StepMapa({
     @required this.setDireccion,
     @required this.setLatLng,
+    this.latitud,
+    this.longitud,
+    this.direccion,
   });
 
   @override
@@ -65,6 +71,14 @@ class _StepMapaState extends State<StepMapa> {
       if (_debounce?.isActive ?? false) _debounce.cancel();
       _debounce = Timer(const Duration(milliseconds: 1500), _fetchPlaceByName);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _latitud = widget.latitud != null ? widget.latitud : _latitud;
+    _longitud = widget.longitud != null ? widget.longitud : _longitud;
+    if (widget.direccion != null) _direccionController.text = widget.direccion;
   }
 
   @override
