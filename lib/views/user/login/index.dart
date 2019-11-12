@@ -106,9 +106,11 @@ class _LoginPageState extends State<LoginPage> {
 
         ///
       } else {
-        Scaffold.of(buildContext).showSnackBar(SnackBar(
-          content: Text("Error al iniciar sesión"),
-        ));
+        Scaffold.of(buildContext).showSnackBar(
+          SnackBar(
+            content: Text("Error al iniciar sesión"),
+          ),
+        );
       }
       if (mounted)
         setState(() {
@@ -126,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
             builder: (context) {
               return AlertDialog(
                 title: Text('Salir'),
-                content: Text('¿Estás seguro que querés salir?'),
+                content: Text('¿Querés salir?'),
                 actions: <Widget>[
                   FlatButton(
                     onPressed: () {
@@ -191,8 +193,8 @@ class _LoginPageState extends State<LoginPage> {
                             icon: Icon(
                               Icons.remove_red_eye,
                               color: _obscurePassword
-                                  ? Colors.black12
-                                  : Colors.black38,
+                                  ? Colors.black26
+                                  : Colors.black54,
                             ),
                             onPressed: () {
                               _obscurePassword = !_obscurePassword;

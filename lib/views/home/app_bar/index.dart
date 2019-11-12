@@ -1,4 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/app_bar/_categories_chip.dart';
 import 'package:arrancando/views/home/app_bar/_search_bar.dart';
@@ -42,7 +43,9 @@ class MainAppBar extends StatelessWidget {
               color: Colors.transparent,
               type: MaterialType.circle,
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  MyGlobals.mainScaffoldKey.currentState.openDrawer();
+                },
               ),
             ),
           ),

@@ -26,31 +26,30 @@ class ShowPage extends StatefulWidget {
 class _ShowPageState extends State<ShowPage> {
   ContentWrapper _content;
   bool _fetching = true;
+  String _url;
 
   _fetchContent() async {
     if (mounted)
-      setState(() {
-        _fetching = true;
-      });
+      // setState(() {
+      //   _fetching = true;
+      // });
 
-    String url;
-
-    switch (widget.type) {
-      case SectionType.publicaciones:
-        url = "/publicaciones";
-        break;
-      case SectionType.recetas:
-        url = "/recetas";
-        break;
-      case SectionType.pois:
-        url = "/pois";
-        break;
-      default:
-        url = "/publicaciones";
-    }
+      switch (widget.type) {
+        case SectionType.publicaciones:
+          _url = "/publicaciones";
+          break;
+        case SectionType.recetas:
+          _url = "/recetas";
+          break;
+        case SectionType.pois:
+          _url = "/pois";
+          break;
+        default:
+          _url = "/publicaciones";
+      }
 
     ResponseObject resp = await Fetcher.get(
-      url: "$url/${widget.contentId}.json",
+      url: "$_url/${widget.contentId}.json",
     );
 
     if (resp != null) {
@@ -219,6 +218,38 @@ class _ShowPageState extends State<ShowPage> {
                                 },
                                 pagination: SwiperPagination(),
                               ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [1, 2, 3, 4, 5]
+                            .map(
+                              (p) => IconButton(
+                                onPressed: () async {
+                                  await Fetcher.put(
+                                    url: "$_url/${_content.id}/puntuar.json",
+                                    body: {
+                                      "puntaje": p,
+                                    },
+                                  );
+                                  _fetchContent();
+                                },
+                                icon: Icon(
+                                  _content.puntajePromedio > p
+                                      ? _content.puntajePromedio < p + 1
+                                          ? Icons.star_half
+                                          : Icons.star
+                                      : _content.puntajePromedio == p
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                  color: Colors.amber,
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
                       SizedBox(
                         height: 50,

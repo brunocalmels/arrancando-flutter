@@ -1,11 +1,8 @@
 import 'dart:convert';
 
-import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
-import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
@@ -45,7 +42,6 @@ class _MyAppState extends State<MyApp> {
       setState(() {
         _loaded = true;
       });
-    return;
   }
 
   _initApp() async {

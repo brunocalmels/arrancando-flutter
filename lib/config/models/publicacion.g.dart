@@ -19,6 +19,10 @@ Publicacion _$PublicacionFromJson(Map<String, dynamic> json) {
     json['cuerpo'] as String,
     json['ciudad_id'] as int,
     (json['imagenes'] as List)?.map((e) => e as String)?.toList(),
+    (json['puntajes'] as List)
+        ?.map((e) =>
+            e == null ? null : Puntaje.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -31,4 +35,5 @@ Map<String, dynamic> _$PublicacionToJson(Publicacion instance) =>
       'cuerpo': instance.cuerpo,
       'ciudad_id': instance.ciudadId,
       'imagenes': instance.imagenes,
+      'puntajes': instance.puntajes,
     };

@@ -113,7 +113,9 @@ class CardPublicacion extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      RowPuntajes(),
+                      RowPuntajes(
+                        publicacion: publicacion,
+                      ),
                     ],
                   ),
                 ],

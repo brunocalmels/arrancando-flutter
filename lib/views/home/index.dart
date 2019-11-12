@@ -1,5 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/globals/global_singleton.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
 import 'package:arrancando/views/home/pages/_home_page.dart';
@@ -11,7 +11,6 @@ import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/material.dart' as prefix0;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -91,6 +90,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         fit: StackFit.passthrough,
         children: <Widget>[
           Scaffold(
+            key: MyGlobals.mainScaffoldKey,
             drawer: Drawer(
               child: ListView(
                 children: <Widget>[
@@ -169,8 +169,6 @@ class _MainScaffoldState extends State<MainScaffold> {
           ),
         ],
       ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: MainNewFab(),
     );
   }
 }

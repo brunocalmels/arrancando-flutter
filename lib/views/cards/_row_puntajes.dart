@@ -1,6 +1,13 @@
+import 'package:arrancando/config/models/publicacion.dart';
 import 'package:flutter/material.dart';
 
 class RowPuntajes extends StatelessWidget {
+  final Publicacion publicacion;
+
+  RowPuntajes({
+    this.publicacion,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -16,7 +23,7 @@ class RowPuntajes extends StatelessWidget {
           width: 3,
         ),
         Text(
-          "4.3",
+          "${publicacion.puntajePromedio}",
           style: TextStyle(
             color: Colors.white,
           ),
@@ -31,7 +38,7 @@ class RowPuntajes extends StatelessWidget {
           ),
         ),
         Text(
-          "25",
+          "${publicacion.puntajes.length}",
           style: TextStyle(
             color: Colors.white,
           ),
