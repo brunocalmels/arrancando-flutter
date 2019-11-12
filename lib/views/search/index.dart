@@ -1,7 +1,6 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/views/home/pages/_content_card_page.dart';
 import 'package:arrancando/views/home/pages/_poi_page.dart';
-import 'package:arrancando/views/home/pages/_publicaciones_page.dart';
-import 'package:arrancando/views/home/pages/_recetas_page.dart';
 import 'package:arrancando/views/search/_search_field.dart';
 import 'package:arrancando/views/search/_selector_section_type.dart';
 import 'package:flutter/material.dart';
@@ -21,18 +20,23 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   SectionType _type;
-  bool _sent = false;
   Widget _page;
   final TextEditingController _searchController = TextEditingController();
 
   Widget _getPage(SectionType value, String term) {
     switch (value) {
       case SectionType.publicaciones:
-        return PublicacionesPage(
+        return ContentCardPage(
+          rootUrl: "/publicaciones",
+          categoryParam: "ciudad_id",
+          type: SectionType.publicaciones,
           searchTerm: term,
         );
       case SectionType.recetas:
-        return RecetasPage(
+        return ContentCardPage(
+          rootUrl: "/recetas",
+          categoryParam: "categoria_receta_id",
+          type: SectionType.recetas,
           searchTerm: term,
         );
       case SectionType.pois:
@@ -40,7 +44,10 @@ class _SearchPageState extends State<SearchPage> {
           searchTerm: term,
         );
       default:
-        return PublicacionesPage(
+        return ContentCardPage(
+          rootUrl: "/publicaciones",
+          categoryParam: "ciudad_id",
+          type: SectionType.publicaciones,
           searchTerm: term,
         );
     }

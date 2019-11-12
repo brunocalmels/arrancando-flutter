@@ -29,42 +29,27 @@ class _ShowPageState extends State<ShowPage> {
   String _url;
 
   _fetchContent() async {
-    if (mounted)
-      // setState(() {
-      //   _fetching = true;
-      // });
-
-      switch (widget.type) {
-        case SectionType.publicaciones:
-          _url = "/publicaciones";
-          break;
-        case SectionType.recetas:
-          _url = "/recetas";
-          break;
-        case SectionType.pois:
-          _url = "/pois";
-          break;
-        default:
-          _url = "/publicaciones";
-      }
+    switch (widget.type) {
+      case SectionType.publicaciones:
+        _url = "/publicaciones";
+        break;
+      case SectionType.recetas:
+        _url = "/recetas";
+        break;
+      case SectionType.pois:
+        _url = "/pois";
+        break;
+      default:
+        _url = "/publicaciones";
+    }
 
     ResponseObject resp = await Fetcher.get(
       url: "$_url/${widget.contentId}.json",
     );
 
     if (resp != null) {
-      dynamic object = [json.decode(resp.body)]
-          .map(
-            (o) => json.decode(json.encode({
-              ...o,
-              "imagenes": [
-                "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
-              ],
-            })),
-          )
-          .first;
-      _content = ContentWrapper.fromOther(json.decode(resp.body), widget.type);
-      // _content = ContentWrapper.fromOther(object, widget.type);
+      _content = ContentWrapper.fromJson(json.decode(resp.body));
+      _content.type = widget.type;
     }
 
     _fetching = false;
@@ -250,6 +235,14 @@ class _ShowPageState extends State<ShowPage> {
                               ),
                             )
                             .toList(),
+                      ),
+                      Text(
+                        "${_content.puntajePromedio}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                       SizedBox(
                         height: 50,

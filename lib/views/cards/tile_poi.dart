@@ -1,11 +1,11 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/models/point_of_interest.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
 
 class TilePoi extends StatelessWidget {
-  final PointOfInterest poi;
+  final ContentWrapper poi;
   final Function onTap;
 
   TilePoi({

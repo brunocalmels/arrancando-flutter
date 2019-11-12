@@ -1,15 +1,15 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/models/publicacion.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
 
-class CardPublicacion extends StatelessWidget {
-  final Publicacion publicacion;
+class CardContent extends StatelessWidget {
+  final ContentWrapper content;
 
-  CardPublicacion({
-    this.publicacion,
+  CardContent({
+    this.content,
   });
 
   @override
@@ -27,8 +27,8 @@ class CardPublicacion extends StatelessWidget {
                   Radius.circular(4),
                 ),
                 child: Image.network(
-                  "${MyGlobals.SERVER_URL}${publicacion.imagenes.first}",
-                  // "${publicacion.imagenes.first}",
+                  "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                  // "${content.imagenes.first}",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -42,8 +42,8 @@ class CardPublicacion extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => ShowPage(
-                          contentId: publicacion.id,
-                          type: SectionType.publicaciones,
+                          contentId: content.id,
+                          type: content.type,
                         ),
                       ),
                     );
@@ -64,7 +64,7 @@ class CardPublicacion extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        publicacion.fecha,
+                        content.fecha,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -90,7 +90,7 @@ class CardPublicacion extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        publicacion.titulo,
+                        content.titulo,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.white,
@@ -101,7 +101,7 @@ class CardPublicacion extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        publicacion.cuerpo,
+                        content.cuerpo,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,
                         style: Theme.of(context).textTheme.body1.merge(
@@ -114,7 +114,7 @@ class CardPublicacion extends StatelessWidget {
                         height: 10,
                       ),
                       RowPuntajes(
-                        publicacion: publicacion,
+                        content: content,
                       ),
                     ],
                   ),

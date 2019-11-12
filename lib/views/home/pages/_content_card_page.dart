@@ -2,65 +2,58 @@ import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/models/receta.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
-import 'package:arrancando/views/cards/card_receta.dart';
+import 'package:arrancando/views/cards/card_content.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RecetasPage extends StatefulWidget {
+class ContentCardPage extends StatefulWidget {
+  final String rootUrl;
+  final SectionType type;
+  final String categoryParam;
   final String searchTerm;
 
-  RecetasPage({
+  ContentCardPage({
+    @required this.rootUrl,
+    @required this.type,
+    @required this.categoryParam,
     this.searchTerm,
   });
 
   @override
-  _RecetasPageState createState() => _RecetasPageState();
+  _ContentCardPageState createState() => _ContentCardPageState();
 }
 
-class _RecetasPageState extends State<RecetasPage> {
-  List<Receta> _recetas;
+class _ContentCardPageState extends State<ContentCardPage> {
+  List<ContentWrapper> _items;
   bool _fetching = true;
 
-  Future<void> _fetchRecetas() async {
-    // if (mounted)
-    //   setState(() {
-    //     _fetching = true;
-    //   });
-
-    int categoriaRecetaId = Provider.of<MyState>(context, listen: false)
-                .selectedCategoryHome[SectionType.recetas] !=
+  Future<void> _fetchContent() async {
+    int selectedCategory = Provider.of<MyState>(context, listen: false)
+                .selectedCategoryHome[widget.type] !=
             null
         ? Provider.of<MyState>(context, listen: false)
-            .selectedCategoryHome[SectionType.recetas]
+            .selectedCategoryHome[widget.type]
         : Provider.of<MyState>(context, listen: false)
-            .preferredCategories[SectionType.recetas];
+            .preferredCategories[widget.type];
 
     ResponseObject resp = await Fetcher.get(
       url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
-          ? "/recetas/search.json?term=${widget.searchTerm}"
-          : "/recetas.json${categoriaRecetaId != null ? '?categoria_receta_id=' + "$categoriaRecetaId" : ''}",
+          ? "${widget.rootUrl}/search.json?term=${widget.searchTerm}"
+          : "${widget.rootUrl}.json${selectedCategory != null ? "?" + "${widget.categoryParam}" + "=" + "$selectedCategory" : ''}",
     );
 
     if (resp != null)
-      _recetas = (json.decode(resp.body) as List)
-          // // REMOVE THIS PART
-          // .map(
-          //   (p) => json.decode(json.encode({
-          //     ...p,
-          //     "imagenes": [
-          //       "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
-          //     ],
-          //   })),
-          // )
-          // // REMOVE THIS PART
-          .map(
-            (r) => Receta.fromJson(r),
-          )
-          .toList();
+      _items = (json.decode(resp.body) as List).map(
+        (p) {
+          var content = ContentWrapper.fromJson(p);
+          content.type = widget.type;
+          return content;
+        },
+      ).toList();
 
     _fetching = false;
     if (mounted) setState(() {});
@@ -68,14 +61,14 @@ class _RecetasPageState extends State<RecetasPage> {
 
   _changeListener() {
     if (Provider.of<MyState>(context, listen: false)
-            .selectedCategoryHome[SectionType.recetas] !=
-        null) _fetchRecetas();
+            .selectedCategoryHome[widget.type] !=
+        null) _fetchContent();
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchRecetas();
+    _fetchContent();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<MyState>(MyGlobals.mainNavigatorKey.currentContext)
           .addListener(_changeListener);
@@ -90,19 +83,25 @@ class _RecetasPageState extends State<RecetasPage> {
   }
 
   @override
+  void didUpdateWidget(ContentCardPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _fetchContent();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _fetching
         ? LoadingWidget()
-        : _recetas != null
-            ? _recetas.length > 0
+        : _items != null
+            ? _items.length > 0
                 ? RefreshIndicator(
-                    onRefresh: _fetchRecetas,
+                    onRefresh: _fetchContent,
                     child: ListView(
                       children: [
-                        ..._recetas
+                        ..._items
                             .map(
-                              (r) => CardReceta(
-                                receta: r,
+                              (p) => CardContent(
+                                content: p,
                               ),
                             )
                             .toList(),
@@ -113,7 +112,7 @@ class _RecetasPageState extends State<RecetasPage> {
                       ],
                     ),
                   )
-                : Text("No hay recetas para mostrar")
+                : Text("No hay elementos para mostrar")
             : Text("Ocurrió un error");
   }
 }

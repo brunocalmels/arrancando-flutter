@@ -2,10 +2,9 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
+import 'package:arrancando/views/home/pages/_content_card_page.dart';
 import 'package:arrancando/views/home/pages/_home_page.dart';
 import 'package:arrancando/views/home/pages/_poi_page.dart';
-import 'package:arrancando/views/home/pages/_publicaciones_page.dart';
-import 'package:arrancando/views/home/pages/_recetas_page.dart';
 import 'package:arrancando/views/home/app_bar/index.dart';
 import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
@@ -63,9 +62,17 @@ class _MainScaffoldState extends State<MainScaffold> {
         case SectionType.home:
           return HomePage();
         case SectionType.publicaciones:
-          return PublicacionesPage();
+          return ContentCardPage(
+            rootUrl: "/publicaciones",
+            categoryParam: "ciudad_id",
+            type: SectionType.publicaciones,
+          );
         case SectionType.recetas:
-          return RecetasPage();
+          return ContentCardPage(
+            rootUrl: "/recetas",
+            categoryParam: "categoria_receta_id",
+            type: SectionType.recetas,
+          );
         case SectionType.pois:
           return PoiPage();
         default:

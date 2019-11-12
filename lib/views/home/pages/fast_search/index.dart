@@ -4,9 +4,6 @@ import 'dart:convert';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
-import 'package:arrancando/config/models/point_of_interest.dart';
-import 'package:arrancando/config/models/publicacion.dart';
-import 'package:arrancando/config/models/receta.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/home/pages/fast_search/_data_group.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +22,11 @@ class FastSearchPage extends StatefulWidget {
 }
 
 class _FastSearchPageState extends State<FastSearchPage> {
-  List<ContentWrapper> _publicaciones;
-  List<ContentWrapper> _recetas;
-  List<ContentWrapper> _pois;
+  Map<String, List<ContentWrapper>> _items = {
+    "publicaciones": [],
+    "recetas": [],
+    "pois": [],
+  };
   Timer _debounce;
 
   Map<String, bool> _fetching = {
@@ -36,114 +35,27 @@ class _FastSearchPageState extends State<FastSearchPage> {
     "pois": false,
   };
 
-  _fetchPublicaciones() async {
+  _fetchContent(String type) async {
     if (mounted)
       setState(() {
-        _fetching["publicaciones"] = true;
+        _fetching[type] = true;
       });
 
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/publicaciones/search.json?term=${widget.searchController.text}&limit=3"
-          : "/publicaciones.json",
+          ? "/$type/search.json?term=${widget.searchController.text}&limit=3"
+          : "/$type.json",
     );
 
     if (resp != null)
-      _publicaciones = (json.decode(resp.body) as List)
-          // // REMOVE THIS PART
-          // .map(
-          //   (p) => json.decode(json.encode({
-          //     ...p,
-          //     "imagenes": [
-          //       "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
-          //     ],
-          //   })),
-          // )
-          // // REMOVE THIS PART
+      _items[type] = (json.decode(resp.body) as List)
           .map(
-            (p) => Publicacion.fromJson(p),
-          )
-          .map(
-            (p) => ContentWrapper.fromOther(p, SectionType.publicaciones),
+            (c) => ContentWrapper.fromJson(c),
           )
           .toList();
 
-    _fetching["publicaciones"] = false;
-    if (mounted) setState(() {});
-  }
-
-  _fetchRecetas() async {
-    if (mounted)
-      setState(() {
-        _fetching["recetas"] = true;
-      });
-
-    ResponseObject resp = await Fetcher.get(
-      url: widget.searchController.text != null &&
-              widget.searchController.text.isNotEmpty
-          ? "/recetas/search.json?term=${widget.searchController.text}&limit=3"
-          : "/recetas.json",
-    );
-
-    if (resp != null)
-      _recetas = (json.decode(resp.body) as List)
-          // // REMOVE THIS PART
-          // .map(
-          //   (p) => json.decode(json.encode({
-          //     ...p,
-          //     "imagenes": [
-          //       "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
-          //     ],
-          //   })),
-          // )
-          // // REMOVE THIS PART
-          .map(
-            (p) => Receta.fromJson(p),
-          )
-          .map(
-            (p) => ContentWrapper.fromOther(p, SectionType.recetas),
-          )
-          .toList();
-
-    _fetching["recetas"] = false;
-    if (mounted) setState(() {});
-  }
-
-  _fetchPois() async {
-    if (mounted)
-      setState(() {
-        _fetching["pois"] = true;
-      });
-
-    ResponseObject resp = await Fetcher.get(
-      url: widget.searchController.text != null &&
-              widget.searchController.text.isNotEmpty
-          ? "/pois/search.json?term=${widget.searchController.text}&limit=3"
-          : "/pois.json",
-    );
-
-    if (resp != null)
-      _pois = (json.decode(resp.body) as List)
-          // // REMOVE THIS PART
-          // .map(
-          //   (p) => json.decode(json.encode({
-          //     ...p,
-          //     "imagenes": [
-          //       "http://yesofcorsa.com/wp-content/uploads/2017/05/Chop-Meat-Wallpaper-Download-Free-1024x682.jpg"
-          //     ],
-          //   })),
-          // )
-          // // REMOVE THIS PART
-          .map(
-            (p) => PointOfInterest.fromJson(p),
-          )
-          .map(
-            (p) => ContentWrapper.fromOther(p, SectionType.pois),
-          )
-          .toList();
-
-    _fetching["pois"] = false;
+    _fetching[type] = false;
     if (mounted) setState(() {});
   }
 
@@ -151,9 +63,9 @@ class _FastSearchPageState extends State<FastSearchPage> {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 1000), () {
       if (widget.searchController.text.isNotEmpty) {
-        _fetchPublicaciones();
-        _fetchRecetas();
-        _fetchPois();
+        _fetchContent("publicaciones");
+        _fetchContent("recetas");
+        _fetchContent("pois");
       }
     });
   }
@@ -161,9 +73,9 @@ class _FastSearchPageState extends State<FastSearchPage> {
   @override
   void initState() {
     super.initState();
-    _fetchPublicaciones();
-    _fetchRecetas();
-    _fetchPois();
+    _fetchContent("publicaciones");
+    _fetchContent("recetas");
+    _fetchContent("pois");
     widget.searchController.addListener(_onSearchChanged);
   }
 
@@ -178,9 +90,9 @@ class _FastSearchPageState extends State<FastSearchPage> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        await _fetchPublicaciones();
-        await _fetchRecetas();
-        await _fetchPois();
+        await _fetchContent("publicaciones");
+        await _fetchContent("recetas");
+        await _fetchContent("pois");
       },
       child: ListView(
         children: <Widget>[
@@ -188,7 +100,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
             fetching: _fetching["publicaciones"],
             icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.publicaciones],
             title: "Publicaciones",
-            items: _publicaciones,
+            items: _items["publicaciones"],
             type: SectionType.publicaciones,
             searchController: widget.searchController,
           ),
@@ -196,7 +108,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
             fetching: _fetching["recetas"],
             icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.recetas],
             title: "Recetas",
-            items: _recetas,
+            items: _items["recetas"],
             type: SectionType.recetas,
             searchController: widget.searchController,
           ),
@@ -204,7 +116,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
             fetching: _fetching["pois"],
             icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.pois],
             title: "Ptos. Interés",
-            items: _pois,
+            items: _items["pois"],
             type: SectionType.pois,
             searchController: widget.searchController,
           ),

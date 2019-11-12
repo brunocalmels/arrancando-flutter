@@ -1,11 +1,11 @@
-import 'package:arrancando/config/models/publicacion.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class RowPuntajes extends StatelessWidget {
-  final Publicacion publicacion;
+  final ContentWrapper content;
 
   RowPuntajes({
-    this.publicacion,
+    this.content,
   });
 
   @override
@@ -23,7 +23,7 @@ class RowPuntajes extends StatelessWidget {
           width: 3,
         ),
         Text(
-          "${publicacion.puntajePromedio}",
+          "${content.puntajePromedio}",
           style: TextStyle(
             color: Colors.white,
           ),
@@ -38,7 +38,7 @@ class RowPuntajes extends StatelessWidget {
           ),
         ),
         Text(
-          "${publicacion.puntajes.length}",
+          "${content.puntajes != null ? content.puntajes.length : ''}",
           style: TextStyle(
             color: Colors.white,
           ),
