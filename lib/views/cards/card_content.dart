@@ -26,11 +26,19 @@ class CardContent extends StatelessWidget {
                 borderRadius: BorderRadius.all(
                   Radius.circular(4),
                 ),
-                child: Image.network(
-                  "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-                  // "${content.imagenes.first}",
-                  fit: BoxFit.cover,
-                ),
+                child: content.imagenes.length == 0
+                    ? Center(
+                        child: Icon(
+                          Icons.photo_camera,
+                          size: 100,
+                          color: Color(0x33000000),
+                        ),
+                      )
+                    : Image.network(
+                        "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                        // "${content.imagenes.first}",
+                        fit: BoxFit.cover,
+                      ),
               ),
             ),
             Positioned(

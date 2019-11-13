@@ -27,7 +27,8 @@ class StepCategoria extends StatelessWidget {
           children: singleton.categories[type]
               .map(
                 (t) => RadioListTile<CategoryWrapper>(
-                  selected: selectedCategory.id == t.id,
+                  selected:
+                      selectedCategory != null && selectedCategory.id == t.id,
                   title: Text(t.nombre),
                   groupValue: selectedCategory,
                   value: t,

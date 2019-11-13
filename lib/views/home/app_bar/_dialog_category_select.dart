@@ -13,9 +13,10 @@ class DialogCategorySelect extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
       title: Text('Cambiar filtro'),
       content: Container(
-        height: 150,
+        height: 200,
         child: ListView.builder(
-          itemCount: 3,
+          itemCount: singleton
+              .categories[Provider.of<MyState>(context).activePageHome].length,
           itemBuilder: (BuildContext context, int index) {
             List<CategoryWrapper> _lista = singleton
                 .categories[Provider.of<MyState>(context).activePageHome];

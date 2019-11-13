@@ -21,10 +21,7 @@ class ImageLarge extends StatelessWidget {
       ),
       body: Container(
         child: Center(
-          child: Hero(
-            tag: tag,
-            child: Image.network(url),
-          ),
+          child: Image.network(url),
         ),
       ),
     );

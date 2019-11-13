@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/edit/index.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_large.dart';
+import 'package:arrancando/views/content_wrapper/show/_image_slider.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class _ShowPageState extends State<ShowPage> {
   ContentWrapper _content;
   bool _fetching = true;
   String _url;
+  final GlobalSingleton gs = GlobalSingleton();
 
   _fetchContent() async {
     switch (widget.type) {
@@ -75,8 +78,8 @@ class _ShowPageState extends State<ShowPage> {
         actions: <Widget>[
           if (_content != null && _content.esOwner(context))
             IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
+              onPressed: () async {
+                await Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => EditPage(
                       contentId: _content.id,
@@ -84,6 +87,8 @@ class _ShowPageState extends State<ShowPage> {
                     ),
                   ),
                 );
+                await Future.delayed(Duration(seconds: 1));
+                _fetchContent();
               },
               icon: Icon(Icons.edit),
             ),
@@ -115,7 +120,9 @@ class _ShowPageState extends State<ShowPage> {
                                 Icon(
                                     MyGlobals.ICONOS_CATEGORIAS[_content.type]),
                                 Text(" / "),
-                                Text("Neuquén")
+                                Text(gs.categories[_content.type]
+                                    .firstWhere((c) => c.id == _content.categID)
+                                    .nombre)
                               ],
                             ),
                             SizedBox(
@@ -181,42 +188,8 @@ class _ShowPageState extends State<ShowPage> {
                                   ),
                                 ),
                               )
-                            : Swiper(
-                                itemCount: _content.imagenes.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Hero(
-                                    tag: "${_content.imagenes[index]}-$index",
-                                    child: Stack(
-                                      fit: StackFit.passthrough,
-                                      children: <Widget>[
-                                        Image.network(
-                                          "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
-                                        ),
-                                        Positioned(
-                                          child: Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (_) => ImageLarge(
-                                                      tag:
-                                                          "${_content.imagenes[index]}-$index",
-                                                      url:
-                                                          // "${_content.imagenes[index]}",
-                                                          "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                pagination: SwiperPagination(),
+                            : ImageSlider(
+                                images: _content.imagenes,
                               ),
                       ),
                       SizedBox(
@@ -287,3 +260,38 @@ class _ShowPageState extends State<ShowPage> {
 //   // pageController: widget.pageController,
 //   // onPageChanged: onPageChanged,
 // ),
+
+// Swiper(
+//                                 itemCount: _content.imagenes.length,
+//                                 itemBuilder: (BuildContext context, int index) {
+//                                   return Stack(
+//                                     fit: StackFit.passthrough,
+//                                     children: <Widget>[
+//                                       Image.network(
+//                                         "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
+//                                       ),
+//                                       Positioned(
+//                                         child: Material(
+//                                           color: Colors.transparent,
+//                                           child: InkWell(
+//                                             onTap: () {
+//                                               Navigator.of(context).push(
+//                                                 MaterialPageRoute(
+//                                                   builder: (_) => ImageLarge(
+//                                                     tag:
+//                                                         "${_content.imagenes[index]}-$index",
+//                                                     url:
+//                                                         // "${_content.imagenes[index]}",
+//                                                         "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
+//                                                   ),
+//                                                 ),
+//                                               );
+//                                             },
+//                                           ),
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   );
+//                                 },
+//                                 pagination: SwiperPagination(),
+//                               ),

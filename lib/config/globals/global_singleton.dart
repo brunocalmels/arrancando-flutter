@@ -14,8 +14,10 @@ class GlobalSingleton {
 
   setCategories(SectionType type, List<CategoryWrapper> list) {
     categories[type] = list;
-    MyState st = Provider.of<MyState>(MyGlobals.mainNavigatorKey.currentContext,
-        listen: false);
+    MyState st = Provider.of<MyState>(
+      MyGlobals.mainNavigatorKey.currentContext,
+      listen: false,
+    );
     if (st.preferredCategories[type] == null)
       st.setPreferredCategories(type, list.first.id);
   }
