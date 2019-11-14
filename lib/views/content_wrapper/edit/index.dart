@@ -229,6 +229,14 @@ class _EditPageState extends State<EditPage> {
                         ),
                         Divider(),
                         Text("Imágenes"),
+                        Text(
+                          _removeImagenes.length > 0
+                              ? "Se ${_removeImagenes.length == 1 ? 'eliminará' : 'eliminarán'} ${_removeImagenes.length} ${_removeImagenes.length == 1 ? 'imagen' : 'imágenes'}"
+                              : '',
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                         SizedBox(
                           height: 5,
                         ),
@@ -275,7 +283,7 @@ class _EditPageState extends State<EditPage> {
                                           right: 0,
                                           bottom: 0,
                                           child: FlatButton(
-                                            color: Colors.black26,
+                                            color: Color(0x99000000),
                                             onPressed: () {
                                               _removeImagenes.remove(i);
                                               setState(() {});
@@ -283,7 +291,7 @@ class _EditPageState extends State<EditPage> {
                                             child: Center(
                                               child: Icon(
                                                 Icons.delete,
-                                                color: Color(0x88ff0000),
+                                                color: Color(0xccff0000),
                                                 size: 50,
                                               ),
                                             ),
