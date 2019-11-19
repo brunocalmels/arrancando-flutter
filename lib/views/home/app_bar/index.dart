@@ -51,7 +51,7 @@ class MainAppBar extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       title: showSearch
           ? SearchBar(
               setSent: setSent,

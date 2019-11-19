@@ -1,4 +1,5 @@
 import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:arrancando/views/user/profile/index.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,20 @@ class HomeDrawer extends StatelessWidget {
                 (_) => false,
               );
             },
-          )
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.wb_incandescent,
+            ),
+            title: Text('Ver animación'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => SplashScreen(),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

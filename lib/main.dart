@@ -5,6 +5,7 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
@@ -46,10 +47,6 @@ class _MyAppState extends State<MyApp> {
         preferredCiudadId,
       );
     }
-    if (mounted)
-      setState(() {
-        _loaded = true;
-      });
   }
 
   _initApp() async {
@@ -57,12 +54,6 @@ class _MyAppState extends State<MyApp> {
     if (Provider.of<MyState>(context, listen: false).activeUser != null) {
       await CategoryWrapper.loadCategories();
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _initApp();
   }
 
   @override
@@ -77,7 +68,15 @@ class _MyAppState extends State<MyApp> {
         accentColor: Color(0xffeab01e),
       ),
       home: !_loaded
-          ? Scaffold()
+          ? SplashScreen(
+              loadData: _initApp,
+              toggleStart: () {
+                if (mounted)
+                  setState(() {
+                    _loaded = true;
+                  });
+              },
+            )
           : Provider.of<MyState>(context, listen: false).activeUser == null
               ? LoginPage()
               : MainScaffold(),
