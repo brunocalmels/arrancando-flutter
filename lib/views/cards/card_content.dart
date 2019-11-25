@@ -3,7 +3,10 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class CardContent extends StatelessWidget {
   final ContentWrapper content;
@@ -97,7 +100,21 @@ class CardContent extends StatelessWidget {
                       SizedBox(
                         width: 35,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (content.imagenes.length > 0) {
+                              http.Response response = await http.get(
+                                "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                              );
+
+                              Share.file(
+                                'Compartir imagen',
+                                'imagen.jpg',
+                                response.bodyBytes,
+                                'image/jpg',
+                                text: "Texto texto texto",
+                              );
+                            }
+                          },
                           icon: Icon(
                             Icons.share,
                             color: Colors.white,

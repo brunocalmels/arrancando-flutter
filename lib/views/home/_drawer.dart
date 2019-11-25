@@ -1,5 +1,6 @@
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/views/comunidad/index.dart';
 import 'package:arrancando/views/content_wrapper/saved/index.dart';
 import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/user/login/index.dart';
@@ -70,6 +71,19 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => SavedContentPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.people,
+            ),
+            title: Text('Comunidad Arrancando'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ComunidadPage(),
                 ),
               );
             },
