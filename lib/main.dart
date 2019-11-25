@@ -4,6 +4,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
+import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/home/index.dart';
@@ -53,6 +54,7 @@ class _MyAppState extends State<MyApp> {
     await _loadUser();
     if (Provider.of<MyState>(context, listen: false).activeUser != null) {
       await CategoryWrapper.loadCategories();
+      await SavedContent.initSaved(context);
     }
   }
 

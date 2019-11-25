@@ -15,12 +15,14 @@ class ContentCardPage extends StatefulWidget {
   final SectionType type;
   final String categoryParam;
   final String searchTerm;
+  final bool sortPoints;
 
   ContentCardPage({
     @required this.rootUrl,
     @required this.type,
     @required this.categoryParam,
     this.searchTerm,
+    this.sortPoints = false,
   });
 
   @override
@@ -54,7 +56,16 @@ class _ContentCardPageState extends State<ContentCardPage> {
           return content;
         },
       ).toList();
-    _items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
+    try {
+      if (Provider.of<MyState>(context).activePageHome ==
+              SectionType.publicaciones &&
+          widget.sortPoints)
+        _items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
+      else
+        _items.sort((a, b) => a.createdAt.isAfter(b.createdAt) ? -1 : 1);
+    } catch (e) {
+      print(e);
+    }
 
     _fetching = false;
     if (mounted) setState(() {});
@@ -113,7 +124,13 @@ class _ContentCardPageState extends State<ContentCardPage> {
                       ],
                     ),
                   )
-                : Text("No hay elementos para mostrar")
-            : Text("Ocurrió un error");
+                : Text(
+                    "No hay elementos para mostrar",
+                    textAlign: TextAlign.center,
+                  )
+            : Text(
+                "Ocurrió un error",
+                textAlign: TextAlign.center,
+              );
   }
 }

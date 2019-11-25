@@ -6,6 +6,7 @@ abstract class MyGlobals {
 
   static const String SERVER_URL = "http://192.168.0.10:5000";
   // static const String SERVER_URL = "http://192.168.0.11:5000";
+  // static const String SERVER_URL = "http://192.168.43.138:5000";
 
   static const ICONOS_CATEGORIAS = {
     SectionType.home: Icons.select_all,

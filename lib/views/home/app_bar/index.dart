@@ -13,6 +13,8 @@ class MainAppBar extends StatelessWidget {
   final Function showSearchPage;
   final Function toggleSearch;
   final TextEditingController searchController;
+  final bool sortByPoints;
+  final Function(bool) setSortPublicaciones;
 
   MainAppBar({
     this.sent,
@@ -21,6 +23,8 @@ class MainAppBar extends StatelessWidget {
     this.showSearchPage,
     this.toggleSearch,
     this.searchController,
+    this.sortByPoints,
+    this.setSortPublicaciones,
   });
 
   @override
@@ -34,10 +38,12 @@ class MainAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(
-              "https://i.pinimg.com/originals/39/dc/46/39dc46a4e66b01245129a4ed0e1345ce.jpg",
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(100),
             ),
             child: Material(
               color: Colors.transparent,
@@ -46,6 +52,7 @@ class MainAppBar extends StatelessWidget {
                 onTap: () {
                   MyGlobals.mainScaffoldKey.currentState.openDrawer();
                 },
+                child: Icon(Icons.person),
               ),
             ),
           ),
@@ -62,12 +69,41 @@ class MainAppBar extends StatelessWidget {
               ? CategoriesChip()
               : null,
       actions: <Widget>[
+        if (!showSearch &&
+            Provider.of<MyState>(context).activePageHome ==
+                SectionType.publicaciones)
+          PopupMenuButton<bool>(
+            icon: Icon(Icons.filter_list),
+            onSelected: (val) {
+              setSortPublicaciones(val);
+            },
+            itemBuilder: (context) => <PopupMenuItem<bool>>[
+              PopupMenuItem(
+                value: false,
+                child: Text(
+                  "Fecha",
+                  style: TextStyle(
+                      color:
+                          !sortByPoints ? Theme.of(context).accentColor : null),
+                ),
+              ),
+              PopupMenuItem(
+                value: true,
+                child: Text(
+                  "Puntuación",
+                  style: TextStyle(
+                      color:
+                          sortByPoints ? Theme.of(context).accentColor : null),
+                ),
+              ),
+            ],
+          ),
         IconButton(
           onPressed: toggleSearch,
           icon: Icon(
             showSearch ? Icons.close : Icons.search,
           ),
-        )
+        ),
       ],
     );
   }

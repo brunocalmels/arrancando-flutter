@@ -1,6 +1,6 @@
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
@@ -71,15 +71,31 @@ class CardContent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        content.fecha,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                      Expanded(
+                        child: Text(
+                          content.fecha,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
+                      if (content != null)
+                        SizedBox(
+                          width: 35,
+                          child: IconButton(
+                            onPressed: () =>
+                                SavedContent.toggleSave(content, context),
+                            icon: Icon(
+                              SavedContent.isSaved(content, context)
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_border,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       SizedBox(
-                        width: 30,
+                        width: 35,
                         child: IconButton(
                           onPressed: () {},
                           icon: Icon(

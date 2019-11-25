@@ -4,14 +4,13 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/edit/index.dart';
-import 'package:arrancando/views/content_wrapper/show/_image_large.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_slider.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 
 class ShowPage extends StatefulWidget {
   final int contentId;
@@ -92,13 +91,22 @@ class _ShowPageState extends State<ShowPage> {
               },
               icon: Icon(Icons.edit),
             ),
+          if (_content != null)
+            IconButton(
+              onPressed: () => SavedContent.toggleSave(_content, context),
+              icon: Icon(
+                SavedContent.isSaved(_content, context)
+                    ? Icons.bookmark
+                    : Icons.bookmark_border,
+              ),
+            ),
           IconButton(
             onPressed: () {
               print(
                   "/${_content.type.toString().split('.').last}/${_content.id}");
             },
             icon: Icon(Icons.share),
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -170,14 +178,6 @@ class _ShowPageState extends State<ShowPage> {
                         width: MediaQuery.of(context).size.width,
                         height: 250,
                         color: Colors.black,
-                        // child: ListView.builder(
-                        //   itemCount: _content.imagenes.length,
-                        //   scrollDirection: Axis.horizontal,
-                        // itemBuilder: (BuildContext context, int index) {
-                        //   return Image.network(
-                        //       "${MyGlobals.SERVER_URL}${_content.imagenes[index]}");
-                        // },
-                        // ),
                         child: _content.imagenes == null ||
                                 _content.imagenes.length == 0
                             ? Center(
@@ -241,57 +241,3 @@ class _ShowPageState extends State<ShowPage> {
     );
   }
 }
-
-// PhotoViewGallery.builder(
-//   scrollPhysics: const BouncingScrollPhysics(),
-//   builder: (BuildContext context, int index) {
-//     return PhotoViewGalleryPageOptions(
-//       imageProvider: NetworkImage(
-//           "${MyGlobals.SERVER_URL}${_content.imagenes[index]}"),
-//       initialScale:
-//           PhotoViewComputedScale.contained * 0.8,
-//       // heroAttributes:
-//       //     HeroAttributes(tag: "$index"),
-//     );
-//   },
-//   itemCount: _content.imagenes.length,
-//   loadingChild: CircularProgressIndicator(),
-//   // backgroundDecoration: widget.backgroundDecoration,
-//   // pageController: widget.pageController,
-//   // onPageChanged: onPageChanged,
-// ),
-
-// Swiper(
-//                                 itemCount: _content.imagenes.length,
-//                                 itemBuilder: (BuildContext context, int index) {
-//                                   return Stack(
-//                                     fit: StackFit.passthrough,
-//                                     children: <Widget>[
-//                                       Image.network(
-//                                         "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
-//                                       ),
-//                                       Positioned(
-//                                         child: Material(
-//                                           color: Colors.transparent,
-//                                           child: InkWell(
-//                                             onTap: () {
-//                                               Navigator.of(context).push(
-//                                                 MaterialPageRoute(
-//                                                   builder: (_) => ImageLarge(
-//                                                     tag:
-//                                                         "${_content.imagenes[index]}-$index",
-//                                                     url:
-//                                                         // "${_content.imagenes[index]}",
-//                                                         "${MyGlobals.SERVER_URL}${_content.imagenes[index]}",
-//                                                   ),
-//                                                 ),
-//                                               );
-//                                             },
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   );
-//                                 },
-//                                 pagination: SwiperPagination(),
-//                               ),

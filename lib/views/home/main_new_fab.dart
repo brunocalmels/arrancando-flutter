@@ -44,6 +44,7 @@ class _MainNewFabState extends State<MainNewFab>
                     FloatingActionButton(
                       heroTag: "new-publicaciones",
                       onPressed: () {
+                        _toggleShow();
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => NewContent(
@@ -64,6 +65,7 @@ class _MainNewFabState extends State<MainNewFab>
                         FloatingActionButton(
                           heroTag: "new-recetas",
                           onPressed: () {
+                            _toggleShow();
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => NewContent(
@@ -84,6 +86,7 @@ class _MainNewFabState extends State<MainNewFab>
                     FloatingActionButton(
                       heroTag: "new-pois",
                       onPressed: () {
+                        _toggleShow();
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => NewContent(
@@ -114,8 +117,7 @@ class _MainNewFabState extends State<MainNewFab>
                 height: 40,
                 child: FittedBox(
                   child: FloatingActionButton(
-                    backgroundColor:
-                        _showAll ? Colors.red[700] : null,
+                    backgroundColor: _showAll ? Colors.red[700] : null,
                     onPressed: _toggleShow,
                     child: Icon(
                       _showAll ? Icons.close : Icons.add,
