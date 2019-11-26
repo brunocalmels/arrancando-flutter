@@ -1,3 +1,4 @@
+import 'package:arrancando/views/content_wrapper/new/_record_camera_page.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
@@ -57,56 +58,79 @@ class _StepImagenesState extends State<StepImagenes> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: widget.images.length == 0
-          ? Container(
-              height: 150,
-              child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'No hay imágenes seleccionadas',
-                      textAlign: TextAlign.center,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          child: widget.images.length == 0
+              ? Container(
+                  height: 150,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'No hay imágenes seleccionadas',
+                          textAlign: TextAlign.center,
+                        ),
+                        FlatButton(
+                          onPressed: loadAssets,
+                          child: Text("SELECCIONAR"),
+                        ),
+                      ],
                     ),
-                    FlatButton(
-                      onPressed: loadAssets,
-                      child: Text("SELECCIONAR"),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : Wrap(
-              direction: Axis.horizontal,
-              children: widget.images
-                  .map(
-                    (asset) => Padding(
-                      padding: const EdgeInsets.all(2),
-                      child: AssetThumb(
-                        asset: asset,
-                        width: (MediaQuery.of(context).size.width - 40) ~/ 3.2,
-                        height: (MediaQuery.of(context).size.width - 40) ~/ 3.2,
-                        spinner: Container(
-                          width: (MediaQuery.of(context).size.width - 45) / 3.2,
-                          height:
-                              (MediaQuery.of(context).size.width - 45) / 3.2,
-                          child: Center(
-                            child: SizedBox(
-                              width: 25,
-                              height: 25,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
+                  ),
+                )
+              : Wrap(
+                  direction: Axis.horizontal,
+                  children: widget.images
+                      .map(
+                        (asset) => Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: AssetThumb(
+                            asset: asset,
+                            width:
+                                (MediaQuery.of(context).size.width - 40) ~/ 3.2,
+                            height:
+                                (MediaQuery.of(context).size.width - 40) ~/ 3.2,
+                            spinner: Container(
+                              width: (MediaQuery.of(context).size.width - 45) /
+                                  3.2,
+                              height: (MediaQuery.of(context).size.width - 45) /
+                                  3.2,
+                              child: Center(
+                                child: SizedBox(
+                                  width: 25,
+                                  height: 25,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
+                      )
+                      .toList(),
+                ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => RecordCameraPage(),
+              ),
+            );
+          },
+          child: Text("O, grabá un video"),
+        )
+      ],
     );
   }
 }

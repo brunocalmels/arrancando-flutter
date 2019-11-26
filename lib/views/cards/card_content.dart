@@ -5,7 +5,6 @@ import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class CardContent extends StatelessWidget {
@@ -105,7 +104,6 @@ class CardContent extends StatelessWidget {
                               http.Response response = await http.get(
                                 "${MyGlobals.SERVER_URL}${content.imagenes.first}",
                               );
-
                               Share.file(
                                 'Compartir imagen',
                                 'imagen.jpg',

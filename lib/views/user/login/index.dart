@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -224,44 +225,42 @@ class _LoginPageState extends State<LoginPage> {
                         passwordController: passwordController,
                         login: _login,
                       ),
-                    // SizedBox(
-                    //   height: 25,
-                    // ),
-                    // RaisedButton(
-                    //   color: Color(0xffdddddd),
-                    //   onPressed: () async {
-                    //     const url =
-                    //         "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
-                    //     if (await canLaunch(url)) {
-                    //       await launch(
-                    //         url,
-                    //         forceSafariVC: false,
-                    //         forceWebView: false,
-                    //       );
-                    //       // SystemChannels.platform
-                    //       //     .invokeMethod('SystemNavigator.pop');
-                    //     } else {
-                    //       throw 'Could not launch $url';
-                    //     }
-                    //   },
-                    //   child: Row(
-                    //     mainAxisSize: MainAxisSize.min,
-                    //     children: <Widget>[
-                    //       Text(
-                    //         'Iniciar con',
-                    //         style: TextStyle(color: Colors.black),
-                    //       ),
-                    //       SizedBox(
-                    //         width: 5,
-                    //       ),
-                    //       Image.asset(
-                    //         "assets/images/logo-google.png",
-                    //         width: 22,
-                    //         height: 22,
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    RaisedButton(
+                      color: Color(0xffdddddd),
+                      onPressed: () async {
+                        const url =
+                            "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
+                        if (await canLaunch(url)) {
+                          await launch(
+                            url,
+                            forceSafariVC: false,
+                            forceWebView: false,
+                          );
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Iniciar con',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Image.asset(
+                            "assets/images/logo-google.png",
+                            width: 22,
+                            height: 22,
+                          ),
+                        ],
+                      ),
+                    ),
                     FlatButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
