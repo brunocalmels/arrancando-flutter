@@ -117,19 +117,19 @@ class _StepImagenesState extends State<StepImagenes> {
                       .toList(),
                 ),
         ),
-        SizedBox(
-          height: 15,
-        ),
-        FlatButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => RecordCameraPage(),
-              ),
-            );
-          },
-          child: Text("O, grabá un video"),
-        )
+        // SizedBox(
+        //   height: 15,
+        // ),
+        // FlatButton(
+        //   onPressed: () {
+        //     Navigator.of(context).push(
+        //       MaterialPageRoute(
+        //         builder: (_) => RecordCameraPage(),
+        //       ),
+        //     );
+        //   },
+        //   child: Text("O, grabá un video"),
+        // )
       ],
     );
   }
