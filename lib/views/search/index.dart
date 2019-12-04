@@ -75,44 +75,30 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              iconTheme: IconThemeData(
-                color: Colors.black,
-              ),
-              floating: true,
-              snap: false,
-              backgroundColor: Colors.transparent,
-              title: SearchField(
-                searchController: _searchController,
-                onChanged: (val) {
-                  _reloadPage();
-                },
-              ),
-              actions: <Widget>[
-                SelectorSectionType(
-                  setActiveType: (type) {
-                    _type = type;
-                    if (mounted) setState(() {});
-                    _reloadPage();
-                  },
-                  activeType: _type,
-                ),
-              ],
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Container(
-                    child: _page,
-                  )
-                ],
-              ),
-            ),
-          ],
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black,
         ),
+        backgroundColor: Colors.transparent,
+        title: SearchField(
+          searchController: _searchController,
+          onChanged: (val) {
+            _reloadPage();
+          },
+        ),
+        actions: <Widget>[
+          SelectorSectionType(
+            setActiveType: (type) {
+              _type = type;
+              if (mounted) setState(() {});
+              _reloadPage();
+            },
+            activeType: _type,
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: _page,
       ),
     );
   }

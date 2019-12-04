@@ -36,11 +36,20 @@ class CardContent extends StatelessWidget {
                           color: Color(0x33000000),
                         ),
                       )
-                    : Image.network(
-                        "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-                        // "${content.imagenes.first}",
-                        fit: BoxFit.cover,
-                      ),
+                    : ['mp4', 'mpg', 'mpeg']
+                            .contains(content.imagenes.first.split('.').last)
+                        ? Center(
+                            child: Icon(
+                              Icons.video_library,
+                              size: 100,
+                              color: Color(0x33000000),
+                            ),
+                          )
+                        : Image.network(
+                            "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                            // "${content.imagenes.first}",
+                            fit: BoxFit.cover,
+                          ),
               ),
             ),
             Positioned(

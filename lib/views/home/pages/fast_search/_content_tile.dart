@@ -25,10 +25,19 @@ class ContentTile extends StatelessWidget {
       },
       trailing: Container(
         width: 40,
-        child: Image.network(
-          "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-          fit: BoxFit.cover,
-        ),
+        child: content != null &&
+                content.imagenes != null &&
+                content.imagenes.length == 0
+            ? Center(
+                child: Icon(
+                  Icons.photo_camera,
+                  color: Color(0x33000000),
+                ),
+              )
+            : Image.network(
+                "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                fit: BoxFit.cover,
+              ),
       ),
       title: Text(content.titulo),
     );

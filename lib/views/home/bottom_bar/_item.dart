@@ -31,6 +31,11 @@ class _BBButtonItemState extends State<BBButtonItem> {
     }
   }
 
+  _stopTextAnimation() async {
+    _width = 0;
+    if (mounted) setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +49,8 @@ class _BBButtonItemState extends State<BBButtonItem> {
     super.didUpdateWidget(oldWidget);
     if (Provider.of<MyState>(context).activePageHome == widget.item.value)
       _setTextAnimation();
+    else
+      _stopTextAnimation();
   }
 
   @override
@@ -54,7 +61,6 @@ class _BBButtonItemState extends State<BBButtonItem> {
         color: Colors.transparent,
         type: MaterialType.circle,
         child: InkWell(
-          // onTap: () => widget.setActiveItem(widget.index),
           onTap: () {
             widget.hideSearch();
             Provider.of<MyState>(context, listen: false)

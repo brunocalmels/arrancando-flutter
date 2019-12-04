@@ -194,7 +194,9 @@ class _ProfilePageState extends State<ProfilePage> {
             onTap: () async {
               int ciudadId = await showDialog(
                 context: context,
-                builder: (_) => DialogCategorySelect(),
+                builder: (_) => DialogCategorySelect(
+                  selectCity: true,
+                ),
               );
               if (ciudadId != null) {
                 Provider.of<MyState>(context, listen: false)

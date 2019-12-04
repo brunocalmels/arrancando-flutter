@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
@@ -12,7 +13,8 @@ import 'package:arrancando/views/content_wrapper/new/_step_imagenes.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_mapa.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class EditPage extends StatefulWidget {
   final int contentId;
@@ -36,7 +38,7 @@ class _EditPageState extends State<EditPage> {
   final TextEditingController _cuerpoController = TextEditingController();
   final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
   CategoryWrapper _selectedCategory;
-  List<Asset> _images = List<Asset>();
+  List<File> _images = [];
   String _selectedDireccion;
   double _selectedLatitud;
   double _selectedLongitud;
@@ -44,6 +46,7 @@ class _EditPageState extends State<EditPage> {
   bool _enableImagenes = false;
   List<String> _removeImagenes = [];
   Function _loadAssets;
+  Map<String, File> _videoThumbs = {};
 
   _fetchContent() async {
     switch (widget.type) {
@@ -81,8 +84,10 @@ class _EditPageState extends State<EditPage> {
       _selectedDireccion = _content.direccion;
     }
 
-    _fetching = false;
     if (mounted) setState(() {});
+    await Future.delayed(Duration(seconds: 1));
+    _getVideosThumbs();
+    _fetching = false;
   }
 
   _setCategory(CategoryWrapper val) {
@@ -91,9 +96,15 @@ class _EditPageState extends State<EditPage> {
     });
   }
 
-  _setImages(List<Asset> val) {
+  _setImages(List<File> val) {
     setState(() {
       _images = val;
+    });
+  }
+
+  _removeImage(File asset) {
+    setState(() {
+      _images.remove(asset);
     });
   }
 
@@ -119,11 +130,14 @@ class _EditPageState extends State<EditPage> {
       Map<String, dynamic> body = {
         "titulo": _tituloController.text,
         "cuerpo": _cuerpoController.text,
-        "imagenes": await Future.wait<String>(
+        "imagenes": await Future.wait(
           _images.map(
-            (i) async => base64Encode(
-              (await i.getByteData(quality: 70)).buffer.asUint8List(),
-            ),
+            (i) async => {
+              "file": i.path.split('/').last,
+              "data": base64Encode(
+                (await i.readAsBytes()).buffer.asUint8List(),
+              )
+            },
           ),
         ),
         "remove_imagenes": _removeImagenes,
@@ -176,6 +190,30 @@ class _EditPageState extends State<EditPage> {
       setState(() {
         _sent = false;
       });
+  }
+
+  _getVideosThumbs() async {
+    _videoThumbs = {};
+    String thumbPath = (await getTemporaryDirectory()).path;
+    await Future.wait(
+      _content.imagenes.map(
+        (i) async {
+          if (['mp4', 'mpg', 'mpeg']
+              .contains(i.split('.').last.toLowerCase())) {
+            _videoThumbs[i] = File(
+              await VideoThumbnail.thumbnailFile(
+                video: "${MyGlobals.SERVER_URL}$i",
+                thumbnailPath: thumbPath,
+                imageFormat: ImageFormat.WEBP,
+                maxHeightOrWidth: 250,
+                quality: 70,
+              ),
+            );
+          }
+        },
+      ),
+    );
+    if (mounted) setState(() {});
   }
 
   @override
@@ -262,9 +300,38 @@ class _EditPageState extends State<EditPage> {
                                           _removeImagenes.add(i);
                                           setState(() {});
                                         },
-                                        child: Image.network(
-                                          "${MyGlobals.SERVER_URL}$i",
-                                        ),
+                                        child: ['mp4', 'mpg', 'mpeg'].contains(
+                                                i.split('.').last.toLowerCase())
+                                            ? _videoThumbs[i] == null
+                                                ? SizedBox(
+                                                    height: 25,
+                                                    width: 25,
+                                                    child: Center(
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Stack(
+                                                    fit: StackFit.passthrough,
+                                                    children: <Widget>[
+                                                      Center(
+                                                        child: Image.file(
+                                                          _videoThumbs[i],
+                                                        ),
+                                                      ),
+                                                      Center(
+                                                        child: Icon(
+                                                          Icons.play_arrow,
+                                                          color: Colors.white,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                            : Image.network(
+                                                "${MyGlobals.SERVER_URL}$i",
+                                              ),
                                       ),
                                       if (!_removeImagenes.contains(i))
                                         Positioned(
@@ -303,29 +370,26 @@ class _EditPageState extends State<EditPage> {
                               )
                               .toList(),
                         ),
-                        if (_enableImagenes)
-                          StepImagenes(
-                            images: _images,
-                            setImages: _setImages,
-                            createdCallback: (loadAssets) {
-                              _loadAssets = loadAssets;
-                              setState(() {});
-                            },
-                          ),
-                        if (!_enableImagenes)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Center(
-                              child: FlatButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _enableImagenes = true;
-                                  });
-                                },
-                                child: Text("AÑADIR IMÁGENES"),
-                              ),
-                            ),
-                          ),
+                        // if (_enableImagenes)
+                        StepImagenes(
+                          images: _images,
+                          setImages: _setImages,
+                          removeImage: _removeImage,
+                        ),
+                        // if (!_enableImagenes)
+                        //   Padding(
+                        //     padding: const EdgeInsets.only(top: 15),
+                        //     child: Center(
+                        //       child: FlatButton(
+                        //         onPressed: () {
+                        //           setState(() {
+                        //             _enableImagenes = true;
+                        //           });
+                        //         },
+                        //         child: Text("AÑADIR IMÁGENES"),
+                        //       ),
+                        //     ),
+                        //   ),
                         if (_enableImagenes &&
                             _loadAssets != null &&
                             _images.length > 0)
@@ -354,7 +418,8 @@ class _EditPageState extends State<EditPage> {
                               ),
                             ),
                           ),
-                        if (_content.type == SectionType.pois) Divider(),
+                        if (_content.type == SectionType.pois)
+                          Divider(),
                         if (_content.type == SectionType.pois)
                           StepMapa(
                             setDireccion: _setDireccion,

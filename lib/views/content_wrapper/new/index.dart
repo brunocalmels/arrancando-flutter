@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
@@ -10,7 +11,6 @@ import 'package:arrancando/views/content_wrapper/new/_step_imagenes.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_mapa.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 
 class NewContent extends StatefulWidget {
   final SectionType type;
@@ -29,7 +29,8 @@ class _NewContentState extends State<NewContent> {
   final TextEditingController _cuerpoController = TextEditingController();
   final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
   CategoryWrapper _selectedCategory;
-  List<Asset> _images = List<Asset>();
+  // List<Asset> _images = List<Asset>();
+  List<File> _images = List<File>();
   String _selectedDireccion;
   double _selectedLatitud;
   double _selectedLongitud;
@@ -46,9 +47,12 @@ class _NewContentState extends State<NewContent> {
         "cuerpo": _cuerpoController.text,
         "imagenes": await Future.wait(
           _images.map(
-            (i) async => base64Encode(
-              (await i.getByteData(quality: 70)).buffer.asUint8List(),
-            ),
+            (i) async => {
+              "file": i.path.split('/').last,
+              "data": base64Encode(
+                (await i.readAsBytes()).buffer.asUint8List(),
+              )
+            },
           ),
         ),
       };
@@ -115,9 +119,16 @@ class _NewContentState extends State<NewContent> {
     });
   }
 
-  _setImages(List<Asset> val) {
+  // _setImages(List<Asset> val) {
+  _setImages(List<File> val) {
     setState(() {
       _images = val;
+    });
+  }
+
+  _removeImage(File asset) {
+    setState(() {
+      _images.remove(asset);
     });
   }
 
@@ -258,6 +269,7 @@ class _NewContentState extends State<NewContent> {
               content: StepImagenes(
                 images: _images,
                 setImages: _setImages,
+                removeImage: _removeImage,
               ),
             ),
             if (widget.type == SectionType.pois)
