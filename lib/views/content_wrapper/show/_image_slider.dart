@@ -102,8 +102,12 @@ class _ImageSliderState extends State<ImageSlider> {
                         height: 25,
                         width: 25,
                         child: Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
+                          // child: CircularProgressIndicator(
+                          //   strokeWidth: 2,
+                          // ),
+                          child: Text(
+                            ". . .",
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       )

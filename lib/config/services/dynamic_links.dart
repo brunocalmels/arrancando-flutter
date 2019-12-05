@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,9 @@ abstract class DynamicLinks {
                     );
                     Provider.of<MyState>(context, listen: false)
                         .setActiveUser(ActiveUser.fromJson(json.decode(body)));
+
+                    await CategoryWrapper.loadCategories();
+
                     MyGlobals.mainNavigatorKey.currentState.pushAndRemoveUntil(
                       MaterialPageRoute(
                         builder: (_) => MainScaffold(),
