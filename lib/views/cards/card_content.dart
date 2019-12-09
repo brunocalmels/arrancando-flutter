@@ -5,6 +5,7 @@ import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class CardContent extends StatelessWidget {
@@ -52,23 +53,8 @@ class CardContent extends StatelessWidget {
                           ),
               ),
             ),
-            Positioned(
-              child: Material(
-                color: Color(0x77000000),
-                type: MaterialType.card,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => ShowPage(
-                          contentId: content.id,
-                          type: content.type,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+            Container(
+              color: Color(0x77000000),
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -79,52 +65,16 @@ class CardContent extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Expanded(
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
                         child: Text(
                           content.fecha,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      if (content != null)
-                        SizedBox(
-                          width: 35,
-                          child: IconButton(
-                            onPressed: () =>
-                                SavedContent.toggleSave(content, context),
-                            icon: Icon(
-                              SavedContent.isSaved(content, context)
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      SizedBox(
-                        width: 35,
-                        child: IconButton(
-                          onPressed: () async {
-                            if (content.imagenes.length > 0) {
-                              http.Response response = await http.get(
-                                "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-                              );
-                              Share.file(
-                                'Compartir imagen',
-                                'imagen.jpg',
-                                response.bodyBytes,
-                                'image/jpg',
-                                text: "Texto texto texto",
-                              );
-                            }
-                          },
-                          icon: Icon(
-                            Icons.share,
-                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -163,6 +113,65 @@ class CardContent extends StatelessWidget {
                       ),
                       RowPuntajes(
                         content: content,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              child: Material(
+                color: Colors.transparent,
+                type: MaterialType.card,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ShowPage(
+                          contentId: content.id,
+                          type: content.type,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+                right: 10,
+                bottom: 10,
+              ),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      if (content != null)
+                        SizedBox(
+                          width: 35,
+                          child: IconButton(
+                            onPressed: () =>
+                                SavedContent.toggleSave(content, context),
+                            icon: Icon(
+                              SavedContent.isSaved(content, context)
+                                  ? Icons.bookmark
+                                  : Icons.bookmark_border,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      SizedBox(
+                        width: 35,
+                        child: IconButton(
+                          onPressed: content.shareSelf,
+                          icon: Icon(
+                            Icons.share,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ],
                   ),

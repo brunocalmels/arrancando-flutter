@@ -82,7 +82,10 @@ abstract class Fetcher {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
       if (throwError)
-        throw e;
+        return ResponseObject(
+          body: e.body,
+          status: e.statusCode,
+        );
       else
         return null;
     }

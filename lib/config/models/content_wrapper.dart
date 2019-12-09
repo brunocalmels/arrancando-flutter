@@ -1,12 +1,16 @@
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/state/index.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/puntaje.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 part 'content_wrapper.g.dart';
 
@@ -94,4 +98,32 @@ class ContentWrapper {
 
   esOwner(BuildContext context) =>
       this.user.id == Provider.of<MyState>(context).activeUser.id;
+
+  shareSelf() async {
+    if (this.imagenes.length > 0) {
+      http.Response response = await http.get(
+        "${MyGlobals.SERVER_URL}${this.imagenes.first}",
+      );
+      Share.file(
+        'Compartir imagen',
+        'imagen.jpg',
+        response.bodyBytes,
+        'image/jpg',
+        text: "Texto texto texto",
+      );
+    } else {
+      var img = (await rootBundle.load('assets/images/icon.png'))
+          .buffer
+          .asUint8List();
+
+      Share.file(
+        'Compartir imagen',
+        'imagen.jpg',
+        img,
+        'image/jpg',
+        text:
+            "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}",
+      );
+    }
+  }
 }

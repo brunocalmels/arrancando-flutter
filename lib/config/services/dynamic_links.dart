@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +24,48 @@ abstract class DynamicLinks {
 
             if (path[0] != null && path[1] != null) {
               switch (path[0]) {
+                case 'publicaciones':
+                  if (context != null) {
+                    int id = int.parse(path[1]);
+
+                    MyGlobals.mainNavigatorKey.currentState.push(
+                      MaterialPageRoute(
+                        builder: (_) => ShowPage(
+                          contentId: id,
+                          type: SectionType.publicaciones,
+                        ),
+                      ),
+                    );
+                  }
+                  break;
+                case 'recetas':
+                  if (context != null) {
+                    int id = int.parse(path[1]);
+
+                    MyGlobals.mainNavigatorKey.currentState.push(
+                      MaterialPageRoute(
+                        builder: (_) => ShowPage(
+                          contentId: id,
+                          type: SectionType.recetas,
+                        ),
+                      ),
+                    );
+                  }
+                  break;
+                case 'pois':
+                  if (context != null) {
+                    int id = int.parse(path[1]);
+
+                    MyGlobals.mainNavigatorKey.currentState.push(
+                      MaterialPageRoute(
+                        builder: (_) => ShowPage(
+                          contentId: id,
+                          type: SectionType.pois,
+                        ),
+                      ),
+                    );
+                  }
+                  break;
                 case 'google-signin':
                   if (context != null) {
                     String base64Data = path[1];

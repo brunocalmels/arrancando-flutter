@@ -103,20 +103,7 @@ class _ShowPageState extends State<ShowPage> {
               ),
             ),
           IconButton(
-            onPressed: () async {
-              if (_content.imagenes.length > 0) {
-                http.Response response = await http.get(
-                  "${MyGlobals.SERVER_URL}${_content.imagenes.first}",
-                );
-                Share.file(
-                  'Compartir imagen',
-                  'imagen.jpg',
-                  response.bodyBytes,
-                  'image/jpg',
-                  text: "Texto texto texto",
-                );
-              }
-            },
+            onPressed: _content == null ? null : _content.shareSelf,
             icon: Icon(Icons.share),
           ),
         ],

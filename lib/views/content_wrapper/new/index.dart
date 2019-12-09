@@ -35,8 +35,10 @@ class _NewContentState extends State<NewContent> {
   double _selectedLatitud;
   double _selectedLongitud;
   bool _sent = false;
+  String _errorMsg;
 
   _createContent() async {
+    _errorMsg = null;
     setState(() {
       _sent = true;
     });
@@ -63,6 +65,7 @@ class _NewContentState extends State<NewContent> {
         case SectionType.publicaciones:
           res = await Fetcher.post(
             url: "/publicaciones.json",
+            throwError: true,
             body: {
               ...body,
               "ciudad_id": _selectedCategory.id,
@@ -102,6 +105,9 @@ class _NewContentState extends State<NewContent> {
             ),
           ),
         );
+      } else {
+        _errorMsg = json.decode(res.body).toString();
+        if (mounted) setState(() {});
       }
     } catch (e) {
       print(e);
@@ -266,19 +272,49 @@ class _NewContentState extends State<NewContent> {
             Step(
               title: Container(),
               isActive: _currentStep == 2,
-              content: StepImagenes(
-                images: _images,
-                setImages: _setImages,
-                removeImage: _removeImage,
+              content: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  StepImagenes(
+                    images: _images,
+                    setImages: _setImages,
+                    removeImage: _removeImage,
+                  ),
+                  if (widget.type != SectionType.pois && _errorMsg != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Text(
+                        _errorMsg,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                ],
               ),
             ),
             if (widget.type == SectionType.pois)
               Step(
                 title: Container(),
                 isActive: _currentStep == 3,
-                content: StepMapa(
-                  setDireccion: _setDireccion,
-                  setLatLng: _setLatLng,
+                content: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    StepMapa(
+                      setDireccion: _setDireccion,
+                      setLatLng: _setLatLng,
+                    ),
+                    if (_errorMsg != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: Text(
+                          _errorMsg,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                  ],
                 ),
               ),
           ],

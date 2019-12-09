@@ -99,54 +99,54 @@ class _MainScaffoldState extends State<MainScaffold> {
         _hideSearch();
         return false;
       },
-      child: Stack(
-        fit: StackFit.passthrough,
-        children: <Widget>[
-          Scaffold(
-            key: MyGlobals.mainScaffoldKey,
-            drawer: HomeDrawer(),
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(55),
-              child: MainAppBar(
-                sent: _sent,
-                setSent: _setSent,
-                showSearchPage: _setShowSearchResults,
-                searchController: _searchController,
-                toggleSearch: _toggleSearch,
-                showSearch: _showSearch,
-                sortByPoints: _shouldSortPoints,
-                setSortPublicaciones: _setSortPublicaciones,
-              ),
-            ),
-            body: _getPage(
+      child: Scaffold(
+        key: MyGlobals.mainScaffoldKey,
+        drawer: HomeDrawer(),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(55),
+          child: MainAppBar(
+            sent: _sent,
+            setSent: _setSent,
+            showSearchPage: _setShowSearchResults,
+            searchController: _searchController,
+            toggleSearch: _toggleSearch,
+            showSearch: _showSearch,
+            sortByPoints: _shouldSortPoints,
+            setSortPublicaciones: _setSortPublicaciones,
+          ),
+        ),
+        body: Stack(
+          fit: StackFit.passthrough,
+          children: <Widget>[
+            _getPage(
               Provider.of<MyState>(context).activePageHome,
             ),
-          ),
-          Positioned(
-            left: 0,
-            bottom: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  MainNewFab(),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  MainBottomBar(
-                    hideSearch: _hideSearch,
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                ],
+            Positioned(
+              left: 0,
+              bottom: 0,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    MainNewFab(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    MainBottomBar(
+                      hideSearch: _hideSearch,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

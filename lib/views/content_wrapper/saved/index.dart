@@ -4,6 +4,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,14 +78,27 @@ class _SavedContentPageState extends State<SavedContentPage> {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 trailing: IconButton(
-                                  onPressed: () =>
-                                      SavedContent.toggleSave(p, context),
+                                  onPressed: () {
+                                    SavedContent.toggleSave(p, context);
+                                    _fetchContent();
+                                  },
                                   icon: Icon(
                                     SavedContent.isSaved(p, context)
                                         ? Icons.bookmark
                                         : Icons.bookmark_border,
                                   ),
                                 ),
+                                onTap: () async {
+                                  await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => ShowPage(
+                                        contentId: p.id,
+                                        type: p.type,
+                                      ),
+                                    ),
+                                  );
+                                  _fetchContent();
+                                },
                               ),
                             )
                             .toList(),
