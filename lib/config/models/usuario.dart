@@ -9,6 +9,7 @@ class Usuario {
   String nombre;
   String apellido;
   String email;
+  String username;
 
   Usuario(
     this.id,
@@ -16,6 +17,7 @@ class Usuario {
     this.nombre,
     this.apellido,
     this.email,
+    this.username,
   );
 
   factory Usuario.fromJson(Map<String, dynamic> json) =>

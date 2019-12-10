@@ -247,10 +247,12 @@ class _ShowPageState extends State<ShowPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: Text(
-                            _content.user.nombre != null &&
-                                    _content.user.apellido != null
-                                ? "${_content.user.nombre} ${_content.user.apellido}"
-                                : _content.user.email,
+                            _content.user.username != null
+                                ? "@${_content.user.username}"
+                                : _content.user.nombre != null &&
+                                        _content.user.apellido != null
+                                    ? "${_content.user.nombre} ${_content.user.apellido}"
+                                    : _content.user.email,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
