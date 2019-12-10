@@ -232,6 +232,32 @@ class _ShowPageState extends State<ShowPage> {
                         ),
                       ),
                       SizedBox(
+                        height: 45,
+                      ),
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: _content.user != null &&
+                                _content.user.avatar != null
+                            ? NetworkImage(
+                                "${MyGlobals.SERVER_URL}${_content.user.avatar}",
+                              )
+                            : null,
+                      ),
+                      if (_content.user != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            _content.user.nombre != null &&
+                                    _content.user.apellido != null
+                                ? "${_content.user.nombre} ${_content.user.apellido}"
+                                : _content.user.email,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      SizedBox(
                         height: 50,
                       ),
                     ],
