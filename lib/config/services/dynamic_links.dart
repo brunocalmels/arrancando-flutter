@@ -6,6 +6,7 @@ import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -80,6 +81,27 @@ abstract class DynamicLinks {
                         .setActiveUser(ActiveUser.fromJson(json.decode(body)));
 
                     await CategoryWrapper.loadCategories();
+
+                    if (prefs.getInt("preferredCiudadId") == null) {
+                      int ciudadId = await showDialog(
+                        context: context,
+                        builder: (_) => DialogCategorySelect(
+                          selectCity: true,
+                          titleText: "¿Cuál es tu ciudad?",
+                          allowDismiss: false,
+                        ),
+                      );
+                      if (ciudadId != null) {
+                        Provider.of<MyState>(context, listen: false)
+                            .setPreferredCategories(
+                          SectionType.publicaciones,
+                          ciudadId,
+                        );
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setInt("preferredCiudadId", ciudadId);
+                      }
+                    }
 
                     MyGlobals.mainNavigatorKey.currentState.pushAndRemoveUntil(
                       MaterialPageRoute(

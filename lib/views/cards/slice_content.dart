@@ -13,16 +13,115 @@ class SliceContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 150,
-      child: Card(
-        elevation: 1,
-        child: Stack(
-          fit: StackFit.passthrough,
-          children: <Widget>[
-            Positioned(
+    return Card(
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: <Widget>[
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(4),
+              ),
+              child: Container(
+                color: Color(0x11666666),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  height: 100,
+                  color: Colors.black12,
+                  child:
+                      content.imagenes == null || content.imagenes.length == 0
+                          ? Center(
+                              child: Icon(
+                                Icons.photo_camera,
+                                size: 50,
+                                color: Color(0x33000000),
+                              ),
+                            )
+                          : [
+                              'mp4',
+                              'mpg',
+                              'mpeg'
+                            ].contains(content.imagenes.first.split('.').last)
+                              ? Center(
+                                  child: Icon(
+                                    Icons.video_library,
+                                    size: 50,
+                                    color: Color(0x33000000),
+                                  ),
+                                )
+                              : Image.network(
+                                  "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                                  // "${content.imagenes.first}",
+                                  fit: BoxFit.cover,
+                                ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 100,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text(
+                                    content.titulo,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context).textTheme.subhead,
+                                  ),
+                                ),
+                                Icon(
+                                  MyGlobals.ICONOS_CATEGORIAS[content.type],
+                                  size: 15,
+                                ),
+                              ],
+                            ),
+                            Text(
+                              content.fecha,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        RowPuntajes(
+                          content: content,
+                          textColor: Colors.black,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(4),
+              ),
               child: Material(
+                color: Colors.transparent,
                 type: MaterialType.card,
                 child: InkWell(
                   onTap: () {
@@ -38,81 +137,8 @@ class SliceContent extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-                bottom: 10,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4),
-                      ),
-                      child: content.imagenes.length == 0
-                          ? Center(
-                              child: Icon(
-                                Icons.photo_camera,
-                                size: 50,
-                                color: Color(0x33000000),
-                              ),
-                            )
-                          : Image.network(
-                              "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-                              fit: BoxFit.cover,
-                            ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          content.fecha,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              content.titulo,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 25,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              content.cuerpo,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: Theme.of(context).textTheme.body1,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            RowPuntajes(
-                              content: content,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

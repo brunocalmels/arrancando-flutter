@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 
 class RowPuntajes extends StatelessWidget {
   final ContentWrapper content;
+  final Color textColor;
 
   RowPuntajes({
-    this.content,
+    @required this.content,
+    this.textColor = Colors.white,
   });
 
   @override
@@ -25,7 +27,7 @@ class RowPuntajes extends StatelessWidget {
         Text(
           "${content.puntajePromedio}",
           style: TextStyle(
-            color: Colors.white,
+            color: textColor,
           ),
         ),
         SizedBox(
@@ -34,24 +36,24 @@ class RowPuntajes extends StatelessWidget {
         Text(
           "(",
           style: TextStyle(
-            color: Colors.white,
+            color: textColor,
           ),
         ),
         Text(
           "${content.puntajes != null ? content.puntajes.length : ''}",
           style: TextStyle(
-            color: Colors.white,
+            color: textColor,
           ),
         ),
         Icon(
           Icons.person,
-          color: Colors.white,
+          color: textColor,
           size: 20,
         ),
         Text(
           ")",
           style: TextStyle(
-            color: Colors.white,
+            color: textColor,
           ),
         ),
       ],

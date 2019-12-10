@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/cards/slice_content.dart';
@@ -13,32 +12,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<ContentWrapper> _items = [];
-  bool _fetching = false;
+  bool _fetching = true;
+  int _offset = -5;
+  bool _noMore = false;
 
   Future<void> _fetchContent() async {
+    int lastLength = _items != null ? _items.length : 0;
     ResponseObject resp = await Fetcher.get(
-      url: "/content.json",
+      url: "/content.json?offset=${_offset + 5}",
     );
 
     if (resp != null)
-      _items = (json.decode(resp.body) as List).map(
-        (p) {
-          var content = ContentWrapper.fromJson(p);
-          content.type = SectionType.values.firstWhere(
-            (v) => v.toString() == p['type'],
-          );
-          return content;
-        },
-      ).toList();
+      _items = (json.decode(resp.body) as List)
+          .map((p) => ContentWrapper.fromJson(p))
+          .toList();
 
     _fetching = false;
+    _offset += 5;
+    _noMore = lastLength == _items.length ? true : false;
     if (mounted) setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    // _fetchContent();
+    _fetchContent();
   }
 
   @override
@@ -70,25 +68,47 @@ class _HomePageState extends State<HomePage> {
                     ? _items.length > 0
                         ? RefreshIndicator(
                             onRefresh: _fetchContent,
-                            child: ListView(
-                              children: [
-                                ..._items
-                                    .map(
-                                      (p) => Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 30,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 7),
+                              child: ListView.builder(
+                                itemCount: _items.length,
+                                itemBuilder: (context, index) {
+                                  if (index == _items.length - 1 && !_noMore)
+                                    _fetchContent();
+                                  Widget item = Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 20,
+                                    ),
+                                    child: SliceContent(
+                                      content: _items[index],
+                                    ),
+                                  );
+                                  if (index == 0)
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        SizedBox(
+                                          height: 7,
                                         ),
-                                        child: SliceContent(
-                                          content: p,
+                                        item,
+                                      ],
+                                    );
+                                  else if (index == _items.length - 1 &&
+                                      !_noMore)
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        item,
+                                        Center(
+                                          child: CircularProgressIndicator(),
                                         ),
-                                      ),
-                                    )
-                                    .toList(),
-                                Container(
-                                  height: 100,
-                                  color: Color(0x05000000),
-                                ),
-                              ],
+                                      ],
+                                    );
+                                  else
+                                    return item;
+                                },
+                              ),
                             ),
                           )
                         : Text(

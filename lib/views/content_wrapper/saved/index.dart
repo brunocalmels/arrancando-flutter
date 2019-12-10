@@ -21,7 +21,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
   Future<void> _fetchContent() async {
     ResponseObject resp = await Fetcher.get(
       url:
-          "/content.json?data=${json.encode(Provider.of<MyState>(context, listen: false).savedContent)}",
+          "/content/saved.json?data=${json.encode(Provider.of<MyState>(context, listen: false).savedContent)}",
     );
 
     if (resp?.body != null)

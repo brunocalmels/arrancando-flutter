@@ -75,6 +75,7 @@ class _NewContentState extends State<NewContent> {
         case SectionType.recetas:
           res = await Fetcher.post(
             url: "/recetas.json",
+            throwError: true,
             body: {
               ...body,
               "categoria_receta_id": _selectedCategory.id,
@@ -84,6 +85,7 @@ class _NewContentState extends State<NewContent> {
         case SectionType.pois:
           res = await Fetcher.post(
             url: "/pois.json",
+            throwError: true,
             body: {
               ...body,
               "categoria_poi_id": _selectedCategory.id,
@@ -106,7 +108,8 @@ class _NewContentState extends State<NewContent> {
           ),
         );
       } else {
-        _errorMsg = json.decode(res.body).toString();
+        _errorMsg =
+            (json.decode(res.body) as Map).values.expand((i) => i).join(',');
         if (mounted) setState(() {});
       }
     } catch (e) {

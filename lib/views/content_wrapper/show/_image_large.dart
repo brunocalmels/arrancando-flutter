@@ -16,6 +16,8 @@ class ImageLarge extends StatefulWidget {
 
 class _ImageLargeState extends State<ImageLarge> {
   VideoPlayerController _controller;
+  double _scale = 1;
+  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -28,6 +30,8 @@ class _ImageLargeState extends State<ImageLarge> {
             // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
             setState(() {});
             _controller.play();
+            _controller.setLooping(true);
+            _isPlaying = true;
           });
     });
   }
@@ -50,23 +54,67 @@ class _ImageLargeState extends State<ImageLarge> {
       ),
       body: ['mp4', 'mpg', 'mpeg']
               .contains(widget.url.split('.').last.toLowerCase())
-          ? Center(
-              child: _controller != null &&
-                      _controller.value != null &&
-                      _controller.value.initialized
-                  ? AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    )
-                  : Container(
+          ? GestureDetector(
+              onTap: () {
+                if (_controller != null) {
+                  if (_isPlaying) {
+                    _controller.pause();
+                    _isPlaying = false;
+                  } else {
+                    _controller.play();
+                    _isPlaying = true;
+                  }
+                  if (mounted) setState(() {});
+                }
+              },
+              child: Stack(
+                fit: StackFit.passthrough,
+                children: <Widget>[
+                  Center(
+                    child: _controller != null &&
+                            _controller.value != null &&
+                            _controller.value.initialized
+                        ? AspectRatio(
+                            aspectRatio: _controller.value.aspectRatio,
+                            child: VideoPlayer(_controller),
+                          )
+                        : Container(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                  ),
+                  if (_controller != null && !_isPlaying)
+                    Positioned.fill(
                       child: Center(
-                        child: CircularProgressIndicator(),
+                        child: Icon(
+                          Icons.play_arrow,
+                          size: 100,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
+                ],
+              ),
             )
-          : Container(
-              child: Center(
-                child: Image.network(widget.url),
+          : GestureDetector(
+              onScaleUpdate: (details) {
+                _scale = details.scale;
+                if (mounted) setState(() {});
+              },
+              onScaleEnd: (details) {
+                _scale = 1;
+                if (mounted) setState(() {});
+              },
+              child: Container(
+                child: Center(
+                  child: Transform.scale(
+                    scale: _scale,
+                    child: Image.network(
+                      widget.url,
+                    ),
+                  ),
+                ),
               ),
             ),
     );

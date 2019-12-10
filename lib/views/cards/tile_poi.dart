@@ -24,7 +24,16 @@ class TilePoi extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         ListTile(
-          onTap: onTap,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ShowPage(
+                  contentId: poi.id,
+                  type: SectionType.pois,
+                ),
+              ),
+            );
+          },
           leading: Container(
             width: 40,
             child: poi.imagenes.length == 0
@@ -107,18 +116,9 @@ class TilePoi extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => ShowPage(
-                        contentId: poi.id,
-                        type: SectionType.pois,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: onTap,
                 icon: Icon(
-                  Icons.arrow_forward,
+                  Icons.location_on,
                 ),
               ),
             ],

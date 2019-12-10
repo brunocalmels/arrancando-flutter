@@ -196,6 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 context: context,
                 builder: (_) => DialogCategorySelect(
                   selectCity: true,
+                  titleText: "¿Cuál es tu ciudad?",
                 ),
               );
               if (ciudadId != null) {
