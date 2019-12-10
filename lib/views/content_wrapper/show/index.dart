@@ -7,12 +7,11 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/edit/index.dart';
+import 'package:arrancando/views/content_wrapper/show/_comentarios_section.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_slider.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class ShowPage extends StatefulWidget {
   final int contentId;
@@ -258,6 +257,11 @@ class _ShowPageState extends State<ShowPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                        ),
+                      if (_content.type != SectionType.pois)
+                        ComentariosSection(
+                          content: _content,
+                          fetchContent: _fetchContent,
                         ),
                       SizedBox(
                         height: 50,

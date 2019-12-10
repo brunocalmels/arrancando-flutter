@@ -32,6 +32,10 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
     json['user'] == null
         ? null
         : Usuario.fromJson(json['user'] as Map<String, dynamic>),
+    (json['comentarios'] as List)
+        ?.map((e) =>
+            e == null ? null : Comentario.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -52,6 +56,7 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'imagenes': instance.imagenes,
       'puntajes': instance.puntajes,
       'user': instance.user,
+      'comentarios': instance.comentarios,
     };
 
 T _$enumDecode<T>(

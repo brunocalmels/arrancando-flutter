@@ -1,5 +1,6 @@
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
@@ -36,6 +37,7 @@ class ContentWrapper {
   List<String> imagenes;
   List<Puntaje> puntajes;
   Usuario user;
+  List<Comentario> comentarios;
 
   ContentWrapper(
     this.id,
@@ -53,6 +55,7 @@ class ContentWrapper {
     this.imagenes,
     this.puntajes,
     this.user,
+    this.comentarios,
   );
 
   factory ContentWrapper.fromJson(Map<String, dynamic> json) =>
