@@ -46,7 +46,7 @@ class _PoiPageState extends State<PoiPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
           ? "/pois/search.json?term=${widget.searchTerm}"
-          : "/pois.json${categoriaPoiId != null ? '?categoria_poi_id=' + "$categoriaPoiId" : ''}",
+          : "/pois.json${categoriaPoiId != null && categoriaPoiId != -1 ? '?categoria_poi_id=' + "$categoriaPoiId" : ''}",
     );
 
     if (resp != null) {
@@ -144,8 +144,14 @@ class _PoiPageState extends State<PoiPage> {
                                 return item;
                             },
                           )
-                        : Text("No hay puntos para mostrar")
-                    : Text("Ocurrió un error"),
+                        : Text(
+                            "No hay puntos para mostrar",
+                            textAlign: TextAlign.center,
+                          )
+                    : Text(
+                        "Ocurrió un error",
+                        textAlign: TextAlign.center,
+                      ),
           ),
         ],
       ),

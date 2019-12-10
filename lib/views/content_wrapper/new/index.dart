@@ -11,6 +11,7 @@ import 'package:arrancando/views/content_wrapper/new/_step_imagenes.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_mapa.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewContent extends StatefulWidget {
   final SectionType type;
@@ -63,12 +64,15 @@ class _NewContentState extends State<NewContent> {
 
       switch (widget.type) {
         case SectionType.publicaciones:
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          int preferredCiudadId = prefs.getInt("preferredCiudadId");
           res = await Fetcher.post(
             url: "/publicaciones.json",
             throwError: true,
             body: {
               ...body,
-              "ciudad_id": _selectedCategory.id,
+              // "ciudad_id": _selectedCategory.id,
+              "ciudad_id": preferredCiudadId,
             },
           );
           break;
@@ -167,11 +171,16 @@ class _NewContentState extends State<NewContent> {
         }
         break;
       case 1:
-        if (_selectedCategory != null) {
-          setState(() {
-            _currentStep = 2;
-          });
+        if (widget.type != SectionType.publicaciones) {
+          if (_selectedCategory != null) {
+            setState(() {
+              _currentStep = 2;
+            });
+          }
+        } else {
+          _createContent();
         }
+
         break;
       case 2:
         if (_images != null && _images.length > 0) {
@@ -263,18 +272,21 @@ class _NewContentState extends State<NewContent> {
                 formKey: _form1Key,
               ),
             ),
-            Step(
-              title: Container(),
-              isActive: _currentStep == 1,
-              content: StepCategoria(
-                type: widget.type,
-                selectedCategory: _selectedCategory,
-                setCategory: _setCategory,
+            if (widget.type != SectionType.publicaciones)
+              Step(
+                title: Container(),
+                isActive: _currentStep == 1,
+                content: StepCategoria(
+                  type: widget.type,
+                  selectedCategory: _selectedCategory,
+                  setCategory: _setCategory,
+                ),
               ),
-            ),
             Step(
               title: Container(),
-              isActive: _currentStep == 2,
+              isActive: widget.type == SectionType.publicaciones
+                  ? _currentStep == 1
+                  : _currentStep == 2,
               content: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,

@@ -45,7 +45,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
           ? "${widget.rootUrl}/search.json?term=${widget.searchTerm}"
-          : "${widget.rootUrl}.json${selectedCategory != null ? "?" + "${widget.categoryParam}" + "=" + "$selectedCategory" : ''}",
+          : "${widget.rootUrl}.json${selectedCategory != null && selectedCategory != -1 ? "?" + "${widget.categoryParam}" + "=" + "$selectedCategory" : ''}",
     );
 
     if (resp != null)

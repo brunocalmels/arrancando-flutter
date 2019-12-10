@@ -97,6 +97,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return WillPopScope(
       onWillPop: () async {
         _hideSearch();
+        if (MyGlobals.mainScaffoldKey.currentState.isDrawerOpen) return true;
         return false;
       },
       child: Scaffold(

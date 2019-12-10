@@ -41,7 +41,7 @@ class _CategoriesChipState extends State<CategoriesChip> {
                     context: context,
                     builder: (_) => DialogCategorySelect(),
                   );
-                  if (selected != null) {
+                  if (selected != null)  {
                     Provider.of<MyState>(
                       context,
                       listen: false,

@@ -19,6 +19,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalSingleton gs = GlobalSingleton();
 
   bool _sent = false;
@@ -84,6 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -209,6 +211,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 prefs.setInt("preferredCiudadId", ciudadId);
               }
             },
+          ),
+          ListTile(
+            title: Text('Contacto'),
+            subtitle: Text("Contactate con nosotros por dudas o consultas."),
+            onTap: () {
+              _scaffoldKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text("Proximamente"),
+                ),
+              );
+            },
+            trailing: Icon(Icons.live_help),
           ),
         ],
       ),

@@ -25,6 +25,11 @@ class CategoryWrapper {
   Map<String, dynamic> toJson() => _$CategoryWrapperToJson(this);
 
   static loadCategories() async {
+    CategoryWrapper todos = CategoryWrapper(
+      id: -1,
+      nombre: "Todos",
+    );
+
     GlobalSingleton gs = GlobalSingleton();
     try {
       //////
@@ -33,10 +38,14 @@ class CategoryWrapper {
       );
       if (res1.status == 200) {
         gs.setCategories(
-            SectionType.publicaciones,
-            (json.decode(res1.body) as List)
+          SectionType.publicaciones,
+          [
+            todos,
+            ...(json.decode(res1.body) as List)
                 .map((e) => CategoryWrapper.fromJson(e))
-                .toList());
+                .toList()
+          ],
+        );
       }
       //////
       ResponseObject res2 = await Fetcher.get(
@@ -44,10 +53,14 @@ class CategoryWrapper {
       );
       if (res2.status == 200) {
         gs.setCategories(
-            SectionType.recetas,
-            (json.decode(res2.body) as List)
+          SectionType.recetas,
+          [
+            todos,
+            ...(json.decode(res2.body) as List)
                 .map((e) => CategoryWrapper.fromJson(e))
-                .toList());
+                .toList()
+          ],
+        );
       }
       //////
       ResponseObject res3 = await Fetcher.get(
@@ -55,10 +68,14 @@ class CategoryWrapper {
       );
       if (res3.status == 200) {
         gs.setCategories(
-            SectionType.pois,
-            (json.decode(res3.body) as List)
+          SectionType.pois,
+          [
+            todos,
+            ...(json.decode(res3.body) as List)
                 .map((e) => CategoryWrapper.fromJson(e))
-                .toList());
+                .toList()
+          ],
+        );
       }
       //////
     } catch (e) {

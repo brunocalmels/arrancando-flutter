@@ -51,6 +51,9 @@ class TilePoi extends StatelessWidget {
           title: Text(
             poi.titulo,
             overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 13,
+            ),
           ),
           subtitle: Row(
             children: <Widget>[
