@@ -287,6 +287,39 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                     ),
+                    RaisedButton(
+                      color: Color(0xffdddddd),
+                      onPressed: () async {
+                        const url =
+                            "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+                        if (await canLaunch(url)) {
+                          await launch(
+                            url,
+                            forceSafariVC: false,
+                            forceWebView: false,
+                          );
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Iniciar con',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Image.asset(
+                            "assets/images/logo-facebook.png",
+                            width: 22,
+                            height: 22,
+                          ),
+                        ],
+                      ),
+                    ),
                     FlatButton(
                       onPressed: () {
                         Navigator.of(context).pushReplacement(
