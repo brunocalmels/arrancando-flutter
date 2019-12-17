@@ -87,20 +87,12 @@ class TilePoi extends StatelessWidget {
                 width: 3,
               ),
               if (!locationDenied)
-                FutureBuilder(
-                  future: poi.distancia,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData && snapshot.data != null) {
-                      return Text(
-                        "${snapshot.data}",
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.black54,
-                        ),
-                      );
-                    }
-                    return Container();
-                  },
+                Text(
+                  poi.localDistance != null ? poi.distanciaToH() : '',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black54,
+                  ),
                 ),
             ],
           ),

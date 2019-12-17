@@ -16,9 +16,11 @@ import 'package:provider/provider.dart';
 
 class PoiPage extends StatefulWidget {
   final String searchTerm;
+  final bool sortByFecha;
 
   PoiPage({
     this.searchTerm,
+    this.sortByFecha = true,
   });
 
   @override
@@ -57,8 +59,24 @@ class _PoiPageState extends State<PoiPage> {
           return content;
         },
       ).toList();
-      _pois.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
+      // _pois.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
+
       _locationDenied = await ActiveUser.locationPermissionDenied();
+      if (!_locationDenied) {
+        await Future.wait(
+          _pois.map((i) => i.distancia),
+        );
+      }
+
+      if (widget.sortByFecha)
+        _pois.sort((a, b) => a.createdAt.isAfter(b.createdAt) ? -1 : 1);
+      else {
+        _pois.sort((a, b) => a.localDistance != null &&
+                b.localDistance != null &&
+                a.localDistance < b.localDistance
+            ? -1
+            : 1);
+      }
     }
     _fetching = false;
     if (mounted) setState(() {});
@@ -85,6 +103,12 @@ class _PoiPageState extends State<PoiPage> {
     Provider.of<MyState>(MyGlobals.mainNavigatorKey.currentContext)
         .removeListener(_changeListener);
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(PoiPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _fetchPois();
   }
 
   @override

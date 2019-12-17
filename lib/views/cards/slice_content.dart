@@ -1,5 +1,6 @@
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/views/cards/_row_cant_comments.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
@@ -80,11 +81,12 @@ class SliceContent extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Expanded(
                                   child: Text(
                                     content.titulo,
-                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
                                     style: Theme.of(context).textTheme.subhead,
                                   ),
                                 ),
@@ -104,9 +106,20 @@ class SliceContent extends StatelessWidget {
                           ],
                         ),
                         Spacer(),
-                        RowPuntajes(
-                          content: content,
-                          textColor: Colors.black,
+                        Row(
+                          children: <Widget>[
+                            RowPuntajes(
+                              content: content,
+                              textColor: Colors.black,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            RowCantComments(
+                              content: content,
+                              textColor: Colors.black,
+                            ),
+                          ],
                         ),
                       ],
                     ),

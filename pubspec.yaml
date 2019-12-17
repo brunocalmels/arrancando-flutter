@@ -39,7 +39,6 @@ dependencies:
   uni_links: ^0.2.0
   esys_flutter_share: ^1.0.2
   url_launcher: ^5.2.7
-  camera: ^0.5.6+3
   path_provider: ^1.4.5
   file_picker: ^1.4.3+1
   thumbnails: ^1.0.1

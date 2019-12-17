@@ -1,9 +1,7 @@
-import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class DialogEditarDatosUsuario extends StatefulWidget {
   final String campo;

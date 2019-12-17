@@ -21,7 +21,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   final TextEditingController _searchController = TextEditingController();
   bool _showSearch = false;
   bool _showSearchResults = false;
-  bool _shouldSortPoints = false;
+  bool _shouldSortByFecha = true;
   bool _sent = false;
 
   _setSent(bool val) {
@@ -48,8 +48,8 @@ class _MainScaffoldState extends State<MainScaffold> {
     if (mounted) setState(() {});
   }
 
-  _setSortPublicaciones(bool byPoints) {
-    _shouldSortPoints = byPoints;
+  _setSortItems(bool byPoints) {
+    _shouldSortByFecha = byPoints;
     if (mounted) setState(() {});
   }
 
@@ -71,16 +71,19 @@ class _MainScaffoldState extends State<MainScaffold> {
             rootUrl: "/publicaciones",
             categoryParam: "ciudad_id",
             type: SectionType.publicaciones,
-            sortPoints: _shouldSortPoints,
+            sortByFecha: _shouldSortByFecha,
           );
         case SectionType.recetas:
           return ContentCardPage(
             rootUrl: "/recetas",
             categoryParam: "categoria_receta_id",
             type: SectionType.recetas,
+            sortByFecha: _shouldSortByFecha,
           );
         case SectionType.pois:
-          return PoiPage();
+          return PoiPage(
+            sortByFecha: _shouldSortByFecha,
+          );
         default:
           return HomePage();
       }
@@ -112,8 +115,8 @@ class _MainScaffoldState extends State<MainScaffold> {
             searchController: _searchController,
             toggleSearch: _toggleSearch,
             showSearch: _showSearch,
-            sortByPoints: _shouldSortPoints,
-            setSortPublicaciones: _setSortPublicaciones,
+            sortByFecha: _shouldSortByFecha,
+            setSortByFecha: _setSortItems,
           ),
         ),
         body: Stack(

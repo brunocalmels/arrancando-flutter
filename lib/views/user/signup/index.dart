@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +32,6 @@ class _LoginPageState extends State<SignupPage> {
   final TextEditingController passwordController = new TextEditingController();
 
   bool sent = false;
-  bool _showAnimation = false;
   bool _obscurePassword = true;
 
   emailValidator(value) {
@@ -84,11 +86,13 @@ class _LoginPageState extends State<SignupPage> {
         unauthenticated: true,
         throwError: true,
         body: {
-          "nombre": nombre,
-          "apellido": apellido,
-          "username": username,
-          "email": email,
-          "password": password,
+          "user": {
+            "nombre": nombre,
+            "apellido": apellido,
+            "username": username,
+            "email": email,
+            "password": password,
+          },
         },
       );
 
@@ -124,10 +128,32 @@ class _LoginPageState extends State<SignupPage> {
           ActiveUser.fromJson(body),
         );
 
-        Navigator.of(context).pushReplacement(
+        await CategoryWrapper.loadCategories();
+
+        if (prefs.getInt("preferredCiudadId") == null) {
+          int ciudadId = await showDialog(
+            context: context,
+            builder: (_) => DialogCategorySelect(
+              selectCity: true,
+              titleText: "¿Cuál es tu ciudad?",
+              allowDismiss: false,
+            ),
+          );
+          if (ciudadId != null) {
+            Provider.of<MyState>(context, listen: false).setPreferredCategories(
+              SectionType.publicaciones,
+              ciudadId,
+            );
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setInt("preferredCiudadId", ciudadId);
+          }
+        }
+
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (_) => MainScaffold(),
           ),
+          (_) => false,
         );
 
         ///

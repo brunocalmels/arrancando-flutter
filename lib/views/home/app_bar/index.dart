@@ -13,8 +13,8 @@ class MainAppBar extends StatelessWidget {
   final Function showSearchPage;
   final Function toggleSearch;
   final TextEditingController searchController;
-  final bool sortByPoints;
-  final Function(bool) setSortPublicaciones;
+  final bool sortByFecha;
+  final Function(bool) setSortByFecha;
 
   MainAppBar({
     this.sent,
@@ -23,8 +23,8 @@ class MainAppBar extends StatelessWidget {
     this.showSearchPage,
     this.toggleSearch,
     this.searchController,
-    this.sortByPoints,
-    this.setSortPublicaciones,
+    this.sortByFecha,
+    this.setSortByFecha,
   });
 
   @override
@@ -52,7 +52,7 @@ class MainAppBar extends StatelessWidget {
                 onTap: () {
                   MyGlobals.mainScaffoldKey.currentState.openDrawer();
                 },
-                child: Icon(Icons.person),
+                child: Image.asset('assets/images/icon.png'),
               ),
             ),
           ),
@@ -70,30 +70,32 @@ class MainAppBar extends StatelessWidget {
               : null,
       actions: <Widget>[
         if (!showSearch &&
-            Provider.of<MyState>(context).activePageHome ==
-                SectionType.publicaciones)
+            Provider.of<MyState>(context).activePageHome != SectionType.home)
           PopupMenuButton<bool>(
             icon: Icon(Icons.filter_list),
             onSelected: (val) {
-              setSortPublicaciones(val);
+              setSortByFecha(val);
             },
             itemBuilder: (context) => <PopupMenuItem<bool>>[
               PopupMenuItem(
-                value: false,
+                value: true,
                 child: Text(
                   "Fecha",
                   style: TextStyle(
                       color:
-                          !sortByPoints ? Theme.of(context).accentColor : null),
+                          sortByFecha ? Theme.of(context).accentColor : null),
                 ),
               ),
               PopupMenuItem(
-                value: true,
+                value: false,
                 child: Text(
-                  "Puntuación",
+                  Provider.of<MyState>(context).activePageHome !=
+                          SectionType.pois
+                      ? "Puntuación"
+                      : "Proximidad",
                   style: TextStyle(
                       color:
-                          sortByPoints ? Theme.of(context).accentColor : null),
+                          !sortByFecha ? Theme.of(context).accentColor : null),
                 ),
               ),
             ],

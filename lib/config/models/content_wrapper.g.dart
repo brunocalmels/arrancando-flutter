@@ -36,7 +36,7 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : Comentario.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-  );
+  )..localDistance = (json['localDistance'] as num)?.toDouble();
 }
 
 Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
@@ -52,6 +52,7 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'categoria_poi_id': instance.categoriaPoiId,
       'latitud': instance.latitud,
       'longitud': instance.longitud,
+      'localDistance': instance.localDistance,
       'direccion': instance.direccion,
       'imagenes': instance.imagenes,
       'puntajes': instance.puntajes,

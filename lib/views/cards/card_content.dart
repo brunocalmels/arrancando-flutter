@@ -1,18 +1,16 @@
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
+import 'package:arrancando/views/cards/_row_cant_comments.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
-import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
 class CardContent extends StatelessWidget {
   final ContentWrapper content;
 
   CardContent({
-    this.content,
+    @required this.content,
   });
 
   @override
@@ -87,13 +85,18 @@ class CardContent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        content.titulo,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                        ),
+                      Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              content.titulo,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 10,
@@ -101,7 +104,7 @@ class CardContent extends StatelessWidget {
                       Text(
                         content.cuerpo,
                         overflow: TextOverflow.ellipsis,
-                        maxLines: 4,
+                        maxLines: 2,
                         style: Theme.of(context).textTheme.body1.merge(
                               TextStyle(
                                 color: Colors.white,
@@ -111,9 +114,19 @@ class CardContent extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      RowPuntajes(
-                        content: content,
-                      ),
+                      Row(
+                        children: <Widget>[
+                          RowPuntajes(
+                            content: content,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          RowCantComments(
+                            content: content,
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ],

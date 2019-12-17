@@ -47,7 +47,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                 ),
               ),
             Container(
-              height: 200,
+              height: 220,
               child: ListView.builder(
                 itemCount: widget.selectCity
                     ? singleton.categories[SectionType.publicaciones].length - 1

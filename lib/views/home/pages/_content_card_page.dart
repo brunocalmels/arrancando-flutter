@@ -15,14 +15,14 @@ class ContentCardPage extends StatefulWidget {
   final SectionType type;
   final String categoryParam;
   final String searchTerm;
-  final bool sortPoints;
+  final bool sortByFecha;
 
   ContentCardPage({
     @required this.rootUrl,
     @required this.type,
     @required this.categoryParam,
     this.searchTerm,
-    this.sortPoints = false,
+    this.sortByFecha = true,
   });
 
   @override
@@ -57,12 +57,12 @@ class _ContentCardPageState extends State<ContentCardPage> {
         },
       ).toList();
     try {
-      if (Provider.of<MyState>(context).activePageHome ==
-              SectionType.publicaciones &&
-          widget.sortPoints)
-        _items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
-      else
+      if (widget.sortByFecha)
         _items.sort((a, b) => a.createdAt.isAfter(b.createdAt) ? -1 : 1);
+      else
+        _items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
+
+      if (mounted) setState(() {});
     } catch (e) {
       print(e);
     }
@@ -104,33 +104,41 @@ class _ContentCardPageState extends State<ContentCardPage> {
   Widget build(BuildContext context) {
     return _fetching
         ? LoadingWidget()
-        : _items != null
-            ? _items.length > 0
-                ? RefreshIndicator(
-                    onRefresh: _fetchContent,
-                    child: ListView(
-                      children: [
-                        ..._items
-                            .map(
-                              (p) => CardContent(
-                                content: p,
-                              ),
-                            )
-                            .toList(),
-                        Container(
-                          height: 100,
-                          color: Color(0x05000000),
-                        ),
-                      ],
-                    ),
-                  )
-                : Text(
-                    "No hay elementos para mostrar",
-                    textAlign: TextAlign.center,
-                  )
-            : Text(
-                "Ocurrió un error",
-                textAlign: TextAlign.center,
-              );
+        : RefreshIndicator(
+            onRefresh: _fetchContent,
+            child: _items != null
+                ? _items.length > 0
+                    ? ListView(
+                        children: [
+                          ..._items
+                              .map(
+                                (p) => CardContent(
+                                  content: p,
+                                ),
+                              )
+                              .toList(),
+                          Container(
+                            height: 100,
+                            color: Color(0x05000000),
+                          ),
+                        ],
+                      )
+                    : ListView(
+                        children: [
+                          Text(
+                            "No hay elementos para mostrar",
+                            textAlign: TextAlign.center,
+                          )
+                        ],
+                      )
+                : ListView(
+                    children: [
+                      Text(
+                        "Ocurrió un error",
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+          );
   }
 }

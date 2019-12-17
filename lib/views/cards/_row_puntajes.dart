@@ -31,7 +31,7 @@ class RowPuntajes extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 20,
+          width: 7,
         ),
         Text(
           "(",

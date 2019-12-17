@@ -25,6 +25,7 @@ class StepCategoria extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: singleton.categories[type]
+              .where((c) => c.id >= 0)
               .map(
                 (t) => RadioListTile<CategoryWrapper>(
                   selected:

@@ -17,8 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      builder: (context) => MyState(),
       child: MyApp(),
+      create: (BuildContext context) => MyState(),
     ),
   );
 }

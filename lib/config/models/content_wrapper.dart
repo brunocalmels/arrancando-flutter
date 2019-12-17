@@ -33,6 +33,7 @@ class ContentWrapper {
   int categoriaPoiId;
   double latitud;
   double longitud;
+  double localDistance;
   String direccion;
   List<String> imagenes;
   List<Puntaje> puntajes;
@@ -84,11 +85,8 @@ class ContentWrapper {
             this.latitud,
             this.longitud);
         if (mts != null) {
-          double kms = mts / 1000;
-          if (kms < 1)
-            return "${mts.round()}mts";
-          else
-            return "${kms.toStringAsFixed(2)}kms";
+          localDistance = mts;
+          return mts;
         }
       }
     }
@@ -101,6 +99,17 @@ class ContentWrapper {
 
   esOwner(BuildContext context) =>
       this.user.id == Provider.of<MyState>(context).activeUser.id;
+
+  distanciaToH() {
+    if (localDistance != null) {
+      double kms = localDistance / 1000;
+      if (kms < 1)
+        return "${localDistance.round()}m";
+      else
+        return "${kms.toStringAsFixed(2)}km";
+    }
+    return null;
+  }
 
   shareSelf() async {
     if (this.imagenes.length > 0) {

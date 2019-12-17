@@ -64,61 +64,69 @@ class _HomePageState extends State<HomePage> {
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : _items != null
-                    ? _items.length > 0
-                        ? RefreshIndicator(
-                            onRefresh: _fetchContent,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 7),
-                              child: ListView.builder(
-                                itemCount: _items.length,
-                                itemBuilder: (context, index) {
-                                  if (index == _items.length - 1 && !_noMore)
-                                    _fetchContent();
-                                  Widget item = Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 20,
-                                    ),
-                                    child: SliceContent(
-                                      content: _items[index],
-                                    ),
-                                  );
-                                  if (index == 0)
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        SizedBox(
-                                          height: 7,
-                                        ),
-                                        item,
-                                      ],
+                : RefreshIndicator(
+                    onRefresh: _fetchContent,
+                    child: _items != null
+                        ? _items.length > 0
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 7),
+                                child: ListView.builder(
+                                  itemCount: _items.length,
+                                  itemBuilder: (context, index) {
+                                    if (index == _items.length - 1 && !_noMore)
+                                      _fetchContent();
+                                    Widget item = Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 20,
+                                      ),
+                                      child: SliceContent(
+                                        content: _items[index],
+                                      ),
                                     );
-                                  else if (index == _items.length - 1 &&
-                                      !_noMore)
-                                    return Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        item,
-                                        Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                      ],
-                                    );
-                                  else
-                                    return item;
-                                },
-                              ),
-                            ),
-                          )
-                        : Text(
-                            "No hay elementos para mostrar",
-                            textAlign: TextAlign.center,
-                          )
-                    : Text(
-                        "Ocurrió un error",
-                        textAlign: TextAlign.center,
-                      ),
+                                    if (index == 0)
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 7,
+                                          ),
+                                          item,
+                                        ],
+                                      );
+                                    else if (index == _items.length - 1 &&
+                                        !_noMore)
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          item,
+                                          Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        ],
+                                      );
+                                    else
+                                      return item;
+                                  },
+                                ),
+                              )
+                            : ListView(
+                                children: [
+                                  Text(
+                                    "No hay elementos para mostrar",
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
+                              )
+                        : ListView(
+                            children: [
+                              Text(
+                                "Ocurrió un error",
+                                textAlign: TextAlign.center,
+                              )
+                            ],
+                          ),
+                  ),
           )
         ],
       ),
