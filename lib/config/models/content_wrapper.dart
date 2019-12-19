@@ -121,7 +121,8 @@ class ContentWrapper {
         'imagen.jpg',
         response.bodyBytes,
         'image/jpg',
-        text: "Texto texto texto",
+        text:
+            "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}",
       );
     } else {
       var img = (await rootBundle.load('assets/images/icon.png'))

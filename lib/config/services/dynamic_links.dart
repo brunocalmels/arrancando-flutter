@@ -30,7 +30,7 @@ abstract class DynamicLinks {
 
       if (prefs.getInt("preferredCiudadId") == null) {
         int ciudadId = await showDialog(
-          context: context,
+          context: MyGlobals.mainNavigatorKey.currentState.overlay.context,
           builder: (_) => DialogCategorySelect(
             selectCity: true,
             titleText: "¿Cuál es tu ciudad?",
