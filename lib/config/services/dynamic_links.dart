@@ -14,6 +14,48 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
 abstract class DynamicLinks {
+  static buildUserOAuth(context, path) async {
+    if (context != null) {
+      String base64Data = path[1];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      dynamic body = utf8.decode(base64.decode(base64Data));
+      prefs.setString(
+        'activeUser',
+        "$body",
+      );
+      Provider.of<MyState>(context, listen: false)
+          .setActiveUser(ActiveUser.fromJson(json.decode(body)));
+
+      await CategoryWrapper.loadCategories();
+
+      if (prefs.getInt("preferredCiudadId") == null) {
+        int ciudadId = await showDialog(
+          context: MyGlobals.mainNavigatorKey.currentState.overlay.context,
+          builder: (_) => DialogCategorySelect(
+            selectCity: true,
+            titleText: "¿Cuál es tu ciudad?",
+            allowDismiss: false,
+          ),
+        );
+        if (ciudadId != null) {
+          Provider.of<MyState>(context, listen: false).setPreferredCategories(
+            SectionType.publicaciones,
+            ciudadId,
+          );
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setInt("preferredCiudadId", ciudadId);
+        }
+      }
+
+      MyGlobals.mainNavigatorKey.currentState.pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => MainScaffold(),
+        ),
+        (_) => false,
+      );
+    }
+  }
+
   static initUniLinks({BuildContext context}) async {
     Stream<Uri> streamURI = getUriLinksStream();
     streamURI.listen(
@@ -68,48 +110,10 @@ abstract class DynamicLinks {
                   }
                   break;
                 case 'google-signin':
-                  if (context != null) {
-                    String base64Data = path[1];
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    dynamic body = utf8.decode(base64.decode(base64Data));
-                    prefs.setString(
-                      'activeUser',
-                      "$body",
-                    );
-                    Provider.of<MyState>(context, listen: false)
-                        .setActiveUser(ActiveUser.fromJson(json.decode(body)));
-
-                    await CategoryWrapper.loadCategories();
-
-                    if (prefs.getInt("preferredCiudadId") == null) {
-                      int ciudadId = await showDialog(
-                        context: context,
-                        builder: (_) => DialogCategorySelect(
-                          selectCity: true,
-                          titleText: "¿Cuál es tu ciudad?",
-                          allowDismiss: false,
-                        ),
-                      );
-                      if (ciudadId != null) {
-                        Provider.of<MyState>(context, listen: false)
-                            .setPreferredCategories(
-                          SectionType.publicaciones,
-                          ciudadId,
-                        );
-                        SharedPreferences prefs =
-                            await SharedPreferences.getInstance();
-                        prefs.setInt("preferredCiudadId", ciudadId);
-                      }
-                    }
-
-                    MyGlobals.mainNavigatorKey.currentState.pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (_) => MainScaffold(),
-                      ),
-                      (_) => false,
-                    );
-                  }
+                  buildUserOAuth(context, path);
+                  break;
+                case 'facebook-signin':
+                  buildUserOAuth(context, path);
                   break;
                 default:
               }

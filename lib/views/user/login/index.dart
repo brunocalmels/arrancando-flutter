@@ -257,6 +257,8 @@ class _LoginPageState extends State<LoginPage> {
                     RaisedButton(
                       color: Color(0xffdddddd),
                       onPressed: () async {
+                        sent = true;
+                        if (mounted) setState(() {});
                         const url =
                             "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
                         if (await canLaunch(url)) {
@@ -281,6 +283,41 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Image.asset(
                             "assets/images/logo-google.png",
+                            width: 22,
+                            height: 22,
+                          ),
+                        ],
+                      ),
+                    ),
+                    RaisedButton(
+                      color: Color(0xffdddddd),
+                      onPressed: () async {
+                        sent = true;
+                        if (mounted) setState(() {});
+                        const url =
+                            "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+                        if (await canLaunch(url)) {
+                          await launch(
+                            url,
+                            forceSafariVC: false,
+                            forceWebView: false,
+                          );
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      },
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            'Iniciar con',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Image.asset(
+                            "assets/images/logo-facebook.png",
                             width: 22,
                             height: 22,
                           ),

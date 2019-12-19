@@ -2,15 +2,19 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_categoria.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_general.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_imagenes.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_mapa.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewContent extends StatefulWidget {
@@ -37,6 +41,7 @@ class _NewContentState extends State<NewContent> {
   double _selectedLongitud;
   bool _sent = false;
   String _errorMsg;
+  final GlobalSingleton gs = GlobalSingleton();
 
   _createContent() async {
     _errorMsg = null;
@@ -66,6 +71,33 @@ class _NewContentState extends State<NewContent> {
         case SectionType.publicaciones:
           SharedPreferences prefs = await SharedPreferences.getInstance();
           int preferredCiudadId = prefs.getInt("preferredCiudadId");
+
+          if (preferredCiudadId == null) {
+            int ciudadId = await showDialog(
+              context: context,
+              builder: (_) => DialogCategorySelect(
+                selectCity: true,
+                titleText: "¿Cuál es tu ciudad?",
+                allowDismiss: false,
+              ),
+            );
+
+            if (gs.categories[SectionType.publicaciones].length <= 0) {
+              await CategoryWrapper.loadCategories();
+            }
+
+            if (ciudadId != null) {
+              Provider.of<MyState>(context, listen: false)
+                  .setPreferredCategories(
+                SectionType.publicaciones,
+                ciudadId,
+              );
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setInt("preferredCiudadId", ciudadId);
+              preferredCiudadId = ciudadId;
+            }
+          }
+
           res = await Fetcher.post(
             url: "/publicaciones.json",
             throwError: true,
