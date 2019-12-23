@@ -80,7 +80,10 @@ class MainAppBar extends StatelessWidget {
               PopupMenuItem(
                 value: true,
                 child: Text(
-                  "Fecha",
+                  Provider.of<MyState>(context).activePageHome !=
+                          SectionType.pois
+                      ? "Fecha"
+                      : "Proximidad",
                   style: TextStyle(
                       color:
                           sortByFecha ? Theme.of(context).accentColor : null),
@@ -89,10 +92,7 @@ class MainAppBar extends StatelessWidget {
               PopupMenuItem(
                 value: false,
                 child: Text(
-                  Provider.of<MyState>(context).activePageHome !=
-                          SectionType.pois
-                      ? "Puntuación"
-                      : "Proximidad",
+                  "Puntuación",
                   style: TextStyle(
                       color:
                           !sortByFecha ? Theme.of(context).accentColor : null),

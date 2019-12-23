@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_large.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -32,15 +33,28 @@ class _ImageSliderState extends State<ImageSlider> {
     await Future.wait(
       vids.map(
         (v) async {
-          _videoThumbs[v] = File(
-            await VideoThumbnail.thumbnailFile(
-              video: "${MyGlobals.SERVER_URL}$v",
-              thumbnailPath: thumbPath,
-              imageFormat: ImageFormat.JPEG,
-              maxHeightOrWidth: 250,
-              quality: 50,
-            ),
+          String filename = v.split('/').last;
+          filename = filename.replaceRange(
+            filename[filename.length - 4] == '.'
+                ? filename.length - 3
+                : filename.length - 4,
+            filename.length,
+            'jpg',
           );
+          File thumb = File("$thumbPath/$filename");
+          if (thumb.existsSync()) {
+            _videoThumbs[v] = thumb;
+          } else {
+            _videoThumbs[v] = File(
+              await VideoThumbnail.thumbnailFile(
+                video: "${MyGlobals.SERVER_URL}$v",
+                thumbnailPath: thumbPath,
+                imageFormat: ImageFormat.JPEG,
+                maxHeightOrWidth: 250,
+                quality: 50,
+              ),
+            );
+          }
         },
       ),
     );
@@ -126,8 +140,22 @@ class _ImageSliderState extends State<ImageSlider> {
                           )
                         ],
                       )
-                : Image.network(
-                    "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
+                // : Image.network(
+                //     "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
+                //   ),
+                : CachedNetworkImage(
+                    imageUrl:
+                        "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
+                    placeholder: (context, url) => Center(
+                      child: SizedBox(
+                        width: 25,
+                        height: 25,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
           ),
           Positioned(

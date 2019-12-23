@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -35,8 +34,14 @@ class _PoiPageState extends State<PoiPage> {
   List<ContentWrapper> _pois;
   bool _fetching = true;
   bool _locationDenied = false;
+  int _limit = 20;
+  bool _noMore = false;
+  bool _loadingMore = false;
+  Map<int, double> _calculatedDistance = {};
 
   Future<void> _fetchPois() async {
+    int lastLength = _pois != null ? _pois.length : 0;
+
     int categoriaPoiId = Provider.of<MyState>(context, listen: false)
                 .selectedCategoryHome[SectionType.pois] !=
             null
@@ -48,7 +53,7 @@ class _PoiPageState extends State<PoiPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchTerm != null && widget.searchTerm.isNotEmpty
           ? "/pois/search.json?term=${widget.searchTerm}"
-          : "/pois.json${categoriaPoiId != null && categoriaPoiId != -1 ? '?categoria_poi_id=' + "$categoriaPoiId" : ''}",
+          : "/pois.json?limit=$_limit${categoriaPoiId != null && categoriaPoiId != -1 ? '&categoria_poi_id=$categoriaPoiId' : ''}",
     );
 
     if (resp != null) {
@@ -59,62 +64,91 @@ class _PoiPageState extends State<PoiPage> {
           return content;
         },
       ).toList();
-      // _pois.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
 
       _locationDenied = await ActiveUser.locationPermissionDenied();
-      if (!_locationDenied) {
-        await Future.wait(
-          _pois.map((i) => i.distancia),
-        );
-      }
 
       if (widget.sortByFecha)
-        _pois.sort((a, b) => a.createdAt.isAfter(b.createdAt) ? -1 : 1);
-      else {
-        _pois.sort((a, b) => a.localDistance != null &&
-                b.localDistance != null &&
-                a.localDistance < b.localDistance
-            ? -1
-            : 1);
-      }
+        _sortByDistance();
+      else
+        _pois.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
+
+      _limit += 20;
+      _noMore = lastLength == _pois.length ? true : false;
+      _loadingMore = false;
     }
     _fetching = false;
     if (mounted) setState(() {});
   }
 
-  _changeListener() {
-    if (Provider.of<MyState>(context, listen: false)
-            .selectedCategoryHome[SectionType.pois] !=
-        null) _fetchPois();
+  // _changeListener() {
+  //   if (Provider.of<MyState>(context, listen: false)
+  //           .selectedCategoryHome[SectionType.pois] !=
+  //       null) _fetchPois();
+  // }
+
+  _sortByDistance() async {
+    if (!_locationDenied && _pois != null) {
+      await Future.wait(
+        _pois.map(
+          (i) async {
+            if (_calculatedDistance[i.id] == null) {
+              double localDistance = await i.distancia;
+              _calculatedDistance[i.id] = localDistance;
+            } else
+              i.localDistance = _calculatedDistance[i.id];
+            return null;
+          },
+        ),
+      );
+      _pois?.sort((a, b) => a.localDistance != null &&
+              b.localDistance != null &&
+              a.localDistance < b.localDistance
+          ? -1
+          : 1);
+      if (mounted) setState(() {});
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    _resetLimit();
     _fetchPois();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<MyState>(MyGlobals.mainNavigatorKey.currentContext)
-          .addListener(_changeListener);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   Provider.of<MyState>(MyGlobals.mainNavigatorKey.currentContext)
+    //       .addListener(_changeListener);
+    // });
   }
 
-  @override
-  void dispose() {
-    Provider.of<MyState>(MyGlobals.mainNavigatorKey.currentContext)
-        .removeListener(_changeListener);
-    super.dispose();
+  // @override
+  // void dispose() {
+  //   Provider.of<MyState>(MyGlobals.mainNavigatorKey.currentContext)
+  //       .removeListener(_changeListener);
+  //   super.dispose();
+  // }
+
+  _resetLimit() {
+    _pois = null;
+    _fetching = true;
+    _noMore = false;
+    _limit = 20;
+    if (mounted) setState(() {});
   }
 
   @override
   void didUpdateWidget(PoiPage oldWidget) {
     super.didUpdateWidget(oldWidget);
+    _resetLimit();
     _fetchPois();
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: _fetchPois,
+      onRefresh: () {
+        _resetLimit();
+        return _fetchPois();
+      },
       child: ListView(
         children: <Widget>[
           PoisMap(
@@ -136,6 +170,10 @@ class _PoiPageState extends State<PoiPage> {
                             padding: const EdgeInsets.all(0),
                             itemCount: _pois.length,
                             itemBuilder: (BuildContext context, int index) {
+                              // if (index == _pois.length - 1 && !_noMore) {
+                              //   print('aca');
+                              //   _fetchPois();
+                              // }
                               ContentWrapper p = _pois[index];
                               Widget item = TilePoi(
                                 poi: p,
@@ -154,17 +192,68 @@ class _PoiPageState extends State<PoiPage> {
                                   }
                                 },
                               );
-                              if (index == _pois.length - 1)
-                                return Column(
-                                  children: <Widget>[
-                                    item,
-                                    Container(
-                                      height: 200,
-                                      color: Color(0x05000000),
-                                    ),
-                                  ],
-                                );
-                              else
+                              if (index == _pois.length - 1) {
+                                if (!_noMore)
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      item,
+                                      // Center(
+                                      //   child: CircularProgressIndicator(),
+                                      // ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 10,
+                                        ),
+                                        child: Column(
+                                          children: <Widget>[
+                                            RaisedButton(
+                                              color: Colors.white,
+                                              onPressed: _loadingMore
+                                                  ? null
+                                                  : () {
+                                                      setState(() {
+                                                        _loadingMore = true;
+                                                      });
+                                                      _fetchPois();
+                                                    },
+                                              child: Text("Cargar más"),
+                                            ),
+                                            if (_loadingMore)
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 15),
+                                                child: Center(
+                                                  child: SizedBox(
+                                                    width: 25,
+                                                    height: 25,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 200,
+                                        color: Color(0x05000000),
+                                      ),
+                                    ],
+                                  );
+                                else
+                                  return Column(
+                                    children: <Widget>[
+                                      item,
+                                      Container(
+                                        height: 200,
+                                        color: Color(0x05000000),
+                                      ),
+                                    ],
+                                  );
+                              } else
                                 return item;
                             },
                           )

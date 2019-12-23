@@ -12,6 +12,7 @@ import 'package:arrancando/views/content_wrapper/new/_step_general.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_imagenes.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_mapa.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
@@ -329,8 +330,26 @@ class _EditPageState extends State<EditPage> {
                                                       )
                                                     ],
                                                   )
-                                            : Image.network(
-                                                "${MyGlobals.SERVER_URL}$i",
+                                            // : Image.network(
+                                            //     "${MyGlobals.SERVER_URL}$i",
+                                            //   ),
+                                            : CachedNetworkImage(
+                                                imageUrl:
+                                                    "${MyGlobals.SERVER_URL}$i",
+                                                placeholder: (context, url) =>
+                                                    Center(
+                                                  child: SizedBox(
+                                                    width: 25,
+                                                    height: 25,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                    ),
+                                                  ),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
                                               ),
                                       ),
                                       if (!_removeImagenes.contains(i))

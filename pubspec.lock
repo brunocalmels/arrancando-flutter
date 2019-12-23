@@ -114,7 +114,7 @@ packages:
     source: hosted
     version: "6.8.2"
   cached_network_image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: cached_network_image
       url: "https://pub.dartlang.org"

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -110,8 +111,21 @@ class _ImageLargeState extends State<ImageLarge> {
                 child: Center(
                   child: Transform.scale(
                     scale: _scale,
-                    child: Image.network(
-                      widget.url,
+                    // child: Image.network(
+                    //   widget.url,
+                    // ),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.url,
+                      placeholder: (context, url) => Center(
+                        child: SizedBox(
+                          width: 25,
+                          height: 25,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                   ),
                 ),

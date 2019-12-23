@@ -9,6 +9,7 @@ import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:arrancando/views/user/profile/_avatar_picker.dart';
 import 'package:arrancando/views/user/profile/_dialog_editar_datos_usuario.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +20,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalSingleton gs = GlobalSingleton();
 
   bool _sent = false;
@@ -85,7 +85,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -101,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
               AvatarPicker(
                 currentAvatar:
                     Provider.of<MyState>(context).activeUser?.avatar != null
-                        ? NetworkImage(
+                        ? CachedNetworkImageProvider(
                             "${MyGlobals.SERVER_URL}${Provider.of<MyState>(context).activeUser?.avatar}",
                           )
                         : null,
@@ -211,18 +210,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 prefs.setInt("preferredCiudadId", ciudadId);
               }
             },
-          ),
-          ListTile(
-            title: Text('Contacto'),
-            subtitle: Text("Contactate con nosotros por dudas o consultas."),
-            onTap: () {
-              _scaffoldKey.currentState.showSnackBar(
-                SnackBar(
-                  content: Text("Proximamente"),
-                ),
-              );
-            },
-            trailing: Icon(Icons.live_help),
           ),
         ],
       ),

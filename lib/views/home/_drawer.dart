@@ -5,6 +5,7 @@ import 'package:arrancando/views/content_wrapper/saved/index.dart';
 import 'package:arrancando/views/reglas/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:arrancando/views/user/profile/index.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,7 +33,7 @@ class HomeDrawer extends StatelessWidget {
                                       .activeUser
                                       .avatar !=
                                   null
-                          ? NetworkImage(
+                          ? CachedNetworkImageProvider(
                               "${MyGlobals.SERVER_URL}${Provider.of<MyState>(context, listen: false).activeUser.avatar}",
                             )
                           : null,
@@ -97,6 +98,26 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ReglasPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.live_help),
+            title: Text('Contacto'),
+            subtitle: Text("Contactate con nosotros por dudas o consultas."),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: Text("Contacto"),
+                  content: Text("Próximamente"),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text("Aceptar"),
+                    ),
+                  ],
                 ),
               );
             },

@@ -3,6 +3,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/views/cards/_row_cant_comments.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class SliceContent extends StatelessWidget {
@@ -38,32 +39,44 @@ class SliceContent extends StatelessWidget {
                   width: 100,
                   height: 100,
                   color: Colors.black12,
-                  child:
-                      content.imagenes == null || content.imagenes.length == 0
+                  child: content.imagenes == null ||
+                          content.imagenes.length == 0
+                      ? Center(
+                          child: Icon(
+                            Icons.photo_camera,
+                            size: 50,
+                            color: Color(0x33000000),
+                          ),
+                        )
+                      : ['mp4', 'mpg', 'mpeg']
+                              .contains(content.imagenes.first.split('.').last)
                           ? Center(
                               child: Icon(
-                                Icons.photo_camera,
+                                Icons.video_library,
                                 size: 50,
                                 color: Color(0x33000000),
                               ),
                             )
-                          : [
-                              'mp4',
-                              'mpg',
-                              'mpeg'
-                            ].contains(content.imagenes.first.split('.').last)
-                              ? Center(
-                                  child: Icon(
-                                    Icons.video_library,
-                                    size: 50,
-                                    color: Color(0x33000000),
-                                  ),
-                                )
-                              : Image.network(
+                          // : Image.network(
+                          //     "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                          //     // "${content.imagenes.first}",
+                          //     fit: BoxFit.cover,
+                          //   ),
+                          : CachedNetworkImage(
+                              imageUrl:
                                   "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-                                  // "${content.imagenes.first}",
-                                  fit: BoxFit.cover,
+                              placeholder: (context, url) => Center(
+                                child: SizedBox(
+                                  width: 25,
+                                  height: 25,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
                 ),
                 SizedBox(
                   width: 10,
@@ -119,6 +132,16 @@ class SliceContent extends StatelessWidget {
                               content: content,
                               textColor: Colors.black,
                             ),
+                            // Spacer(),
+                            // CircleAvatar(
+                            //   radius: 12,
+                            //   backgroundImage: content.user != null &&
+                            //           content.user.avatar != null
+                            //       ? CachedNetworkImageProvider(
+                            //           "${MyGlobals.SERVER_URL}${content.user.avatar}",
+                            //         )
+                            //       : null,
+                            // ),
                           ],
                         ),
                       ],

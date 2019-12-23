@@ -1,9 +1,11 @@
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/cards/_row_cant_comments.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CardContent extends StatelessWidget {
@@ -44,10 +46,25 @@ class CardContent extends StatelessWidget {
                               color: Color(0x33000000),
                             ),
                           )
-                        : Image.network(
-                            "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-                            // "${content.imagenes.first}",
-                            fit: BoxFit.cover,
+                        // : Image.network(
+                        //     "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                        //     // "${content.imagenes.first}",
+                        //     fit: BoxFit.cover,
+                        //   ),
+                        : CachedNetworkImage(
+                            imageUrl:
+                                "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                            placeholder: (context, url) => Center(
+                              child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
               ),
             ),
@@ -101,20 +118,22 @@ class CardContent extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Text(
-                        content.cuerpo,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: Theme.of(context).textTheme.body1.merge(
-                              TextStyle(
-                                color: Colors.white,
+                      if (content.type == SectionType.publicaciones)
+                        Text(
+                          content.cuerpo,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.body1.merge(
+                                TextStyle(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                      ),
+                        ),
                       SizedBox(
                         height: 10,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           RowPuntajes(
                             content: content,
@@ -126,7 +145,7 @@ class CardContent extends StatelessWidget {
                             content: content,
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -189,6 +208,23 @@ class CardContent extends StatelessWidget {
                     ],
                   ),
                 ],
+              ),
+            ),
+            Positioned(
+              right: 10,
+              bottom: 10,
+              child: Tooltip(
+                waitDuration: Duration(milliseconds: 50),
+                message: "@${content.user.username}",
+                child: CircleAvatar(
+                  radius: 15,
+                  backgroundImage:
+                      content.user != null && content.user.avatar != null
+                          ? CachedNetworkImageProvider(
+                              "${MyGlobals.SERVER_URL}${content.user.avatar}",
+                            )
+                          : null,
+                ),
               ),
             ),
           ],

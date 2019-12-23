@@ -67,12 +67,12 @@ class ContentWrapper {
   get fecha =>
       "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
 
-  get puntajePromedio => puntajes != null && puntajes.length > 0
+  double get puntajePromedio => puntajes != null && puntajes.length > 0
       ? (puntajes.fold<double>(0, (sum, p) => sum + p.puntaje) /
           puntajes.length)
       : 0.0;
 
-  get distancia async {
+  Future<double> get distancia async {
     if (type != null && type == SectionType.pois) {
       bool denied = await ActiveUser.locationPermissionDenied();
       if (!denied) {

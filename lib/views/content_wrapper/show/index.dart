@@ -11,6 +11,7 @@ import 'package:arrancando/views/content_wrapper/show/_comentarios_section.dart'
 import 'package:arrancando/views/content_wrapper/show/_image_slider.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ShowPage extends StatefulWidget {
@@ -216,12 +217,10 @@ class _ShowPageState extends State<ShowPage> {
                                     _fetchContent();
                                   },
                                   icon: Icon(
-                                    _content.puntajePromedio > p
-                                        ? _content.puntajePromedio < p + 1
+                                    _content.puntajePromedio >= p
+                                        ? Icons.star
+                                        : _content.puntajePromedio > p - 1
                                             ? Icons.star_half
-                                            : Icons.star
-                                        : _content.puntajePromedio == p
-                                            ? Icons.star
                                             : Icons.star_border,
                                     color: Colors.amber,
                                   ),
@@ -230,7 +229,7 @@ class _ShowPageState extends State<ShowPage> {
                               .toList(),
                         ),
                         Text(
-                          "${_content.puntajePromedio}",
+                          "${_content.puntajePromedio.toStringAsFixed(1)}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -244,7 +243,7 @@ class _ShowPageState extends State<ShowPage> {
                           radius: 50,
                           backgroundImage: _content.user != null &&
                                   _content.user.avatar != null
-                              ? NetworkImage(
+                              ? CachedNetworkImageProvider(
                                   "${MyGlobals.SERVER_URL}${_content.user.avatar}",
                                 )
                               : null,

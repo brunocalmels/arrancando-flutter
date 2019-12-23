@@ -3,6 +3,7 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class TilePoi extends StatelessWidget {
@@ -43,9 +44,22 @@ class TilePoi extends StatelessWidget {
                       color: Color(0x33000000),
                     ),
                   )
-                : Image.network(
-                    "${MyGlobals.SERVER_URL}${poi.imagenes.first}",
-                    fit: BoxFit.cover,
+                // : Image.network(
+                //     "${MyGlobals.SERVER_URL}${poi.imagenes.first}",
+                //     fit: BoxFit.cover,
+                //   ),
+                : CachedNetworkImage(
+                    imageUrl: "${MyGlobals.SERVER_URL}${poi.imagenes.first}",
+                    placeholder: (context, url) => Center(
+                      child: SizedBox(
+                        width: 25,
+                        height: 25,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
           ),
           title: Text(
