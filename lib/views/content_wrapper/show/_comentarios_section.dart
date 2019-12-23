@@ -84,8 +84,8 @@ class _ComentariosSectionState extends State<ComentariosSection> {
                 children: <Widget>[
                   TextFormField(
                     keyboardType: TextInputType.multiline,
-                    minLines: 7,
-                    maxLines: 7,
+                    minLines: 3,
+                    maxLines: 3,
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
                       labelText: "Mensaje",
@@ -105,46 +105,50 @@ class _ComentariosSectionState extends State<ComentariosSection> {
               ),
             ),
           SizedBox(
-            height: 10,
+            height: 20,
           ),
           Container(
             constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height / 2,
+              maxHeight: MediaQuery.of(context).size.height / 3,
             ),
-            child: ListView(
-              children: widget.content.comentarios != null &&
-                      widget.content.comentarios.length > 0
-                  ? [...widget.content.comentarios]
-                      .reversed
-                      .map(
-                        (c) => ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                c.user != null && c.user.avatar != null
-                                    ? CachedNetworkImageProvider(
-                                        "${MyGlobals.SERVER_URL}${c.user.avatar}",
-                                      )
-                                    : null,
-                          ),
-                          title: Text(
-                            c.mensaje,
-                          ),
-                          subtitle: Text(
-                            c.fecha,
-                            style: TextStyle(fontSize: 10),
-                          ),
-                        ),
-                      )
-                      .toList()
-                  : [
-                      ListTile(
-                        title: Text(
-                          "Aún no hay comentarios",
-                          textAlign: TextAlign.center,
-                        ),
+            child: widget.content.comentarios != null &&
+                    widget.content.comentarios.length > 0
+                ? Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black12,
+                        width: 2,
                       ),
-                    ],
-            ),
+                    ),
+                    child: ListView(
+                      children: [...widget.content.comentarios]
+                          .reversed
+                          .map(
+                            (c) => ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    c.user != null && c.user.avatar != null
+                                        ? CachedNetworkImageProvider(
+                                            "${MyGlobals.SERVER_URL}${c.user.avatar}",
+                                          )
+                                        : null,
+                              ),
+                              title: Text(
+                                c.mensaje,
+                              ),
+                              subtitle: Text(
+                                c.fecha,
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  )
+                : Text(
+                    "Aún no hay comentarios",
+                    textAlign: TextAlign.center,
+                  ),
           ),
         ],
       ),

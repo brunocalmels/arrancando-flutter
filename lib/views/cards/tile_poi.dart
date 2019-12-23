@@ -5,6 +5,7 @@ import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TilePoi extends StatelessWidget {
   final ContentWrapper poi;
@@ -115,6 +116,29 @@ class TilePoi extends StatelessWidget {
             children: <Widget>[
               SizedBox(
                 width: 35,
+                child: GestureDetector(
+                  onTap: () async {
+                    String url =
+                        "http://maps.google.com/maps?z=15&t=m&q=loc:${poi.latitud}+${poi.longitud}";
+                    if (await canLaunch(url)) {
+                      await launch(
+                        url,
+                        forceSafariVC: false,
+                        forceWebView: false,
+                      );
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  },
+                  child: Image.asset(
+                    "assets/images/logo-google.png",
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 35,
                 child: IconButton(
                   onPressed: () => SavedContent.toggleSave(poi, context),
                   icon: Icon(
@@ -124,10 +148,13 @@ class TilePoi extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
-                onPressed: onTap,
-                icon: Icon(
-                  Icons.location_on,
+              SizedBox(
+                width: 35,
+                child: IconButton(
+                  onPressed: onTap,
+                  icon: Icon(
+                    Icons.location_on,
+                  ),
                 ),
               ),
             ],

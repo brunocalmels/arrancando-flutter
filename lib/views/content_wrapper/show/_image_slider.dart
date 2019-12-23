@@ -50,8 +50,8 @@ class _ImageSliderState extends State<ImageSlider> {
                 video: "${MyGlobals.SERVER_URL}$v",
                 thumbnailPath: thumbPath,
                 imageFormat: ImageFormat.JPEG,
-                maxHeightOrWidth: 250,
-                quality: 50,
+                maxHeightOrWidth: 350,
+                quality: 70,
               ),
             );
           }

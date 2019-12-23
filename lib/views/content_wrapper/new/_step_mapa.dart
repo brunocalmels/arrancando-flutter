@@ -92,6 +92,7 @@ class _StepMapaState extends State<StepMapa> {
       _latitud = currentPosition.latitude;
       _longitud = currentPosition.longitude;
       _mapController.move(LatLng(_latitud, _longitud), 15);
+      widget.setLatLng(_latitud, _longitud);
       _locating = false;
       if (mounted) setState(() {});
     }

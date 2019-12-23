@@ -4,6 +4,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/cards/_row_cant_comments.dart';
 import 'package:arrancando/views/cards/_row_puntajes.dart';
+import 'package:arrancando/views/content_wrapper/dialog/share.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -198,7 +199,15 @@ class CardContent extends StatelessWidget {
                       SizedBox(
                         width: 35,
                         child: IconButton(
-                          onPressed: content.shareSelf,
+                          // onPressed: content.shareSelf,
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (_) => ShareContentWrapper(
+                                content: content,
+                              ),
+                            );
+                          },
                           icon: Icon(
                             Icons.share,
                             color: Colors.white,

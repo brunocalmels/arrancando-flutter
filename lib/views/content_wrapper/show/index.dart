@@ -6,6 +6,7 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/views/content_wrapper/dialog/share.dart';
 import 'package:arrancando/views/content_wrapper/edit/index.dart';
 import 'package:arrancando/views/content_wrapper/show/_comentarios_section.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_slider.dart';
@@ -103,7 +104,16 @@ class _ShowPageState extends State<ShowPage> {
               ),
             ),
           IconButton(
-            onPressed: _content == null ? null : _content.shareSelf,
+            onPressed: _content == null
+                ? null
+                : () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => ShareContentWrapper(
+                        content: _content,
+                      ),
+                    );
+                  },
             icon: Icon(Icons.share),
           ),
         ],

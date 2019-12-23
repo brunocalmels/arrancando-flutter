@@ -1,4 +1,5 @@
-import 'package:arrancando/config/globals/index.dart';
+import 'dart:typed_data';
+
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/usuario.dart';
@@ -11,7 +12,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/puntaje.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 part 'content_wrapper.g.dart';
 
@@ -111,18 +111,23 @@ class ContentWrapper {
     return null;
   }
 
-  shareSelf() async {
-    if (this.imagenes.length > 0) {
-      http.Response response = await http.get(
-        "${MyGlobals.SERVER_URL}${this.imagenes.first}",
-      );
+  shareSelf({bool esFull = false, Uint8List imageBytes}) async {
+    String cabecera =
+        "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}";
+    String piecera =
+        "Si todavía no te descargaste Arrancando podés hacerlo desde https://play.google.com/store/apps/details?id=com.macherit.arrancando";
+
+    String texto = esFull
+        ? "$cabecera\n\n${this.titulo}\n\n${this.cuerpo}\n\n$piecera"
+        : "$cabecera\n\n${this.titulo}\n\n$piecera";
+
+    if (this.imagenes.length > 0 && imageBytes != null) {
       Share.file(
         'Compartir imagen',
         'imagen.jpg',
-        response.bodyBytes,
+        imageBytes,
         'image/jpg',
-        text:
-            "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}",
+        text: texto,
       );
     } else {
       var img = (await rootBundle.load('assets/images/icon.png'))
@@ -134,8 +139,7 @@ class ContentWrapper {
         'imagen.jpg',
         img,
         'image/jpg',
-        text:
-            "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}",
+        text: texto,
       );
     }
   }

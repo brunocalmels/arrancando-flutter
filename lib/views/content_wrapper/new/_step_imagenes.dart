@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class StepImagenes extends StatelessWidget {
@@ -46,7 +47,74 @@ class StepImagenes extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 FlatButton(
-                  onPressed: () => _openFileExplorer(FileType.IMAGE),
+                  // onPressed: () => _openFileExplorer(FileType.IMAGE),
+                  onPressed: () async {
+                    try {
+                      String opcion = await showModalBottomSheet(
+                        builder: (BuildContext context) {
+                          return Container(
+                            height: 100,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop("camara");
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.camera_alt),
+                                        Text("Cámara"),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop("galeria");
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Icon(Icons.filter),
+                                        Text("Galería"),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        context: context,
+                      );
+
+                      switch (opcion) {
+                        case "camara":
+                          File image = await ImagePicker.pickImage(
+                            source: ImageSource.camera,
+                            imageQuality: 70,
+                            maxWidth: 1000,
+                          );
+                          setImages([...images, image]);
+                          break;
+                        case "galeria":
+                          _openFileExplorer(FileType.IMAGE);
+                          break;
+                        default:
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
                   child: Text("SELECCIONAR IMÁGENES"),
                 ),
                 FlatButton(
