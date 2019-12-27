@@ -112,7 +112,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
 
   @override
   void didUpdateWidget(ContentCardPage oldWidget) {
-    print(oldWidget.type);
+    // print(oldWidget.type);
     super.didUpdateWidget(oldWidget);
     _resetLimit();
     _fetchContent();

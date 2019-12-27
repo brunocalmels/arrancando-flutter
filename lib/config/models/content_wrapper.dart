@@ -113,7 +113,7 @@ class ContentWrapper {
 
   shareSelf({bool esFull = false, Uint8List imageBytes}) async {
     String cabecera =
-        "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}";
+        "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}";
     String piecera =
         "Si todavía no te descargaste Arrancando podés hacerlo desde https://play.google.com/store/apps/details?id=com.macherit.arrancando";
 
