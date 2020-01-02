@@ -51,6 +51,7 @@ class TilePoi extends StatelessWidget {
                 //   ),
                 : CachedNetworkImage(
                     imageUrl: "${MyGlobals.SERVER_URL}${poi.imagenes.first}",
+                    fit: BoxFit.cover,
                     placeholder: (context, url) => Center(
                       child: SizedBox(
                         width: 25,

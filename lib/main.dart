@@ -31,6 +31,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _loaded = false;
+  bool _isLoggedIn = false;
 
   _loadUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -42,6 +43,7 @@ class _MyAppState extends State<MyApp> {
           json.decode(activeUser),
         ),
       );
+      _isLoggedIn = true;
     }
     if (preferredCiudadId != null) {
       Provider.of<MyState>(context, listen: false).setPreferredCategories(
@@ -49,6 +51,7 @@ class _MyAppState extends State<MyApp> {
         preferredCiudadId,
       );
     }
+    if (mounted) setState(() {});
   }
 
   _initApp() async {
@@ -56,7 +59,7 @@ class _MyAppState extends State<MyApp> {
       context: context,
     );
     await _loadUser();
-    if (Provider.of<MyState>(context, listen: false).activeUser != null) {
+    if (_isLoggedIn) {
       await CategoryWrapper.loadCategories();
       await SavedContent.initSaved(context);
     }
@@ -83,9 +86,7 @@ class _MyAppState extends State<MyApp> {
                   });
               },
             )
-          : Provider.of<MyState>(context, listen: false).activeUser == null
-              ? LoginPage()
-              : MainScaffold(),
+          : _isLoggedIn ? MainScaffold() : LoginPage(),
     );
   }
 }

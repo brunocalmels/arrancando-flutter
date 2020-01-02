@@ -55,6 +55,7 @@ class CardContent extends StatelessWidget {
                         : CachedNetworkImage(
                             imageUrl:
                                 "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                            fit: BoxFit.cover,
                             placeholder: (context, url) => Center(
                               child: SizedBox(
                                 width: 25,

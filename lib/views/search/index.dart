@@ -79,6 +79,7 @@ class _SearchPageState extends State<SearchPage> {
         iconTheme: IconThemeData(
           color: Colors.black,
         ),
+        elevation: 0,
         backgroundColor: Colors.transparent,
         title: SearchField(
           searchController: _searchController,
@@ -97,9 +98,10 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: _page,
-      ),
+      // body: SingleChildScrollView(
+      //   child: _page,
+      // ),
+      body: _page,
     );
   }
 }

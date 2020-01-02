@@ -64,6 +64,7 @@ class DataGroup extends StatelessWidget {
                               .map(
                                 (i) => ContentTile(
                                   content: i,
+                                  type: type,
                                 ),
                               )
                               .toList(),
@@ -72,9 +73,8 @@ class DataGroup extends StatelessWidget {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => SearchPage(
-                                    originalType: type,
-                                    originalSearch: searchController.text
-                                  ),
+                                      originalType: type,
+                                      originalSearch: searchController.text),
                                 ),
                               );
                             },

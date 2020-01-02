@@ -14,6 +14,7 @@ import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShowPage extends StatefulWidget {
   final int contentId;
@@ -59,6 +60,7 @@ class _ShowPageState extends State<ShowPage> {
     }
 
     _fetching = false;
+
     if (mounted) setState(() {});
   }
 
@@ -78,6 +80,35 @@ class _ShowPageState extends State<ShowPage> {
           color: Colors.black,
         ),
         actions: <Widget>[
+          if (_content != null &&
+              widget.type == SectionType.pois &&
+              _content.latitud != null &&
+              _content.longitud != null)
+            SizedBox(
+              width: 50,
+              child: GestureDetector(
+                onTap: () async {
+                  String url =
+                      "http://maps.google.com/maps?z=15&t=m&q=loc:${_content.latitud}+${_content.longitud}";
+                  if (await canLaunch(url)) {
+                    await launch(
+                      url,
+                      forceSafariVC: false,
+                      forceWebView: false,
+                    );
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                },
+                child: Center(
+                  child: Image.asset(
+                    "assets/images/logo-google.png",
+                    width: 25,
+                    height: 25,
+                  ),
+                ),
+              ),
+            ),
           if (_content != null && _content.esOwner(context))
             IconButton(
               onPressed: () async {
