@@ -29,7 +29,7 @@ class _ContactPageState extends State<ContactPage> {
         if (mounted) FocusScope.of(context).requestFocus(FocusNode());
 
         ResponseObject resp = await Fetcher.post(
-          url: "/mailing/contacto",
+          url: "/contacto.json",
           body: {
             "mensaje": _mensajeController.text,
           },

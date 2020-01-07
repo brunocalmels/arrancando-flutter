@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
-import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
+// import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,14 +30,21 @@ abstract class DynamicLinks {
       await CategoryWrapper.loadCategories();
 
       if (prefs.getInt("preferredCiudadId") == null) {
-        int ciudadId = await showDialog(
-          context: MyGlobals.mainNavigatorKey.currentState.overlay.context,
-          builder: (_) => DialogCategorySelect(
-            selectCity: true,
-            titleText: "¿Cuál es tu ciudad?",
-            allowDismiss: false,
-          ),
-        );
+        // int ciudadId = await showDialog(
+        //   context: MyGlobals.mainNavigatorKey.currentState.overlay.context,
+        //   builder: (_) => DialogCategorySelect(
+        //     selectCity: true,
+        //     titleText: "¿Cuál es tu ciudad?",
+        //     allowDismiss: false,
+        //   ),
+        // );
+
+        final GlobalSingleton singleton = GlobalSingleton();
+
+        int ciudadId = singleton.categories[SectionType.publicaciones]
+            .where((c) => c.id > 0)
+            .first
+            .id;
         if (ciudadId != null) {
           Provider.of<MyState>(context, listen: false).setPreferredCategories(
             SectionType.publicaciones,

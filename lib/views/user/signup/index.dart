@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
-import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
+// import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _LoginPageState extends State<SignupPage> {
   final TextEditingController usernameController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
+  final GlobalSingleton singleton = GlobalSingleton();
 
   bool sent = false;
   bool _obscurePassword = true;
@@ -131,14 +133,19 @@ class _LoginPageState extends State<SignupPage> {
         await CategoryWrapper.loadCategories();
 
         if (prefs.getInt("preferredCiudadId") == null) {
-          int ciudadId = await showDialog(
-            context: context,
-            builder: (_) => DialogCategorySelect(
-              selectCity: true,
-              titleText: "¿Cuál es tu ciudad?",
-              allowDismiss: false,
-            ),
-          );
+          // int ciudadId = await showDialog(
+          //   context: context,
+          //   builder: (_) => DialogCategorySelect(
+          //     selectCity: true,
+          //     titleText: "¿Cuál es tu ciudad?",
+          //     allowDismiss: false,
+          //   ),
+          // );
+          int ciudadId = singleton.categories[SectionType.publicaciones]
+              .where((c) => c.id > 0)
+              .first
+              .id;
+
           if (ciudadId != null) {
             Provider.of<MyState>(context, listen: false).setPreferredCategories(
               SectionType.publicaciones,
