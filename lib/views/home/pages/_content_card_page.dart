@@ -78,11 +78,11 @@ class _ContentCardPageState extends State<ContentCardPage> {
     if (mounted) setState(() {});
   }
 
-  _changeListener() {
-    if (Provider.of<MyState>(context, listen: false)
-            .selectedCategoryHome[widget.type] !=
-        null) _fetchContent();
-  }
+  // _changeListener() {
+  //   if (Provider.of<MyState>(context, listen: false)
+  //           .selectedCategoryHome[widget.type] !=
+  //       null) _fetchContent();
+  // }
 
   @override
   void initState() {
