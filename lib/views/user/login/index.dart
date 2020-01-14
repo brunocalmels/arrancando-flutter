@@ -147,6 +147,38 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  _redirectDialog(url) => AlertDialog(
+        content: RichText(
+          text: TextSpan(
+            text:
+                'Vas a ser redirigido para iniciar sesión. Luego de seleccionar tu cuenta, si el sistema te solicita seleccionar una aplicación para continuar, acordate de seleccionar ',
+            style: Theme.of(context).textTheme.subhead,
+            children: <TextSpan>[
+              TextSpan(
+                text: '"Arrancando"',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Continuar'),
+            onPressed: () async {
+              if (await canLaunch(url)) {
+                await launch(
+                  url,
+                  forceSafariVC: false,
+                  forceWebView: false,
+                );
+              } else {
+                throw 'Could not launch $url';
+              }
+            },
+          )
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -196,61 +228,61 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    TextFormField(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: new InputDecoration(
-                        hasFloatingPlaceholder: true,
-                        labelText: "Email",
-                        hintText: 'usuario@ejemplo.com',
-                      ),
-                      validator: (value) => emailValidator(value),
-                    ),
-                    Stack(
-                      fit: StackFit.passthrough,
-                      children: <Widget>[
-                        TextFormField(
-                          controller: passwordController,
-                          obscureText: _obscurePassword,
-                          decoration: new InputDecoration(
-                            hasFloatingPlaceholder: true,
-                            labelText: "Contraseña",
-                            hintText: '*********',
-                          ),
-                          validator: (value) => requiredValidator(value),
-                        ),
-                        Positioned(
-                          top: 10,
-                          right: 0,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.remove_red_eye,
-                              color: _obscurePassword
-                                  ? Colors.black26
-                                  : Colors.black54,
-                            ),
-                            onPressed: () {
-                              _obscurePassword = !_obscurePassword;
-                              setState(() {});
-                            },
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Builder(
-                      // NECESITA EL CONTEXT PARA EL SNACKBAR
-                      builder: (context) => RaisedButton(
-                        onPressed: () {
-                          _login(context);
-                        },
-                        child: Text(
-                          'Login',
-                        ),
-                      ),
-                    ),
+                    // TextFormField(
+                    //   controller: emailController,
+                    //   keyboardType: TextInputType.emailAddress,
+                    //   decoration: new InputDecoration(
+                    //     hasFloatingPlaceholder: true,
+                    //     labelText: "Email",
+                    //     hintText: 'usuario@ejemplo.com',
+                    //   ),
+                    //   validator: (value) => emailValidator(value),
+                    // ),
+                    // Stack(
+                    //   fit: StackFit.passthrough,
+                    //   children: <Widget>[
+                    //     TextFormField(
+                    //       controller: passwordController,
+                    //       obscureText: _obscurePassword,
+                    //       decoration: new InputDecoration(
+                    //         hasFloatingPlaceholder: true,
+                    //         labelText: "Contraseña",
+                    //         hintText: '*********',
+                    //       ),
+                    //       validator: (value) => requiredValidator(value),
+                    //     ),
+                    //     Positioned(
+                    //       top: 10,
+                    //       right: 0,
+                    //       child: IconButton(
+                    //         icon: Icon(
+                    //           Icons.remove_red_eye,
+                    //           color: _obscurePassword
+                    //               ? Colors.black26
+                    //               : Colors.black54,
+                    //         ),
+                    //         onPressed: () {
+                    //           _obscurePassword = !_obscurePassword;
+                    //           setState(() {});
+                    //         },
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
+                    // SizedBox(
+                    //   height: 25,
+                    // ),
+                    // Builder(
+                    //   // NECESITA EL CONTEXT PARA EL SNACKBAR
+                    //   builder: (context) => RaisedButton(
+                    //     onPressed: () {
+                    //       _login(context);
+                    //     },
+                    //     child: Text(
+                    //       'Login',
+                    //     ),
+                    //   ),
+                    // ),
                     if (MyGlobals.SHOW_DEV_LOGIN)
                       DevLogin(
                         emailController: emailController,
@@ -260,88 +292,95 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 25,
                     ),
-                    RaisedButton(
-                      color: Color(0xffdddddd),
-                      onPressed: () async {
-                        sent = true;
-                        if (mounted) setState(() {});
-                        const url =
-                            "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
-                        if (await canLaunch(url)) {
-                          await launch(
-                            url,
-                            forceSafariVC: false,
-                            forceWebView: false,
+                    ButtonTheme(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 10,
+                      ),
+                      child: RaisedButton(
+                        color: Color(0xffdddddd),
+                        onPressed: () async {
+                          sent = true;
+                          if (mounted) setState(() {});
+                          const url =
+                              "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
+
+                          showDialog(
+                            context: context,
+                            builder: (_) => _redirectDialog(url),
                           );
-                        } else {
-                          throw 'Could not launch $url';
-                        }
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            'Iniciar con',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Image.asset(
-                            "assets/images/logo-google.png",
-                            width: 22,
-                            height: 22,
-                          ),
-                        ],
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'Iniciar con',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset(
+                              "assets/images/logo-google.png",
+                              width: 27,
+                              height: 27,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    RaisedButton(
-                      color: Color(0xffdddddd),
-                      onPressed: () async {
-                        sent = true;
-                        if (mounted) setState(() {});
-                        const url =
-                            "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
-                        if (await canLaunch(url)) {
-                          await launch(
-                            url,
-                            forceSafariVC: false,
-                            forceWebView: false,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ButtonTheme(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 10,
+                      ),
+                      child: RaisedButton(
+                        color: Color(0xffdddddd),
+                        onPressed: () async {
+                          sent = true;
+                          if (mounted) setState(() {});
+                          const url =
+                              "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+
+                          showDialog(
+                            context: context,
+                            builder: (_) => _redirectDialog(url),
                           );
-                        } else {
-                          throw 'Could not launch $url';
-                        }
-                      },
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            'Iniciar con',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Image.asset(
-                            "assets/images/logo-facebook.png",
-                            width: 22,
-                            height: 22,
-                          ),
-                        ],
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'Iniciar con',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset(
+                              "assets/images/logo-facebook.png",
+                              width: 27,
+                              height: 27,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (_) => SignupPage(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Crear cuenta',
-                      ),
-                    ),
+                    // FlatButton(
+                    //   onPressed: () {
+                    //     Navigator.of(context).pushReplacement(
+                    //       MaterialPageRoute(
+                    //         builder: (_) => SignupPage(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Text(
+                    //     'Crear cuenta',
+                    //   ),
+                    // ),
                     SizedBox(
                       width: 50,
                       height: 50,

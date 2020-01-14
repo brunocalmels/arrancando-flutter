@@ -25,7 +25,7 @@ class RowPuntajes extends StatelessWidget {
           width: 3,
         ),
         Text(
-          "${content.puntajePromedio}",
+          "${content.puntajePromedio.toStringAsFixed(1)}",
           style: TextStyle(
             color: textColor,
           ),

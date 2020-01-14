@@ -17,6 +17,8 @@
 
 
     <application
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:name="io.flutter.app.FlutterApplication"
         android:label="Arrancando"
         android:icon="@mipmap/ic_launcher">
@@ -39,9 +41,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <intent-filter
+            <!-- <intent-filter
                 android:autoVerify="true"
-                tools:targetApi="m">
+                tools:targetApi="m"> -->
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

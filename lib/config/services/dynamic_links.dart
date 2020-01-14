@@ -64,73 +64,99 @@ abstract class DynamicLinks {
     }
   }
 
-  static initUniLinks({BuildContext context}) async {
-    Stream<Uri> streamURI = getUriLinksStream();
-    streamURI.listen(
-      (Uri uri) async {
-        if (uri != null) {
-          try {
-            List<String> path = uri.path.split('/');
-            path.retainWhere((p) => p != null && p != "");
+  static _parseURI(Uri uri, context) async {
+    if (uri != null) {
+      try {
+        List<String> path = uri.path.split('/');
+        path.retainWhere((p) => p != null && p != "");
 
-            if (path[0] != null && path[1] != null) {
-              switch (path[0]) {
-                case 'publicaciones':
-                  if (context != null) {
-                    int id = int.parse(path[1]);
+        print("Adentro");
+        if (uri != null) print(uri.path);
 
-                    MyGlobals.mainNavigatorKey.currentState.push(
-                      MaterialPageRoute(
-                        builder: (_) => ShowPage(
-                          contentId: id,
-                          type: SectionType.publicaciones,
-                        ),
-                      ),
-                    );
-                  }
-                  break;
-                case 'recetas':
-                  if (context != null) {
-                    int id = int.parse(path[1]);
+        bool _invalidUser = false;
 
-                    MyGlobals.mainNavigatorKey.currentState.push(
-                      MaterialPageRoute(
-                        builder: (_) => ShowPage(
-                          contentId: id,
-                          type: SectionType.recetas,
-                        ),
-                      ),
-                    );
-                  }
-                  break;
-                case 'pois':
-                  if (context != null) {
-                    int id = int.parse(path[1]);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String activeUser = prefs.getString("activeUser");
+        if (activeUser != null) {
+          ActiveUser au = ActiveUser.fromJson(
+            json.decode(activeUser),
+          );
+          if (au.id == null || au.email == null || au.authToken == null) {
+            _invalidUser = true;
+          }
+        } else {
+          _invalidUser = true;
+        }
 
-                    MyGlobals.mainNavigatorKey.currentState.push(
-                      MaterialPageRoute(
-                        builder: (_) => ShowPage(
-                          contentId: id,
-                          type: SectionType.pois,
-                        ),
-                      ),
-                    );
-                  }
-                  break;
-                case 'google-signin':
-                  buildUserOAuth(context, path);
-                  break;
-                case 'facebook-signin':
-                  buildUserOAuth(context, path);
-                  break;
-                default:
+        if (path[0] != null && path[1] != null) {
+          switch (path[0]) {
+            case 'publicaciones':
+              if (context != null && !_invalidUser) {
+                int id = int.parse(path[1]);
+
+                MyGlobals.mainNavigatorKey.currentState.push(
+                  MaterialPageRoute(
+                    builder: (_) => ShowPage(
+                      contentId: id,
+                      type: SectionType.publicaciones,
+                    ),
+                  ),
+                );
               }
-            }
-          } catch (e) {
-            print(e);
+              break;
+            case 'recetas':
+              if (context != null && !_invalidUser) {
+                int id = int.parse(path[1]);
+
+                MyGlobals.mainNavigatorKey.currentState.push(
+                  MaterialPageRoute(
+                    builder: (_) => ShowPage(
+                      contentId: id,
+                      type: SectionType.recetas,
+                    ),
+                  ),
+                );
+              }
+              break;
+            case 'pois':
+              if (context != null && !_invalidUser) {
+                int id = int.parse(path[1]);
+
+                MyGlobals.mainNavigatorKey.currentState.push(
+                  MaterialPageRoute(
+                    builder: (_) => ShowPage(
+                      contentId: id,
+                      type: SectionType.pois,
+                    ),
+                  ),
+                );
+              }
+              break;
+            case 'google-signin':
+              buildUserOAuth(context, path);
+              break;
+            case 'facebook-signin':
+              buildUserOAuth(context, path);
+              break;
+            default:
           }
         }
-      },
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
+  static initUniLinks({BuildContext context}) async {
+    //Parse the uri that started the app
+    Uri uri = await getInitialUri();
+    print("Afuera");
+    if (uri != null) print(uri.path);
+    _parseURI(uri, context);
+    Stream<Uri> streamURI = getUriLinksStream();
+    //Parse the uri when the app is started but the user leaves it and comes back
+    streamURI.listen(
+      (Uri uri) => _parseURI(uri, context),
       onError: (e) {
         print(e);
       },

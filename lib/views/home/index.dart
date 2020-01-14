@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/home/_drawer.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
@@ -9,8 +12,10 @@ import 'package:arrancando/views/home/pages/_poi_page.dart';
 import 'package:arrancando/views/home/app_bar/index.dart';
 import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
+import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScaffold extends StatefulWidget {
   @override
@@ -93,6 +98,43 @@ class _MainScaffoldState extends State<MainScaffold> {
         searchController: _searchController,
       );
     }
+  }
+
+  _logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('activeUser');
+    Provider.of<MyState>(context, listen: false).setActiveUser(null);
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => LoginPage(),
+      ),
+      (_) => false,
+    );
+  }
+
+  _verifyCorrectLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String activeUser = prefs.getString("activeUser");
+    print('Verify active user defined');
+    if (activeUser != null) {
+      print('Active user is set');
+      ActiveUser au = ActiveUser.fromJson(
+        json.decode(activeUser),
+      );
+      if (au.id == null || au.email == null || au.authToken == null) {
+        print('Active user lacks either id or email or token');
+        this._logout();
+      }
+    } else {
+      print('Active user was null but the app landed on /home somehow');
+      this._logout();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this._verifyCorrectLogin();
   }
 
   @override
