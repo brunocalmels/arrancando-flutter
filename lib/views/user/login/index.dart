@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.title}) : super(key: key);
@@ -228,159 +230,260 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    // TextFormField(
-                    //   controller: emailController,
-                    //   keyboardType: TextInputType.emailAddress,
-                    //   decoration: new InputDecoration(
-                    //     hasFloatingPlaceholder: true,
-                    //     labelText: "Email",
-                    //     hintText: 'usuario@ejemplo.com',
-                    //   ),
-                    //   validator: (value) => emailValidator(value),
-                    // ),
-                    // Stack(
-                    //   fit: StackFit.passthrough,
-                    //   children: <Widget>[
-                    //     TextFormField(
-                    //       controller: passwordController,
-                    //       obscureText: _obscurePassword,
-                    //       decoration: new InputDecoration(
-                    //         hasFloatingPlaceholder: true,
-                    //         labelText: "Contraseña",
-                    //         hintText: '*********',
-                    //       ),
-                    //       validator: (value) => requiredValidator(value),
-                    //     ),
-                    //     Positioned(
-                    //       top: 10,
-                    //       right: 0,
-                    //       child: IconButton(
-                    //         icon: Icon(
-                    //           Icons.remove_red_eye,
-                    //           color: _obscurePassword
-                    //               ? Colors.black26
-                    //               : Colors.black54,
-                    //         ),
-                    //         onPressed: () {
-                    //           _obscurePassword = !_obscurePassword;
-                    //           setState(() {});
-                    //         },
-                    //       ),
-                    //     )
-                    //   ],
-                    // ),
-                    // SizedBox(
-                    //   height: 25,
-                    // ),
-                    // Builder(
-                    //   // NECESITA EL CONTEXT PARA EL SNACKBAR
-                    //   builder: (context) => RaisedButton(
-                    //     onPressed: () {
-                    //       _login(context);
-                    //     },
-                    //     child: Text(
-                    //       'Login',
-                    //     ),
-                    //   ),
-                    // ),
+                    if (Platform.isIOS)
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          TextFormField(
+                            controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: new InputDecoration(
+                              hasFloatingPlaceholder: true,
+                              labelText: "Email",
+                              hintText: 'usuario@ejemplo.com',
+                            ),
+                            validator: (value) => emailValidator(value),
+                          ),
+                          Stack(
+                            fit: StackFit.passthrough,
+                            children: <Widget>[
+                              TextFormField(
+                                controller: passwordController,
+                                obscureText: _obscurePassword,
+                                decoration: new InputDecoration(
+                                  hasFloatingPlaceholder: true,
+                                  labelText: "Contraseña",
+                                  hintText: '*********',
+                                ),
+                                validator: (value) => requiredValidator(value),
+                              ),
+                              Positioned(
+                                top: 10,
+                                right: 0,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.remove_red_eye,
+                                    color: _obscurePassword
+                                        ? Colors.black26
+                                        : Colors.black54,
+                                  ),
+                                  onPressed: () {
+                                    _obscurePassword = !_obscurePassword;
+                                    setState(() {});
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    if (Platform.isIOS)
+                      SizedBox(
+                        height: 25,
+                      ),
+                    if (Platform.isIOS)
+                      Builder(
+                        // NECESITA EL CONTEXT PARA EL SNACKBAR
+                        builder: (context) => RaisedButton(
+                          onPressed: () {
+                            _login(context);
+                          },
+                          child: Text(
+                            'Login',
+                          ),
+                        ),
+                      ),
+
                     if (MyGlobals.SHOW_DEV_LOGIN)
                       DevLogin(
                         emailController: emailController,
                         passwordController: passwordController,
                         login: _login,
                       ),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    ButtonTheme(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 10,
+                    if (!Platform.isIOS)
+                      SizedBox(
+                        height: 25,
                       ),
-                      child: RaisedButton(
-                        color: Color(0xffdddddd),
-                        onPressed: () async {
-                          sent = true;
-                          if (mounted) setState(() {});
-                          const url =
-                              "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
+                    if (!Platform.isIOS)
+                      ButtonTheme(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 10,
+                        ),
+                        child: RaisedButton(
+                          color: Color(0xffdddddd),
+                          onPressed: () async {
+                            sent = true;
+                            if (mounted) setState(() {});
+                            const url =
+                                "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
 
-                          showDialog(
-                            context: context,
-                            builder: (_) => _redirectDialog(url),
-                          );
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              'Iniciar con',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Image.asset(
-                              "assets/images/logo-google.png",
-                              width: 27,
-                              height: 27,
-                            ),
-                          ],
+                            showDialog(
+                              context: context,
+                              builder: (_) => _redirectDialog(url),
+                            );
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                'Iniciar con',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Image.asset(
+                                "assets/images/logo-google.png",
+                                width: 27,
+                                height: 27,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    ButtonTheme(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 10,
+                    if (!Platform.isIOS)
+                      SizedBox(
+                        height: 10,
                       ),
-                      child: RaisedButton(
-                        color: Color(0xffdddddd),
-                        onPressed: () async {
-                          sent = true;
-                          if (mounted) setState(() {});
-                          const url =
-                              "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+                    if (!Platform.isIOS)
+                      ButtonTheme(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 10,
+                        ),
+                        child: RaisedButton(
+                          color: Color(0xffdddddd),
+                          onPressed: () async {
+                            sent = true;
+                            if (mounted) setState(() {});
+                            const url =
+                                "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
 
-                          showDialog(
-                            context: context,
-                            builder: (_) => _redirectDialog(url),
-                          );
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              'Iniciar con',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Image.asset(
-                              "assets/images/logo-facebook.png",
-                              width: 27,
-                              height: 27,
-                            ),
-                          ],
+                            showDialog(
+                              context: context,
+                              builder: (_) => _redirectDialog(url),
+                            );
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                'Iniciar con',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Image.asset(
+                                "assets/images/logo-facebook.png",
+                                width: 27,
+                                height: 27,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    // FlatButton(
-                    //   onPressed: () {
-                    //     Navigator.of(context).pushReplacement(
-                    //       MaterialPageRoute(
-                    //         builder: (_) => SignupPage(),
-                    //       ),
-                    //     );
-                    //   },
-                    //   child: Text(
-                    //     'Crear cuenta',
+
+                    // ButtonTheme(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     horizontal: 30,
+                    //     vertical: 10,
+                    //   ),
+                    //   child: RaisedButton(
+                    //     color: Color(0xffdddddd),
+                    //     onPressed: () async {
+                    //       sent = true;
+                    //       if (mounted) setState(() {});
+
+                    //       http.Response resp = await http.get(
+                    //         "https://appleid.apple.com/auth/keys",
+                    //         headers: {
+                    //           "Content-type": "application/json",
+                    //         },
+                    //       );
+
+                    //       print(resp.body);
+
+                    //       String code = json.decode(resp.body)['keys'][0]['n'];
+
+                    //       http.Response respPost = await http.post(
+                    //         "https://appleid.apple.com/auth/token",
+                    //         headers: {
+                    //           "Content-type": "application/json",
+                    //         },
+                    //         body: json.encode(
+                    //           {
+                    //             "cliend_id": "1490590335",
+                    //             "client_secret": {
+                    //               "header": {
+                    //                 "alg": "ES256",
+                    //                 "kid": "U9P8GN38M5",
+                    //               },
+                    //               "payload": {
+                    //                 // API Key Issuer ID: 5c6e4fe8-d944-41a0-a8f8-9e855116890c
+                    //                 "iss": "CPD2RT3KRV",
+                    //                 "iat":
+                    //                     DateTime.now().millisecondsSinceEpoch,
+                    //                 "exp": DateTime.now()
+                    //                     .add(Duration(days: 10))
+                    //                     .millisecondsSinceEpoch,
+                    //                 "aud": "https://appleid.apple.com",
+                    //                 "sub": "com.macherit.arrancando",
+                    //               },
+                    //             },
+                    //             "code": code,
+                    //             "grant_type": 'authorization_code',
+                    //             "redirect_uri": MyGlobals.APPLE_REDIRECT_URI,
+                    //           },
+                    //         ),
+                    //       );
+
+                    //       print(respPost.body);
+
+                    //       // const url =
+                    //       //     "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+
+                    //       // showDialog(
+                    //       //   context: context,
+                    //       //   builder: (_) => _redirectDialog(url),
+                    //       // );
+                    //     },
+                    //     child: Row(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: <Widget>[
+                    //         Text(
+                    //           'Iniciar con',
+                    //           style: TextStyle(color: Colors.black),
+                    //         ),
+                    //         SizedBox(
+                    //           width: 10,
+                    //         ),
+                    //         // Image.asset(
+                    //         //   "assets/images/logo-facebook.png",
+                    //         //   width: 27,
+                    //         //   height: 27,
+                    //         // ),
+                    //         Text("A")
+                    //       ],
+                    //     ),
                     //   ),
                     // ),
+
+                    if (Platform.isIOS)
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (_) => SignupPage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Crear cuenta',
+                        ),
+                      ),
+
                     SizedBox(
                       width: 50,
                       height: 50,

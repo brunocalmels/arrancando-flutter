@@ -21,6 +21,9 @@ abstract class MyGlobals {
 
   static const FACEBOOK_REDIRECT_URI =
       "https://arrancando.herokuapp.com/facebook-login";
+  
+  static const APPLE_REDIRECT_URI =
+      "https://arrancando.herokuapp.com/apple-login";
 
   static const ICONOS_CATEGORIAS = {
     SectionType.home: Icons.select_all,
