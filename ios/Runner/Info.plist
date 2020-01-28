@@ -42,15 +42,25 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Necesitamos usar la cámara para fotos de tu perfil y para tus publicaciones.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Necesitamos usar el micrófono para los videos de tus publicaciones.</string>
+	<string>Podemos llegar a necesitar usar el micrófono para los videos de tus publicaciones.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Podemos llegar a necesitar acceder a tus contactos para buscar a tus amigos amantes del assado.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Podemos llegar a necesitar acceder a tu calendario para gestionar tus planes de asado.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Podemos llegar a necesitar acceder a tu música para los videos.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Podemos llegar a necesitar acceder a tu movimiento para darte las mejores rutas de compras y puntos de interés.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Podemos llegar a necesitar acceder al reconocimiento de voz para reemplazar la escritura normal.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Necesitamos acceder a tu ubicación para mostrarte los puntos de interés más cercanos.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Necesitamos acceder a tu ubicación para mostrarte los puntos de interés más cercanos.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Necesitamos acceder a tu ubicación para mostrarte los puntos de interés más cercanos.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Necesitamos acceder a tu ubicación para mostrarte los puntos de interés más cercanos.</string>
 </dict>
 </plist>
