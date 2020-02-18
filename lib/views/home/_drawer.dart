@@ -10,6 +10,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeDrawer extends StatelessWidget {
   @override
@@ -108,24 +109,26 @@ class HomeDrawer extends StatelessWidget {
             title: Text('Contacto'),
             subtitle: Text("Contactate con nosotros por dudas o consultas."),
             onTap: () {
-              // showDialog(
-              //   context: context,
-              //   builder: (_) => AlertDialog(
-              //     title: Text("Contacto"),
-              //     content: Text("Próximamente"),
-              //     actions: <Widget>[
-              //       FlatButton(
-              //         onPressed: () => Navigator.of(context).pop(),
-              //         child: Text("Aceptar"),
-              //       ),
-              //     ],
-              //   ),
-              // );
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ContactPage(),
                 ),
               );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.share),
+            title: Text('Compartí la app'),
+            subtitle: Text('Enviá el link para que la descarguen.'),
+            onTap: () async {
+              // TODO: Reemplazar por link para iOS.
+              const url =
+                  'https://play.google.com/store/apps/details?id=com.macherit.arrancando';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'Could not launch $url';
+              }
             },
           ),
           ListTile(
