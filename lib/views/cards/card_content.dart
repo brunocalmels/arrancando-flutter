@@ -87,11 +87,17 @@ class CardContent extends StatelessWidget {
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          content.fecha,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
+                        child: Tooltip(
+                          waitDuration: Duration(milliseconds: 50),
+                          message: "@${content.user.username}",
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundImage: content.user != null &&
+                                    content.user.avatar != null
+                                ? CachedNetworkImageProvider(
+                                    "${MyGlobals.SERVER_URL}${content.user.avatar}",
+                                  )
+                                : null,
                           ),
                         ),
                       ),
@@ -136,15 +142,25 @@ class CardContent extends StatelessWidget {
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          RowPuntajes(
-                            content: content,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          RowCantComments(
-                            content: content,
+                          Row(children: <Widget>[
+                            RowPuntajes(
+                              content: content,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            RowCantComments(
+                              content: content,
+                            ),
+                          ]),
+                          Text(
+                            content.fecha,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
                           ),
                         ],
                       ),
@@ -218,23 +234,6 @@ class CardContent extends StatelessWidget {
                     ],
                   ),
                 ],
-              ),
-            ),
-            Positioned(
-              right: 10,
-              bottom: 10,
-              child: Tooltip(
-                waitDuration: Duration(milliseconds: 50),
-                message: "@${content.user.username}",
-                child: CircleAvatar(
-                  radius: 15,
-                  backgroundImage:
-                      content.user != null && content.user.avatar != null
-                          ? CachedNetworkImageProvider(
-                              "${MyGlobals.SERVER_URL}${content.user.avatar}",
-                            )
-                          : null,
-                ),
               ),
             ),
           ],
