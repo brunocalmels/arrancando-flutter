@@ -24,11 +24,11 @@ class _BBButtonItemState extends State<BBButtonItem> {
         ? widget.item.text.length * 8.0
         : 0;
     if (mounted) setState(() {});
-    if (_width > 0) {
-      await Future.delayed(Duration(milliseconds: 1000));
-      _width = 0;
-      if (mounted) setState(() {});
-    }
+    // if (_width > 0) {
+    //   await Future.delayed(Duration(milliseconds: 1000));
+    //   _width = 0;
+    //   if (mounted) setState(() {});
+    // }
   }
 
   _stopTextAnimation() async {
