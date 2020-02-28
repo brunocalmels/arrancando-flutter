@@ -25,6 +25,9 @@ class ContentWrapper {
   DateTime updatedAt;
   String titulo;
   String cuerpo;
+  String introduccion;
+  String ingredientes;
+  String instrucciones;
   @JsonKey(name: 'ciudad_id')
   int ciudadId;
   @JsonKey(name: 'categoria_receta_id')
@@ -47,6 +50,9 @@ class ContentWrapper {
     this.updatedAt,
     this.titulo,
     this.cuerpo,
+    this.introduccion,
+    this.ingredientes,
+    this.instrucciones,
     this.latitud,
     this.longitud,
     this.direccion,
@@ -66,7 +72,7 @@ class ContentWrapper {
 
   get fecha =>
       "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' : '/' + createdAt.toLocal().year.toString()}";
-      // "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
+  // "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
 
   double get puntajePromedio => puntajes != null && puntajes.length > 0
       ? (puntajes.fold<double>(0, (sum, p) => sum + p.puntaje) /

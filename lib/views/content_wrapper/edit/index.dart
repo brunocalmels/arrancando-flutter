@@ -37,6 +37,10 @@ class _EditPageState extends State<EditPage> {
   String _url;
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _cuerpoController = TextEditingController();
+  final TextEditingController _introduccionController = TextEditingController();
+  final TextEditingController _ingredientesController = TextEditingController();
+  final TextEditingController _instruccionesController =
+      TextEditingController();
   final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
   CategoryWrapper _selectedCategory;
   List<File> _images = [];
@@ -73,6 +77,9 @@ class _EditPageState extends State<EditPage> {
       _content.type = widget.type;
       _tituloController.text = _content.titulo;
       _cuerpoController.text = _content.cuerpo;
+      _introduccionController.text = _content.introduccion;
+      _ingredientesController.text = _content.ingredientes;
+      _instruccionesController.text = _content.instrucciones;
       _selectedCategory = CategoryWrapper.fromJson({
         "id": _content.categID,
         "nombre": gs.categories[_content.type]
@@ -134,7 +141,7 @@ class _EditPageState extends State<EditPage> {
         "imagenes": await Future.wait(
           _images.map(
             (i) async => {
-              "file": i.path.split('/').last,
+              "file": i != null ? i.path.split('/').last : 'file',
               "data": base64Encode(
                 (await i.readAsBytes()).buffer.asUint8List(),
               )
@@ -162,6 +169,9 @@ class _EditPageState extends State<EditPage> {
             body: {
               ...body,
               "categoria_receta_id": _selectedCategory.id,
+              "introduccion": _introduccionController.text,
+              "ingredientes": _ingredientesController.text,
+              "instrucciones": _instruccionesController.text,
             },
           );
           break;
@@ -254,6 +264,10 @@ class _EditPageState extends State<EditPage> {
                           cuerpoController: _cuerpoController,
                           formKey: _form1Key,
                           tituloController: _tituloController,
+                          introduccionController: _introduccionController,
+                          ingredientesController: _ingredientesController,
+                          instruccionesController: _instruccionesController,
+                          type: widget.type,
                         ),
                         SizedBox(
                           height: 10,

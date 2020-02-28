@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/index.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -72,6 +74,43 @@ class _SavedContentPageState extends State<SavedContentPage> {
                         children: _items
                             .map(
                               (p) => ListTile(
+                                leading: Container(
+                                  width: 40,
+                                  child: (p.imagenes == null ||
+                                          p.imagenes.length == 0)
+                                      ? Center(
+                                          child: Icon(
+                                            Icons.photo_camera,
+                                            color: Color(0x33000000),
+                                          ),
+                                        )
+                                      : ['mp4', 'mpg', 'mpeg'].contains(
+                                              p.imagenes.first.split('.').last)
+                                          ? Center(
+                                              child: Icon(
+                                                Icons.video_library,
+                                                color: Color(0x33000000),
+                                              ),
+                                            )
+                                          : CachedNetworkImage(
+                                              imageUrl: "${p.imagenes.first}",
+                                              fit: BoxFit.cover,
+                                              placeholder: (context, url) =>
+                                                  Center(
+                                                child: SizedBox(
+                                                  width: 25,
+                                                  height: 25,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                  ),
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                ),
                                 title: Text(p.titulo),
                                 subtitle: Text(
                                   p.cuerpo,

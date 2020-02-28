@@ -47,11 +47,6 @@ class CardContent extends StatelessWidget {
                               color: Color(0x33000000),
                             ),
                           )
-                        // : Image.network(
-                        //     "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-                        //     // "${content.imagenes.first}",
-                        //     fit: BoxFit.cover,
-                        //   ),
                         : CachedNetworkImage(
                             imageUrl:
                                 "${MyGlobals.SERVER_URL}${content.imagenes.first}",
@@ -91,6 +86,7 @@ class CardContent extends StatelessWidget {
                           waitDuration: Duration(milliseconds: 50),
                           message: "@${content.user.username}",
                           child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
                             radius: 20,
                             backgroundImage: content.user != null &&
                                     content.user.avatar != null

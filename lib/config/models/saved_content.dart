@@ -27,6 +27,7 @@ class SavedContent {
 
   static initSaved(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.remove('savedContent');
     String scsString = prefs.getString("savedContent");
     if (scsString != null) {
       (json.decode(scsString) as List)

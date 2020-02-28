@@ -159,6 +159,7 @@ class _ShowPageState extends State<ShowPage> {
                       child: Text("Ocurrió un error"),
                     )
                   : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(15),
@@ -214,13 +215,54 @@ class _ShowPageState extends State<ShowPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Text("${_content.cuerpo}"),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        if (_content.cuerpo != null)
+                          Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Text(
+                              "${_content.cuerpo}",
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                        if (_content.cuerpo != null)
+                          SizedBox(
+                            height: 10,
+                          ),
+                        if (_content.introduccion != null)
+                          Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Text(
+                              "${_content.introduccion}",
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                        if (_content.introduccion != null)
+                          SizedBox(
+                            height: 10,
+                          ),
+                        if (_content.ingredientes != null)
+                          Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Text(
+                              "${_content.ingredientes}",
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                        if (_content.ingredientes != null)
+                          SizedBox(
+                            height: 10,
+                          ),
+                        if (_content.instrucciones != null)
+                          Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Text(
+                              "${_content.instrucciones}",
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                        if (_content.instrucciones != null)
+                          SizedBox(
+                            height: 10,
+                          ),
                         Container(
                           width: MediaQuery.of(context).size.width,
                           height: 250,
@@ -269,42 +311,53 @@ class _ShowPageState extends State<ShowPage> {
                               )
                               .toList(),
                         ),
-                        Text(
-                          "${_content.puntajePromedio.toStringAsFixed(1)}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 45,
-                        ),
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: _content.user != null &&
-                                  _content.user.avatar != null
-                              ? CachedNetworkImageProvider(
-                                  "${MyGlobals.SERVER_URL}${_content.user.avatar}",
-                                )
-                              : null,
-                        ),
-                        if (_content.user != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: Text(
-                              _content.user.username != null
-                                  ? "@${_content.user.username}"
-                                  : _content.user.nombre != null &&
-                                          _content.user.apellido != null
-                                      ? "${_content.user.nombre} ${_content.user.apellido}"
-                                      : _content.user.email,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "${_content.puntajePromedio.toStringAsFixed(1)}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 45,
+                                ),
+                                CircleAvatar(
+                                  radius: 50,
+                                  backgroundImage: _content.user != null &&
+                                          _content.user.avatar != null
+                                      ? CachedNetworkImageProvider(
+                                          "${MyGlobals.SERVER_URL}${_content.user.avatar}",
+                                        )
+                                      : null,
+                                ),
+                                if (_content.user != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 15),
+                                    child: Text(
+                                      _content.user.username != null
+                                          ? "@${_content.user.username}"
+                                          : _content.user.nombre != null &&
+                                                  _content.user.apellido != null
+                                              ? "${_content.user.nombre} ${_content.user.apellido}"
+                                              : _content.user.email,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
-                          ),
+                          ],
+                        ),
                         if (_content.type != SectionType.pois)
                           ComentariosSection(
                             content: _content,

@@ -108,6 +108,7 @@ class _ContactPageState extends State<ContactPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     TextFormField(
+                      textCapitalization: TextCapitalization.sentences,
                       controller: _mensajeController,
                       keyboardType: TextInputType.multiline,
                       minLines: 8,

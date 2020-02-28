@@ -82,6 +82,7 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
           Form(
             key: formKey,
             child: TextFormField(
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 hasFloatingPlaceholder: true,
                 labelText: "${widget.campo}",

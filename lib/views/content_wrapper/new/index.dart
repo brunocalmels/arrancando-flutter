@@ -32,6 +32,10 @@ class _NewContentState extends State<NewContent> {
   int _currentStep = 0;
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _cuerpoController = TextEditingController();
+  final TextEditingController _introduccionController = TextEditingController();
+  final TextEditingController _ingredientesController = TextEditingController();
+  final TextEditingController _instruccionesController =
+      TextEditingController();
   final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
   CategoryWrapper _selectedCategory;
   // List<Asset> _images = List<Asset>();
@@ -56,7 +60,7 @@ class _NewContentState extends State<NewContent> {
         "imagenes": await Future.wait(
           _images.map(
             (i) async => {
-              "file": i.path.split('/').last,
+              "file": i != null ? i.path.split('/').last : 'file',
               "data": base64Encode(
                 (await i.readAsBytes()).buffer.asUint8List(),
               )
@@ -115,6 +119,9 @@ class _NewContentState extends State<NewContent> {
             body: {
               ...body,
               "categoria_receta_id": _selectedCategory.id,
+              "introduccion": _introduccionController.text,
+              "ingredientes": _ingredientesController.text,
+              "instrucciones": _instruccionesController.text,
             },
           );
           break;
@@ -194,9 +201,7 @@ class _NewContentState extends State<NewContent> {
     switch (_currentStep) {
       case 0:
         if (_tituloController.text != null &&
-            _tituloController.text.isNotEmpty &&
-            _cuerpoController.text != null &&
-            _cuerpoController.text.isNotEmpty) {
+            _tituloController.text.isNotEmpty) {
           setState(() {
             _currentStep = 1;
           });
@@ -299,7 +304,11 @@ class _NewContentState extends State<NewContent> {
               content: StepGeneral(
                 tituloController: _tituloController,
                 cuerpoController: _cuerpoController,
+                introduccionController: _introduccionController,
+                ingredientesController: _ingredientesController,
+                instruccionesController: _instruccionesController,
                 formKey: _form1Key,
+                type: widget.type,
               ),
             ),
             if (widget.type != SectionType.publicaciones)

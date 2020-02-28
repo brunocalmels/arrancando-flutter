@@ -114,7 +114,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
   void didUpdateWidget(ContentCardPage oldWidget) {
     // print(oldWidget.type);
     super.didUpdateWidget(oldWidget);
-    _resetLimit();
+    // _resetLimit();
     _fetchContent();
   }
 

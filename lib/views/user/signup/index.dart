@@ -230,6 +230,7 @@ class _LoginPageState extends State<SignupPage> {
                       height: 35,
                     ),
                     TextFormField(
+                      textCapitalization: TextCapitalization.sentences,
                       controller: nombreController,
                       decoration: new InputDecoration(
                         hasFloatingPlaceholder: true,
@@ -239,6 +240,7 @@ class _LoginPageState extends State<SignupPage> {
                       validator: (value) => requiredValidator(value),
                     ),
                     TextFormField(
+                      textCapitalization: TextCapitalization.sentences,
                       controller: apellidoController,
                       decoration: new InputDecoration(
                         hasFloatingPlaceholder: true,

@@ -345,47 +345,47 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      
+
                     // Comento hasta que se solucione login con Facebook
+                    ButtonTheme(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 10,
+                      ),
+                      child: RaisedButton(
+                        color: Color(0xffdddddd),
+                        onPressed: () async {
+                          sent = true;
+                          if (mounted) setState(() {});
+                          const url =
+                              "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+
+                          showDialog(
+                            context: context,
+                            builder: (_) => _redirectDialog(url),
+                          );
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'Iniciar con',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset(
+                              "assets/images/logo-facebook.png",
+                              width: 27,
+                              height: 27,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
                     // if (!Platform.isIOS)
-                    //   ButtonTheme(
-                    //     padding: const EdgeInsets.symmetric(
-                    //       horizontal: 30,
-                    //       vertical: 10,
-                    //     ),
-                    //     child: RaisedButton(
-                    //       color: Color(0xffdddddd),
-                    //       onPressed: () async {
-                    //         sent = true;
-                    //         if (mounted) setState(() {});
-                    //         const url =
-                    //             "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
-
-                    //         showDialog(
-                    //           context: context,
-                    //           builder: (_) => _redirectDialog(url),
-                    //         );
-                    //       },
-                    //       child: Row(
-                    //         mainAxisSize: MainAxisSize.min,
-                    //         children: <Widget>[
-                    //           Text(
-                    //             'Iniciar con',
-                    //             style: TextStyle(color: Colors.black),
-                    //           ),
-                    //           SizedBox(
-                    //             width: 10,
-                    //           ),
-                    //           Image.asset(
-                    //             "assets/images/logo-facebook.png",
-                    //             width: 27,
-                    //             height: 27,
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-
                     // ButtonTheme(
                     //   padding: const EdgeInsets.symmetric(
                     //     horizontal: 30,

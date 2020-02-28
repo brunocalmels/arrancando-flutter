@@ -33,19 +33,33 @@ class _ComentariosSectionState extends State<ComentariosSection> {
         setState(() {
           _sent = true;
         });
-        await Fetcher.post(
-          url: widget.content.type == SectionType.recetas
-              ? "/comentario_recetas.json"
-              : "/comentario_publicaciones.json",
-          body: {
-            "receta_id": widget.content.id,
+
+        String url = "/comentario_publicaciones.json";
+
+        var body = {
+          "comentario_publicacion": {
             "publicacion_id": widget.content.id,
             "mensaje": _mensajeController.text,
-          },
+          }
+        };
+
+        if (widget.content.type == SectionType.recetas) {
+          url = "/comentario_recetas.json";
+          body = {
+            "comentario_receta": {
+              "receta_id": widget.content.id,
+              "mensaje": _mensajeController.text,
+            }
+          };
+        }
+
+        await Fetcher.post(
+          url: url,
+          body: body,
         );
-        _mensajeController.clear();
         setState(() {});
-        widget.fetchContent();
+        await widget.fetchContent();
+        _mensajeController.clear();
       } catch (e) {
         print(e);
       }
@@ -76,34 +90,34 @@ class _ComentariosSectionState extends State<ComentariosSection> {
           SizedBox(
             height: 20,
           ),
-          if (widget.content.user.id !=
-              Provider.of<MyState>(context).activeUser.id)
-            Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    keyboardType: TextInputType.multiline,
-                    minLines: 3,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      alignLabelWithHint: true,
-                      labelText: "Mensaje",
-                    ),
-                    controller: _mensajeController,
+          Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  textCapitalization: TextCapitalization.sentences,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 3,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    alignLabelWithHint: true,
+                    labelText: "Mensaje",
+                    hasFloatingPlaceholder: false,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      RaisedButton(
-                        onPressed: _sent ? null : _sendComentario,
-                        child: Text("Comentar"),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                  controller: _mensajeController,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    RaisedButton(
+                      onPressed: _sent ? null : _sendComentario,
+                      child: Text("Comentar"),
+                    ),
+                  ],
+                )
+              ],
             ),
+          ),
           SizedBox(
             height: 20,
           ),

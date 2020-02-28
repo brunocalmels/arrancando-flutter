@@ -4,6 +4,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/views/general/version_checker.dart';
 import 'package:arrancando/views/home/_drawer.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
 import 'package:arrancando/views/home/pages/_content_card_page.dart';
@@ -190,6 +191,11 @@ class _MainScaffoldState extends State<MainScaffold> {
                   ],
                 ),
               ),
+            ),
+            Positioned(
+              left: 0,
+              bottom: 0,
+              child: VersionChecker(),
             ),
           ],
         ),

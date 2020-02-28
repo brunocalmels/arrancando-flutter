@@ -23,6 +23,7 @@ class _SearchBarState extends State<SearchBar> {
     return Form(
       key: _formKey,
       child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
         onChanged: (val) async {
           if (val != null && val.isNotEmpty) {
             widget.setSent(true);

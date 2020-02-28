@@ -7,6 +7,7 @@ import 'package:arrancando/views/reglas/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:arrancando/views/user/profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,9 +118,10 @@ class HomeDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.share),
-            title: Text('Compartí la app'),
-            subtitle: Text('Enviá el link para que la descarguen.'),
+            // leading: Icon(Icons.share),
+            leading: Icon(Icons.update),
+            title: Text('Buscar actualizaciones'),
+            // subtitle: Text('Enviá el link para que la descarguen.'),
             onTap: () async {
               // TODO: Reemplazar por link para iOS.
               const url =
@@ -129,6 +131,18 @@ class HomeDrawer extends StatelessWidget {
               } else {
                 throw 'Could not launch $url';
               }
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.share),
+            title: Text('Compartí la aplicación'),
+            subtitle: Text('Enviá el link para que la descarguen.'),
+            onTap: () async {
+              Share.text(
+                'Arrancando',
+                'Bajate Arrancando y compartí tu pasión por el asado.\nhttps://play.google.com/store/apps/details?id=com.macherit.arrancando',
+                'text/plain',
+              );
             },
           ),
           ListTile(

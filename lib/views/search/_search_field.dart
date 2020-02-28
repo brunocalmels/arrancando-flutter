@@ -25,6 +25,7 @@ class _SearchFieldState extends State<SearchField> {
         children: <Widget>[
           Expanded(
             child: TextFormField(
+              textCapitalization: TextCapitalization.sentences,
               onChanged: widget.onChanged,
               decoration: InputDecoration(
                 hasFloatingPlaceholder: false,
