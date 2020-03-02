@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -33,6 +34,7 @@ class _ShowPageState extends State<ShowPage> {
   ContentWrapper _content;
   bool _fetching = true;
   String _url;
+  String _categoryName = "";
   final GlobalSingleton gs = GlobalSingleton();
 
   Future<void> _fetchContent() async {
@@ -62,6 +64,19 @@ class _ShowPageState extends State<ShowPage> {
     _fetching = false;
 
     if (mounted) setState(() {});
+
+    if (resp != null) {
+      if (gs == null ||
+          gs.categories == null ||
+          gs.categories[_content.type] == null ||
+          gs.categories[_content.type].isEmpty) {
+        await CategoryWrapper.loadCategories();
+      }
+      _categoryName = gs.categories[_content.type]
+          .firstWhere((c) => c.id == _content.categID)
+          .nombre;
+      if (mounted) setState(() {});
+    }
   }
 
   @override
@@ -171,10 +186,7 @@ class _ShowPageState extends State<ShowPage> {
                                   Icon(MyGlobals
                                       .ICONOS_CATEGORIAS[_content.type]),
                                   Text(" / "),
-                                  Text(gs.categories[_content.type]
-                                      .firstWhere(
-                                          (c) => c.id == _content.categID)
-                                      .nombre)
+                                  Text(_categoryName)
                                 ],
                               ),
                               SizedBox(

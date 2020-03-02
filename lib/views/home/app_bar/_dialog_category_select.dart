@@ -48,38 +48,40 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                     ),
                   ),
                 ),
-              TypeAhead(),
-              // Container(
-              //   height: 220,
-              //   child: ListView.builder(
-              //     itemCount: widget.selectCity
-              //         ? singleton.categories[SectionType.publicaciones].length - 1
-              //         : singleton
-              //             .categories[
-              //                 Provider.of<MyState>(context).activePageHome]
-              //             .length,
-              //     itemBuilder: (BuildContext context, int index) {
-              //       List<CategoryWrapper> _lista = widget.selectCity
-              //           ? [...singleton.categories[SectionType.publicaciones]]
-              //           : [
-              //               ...singleton.categories[
-              //                   Provider.of<MyState>(context).activePageHome]
-              //             ];
+              // TypeAhead(),
+              Container(
+                height: 220,
+                child: ListView.builder(
+                  itemCount: widget.selectCity
+                      ? singleton.categories[SectionType.publicaciones].length -
+                          1
+                      : singleton
+                          .categories[
+                              Provider.of<MyState>(context).activePageHome]
+                          .length,
+                  itemBuilder: (BuildContext context, int index) {
+                    List<CategoryWrapper> _lista = widget.selectCity
+                        ? [...singleton.categories[SectionType.publicaciones]]
+                        : [
+                            ...singleton.categories[
+                                Provider.of<MyState>(context).activePageHome]
+                          ];
 
-              //       if (widget.selectCity) _lista.removeWhere((c) => c.id == -1);
+                    if (widget.selectCity)
+                      _lista.removeWhere((c) => c.id == -1);
 
-              //       return ListTile(
-              //         onTap: () {
-              //           _selected = _lista[index].id;
-              //           if (mounted) setState(() {});
-              //           Navigator.of(context).pop(_lista[index].id);
-              //         },
-              //         leading: Icon(Icons.location_on),
-              //         title: Text(_lista[index].nombre),
-              //       );
-              //     },
-              //   ),
-              // ),
+                    return ListTile(
+                      onTap: () {
+                        _selected = _lista[index].id;
+                        if (mounted) setState(() {});
+                        Navigator.of(context).pop(_lista[index].id);
+                      },
+                      leading: Icon(Icons.location_on),
+                      title: Text(_lista[index].nombre),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
