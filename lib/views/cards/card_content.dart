@@ -111,6 +111,8 @@ class CardContent extends StatelessWidget {
                           Flexible(
                             child: Text(
                               content.titulo,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,

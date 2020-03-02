@@ -82,6 +82,15 @@ class _ProfilePageState extends State<ProfilePage> {
     prefs.setString("activeUser", json.encode(_activeUser));
   }
 
+  _getPublicacionesCiudadCount(id) async {
+    ResponseObject resp =
+        await Fetcher.get(url: "/publicaciones.json?ciudad_id=$id");
+    if (resp != null) {
+      return (json.decode(resp.body) as List).length;
+    }
+    return -1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,6 +217,24 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setInt("preferredCiudadId", ciudadId);
+
+                if (await _getPublicacionesCiudadCount(ciudadId) <= 0) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('No hay contenido'),
+                      content: Text(
+                        'Aún no hay publicaciones asociadas a la ciudad seleccionada, próximamente, se añadirán las mismas.',
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('Aceptar'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               }
             },
           ),

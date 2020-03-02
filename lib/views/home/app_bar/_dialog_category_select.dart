@@ -2,7 +2,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/state/index.dart';
-import 'package:arrancando/views/general/type_ahead.dart';
+import 'package:arrancando/views/general/type_ahead_ciudad.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +24,12 @@ class DialogCategorySelect extends StatefulWidget {
 class _DialogCategorySelectState extends State<DialogCategorySelect> {
   final GlobalSingleton singleton = GlobalSingleton();
   int _selected;
+
+  _onItemTap(item) {
+    _selected = item.id;
+    if (mounted) setState(() {});
+    Navigator.of(context).pop(item.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,40 +54,44 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                     ),
                   ),
                 ),
-              // TypeAhead(),
-              Container(
-                height: 220,
-                child: ListView.builder(
-                  itemCount: widget.selectCity
-                      ? singleton.categories[SectionType.publicaciones].length -
-                          1
-                      : singleton
-                          .categories[
-                              Provider.of<MyState>(context).activePageHome]
-                          .length,
-                  itemBuilder: (BuildContext context, int index) {
-                    List<CategoryWrapper> _lista = widget.selectCity
-                        ? [...singleton.categories[SectionType.publicaciones]]
-                        : [
-                            ...singleton.categories[
-                                Provider.of<MyState>(context).activePageHome]
-                          ];
+              widget.selectCity
+                  ? TypeAheadCiudad(
+                      onItemTap: _onItemTap,
+                    )
+                  : Container(
+                      height: 220,
+                      child: ListView.builder(
+                        itemCount: widget.selectCity
+                            ? singleton.categories[SectionType.publicaciones]
+                                    .length -
+                                1
+                            : singleton
+                                .categories[Provider.of<MyState>(context)
+                                    .activePageHome]
+                                .length,
+                        itemBuilder: (BuildContext context, int index) {
+                          List<CategoryWrapper> _lista = widget.selectCity
+                              ? [
+                                  ...singleton
+                                      .categories[SectionType.publicaciones]
+                                ]
+                              : [
+                                  ...singleton.categories[
+                                      Provider.of<MyState>(context)
+                                          .activePageHome]
+                                ];
 
-                    if (widget.selectCity)
-                      _lista.removeWhere((c) => c.id == -1);
+                          if (widget.selectCity)
+                            _lista.removeWhere((c) => c.id == -1);
 
-                    return ListTile(
-                      onTap: () {
-                        _selected = _lista[index].id;
-                        if (mounted) setState(() {});
-                        Navigator.of(context).pop(_lista[index].id);
-                      },
-                      leading: Icon(Icons.location_on),
-                      title: Text(_lista[index].nombre),
-                    );
-                  },
-                ),
-              ),
+                          return ListTile(
+                            onTap: () => _onItemTap,
+                            leading: Icon(Icons.location_on),
+                            title: Text(_lista[index].nombre),
+                          );
+                        },
+                      ),
+                    ),
             ],
           ),
         ),

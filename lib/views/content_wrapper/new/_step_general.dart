@@ -45,7 +45,7 @@ class StepGeneral extends StatelessWidget {
                 labelText: "Cuerpo",
                 hintText: "Cuerpo",
               ),
-              controller: ingredientesController,
+              controller: cuerpoController,
             ),
           if (type == SectionType.recetas)
             TextFormField(

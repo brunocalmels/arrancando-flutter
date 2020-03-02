@@ -1,3 +1,4 @@
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/index.dart';
@@ -39,9 +40,15 @@ class _CategoriesChipState extends State<CategoriesChip> {
                 onSelected: (val) async {
                   int selected = await showDialog(
                     context: context,
-                    builder: (_) => DialogCategorySelect(),
+                    builder: (_) => DialogCategorySelect(
+                      selectCity:
+                          Provider.of<MyState>(context).activePageHome !=
+                                  null &&
+                              Provider.of<MyState>(context).activePageHome ==
+                                  SectionType.publicaciones,
+                    ),
                   );
-                  if (selected != null)  {
+                  if (selected != null) {
                     Provider.of<MyState>(
                       context,
                       listen: false,
