@@ -28,9 +28,13 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
         url: "/ciudades/search.json?term=${_searchController.text}",
       );
 
-      _items = (json.decode(resp.body) as List)
-          .map((c) => CategoryWrapper.fromJson(c))
-          .toList();
+      if (resp != null && resp.body != null) {
+        _items = (json.decode(resp.body) as List)
+            .map((c) => CategoryWrapper.fromJson(c))
+            .toList();
+      } else {
+        _items = [];
+      }
     }
 
     _searching = false;

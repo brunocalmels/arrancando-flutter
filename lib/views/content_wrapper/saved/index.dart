@@ -112,10 +112,6 @@ class _SavedContentPageState extends State<SavedContentPage> {
                                             ),
                                 ),
                                 title: Text(p.titulo),
-                                subtitle: Text(
-                                  p.cuerpo,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
                                 trailing: IconButton(
                                   onPressed: () {
                                     SavedContent.toggleSave(p, context);
