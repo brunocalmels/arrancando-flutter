@@ -1,5 +1,5 @@
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +27,7 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
   Future _actualizarDato() async {
     try {
       ResponseObject resp = await Fetcher.put(
-        url: "/users/${Provider.of<MyState>(context).activeUser.id}.json",
+        url: "/users/${Provider.of<UserState>(context).activeUser.id}.json",
         body: {
           "${widget.campo.toLowerCase()}": "${textoController.text}",
         },

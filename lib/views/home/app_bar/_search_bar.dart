@@ -1,13 +1,11 @@
+import 'package:arrancando/config/state/content_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
-  final Function(bool) setSent;
-  final Function showSearchPage;
   final TextEditingController searchController;
 
   SearchBar({
-    this.setSent,
-    this.showSearchPage,
     this.searchController,
   });
 
@@ -26,10 +24,9 @@ class _SearchBarState extends State<SearchBar> {
         textCapitalization: TextCapitalization.sentences,
         onChanged: (val) async {
           if (val != null && val.isNotEmpty) {
-            widget.setSent(true);
-            widget.showSearchPage(true);
+            Provider.of<ContentPageState>(context)
+                .setSearchResultsVisible(true);
             await Future.delayed(Duration(seconds: 3));
-            widget.setSent(false);
           }
         },
         autofocus: true,

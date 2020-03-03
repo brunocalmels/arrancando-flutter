@@ -1,112 +1,119 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/content_page.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/home/app_bar/_categories_chip.dart';
 import 'package:arrancando/views/home/app_bar/_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MainAppBar extends StatelessWidget {
-  final bool sent;
-  final bool showSearch;
-  final Function(bool) setSent;
-  final Function showSearchPage;
-  final Function toggleSearch;
+  final Function(bool) setSearchVisibility;
   final TextEditingController searchController;
-  final bool sortByFecha;
-  final Function(bool) setSortByFecha;
 
   MainAppBar({
-    this.sent,
-    this.showSearch,
-    this.setSent,
-    this.showSearchPage,
-    this.toggleSearch,
+    this.setSearchVisibility,
     this.searchController,
-    this.sortByFecha,
-    this.setSortByFecha,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      iconTheme: IconThemeData(
-        color: Colors.black,
-      ),
-      leading: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.black12,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              type: MaterialType.circle,
-              child: InkWell(
-                onTap: () {
-                  MyGlobals.mainScaffoldKey.currentState.openDrawer();
-                },
-                child: Image.asset('assets/images/icon.png'),
-              ),
-            ),
+    return Consumer2<MainState, ContentPageState>(
+      builder: (context, mainState, contentState, child) {
+        return AppBar(
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black,
           ),
-        ],
-      ),
-      backgroundColor: Colors.white,
-      title: showSearch
-          ? SearchBar(
-              setSent: setSent,
-              showSearchPage: showSearchPage,
-              searchController: searchController,
-            )
-          : Provider.of<MyState>(context).activePageHome != SectionType.home
-              ? CategoriesChip()
-              : null,
-      actions: <Widget>[
-        if (!showSearch &&
-            Provider.of<MyState>(context).activePageHome != SectionType.home)
-          PopupMenuButton<bool>(
-            icon: Icon(Icons.filter_list),
-            onSelected: (val) {
-              setSortByFecha(val);
-            },
-            itemBuilder: (context) => <PopupMenuItem<bool>>[
-              PopupMenuItem(
-                value: true,
-                child: Text(
-                  Provider.of<MyState>(context).activePageHome !=
-                          SectionType.pois
-                      ? "Fecha"
-                      : "Proximidad",
-                  style: TextStyle(
-                      color:
-                          sortByFecha ? Theme.of(context).accentColor : null),
+          leading: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(100),
                 ),
-              ),
-              PopupMenuItem(
-                value: false,
-                child: Text(
-                  "Puntuación",
-                  style: TextStyle(
-                      color:
-                          !sortByFecha ? Theme.of(context).accentColor : null),
+                child: Material(
+                  color: Colors.transparent,
+                  type: MaterialType.circle,
+                  child: InkWell(
+                    onTap: () {
+                      MyGlobals.mainScaffoldKey.currentState.openDrawer();
+                    },
+                    child: Image.asset('assets/images/icon.png'),
+                  ),
                 ),
               ),
             ],
           ),
-        IconButton(
-          onPressed: toggleSearch,
-          icon: Icon(
-            showSearch ? Icons.close : Icons.search,
-          ),
-        ),
-      ],
+          backgroundColor: Colors.white,
+          title: contentState.showSearchPage
+              ? SearchBar(
+                  searchController: searchController,
+                )
+              : mainState.activePageHome != SectionType.home
+                  ? CategoriesChip()
+                  : null,
+          actions: <Widget>[
+            if (!contentState.showSearchPage &&
+                mainState.activePageHome != SectionType.home)
+              PopupMenuButton<ContentSortType>(
+                icon: Icon(Icons.filter_list),
+                onSelected: (type) {
+                  contentState.setContentSortType(type);
+                },
+                itemBuilder: (context) => <PopupMenuItem<ContentSortType>>[
+                  if (mainState.activePageHome != SectionType.pois)
+                    PopupMenuItem(
+                      value: ContentSortType.fecha,
+                      child: Text(
+                        "Fecha",
+                        style: TextStyle(
+                            color: contentState.sortContentBy ==
+                                    ContentSortType.fecha
+                                ? Theme.of(context).accentColor
+                                : null),
+                      ),
+                    ),
+                  if (mainState.activePageHome == SectionType.pois)
+                    PopupMenuItem(
+                      value: ContentSortType.proximidad,
+                      child: Text(
+                        "Proximidad",
+                        style: TextStyle(
+                            color: contentState.sortContentBy ==
+                                    ContentSortType.proximidad
+                                ? Theme.of(context).accentColor
+                                : null),
+                      ),
+                    ),
+                  PopupMenuItem(
+                    value: ContentSortType.puntuacion,
+                    child: Text(
+                      "Puntuación",
+                      style: TextStyle(
+                          color: contentState.sortContentBy ==
+                                  ContentSortType.puntuacion
+                              ? Theme.of(context).accentColor
+                              : null),
+                    ),
+                  ),
+                ],
+              ),
+            IconButton(
+              onPressed: () {
+                setSearchVisibility(!contentState.showSearchPage);
+              },
+              icon: Icon(
+                contentState.showSearchPage ? Icons.close : Icons.search,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

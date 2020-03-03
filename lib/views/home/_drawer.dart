@@ -1,5 +1,6 @@
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/comunidad/index.dart';
 import 'package:arrancando/views/contacto/index.dart';
 import 'package:arrancando/views/content_wrapper/saved/index.dart';
@@ -30,26 +31,28 @@ class HomeDrawer extends StatelessWidget {
                 CircleAvatar(
                   radius: 40,
                   backgroundImage:
-                      Provider.of<MyState>(context, listen: false).activeUser !=
+                      Provider.of<UserState>(context, listen: false)
+                                      .activeUser !=
                                   null &&
-                              Provider.of<MyState>(context, listen: false)
+                              Provider.of<UserState>(context, listen: false)
                                       .activeUser
                                       .avatar !=
                                   null
                           ? CachedNetworkImageProvider(
-                              "${MyGlobals.SERVER_URL}${Provider.of<MyState>(context, listen: false).activeUser.avatar}",
+                              "${MyGlobals.SERVER_URL}${Provider.of<UserState>(context, listen: false).activeUser.avatar}",
                             )
                           : null,
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Text(Provider.of<MyState>(context, listen: false).activeUser !=
-                        null
-                    ? Provider.of<MyState>(context, listen: false)
-                        .activeUser
-                        .username
-                    : ""),
+                Text(
+                    Provider.of<UserState>(context, listen: false).activeUser !=
+                            null
+                        ? Provider.of<UserState>(context, listen: false)
+                            .activeUser
+                            .username
+                        : ""),
               ],
             ),
           ),
@@ -153,7 +156,8 @@ class HomeDrawer extends StatelessWidget {
             onTap: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               prefs.remove('activeUser');
-              Provider.of<MyState>(context, listen: false).setActiveUser(null);
+              Provider.of<UserState>(context, listen: false)
+                  .setActiveUser(null);
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                   builder: (_) => LoginPage(),

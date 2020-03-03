@@ -27,28 +27,22 @@ class _SearchPageState extends State<SearchPage> {
     switch (value) {
       case SectionType.publicaciones:
         return ContentCardPage(
-          rootUrl: "/publicaciones",
-          categoryParam: "ciudad_id",
           type: SectionType.publicaciones,
-          searchTerm: term,
+          // searchTerm: term,
         );
       case SectionType.recetas:
         return ContentCardPage(
-          rootUrl: "/recetas",
-          categoryParam: "categoria_receta_id",
           type: SectionType.recetas,
-          searchTerm: term,
+          // searchTerm: term,
         );
       case SectionType.pois:
         return PoiPage(
-          searchTerm: term,
-        );
+            // searchTerm: term,
+            );
       default:
         return ContentCardPage(
-          rootUrl: "/publicaciones",
-          categoryParam: "ciudad_id",
           type: SectionType.publicaciones,
-          searchTerm: term,
+          // searchTerm: term,
         );
     }
   }

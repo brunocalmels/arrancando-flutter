@@ -1,15 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:flutter/material.dart';
 
 class TypeAheadCiudad extends StatefulWidget {
   final Function(CategoryWrapper) onItemTap;
+  final bool insideProfile;
 
   TypeAheadCiudad({
     this.onItemTap,
+    this.insideProfile = false,
   });
 
   @override
@@ -19,6 +23,7 @@ class TypeAheadCiudad extends StatefulWidget {
 class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
   List<CategoryWrapper> _items;
   final TextEditingController _searchController = TextEditingController();
+  final GlobalSingleton gs = GlobalSingleton();
   Timer _debounce;
   bool _searching = false;
 
@@ -92,12 +97,16 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
               ),
             if (_items != null && _items.length > 0)
               Container(
+                color: Colors.black12.withAlpha(9),
                 height: 220,
                 child: ListView.builder(
                   itemCount: _items.length,
                   itemBuilder: (context, index) => ListTile(
                     title: Text(
                       _items[index].nombre,
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
                     ),
                     onTap: () {
                       if (widget.onItemTap != null) {
@@ -116,6 +125,26 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                     fontSize: 13,
                   ),
                 ),
+              ),
+            if (!widget.insideProfile)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      widget.onItemTap(
+                          gs.categories[SectionType.publicaciones].first);
+                    },
+                    child: Text(
+                      'TODAS LAS CIUDADES',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).accentColor,
+                      ),
+                    ),
+                  ),
+                ],
               ),
           ],
         ),

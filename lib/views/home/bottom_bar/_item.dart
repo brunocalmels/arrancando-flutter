@@ -1,15 +1,15 @@
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BBButtonItem extends StatefulWidget {
   final BBItem item;
-  final Function hideSearch;
+  final Function setSearchVisibility;
 
   BBButtonItem({
     this.item,
-    this.hideSearch,
+    this.setSearchVisibility,
   });
 
   @override
@@ -20,7 +20,7 @@ class _BBButtonItemState extends State<BBButtonItem> {
   double _width = 0;
 
   _setTextAnimation() async {
-    _width = Provider.of<MyState>(context).activePageHome == widget.item.value
+    _width = Provider.of<MainState>(context).activePageHome == widget.item.value
         ? widget.item.text.length * 8.0
         : 0;
     if (mounted) setState(() {});
@@ -47,7 +47,7 @@ class _BBButtonItemState extends State<BBButtonItem> {
   @override
   void didUpdateWidget(BBButtonItem oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (Provider.of<MyState>(context).activePageHome == widget.item.value)
+    if (Provider.of<MainState>(context).activePageHome == widget.item.value)
       _setTextAnimation();
     else
       _stopTextAnimation();
@@ -62,8 +62,8 @@ class _BBButtonItemState extends State<BBButtonItem> {
         type: MaterialType.circle,
         child: InkWell(
           onTap: () {
-            widget.hideSearch();
-            Provider.of<MyState>(context, listen: false)
+            widget.setSearchVisibility(false);
+            Provider.of<MainState>(context, listen: false)
                 .setActivePageHome(widget.item.value);
           },
           child: Row(
@@ -72,7 +72,7 @@ class _BBButtonItemState extends State<BBButtonItem> {
                 padding: const EdgeInsets.all(10),
                 child: Icon(
                   widget.item.icon,
-                  color: Provider.of<MyState>(context).activePageHome ==
+                  color: Provider.of<MainState>(context).activePageHome ==
                           widget.item.value
                       ? Theme.of(context).primaryColor
                       : null,

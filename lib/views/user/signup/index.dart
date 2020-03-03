@@ -6,7 +6,7 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/user.dart';
 // import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
@@ -126,7 +126,7 @@ class _LoginPageState extends State<SignupPage> {
           'activeUser',
           "${json.encode(body)}",
         );
-        Provider.of<MyState>(context, listen: false).setActiveUser(
+        Provider.of<UserState>(context, listen: false).setActiveUser(
           ActiveUser.fromJson(body),
         );
 
@@ -147,7 +147,8 @@ class _LoginPageState extends State<SignupPage> {
               .id;
 
           if (ciudadId != null) {
-            Provider.of<MyState>(context, listen: false).setPreferredCategories(
+            Provider.of<UserState>(context, listen: false)
+                .setPreferredCategories(
               SectionType.publicaciones,
               ciudadId,
             );

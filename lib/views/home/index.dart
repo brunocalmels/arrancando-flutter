@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/state/content_page.dart';
+import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/general/version_checker.dart';
 import 'package:arrancando/views/home/_drawer.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
@@ -13,10 +16,8 @@ import 'package:arrancando/views/home/pages/_poi_page.dart';
 import 'package:arrancando/views/home/app_bar/index.dart';
 import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
-import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScaffold extends StatefulWidget {
   @override
@@ -25,124 +26,140 @@ class MainScaffold extends StatefulWidget {
 
 class _MainScaffoldState extends State<MainScaffold> {
   final TextEditingController _searchController = TextEditingController();
-  bool _showSearch = false;
-  bool _showSearchResults = false;
-  bool _shouldSortByFecha = true;
-  bool _sent = false;
+  List<ContentWrapper> _items;
+  int _limit = 20;
+  bool _fetching = true;
+  bool _noMore = false;
+  bool _loadingMore = false;
+  bool _locationDenied = false;
+  Map<int, double> _calculatedDistance = {};
 
-  _setSent(bool val) {
-    if (mounted)
-      setState(() {
-        _sent = val;
-      });
-  }
+  Future<void> _fetchContent(type) async {
+    MainState mainState = Provider.of<MainState>(
+      context,
+      listen: false,
+    );
+    UserState userState = Provider.of<UserState>(
+      context,
+      listen: false,
+    );
+    ContentPageState contentPageState = Provider.of<ContentPageState>(
+      context,
+      listen: false,
+    );
 
-  _setShowSearchResults(bool val) {
-    if (mounted)
-      setState(() {
-        _showSearchResults = val;
-      });
-  }
+    int lastLength = _items != null ? _items.length : 0;
 
-  _toggleSearch() {
-    _showSearch = !_showSearch;
-    if (!_showSearch) {
-      _searchController.clear();
-      _setSent(false);
-      _setShowSearchResults(false);
-    }
+    int selectedCategory = mainState.selectedCategoryHome[type] != null
+        ? mainState.selectedCategoryHome[type]
+        : userState.preferredCategories[type];
+
+    _items = await ContentWrapper.fetchItems(
+      type,
+      search: _searchController.text,
+      categoryId: selectedCategory,
+      limit: _limit,
+    );
+
+    _items = await ContentWrapper.sortItems(
+      _items,
+      contentPageState.sortContentBy,
+      calculatedDistance: _calculatedDistance,
+    );
+
+    _limit += 20;
+    _noMore = lastLength == _items.length ? true : false;
+    _fetching = false;
     if (mounted) setState(() {});
   }
 
-  _setSortItems(bool byPoints) {
-    _shouldSortByFecha = byPoints;
+  _resetLimit() {
+    _items = null;
+    _fetching = true;
+    _noMore = false;
+    _limit = 20;
     if (mounted) setState(() {});
   }
 
-  _hideSearch() {
-    _showSearch = false;
-    _searchController.clear();
-    _setSent(false);
-    _setShowSearchResults(false);
+  _setSearchVisibility(bool val) {
+    ContentPageState cps = Provider.of<ContentPageState>(context);
+    cps.setSearchPageVisible(val);
+    cps.setSearchResultsVisible(val);
+    if (!val) _searchController.clear();
     if (mounted) setState(() {});
   }
 
-  Widget _getPage(SectionType value) {
-    if (!_showSearchResults) {
-      switch (value) {
+  _setLoadingMore(bool val) {
+    _loadingMore = val;
+    setState(() {});
+  }
+
+  Widget _getPage(SectionType type) {
+    if (!Provider.of<ContentPageState>(context).showSearchResults) {
+      switch (type) {
         case SectionType.home:
           return HomePage();
         case SectionType.publicaciones:
-          return ContentCardPage(
-            rootUrl: "/publicaciones",
-            categoryParam: "ciudad_id",
-            type: SectionType.publicaciones,
-            sortByFecha: _shouldSortByFecha,
+          return Container(
+            key: Key('publicaciones-page'),
+            child: ContentCardPage(
+              type: SectionType.publicaciones,
+              fetching: _fetching,
+              noMore: _noMore,
+              resetLimit: _resetLimit,
+              fetchContent: _fetchContent,
+              items: _items,
+            ),
           );
         case SectionType.recetas:
-          return ContentCardPage(
-            rootUrl: "/recetas",
-            categoryParam: "categoria_receta_id",
-            type: SectionType.recetas,
-            sortByFecha: _shouldSortByFecha,
+          return Container(
+            key: Key('recetas-page'),
+            child: ContentCardPage(
+              type: SectionType.recetas,
+              fetching: _fetching,
+              noMore: _noMore,
+              resetLimit: _resetLimit,
+              fetchContent: _fetchContent,
+              items: _items,
+            ),
           );
         case SectionType.pois:
           return PoiPage(
-            sortByFecha: _shouldSortByFecha,
+            fetching: _fetching,
+            noMore: _noMore,
+            resetLimit: _resetLimit,
+            fetchContent: _fetchContent,
+            items: _items,
+            loadingMore: _loadingMore,
+            setLoadingMore: _setLoadingMore,
+            setLocationDenied: _setLocationDenied,
+            locationDenied: _locationDenied,
           );
         default:
           return HomePage();
       }
     } else {
       return FastSearchPage(
-        sent: _sent,
         searchController: _searchController,
       );
     }
   }
 
-  _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('activeUser');
-    Provider.of<MyState>(context, listen: false).setActiveUser(null);
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => LoginPage(),
-      ),
-      (_) => false,
-    );
-  }
-
-  _verifyCorrectLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String activeUser = prefs.getString("activeUser");
-    print('Verify active user defined');
-    if (activeUser != null) {
-      print('Active user is set');
-      ActiveUser au = ActiveUser.fromJson(
-        json.decode(activeUser),
-      );
-      if (au.id == null || au.email == null || au.authToken == null) {
-        print('Active user lacks either id or email or token');
-        this._logout();
-      }
-    } else {
-      print('Active user was null but the app landed on /home somehow');
-      this._logout();
-    }
+  _setLocationDenied() async {
+    _locationDenied = await ActiveUser.locationPermissionDenied();
   }
 
   @override
   void initState() {
     super.initState();
-    this._verifyCorrectLogin();
+    ActiveUser.verifyCorrectLogin(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _hideSearch();
+        _setSearchVisibility(false);
         if (MyGlobals.mainScaffoldKey.currentState.isDrawerOpen) return true;
         return false;
       },
@@ -152,21 +169,15 @@ class _MainScaffoldState extends State<MainScaffold> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(55),
           child: MainAppBar(
-            sent: _sent,
-            setSent: _setSent,
-            showSearchPage: _setShowSearchResults,
             searchController: _searchController,
-            toggleSearch: _toggleSearch,
-            showSearch: _showSearch,
-            sortByFecha: _shouldSortByFecha,
-            setSortByFecha: _setSortItems,
+            setSearchVisibility: _setSearchVisibility,
           ),
         ),
         body: Stack(
           fit: StackFit.passthrough,
           children: <Widget>[
             _getPage(
-              Provider.of<MyState>(context).activePageHome,
+              Provider.of<MainState>(context).activePageHome,
             ),
             Positioned(
               left: 0,
@@ -183,7 +194,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                       height: 15,
                     ),
                     MainBottomBar(
-                      hideSearch: _hideSearch,
+                      setSearchVisibility: _setSearchVisibility,
                     ),
                     SizedBox(
                       height: 15,

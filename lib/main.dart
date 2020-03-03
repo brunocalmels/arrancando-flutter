@@ -6,7 +6,9 @@ import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/dynamic_links.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/content_page.dart';
+import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
@@ -16,9 +18,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
+    MultiProvider(
+      providers: <SingleChildCloneableWidget>[
+        ChangeNotifierProvider(
+          create: (BuildContext context) => MainState(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => UserState(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => ContentPageState(),
+        ),
+      ],
       child: MyApp(),
-      create: (BuildContext context) => MyState(),
     ),
   );
 }
@@ -38,7 +50,7 @@ class _MyAppState extends State<MyApp> {
     String activeUser = prefs.getString("activeUser");
     int preferredCiudadId = prefs.getInt("preferredCiudadId");
     if (activeUser != null) {
-      Provider.of<MyState>(context, listen: false).setActiveUser(
+      Provider.of<UserState>(context, listen: false).setActiveUser(
         ActiveUser.fromJson(
           json.decode(activeUser),
         ),
@@ -46,7 +58,7 @@ class _MyAppState extends State<MyApp> {
       _isLoggedIn = true;
     }
     if (preferredCiudadId != null) {
-      Provider.of<MyState>(context, listen: false).setPreferredCategories(
+      Provider.of<UserState>(context, listen: false).setPreferredCategories(
         SectionType.publicaciones,
         preferredCiudadId,
       );

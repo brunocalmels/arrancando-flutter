@@ -2,7 +2,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +28,7 @@ class _ComentariosSectionState extends State<ComentariosSection> {
   _sendComentario() async {
     if (_mensajeController != null &&
         _mensajeController.text != null &&
-        _mensajeController.text != "") {
+        _mensajeController.text.isNotEmpty) {
       try {
         setState(() {
           _sent = true;

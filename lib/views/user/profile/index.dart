@@ -5,7 +5,7 @@ import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:arrancando/views/user/profile/_avatar_picker.dart';
 import 'package:arrancando/views/user/profile/_dialog_editar_datos_usuario.dart';
@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (resp?.status == 200 && resp?.body != null) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      ActiveUser au = Provider.of<MyState>(context, listen: false).activeUser;
+      ActiveUser au = Provider.of<UserState>(context, listen: false).activeUser;
 
       au.avatar = json.decode(resp.body)['avatar'];
 
@@ -48,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
         "${json.encode(au.toJson())}",
       );
 
-      Provider.of<MyState>(context, listen: false).setActiveUser(
+      Provider.of<UserState>(context, listen: false).setActiveUser(
         ActiveUser.fromJson(au.toJson()),
       );
     }
@@ -62,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     ActiveUser _activeUser =
-        Provider.of<MyState>(context, listen: false).activeUser;
+        Provider.of<UserState>(context, listen: false).activeUser;
 
     switch (campo) {
       case "Nombre":
@@ -77,18 +77,19 @@ class _ProfilePageState extends State<ProfilePage> {
       default:
     }
 
-    Provider.of<MyState>(context, listen: false).setActiveUser(_activeUser);
+    Provider.of<UserState>(context, listen: false).setActiveUser(_activeUser);
 
     prefs.setString("activeUser", json.encode(_activeUser));
   }
 
-  _getPublicacionesCiudadCount(id) async {
-    ResponseObject resp =
-        await Fetcher.get(url: "/publicaciones.json?ciudad_id=$id");
+  Future<bool> _getCiudadPopulada(id) async {
+    ResponseObject resp = await Fetcher.get(url: "/ciudades/$id.json");
     if (resp != null) {
-      return (json.decode(resp.body) as List).length;
+      return json.decode(resp.body)['populada'] != null
+          ? json.decode(resp.body)['populada']
+          : false;
     }
-    return -1;
+    return false;
   }
 
   @override
@@ -108,9 +109,9 @@ class _ProfilePageState extends State<ProfilePage> {
             children: <Widget>[
               AvatarPicker(
                 currentAvatar:
-                    Provider.of<MyState>(context).activeUser?.avatar != null
+                    Provider.of<UserState>(context).activeUser?.avatar != null
                         ? CachedNetworkImageProvider(
-                            "${MyGlobals.SERVER_URL}${Provider.of<MyState>(context).activeUser?.avatar}",
+                            "${MyGlobals.SERVER_URL}${Provider.of<UserState>(context).activeUser?.avatar}",
                           )
                         : null,
                 setAvatar: _setAvatar,
@@ -138,14 +139,14 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           ListTile(
             title: Text('Nombre'),
-            subtitle: Text(Provider.of<MyState>(context).activeUser.nombre),
+            subtitle: Text(Provider.of<UserState>(context).activeUser.nombre),
             onTap: () async {
               String valor = await showDialog(
                 context: context,
                 builder: (context) {
                   return DialogEditarDatosUsuario(
                     campo: "Nombre",
-                    valor: Provider.of<MyState>(context).activeUser.nombre,
+                    valor: Provider.of<UserState>(context).activeUser.nombre,
                   );
                 },
               );
@@ -156,8 +157,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ListTile(
             title: Text('Apellido'),
             subtitle: Text(
-                Provider.of<MyState>(context).activeUser.apellido != null
-                    ? Provider.of<MyState>(context).activeUser.apellido
+                Provider.of<UserState>(context).activeUser.apellido != null
+                    ? Provider.of<UserState>(context).activeUser.apellido
                     : ''),
             onTap: () async {
               String valor = await showDialog(
@@ -165,7 +166,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 builder: (context) {
                   return DialogEditarDatosUsuario(
                     campo: "Apellido",
-                    valor: Provider.of<MyState>(context).activeUser.apellido,
+                    valor: Provider.of<UserState>(context).activeUser.apellido,
                   );
                 },
               );
@@ -175,14 +176,14 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           ListTile(
             title: Text('Username'),
-            subtitle: Text(Provider.of<MyState>(context).activeUser.username),
+            subtitle: Text(Provider.of<UserState>(context).activeUser.username),
             onTap: () async {
               String valor = await showDialog(
                 context: context,
                 builder: (context) {
                   return DialogEditarDatosUsuario(
                     campo: "Username",
-                    valor: Provider.of<MyState>(context).activeUser.username,
+                    valor: Provider.of<UserState>(context).activeUser.username,
                   );
                 },
               );
@@ -196,7 +197,7 @@ class _ProfilePageState extends State<ProfilePage> {
               gs.categories[SectionType.publicaciones]
                   .firstWhere((c) =>
                       c.id ==
-                      Provider.of<MyState>(context)
+                      Provider.of<UserState>(context)
                           .preferredCategories[SectionType.publicaciones])
                   .nombre,
             ),
@@ -207,10 +208,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 builder: (_) => DialogCategorySelect(
                   selectCity: true,
                   titleText: "¿Cuál es tu ciudad?",
+                  insideProfile: true,
                 ),
               );
               if (ciudadId != null) {
-                Provider.of<MyState>(context, listen: false)
+                Provider.of<UserState>(context, listen: false)
                     .setPreferredCategories(
                   SectionType.publicaciones,
                   ciudadId,
@@ -218,13 +220,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setInt("preferredCiudadId", ciudadId);
 
-                if (await _getPublicacionesCiudadCount(ciudadId) <= 0) {
+                if (!(await _getCiudadPopulada(ciudadId))) {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
                       title: Text('No hay contenido'),
                       content: Text(
-                        'Aún no hay publicaciones asociadas a la ciudad seleccionada, próximamente, se añadirán las mismas.',
+                        'Aún no hay mucho contenido de tu ciudad.\nEn unos días añadiremos publicaciones y puntos de interés cerca tuyo.\nMientras tanto, te recomendamos que veas el contenido de Neuquén.',
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
                       ),
                       actions: <Widget>[
                         FlatButton(

@@ -4,3 +4,9 @@ enum SectionType {
   recetas,
   pois,
 }
+
+enum ContentSortType {
+  fecha,
+  puntuacion,
+  proximidad,
+}

@@ -1,5 +1,12 @@
+import 'dart:convert';
+
+import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/user/login/index.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'active_user.g.dart';
 
@@ -46,5 +53,36 @@ class ActiveUser {
       return false;
     }
     return false;
+  }
+
+  static logout(context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('activeUser');
+    Provider.of<UserState>(context, listen: false).setActiveUser(null);
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => LoginPage(),
+      ),
+      (_) => false,
+    );
+  }
+
+  static verifyCorrectLogin(context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String activeUser = prefs.getString("activeUser");
+    print('Verify active user defined');
+    if (activeUser != null) {
+      print('Active user is set');
+      ActiveUser au = ActiveUser.fromJson(
+        json.decode(activeUser),
+      );
+      if (au.id == null || au.email == null || au.authToken == null) {
+        print('Active user lacks either id or email or token');
+        ActiveUser.logout(context);
+      }
+    } else {
+      print('Active user was null but the app landed on /home somehow');
+      ActiveUser.logout(context);
+    }
   }
 }

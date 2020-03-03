@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/usuario.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -105,7 +107,7 @@ class ContentWrapper {
       : type == SectionType.recetas ? categoriaRecetaId : categoriaPoiId;
 
   esOwner(BuildContext context) =>
-      this.user.id == Provider.of<MyState>(context).activeUser.id;
+      this.user.id == Provider.of<UserState>(context).activeUser.id;
 
   distanciaToH() {
     if (localDistance != null) {
@@ -149,5 +151,100 @@ class ContentWrapper {
         text: texto,
       );
     }
+  }
+
+  static Future<List<ContentWrapper>> fetchItems(
+    SectionType type, {
+    String search,
+    int limit = 0,
+    int categoryId,
+  }) async {
+    String rootURL = '/publicaciones';
+    String categoryParamName = "ciudad_id";
+
+    switch (type) {
+      case SectionType.publicaciones:
+        rootURL = '/publicaciones';
+        categoryParamName = "ciudad_id";
+        break;
+      case SectionType.recetas:
+        rootURL = '/recetas';
+        categoryParamName = "categoria_receta_id";
+        break;
+      case SectionType.pois:
+        rootURL = '/pois';
+        categoryParamName = "categoria_poi_id";
+        break;
+      default:
+    }
+
+    String url = "$rootURL.json?limit=$limit";
+
+    if (search != null && search.isNotEmpty) {
+      url = "$rootURL/search.json?term=$search";
+    } else if (categoryId != null && categoryId > 0) {
+      url += "&$categoryParamName=$categoryId";
+    }
+
+    ResponseObject resp = await Fetcher.get(
+      url: url,
+    );
+
+    if (resp != null) {
+      return (json.decode(resp.body) as List).map(
+        (p) {
+          var content = ContentWrapper.fromJson(p);
+          content.type = type;
+          return content;
+        },
+      ).toList();
+    }
+
+    return [];
+  }
+
+  static Future<List<ContentWrapper>> sortItems(
+    List<ContentWrapper> elements,
+    ContentSortType type, {
+    Map<int, double> calculatedDistance,
+  }) async {
+    List<ContentWrapper> items = [...elements];
+    try {
+      switch (type) {
+        case ContentSortType.fecha:
+          items.sort((a, b) => a.createdAt.isAfter(b.createdAt) ? -1 : 1);
+          break;
+        case ContentSortType.puntuacion:
+          items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
+          break;
+        case ContentSortType.proximidad:
+          if (calculatedDistance != null &&
+              !(await ActiveUser.locationPermissionDenied())) {
+            await Future.wait(
+              items.map(
+                (i) async {
+                  if (calculatedDistance[i.id] == null) {
+                    double localDistance = await i.distancia;
+                    calculatedDistance[i.id] = localDistance;
+                  } else
+                    i.localDistance = calculatedDistance[i.id];
+                  return null;
+                },
+              ),
+            );
+            items?.sort((a, b) => a.localDistance != null &&
+                    b.localDistance != null &&
+                    a.localDistance < b.localDistance
+                ? -1
+                : 1);
+          }
+          break;
+        default:
+      }
+      return items;
+    } catch (e) {
+      print(e);
+    }
+    return [];
   }
 }

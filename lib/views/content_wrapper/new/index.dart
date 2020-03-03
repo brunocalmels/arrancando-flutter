@@ -6,7 +6,7 @@ import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_categoria.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_general.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_imagenes.dart';
@@ -91,7 +91,7 @@ class _NewContentState extends State<NewContent> {
             }
 
             if (ciudadId != null) {
-              Provider.of<MyState>(context, listen: false)
+              Provider.of<UserState>(context, listen: false)
                   .setPreferredCategories(
                 SectionType.publicaciones,
                 ciudadId,

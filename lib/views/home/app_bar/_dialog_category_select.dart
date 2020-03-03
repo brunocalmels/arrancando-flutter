@@ -1,7 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/general/type_ahead_ciudad.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,11 +10,13 @@ class DialogCategorySelect extends StatefulWidget {
   final bool selectCity;
   final bool allowDismiss;
   final String titleText;
+  final bool insideProfile;
 
   DialogCategorySelect({
     this.selectCity = false,
     this.allowDismiss = true,
     this.titleText = "Cambiar filtro",
+    this.insideProfile = false,
   });
 
   @override
@@ -57,6 +59,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
               widget.selectCity
                   ? TypeAheadCiudad(
                       onItemTap: _onItemTap,
+                      insideProfile: widget.insideProfile,
                     )
                   : Container(
                       height: 220,
@@ -66,7 +69,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                                     .length -
                                 1
                             : singleton
-                                .categories[Provider.of<MyState>(context)
+                                .categories[Provider.of<MainState>(context)
                                     .activePageHome]
                                 .length,
                         itemBuilder: (BuildContext context, int index) {
@@ -77,7 +80,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                                 ]
                               : [
                                   ...singleton.categories[
-                                      Provider.of<MyState>(context)
+                                      Provider.of<MainState>(context)
                                           .activePageHome]
                                 ];
 

@@ -1,10 +1,9 @@
 import 'dart:convert';
 
-import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,7 +22,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
   Future<void> _fetchContent() async {
     ResponseObject resp = await Fetcher.get(
       url:
-          "/content/saved.json?data=${json.encode(Provider.of<MyState>(context, listen: false).savedContent)}",
+          "/content/saved.json?data=${json.encode(Provider.of<UserState>(context, listen: false).savedContent)}",
     );
 
     if (resp?.body != null)

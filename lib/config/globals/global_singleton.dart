@@ -1,7 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:provider/provider.dart';
 
 class GlobalSingleton {
@@ -14,7 +14,7 @@ class GlobalSingleton {
 
   setCategories(SectionType type, List<CategoryWrapper> list) {
     categories[type] = list;
-    MyState st = Provider.of<MyState>(
+    UserState st = Provider.of<UserState>(
       MyGlobals.mainNavigatorKey.currentContext,
       listen: false,
     );

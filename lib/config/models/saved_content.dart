@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
-import 'package:arrancando/config/state/index.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:provider/provider.dart';
@@ -36,25 +36,25 @@ class SavedContent {
       )
           .forEach(
         (sc) {
-          Provider.of<MyState>(context).toggleSavedContent(sc);
+          Provider.of<UserState>(context).toggleSavedContent(sc);
         },
       );
     }
   }
 
   static bool isSaved(ContentWrapper content, BuildContext context) =>
-      Provider.of<MyState>(context)
+      Provider.of<UserState>(context)
           .savedContent
           .any((sc) => sc.id == content.id && sc.type == content.type);
 
   static toggleSave(ContentWrapper content, BuildContext context) async {
-    Provider.of<MyState>(context).toggleSavedContent(
+    Provider.of<UserState>(context).toggleSavedContent(
       SavedContent(content.id, content.type),
     );
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(
       "savedContent",
-      json.encode(Provider.of<MyState>(context).savedContent),
+      json.encode(Provider.of<UserState>(context).savedContent),
     );
   }
 }
