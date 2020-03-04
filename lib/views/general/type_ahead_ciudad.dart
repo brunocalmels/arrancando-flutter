@@ -5,7 +5,9 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TypeAheadCiudad extends StatefulWidget {
   final Function(CategoryWrapper) onItemTap;
@@ -108,9 +110,20 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                         fontSize: 14,
                       ),
                     ),
-                    onTap: () {
+                    onTap: () async {
                       if (widget.onItemTap != null) {
                         widget.onItemTap(_items[index]);
+                        if (widget.insideProfile) {
+                          await Fetcher.put(
+                            url:
+                                "/users/${Provider.of<UserState>(context).activeUser.id}.json",
+                            body: {
+                              "user": {
+                                "ciudad_id": "${_items[index].id}",
+                              }
+                            },
+                          );
+                        }
                       }
                     },
                   ),
@@ -134,7 +147,8 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                   FlatButton(
                     onPressed: () {
                       widget.onItemTap(
-                          gs.categories[SectionType.publicaciones].first);
+                        gs.categories[SectionType.publicaciones].first,
+                      );
                     },
                     child: Text(
                       'TODAS LAS CIUDADES',

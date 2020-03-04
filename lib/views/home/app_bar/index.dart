@@ -9,10 +9,12 @@ import 'package:provider/provider.dart';
 
 class MainAppBar extends StatelessWidget {
   final Function(bool) setSearchVisibility;
+  final Function fetchContent;
   final TextEditingController searchController;
 
   MainAppBar({
     this.setSearchVisibility,
+    this.fetchContent,
     this.searchController,
   });
 
@@ -55,7 +57,9 @@ class MainAppBar extends StatelessWidget {
                   searchController: searchController,
                 )
               : mainState.activePageHome != SectionType.home
-                  ? CategoriesChip()
+                  ? CategoriesChip(
+                      fetchContent: fetchContent,
+                    )
                   : null,
           actions: <Widget>[
             if (!contentState.showSearchPage &&
@@ -64,6 +68,7 @@ class MainAppBar extends StatelessWidget {
                 icon: Icon(Icons.filter_list),
                 onSelected: (type) {
                   contentState.setContentSortType(type);
+                  if (fetchContent != null) fetchContent();
                 },
                 itemBuilder: (context) => <PopupMenuItem<ContentSortType>>[
                   if (mainState.activePageHome != SectionType.pois)

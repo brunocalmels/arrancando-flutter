@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
@@ -34,7 +32,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
 
-  Future<void> _fetchContent(type) async {
+  Future<void> _fetchContent(type, {bool keepLimit = false}) async {
     MainState mainState = Provider.of<MainState>(
       context,
       listen: false,
@@ -54,6 +52,8 @@ class _MainScaffoldState extends State<MainScaffold> {
         ? mainState.selectedCategoryHome[type]
         : userState.preferredCategories[type];
 
+    print(_limit);
+
     _items = await ContentWrapper.fetchItems(
       type,
       search: _searchController.text,
@@ -67,17 +67,31 @@ class _MainScaffoldState extends State<MainScaffold> {
       calculatedDistance: _calculatedDistance,
     );
 
-    _limit += 20;
+    if (type == SectionType.pois && !_locationDenied)
+      _items.map((i) => _calculatedDistance[i.id] = i.localDistance);
+
+    if (!keepLimit) _limit += 20;
+
     _noMore = lastLength == _items.length ? true : false;
     _fetching = false;
     if (mounted) setState(() {});
   }
 
-  _resetLimit() {
+  _resetLimit({bool keepNumber = false}) {
     _items = null;
     _fetching = true;
     _noMore = false;
-    _limit = 20;
+    if (!keepNumber) _limit = 20;
+    if (mounted) setState(() {});
+  }
+
+  _setLoadingMore(bool val) {
+    _loadingMore = val;
+    if (mounted) setState(() {});
+  }
+
+  _setLocationDenied() async {
+    _locationDenied = await ActiveUser.locationPermissionDenied();
     if (mounted) setState(() {});
   }
 
@@ -87,11 +101,6 @@ class _MainScaffoldState extends State<MainScaffold> {
     cps.setSearchResultsVisible(val);
     if (!val) _searchController.clear();
     if (mounted) setState(() {});
-  }
-
-  _setLoadingMore(bool val) {
-    _loadingMore = val;
-    setState(() {});
   }
 
   Widget _getPage(SectionType type) {
@@ -145,14 +154,16 @@ class _MainScaffoldState extends State<MainScaffold> {
     }
   }
 
-  _setLocationDenied() async {
-    _locationDenied = await ActiveUser.locationPermissionDenied();
+  _initUserInfo() async {
+    await ActiveUser.verifyCorrectLogin(context);
+    if (Provider.of<UserState>(context).activeUser != null)
+      ActiveUser.updateAppVersion(context);
   }
 
   @override
   void initState() {
     super.initState();
-    ActiveUser.verifyCorrectLogin(context);
+    _initUserInfo();
   }
 
   @override
@@ -171,6 +182,13 @@ class _MainScaffoldState extends State<MainScaffold> {
           child: MainAppBar(
             searchController: _searchController,
             setSearchVisibility: _setSearchVisibility,
+            fetchContent: () {
+              _resetLimit(keepNumber: true);
+              _fetchContent(
+                Provider.of<MainState>(context).activePageHome,
+                keepLimit: true,
+              );
+            },
           ),
         ),
         body: Stack(

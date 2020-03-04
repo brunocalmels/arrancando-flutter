@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
@@ -84,5 +86,16 @@ class ActiveUser {
       print('Active user was null but the app landed on /home somehow');
       ActiveUser.logout(context);
     }
+  }
+
+  static updateAppVersion(context) async {
+    await Fetcher.put(
+      url: "/users/${Provider.of<UserState>(context).activeUser.id}.json",
+      body: {
+        "user": {
+          "app_version": "${MyGlobals.APP_VERSION}",
+        }
+      },
+    );
   }
 }

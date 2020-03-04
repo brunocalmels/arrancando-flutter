@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesChip extends StatefulWidget {
+  final Function fetchContent;
   final bool small;
 
   CategoriesChip({
+    this.fetchContent,
     this.small = false,
   });
 
@@ -23,83 +25,77 @@ class _CategoriesChipState extends State<CategoriesChip> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        singleton.categories == null ||
-                singleton.categories[
-                        Provider.of<MainState>(context).activePageHome] ==
-                    null ||
-                singleton
-                        .categories[
-                            Provider.of<MainState>(context).activePageHome]
-                        .length ==
-                    0
-            ? Container()
-            : ChoiceChip(
-                onSelected: (val) async {
-                  int selected = await showDialog(
-                    context: context,
-                    builder: (_) => DialogCategorySelect(
-                      selectCity:
-                          Provider.of<MainState>(context).activePageHome !=
-                                  null &&
-                              Provider.of<MainState>(context).activePageHome ==
+    return Consumer2<MainState, UserState>(
+      builder: (context, mainState, userState, child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            singleton.categories == null ||
+                    singleton.categories[mainState.activePageHome] == null ||
+                    singleton.categories[mainState.activePageHome].length == 0
+                ? Container()
+                : ChoiceChip(
+                    onSelected: (val) async {
+                      int selected = await showDialog(
+                        context: context,
+                        builder: (_) => DialogCategorySelect(
+                          selectCity: mainState.activePageHome != null &&
+                              mainState.activePageHome ==
                                   SectionType.publicaciones,
-                    ),
-                  );
-                  if (selected != null) {
-                    Provider.of<MainState>(
-                      context,
-                      listen: false,
-                    ).setSelectedCategoryHome(
-                      Provider.of<MainState>(context).activePageHome,
-                      selected,
-                    );
-                  }
-                },
-                label: Row(
-                  children: <Widget>[
-                    Icon(
-                      MyGlobals.ICONOS_CATEGORIAS[
-                          Provider.of<MainState>(context).activePageHome],
-                      size: widget.small ? 12 : 15,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      constraints: BoxConstraints(
-                        maxWidth: widget.small ? 20 : 150,
-                      ),
-                      child: Text(
-                        singleton.categories[Provider.of<MainState>(context).activePageHome]
-                            .firstWhere((c) => Provider.of<MainState>(context)
-                                            .selectedCategoryHome[
-                                        Provider.of<MainState>(context)
-                                            .activePageHome] !=
-                                    null
-                                ? c.id ==
-                                    Provider.of<MainState>(context).selectedCategoryHome[
-                                        Provider.of<MainState>(context)
-                                            .activePageHome]
-                                : c.id ==
-                                    Provider.of<UserState>(context).preferredCategories[
-                                        Provider.of<MainState>(context).activePageHome])
-                            .nombre,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: widget.small ? 10 : 14,
                         ),
-                      ),
+                      );
+                      if (selected != null) {
+                        Provider.of<MainState>(
+                          context,
+                          listen: false,
+                        ).setSelectedCategoryHome(
+                          mainState.activePageHome,
+                          selected,
+                        );
+                        if (widget.fetchContent != null) widget.fetchContent();
+                      }
+                    },
+                    label: Row(
+                      children: <Widget>[
+                        Icon(
+                          MyGlobals.ICONOS_CATEGORIAS[mainState.activePageHome],
+                          size: widget.small ? 12 : 15,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          constraints: BoxConstraints(
+                            maxWidth: widget.small ? 20 : 150,
+                          ),
+                          child: Text(
+                            singleton.categories[mainState.activePageHome]
+                                .firstWhere((c) =>
+                                    mainState.selectedCategoryHome[
+                                                mainState.activePageHome] !=
+                                            null
+                                        ? c.id ==
+                                            mainState.selectedCategoryHome[
+                                                mainState.activePageHome]
+                                        : c.id ==
+                                            userState.preferredCategories[
+                                                mainState.activePageHome])
+                                .nombre,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: widget.small ? 10 : 14,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                selected: false,
-              ),
-      ],
+                    selected: false,
+                  ),
+          ],
+        );
+      },
     );
   }
 }

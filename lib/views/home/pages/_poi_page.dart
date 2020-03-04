@@ -1,11 +1,13 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/views/cards/tile_poi.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
+import 'package:provider/provider.dart';
 
 class PoiPage extends StatefulWidget {
   final bool fetching;
@@ -43,7 +45,9 @@ class _PoiPageState extends State<PoiPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      Provider.of<ContentPageState>(context)
+          .setContentSortType(ContentSortType.proximidad);
       widget.setLocationDenied();
       widget.resetLimit();
       widget.fetchContent(SectionType.pois);
@@ -102,29 +106,31 @@ class _PoiPageState extends State<PoiPage> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       item,
-                                      // Center(
-                                      //   child: CircularProgressIndicator(),
-                                      // ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
                                           vertical: 10,
                                         ),
                                         child: Column(
                                           children: <Widget>[
-                                            RaisedButton(
-                                              color: Colors.white,
-                                              onPressed: widget.loadingMore
-                                                  ? null
-                                                  : () {
-                                                      widget.setLoadingMore(
-                                                        false,
-                                                      );
-                                                      widget.fetchContent(
-                                                        SectionType.pois,
-                                                      );
-                                                    },
-                                              child: Text("Cargar más"),
-                                            ),
+                                            if (!widget.noMore)
+                                              RaisedButton(
+                                                color: Colors.white,
+                                                onPressed: widget.loadingMore
+                                                    ? null
+                                                    : () async {
+                                                        widget.setLoadingMore(
+                                                          true,
+                                                        );
+                                                        await widget
+                                                            .fetchContent(
+                                                          SectionType.pois,
+                                                        );
+                                                        widget.setLoadingMore(
+                                                          false,
+                                                        );
+                                                      },
+                                                child: Text("Cargar más"),
+                                              ),
                                             if (widget.loadingMore)
                                               Padding(
                                                 padding: const EdgeInsets.only(

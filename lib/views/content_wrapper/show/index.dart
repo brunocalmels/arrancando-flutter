@@ -227,53 +227,100 @@ class _ShowPageState extends State<ShowPage> {
                         SizedBox(
                           height: 10,
                         ),
-                        if (_content.cuerpo != null)
+                        if (_content.cuerpo != null &&
+                            _content.cuerpo.isNotEmpty)
                           Padding(
-                            padding: const EdgeInsets.all(15),
+                            padding: const EdgeInsets.only(
+                              left: 15,
+                              top: 15,
+                              right: 15,
+                              bottom: 25,
+                            ),
                             child: Text(
                               "${_content.cuerpo}",
                               textAlign: TextAlign.justify,
                             ),
                           ),
-                        if (_content.cuerpo != null)
-                          SizedBox(
-                            height: 10,
-                          ),
-                        if (_content.introduccion != null)
+                        if (_content.introduccion != null &&
+                            _content.introduccion.isNotEmpty)
                           Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Text(
-                              "${_content.introduccion}",
-                              textAlign: TextAlign.justify,
+                            padding: const EdgeInsets.only(
+                              left: 15,
+                              top: 15,
+                              right: 15,
+                              bottom: 25,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "INTRODUCCIÓN:",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "${_content.introduccion}",
+                                  textAlign: TextAlign.justify,
+                                ),
+                              ],
                             ),
                           ),
-                        if (_content.introduccion != null)
-                          SizedBox(
-                            height: 10,
-                          ),
-                        if (_content.ingredientes != null)
+                        if (_content.ingredientes != null &&
+                            _content.ingredientes.isNotEmpty)
                           Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Text(
-                              "${_content.ingredientes}",
-                              textAlign: TextAlign.justify,
+                            padding: const EdgeInsets.only(
+                              left: 15,
+                              top: 15,
+                              right: 15,
+                              bottom: 25,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "INGREDIENTES:",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "${_content.ingredientes}",
+                                  textAlign: TextAlign.justify,
+                                ),
+                              ],
                             ),
                           ),
-                        if (_content.ingredientes != null)
-                          SizedBox(
-                            height: 10,
-                          ),
-                        if (_content.instrucciones != null)
+                        if (_content.instrucciones != null &&
+                            _content.instrucciones.isNotEmpty)
                           Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Text(
-                              "${_content.instrucciones}",
-                              textAlign: TextAlign.justify,
+                            padding: const EdgeInsets.only(
+                              left: 15,
+                              top: 15,
+                              right: 15,
+                              bottom: 25,
                             ),
-                          ),
-                        if (_content.instrucciones != null)
-                          SizedBox(
-                            height: 10,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "INSTRUCCIONES:",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  "${_content.instrucciones}",
+                                  textAlign: TextAlign.justify,
+                                ),
+                              ],
+                            ),
                           ),
                         Container(
                           width: MediaQuery.of(context).size.width,

@@ -127,7 +127,7 @@ class ContentWrapper {
         "Si todavía no te descargaste Arrancando podés hacerlo desde https://play.google.com/store/apps/details?id=com.macherit.arrancando";
 
     String texto = esFull
-        ? "$cabecera\n\n${this.titulo}\n\n${this.cuerpo}\n\n$piecera"
+        ? "$cabecera\n\n${this.titulo}${this.cuerpo != null ? ('\n\n' + this.cuerpo) : ''}${this.introduccion != null ? ('\n\n' + this.introduccion) : ''}${this.ingredientes != null ? ('\n\n' + this.ingredientes) : ''}${this.instrucciones != null ? ('\n\n' + this.instrucciones) : ''}\n\n$piecera"
         : "$cabecera\n\n${this.titulo}\n\n$piecera";
 
     if (this.imagenes.length > 0 && imageBytes != null) {
@@ -223,10 +223,9 @@ class ContentWrapper {
             await Future.wait(
               items.map(
                 (i) async {
-                  if (calculatedDistance[i.id] == null) {
-                    double localDistance = await i.distancia;
-                    calculatedDistance[i.id] = localDistance;
-                  } else
+                  if (calculatedDistance[i.id] == null)
+                    await i.distancia;
+                  else
                     i.localDistance = calculatedDistance[i.id];
                   return null;
                 },

@@ -88,7 +88,9 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                             _lista.removeWhere((c) => c.id == -1);
 
                           return ListTile(
-                            onTap: () => _onItemTap,
+                            onTap: () {
+                              _onItemTap(_lista[index]);
+                            },
                             leading: Icon(Icons.location_on),
                             title: Text(_lista[index].nombre),
                           );

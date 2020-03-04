@@ -114,9 +114,9 @@ class _LoginPageState extends State<LoginPage> {
           //   ),
           // );
           int ciudadId = singleton.categories[SectionType.publicaciones]
-              .where((c) => c.id > 0)
-              .first
-              .id;
+              ?.where((c) => c.id > 0)
+              ?.first
+              ?.id;
           if (ciudadId != null) {
             Provider.of<UserState>(context, listen: false)
                 .setPreferredCategories(
