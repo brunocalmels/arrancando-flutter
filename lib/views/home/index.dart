@@ -25,7 +25,7 @@ class MainScaffold extends StatefulWidget {
 class _MainScaffoldState extends State<MainScaffold> {
   final TextEditingController _searchController = TextEditingController();
   List<ContentWrapper> _items;
-  int _limit = 20;
+  int _limit = 50;
   bool _fetching = true;
   bool _noMore = false;
   bool _loadingMore = false;
