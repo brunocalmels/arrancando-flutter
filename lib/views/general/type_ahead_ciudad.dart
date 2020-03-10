@@ -12,10 +12,12 @@ import 'package:provider/provider.dart';
 class TypeAheadCiudad extends StatefulWidget {
   final Function(CategoryWrapper) onItemTap;
   final bool insideProfile;
+  final bool insideEdit;
 
   TypeAheadCiudad({
     this.onItemTap,
     this.insideProfile = false,
+    this.insideEdit = false,
   });
 
   @override
@@ -117,7 +119,8 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                               onTap: () async {
                                 if (widget.onItemTap != null) {
                                   widget.onItemTap(item);
-                                  if (widget.insideProfile) {
+                                  if (widget.insideProfile &&
+                                      !widget.insideEdit) {
                                     await Fetcher.put(
                                       url:
                                           "/users/${Provider.of<UserState>(context).activeUser.id}.json",
@@ -147,7 +150,7 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                   ),
                 ),
               ),
-            if (!widget.insideProfile)
+            if (!widget.insideProfile && !widget.insideEdit)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,

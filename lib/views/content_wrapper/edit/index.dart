@@ -11,6 +11,7 @@ import 'package:arrancando/views/content_wrapper/new/_step_categoria.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_general.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_imagenes.dart';
 import 'package:arrancando/views/content_wrapper/new/_step_mapa.dart';
+import 'package:arrancando/views/general/type_ahead_ciudad.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -275,11 +276,23 @@ class _EditPageState extends State<EditPage> {
                         Text(_content.type == SectionType.publicaciones
                             ? "Ciudad"
                             : "Categoría"),
-                        StepCategoria(
-                          selectedCategory: _selectedCategory,
-                          setCategory: _setCategory,
-                          type: _content.type,
-                        ),
+                        _content.type == SectionType.publicaciones
+                            ? Container(
+                                height: 150,
+                                child: SingleChildScrollView(
+                                  child: TypeAheadCiudad(
+                                    insideEdit: true,
+                                    onItemTap: _setCategory,
+                                  ),
+                                ),
+                              )
+                            : StepCategoria(
+                                selectedCategory: _selectedCategory,
+                                setCategory: _setCategory,
+                                type: _content.type,
+                              ),
+                        if (_content.type == SectionType.publicaciones)
+                          Text("Ciudad: ${_selectedCategory.nombre}"),
                         Divider(),
                         Text("Imágenes"),
                         Text(

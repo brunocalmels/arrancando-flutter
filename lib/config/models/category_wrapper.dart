@@ -47,7 +47,6 @@ class CategoryWrapper {
           ],
         );
       }
-      print(gs.categories[SectionType.publicaciones].map((c) => c.id).toList());
       //////
       ResponseObject res2 = await Fetcher.get(
         url: "/categoria_recetas.json",
