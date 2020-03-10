@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:arrancando/config/models/active_user.dart';
@@ -218,7 +219,8 @@ class ContentWrapper {
           items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
           break;
         case ContentSortType.proximidad:
-          if (calculatedDistance != null &&
+          if (!Platform.isIOS &&
+              calculatedDistance != null &&
               !(await ActiveUser.locationPermissionDenied())) {
             await Future.wait(
               items.map(

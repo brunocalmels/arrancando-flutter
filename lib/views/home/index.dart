@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
@@ -221,11 +223,12 @@ class _MainScaffoldState extends State<MainScaffold> {
                 ),
               ),
             ),
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: VersionChecker(),
-            ),
+            if (!Platform.isIOS)
+              Positioned(
+                left: 0,
+                bottom: 0,
+                child: VersionChecker(),
+              ),
           ],
         ),
       ),

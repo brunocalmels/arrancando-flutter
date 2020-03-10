@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -99,12 +100,34 @@ class StepImagenes extends StatelessWidget {
 
                       switch (opcion) {
                         case "camara":
-                          File image = await ImagePicker.pickImage(
-                            source: ImageSource.camera,
-                            imageQuality: 70,
-                            maxWidth: 1000,
-                          );
-                          setImages([...images, image]);
+                          bool camaraPermisionDenied =
+                              await ActiveUser.cameraPermissionDenied();
+                          if (!camaraPermisionDenied) {
+                            File image = await ImagePicker.pickImage(
+                              source: ImageSource.camera,
+                              imageQuality: 70,
+                              maxWidth: 1000,
+                            );
+                            if (image != null) setImages([...images, image]);
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("Permiso denegado"),
+                                content: Text(
+                                  "El permiso para la cámara fue denegado, para utilizar la cámara cambie los permisos desde la configuración de su dispositivo.",
+                                ),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Aceptar"),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
                           break;
                         case "galeria":
                           _openFileExplorer(FileType.IMAGE);

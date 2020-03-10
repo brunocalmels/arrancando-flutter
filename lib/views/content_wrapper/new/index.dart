@@ -30,6 +30,7 @@ class NewContent extends StatefulWidget {
 
 class _NewContentState extends State<NewContent> {
   int _currentStep = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _cuerpoController = TextEditingController();
   final TextEditingController _introduccionController = TextEditingController();
@@ -214,6 +215,13 @@ class _NewContentState extends State<NewContent> {
               _currentStep = 2;
             });
           }
+        } else if (_images == null || _images.length == 0) {
+          _scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              content: Text(
+                  "Es necesario añadir al menos una imagen para poder crear un contenido."),
+            ),
+          );
         } else {
           _createContent();
         }
@@ -228,6 +236,13 @@ class _NewContentState extends State<NewContent> {
               _currentStep = 3;
             });
           }
+        } else {
+          _scaffoldKey.currentState.showSnackBar(
+            SnackBar(
+              content: Text(
+                  "Es necesario añadir al menos una imagen para poder crear un contenido."),
+            ),
+          );
         }
         break;
       case 3:
@@ -255,6 +270,7 @@ class _NewContentState extends State<NewContent> {
           return false;
       },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text(
             "Crear ${MyGlobals.NOMBRES_CATEGORIAS_SINGULAR[widget.type].toLowerCase()}",

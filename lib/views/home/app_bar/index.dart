@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/content_page.dart';
@@ -83,7 +85,8 @@ class MainAppBar extends StatelessWidget {
                                 : null),
                       ),
                     ),
-                  if (mainState.activePageHome == SectionType.pois)
+                  if (mainState.activePageHome == SectionType.pois &&
+                      !Platform.isIOS)
                     PopupMenuItem(
                       value: ContentSortType.proximidad,
                       child: Text(

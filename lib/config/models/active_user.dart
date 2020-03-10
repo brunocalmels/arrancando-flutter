@@ -57,6 +57,25 @@ class ActiveUser {
     return false;
   }
 
+  static Future<bool> cameraPermissionDenied() async {
+    PermissionStatus permission =
+        await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
+
+    if (permission == PermissionStatus.denied) {
+      Map<PermissionGroup, PermissionStatus> permissions =
+          await PermissionHandler()
+              .requestPermissions([PermissionGroup.camera]);
+
+      if (permissions.containsKey(PermissionGroup.camera) &&
+          permissions[PermissionGroup.camera] != PermissionStatus.granted) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+    return false;
+  }
+
   static logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('activeUser');

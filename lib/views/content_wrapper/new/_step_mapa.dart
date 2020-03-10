@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
@@ -128,7 +129,7 @@ class _StepMapaState extends State<StepMapa> {
                     setState(() {
                       _mapController = controller;
                     });
-                  _setMyLocation();
+                  if (!Platform.isIOS) _setMyLocation();
                 },
                 onPositionChanged: (MapPosition position, bool changed) {
                   if (changed && _mapController != null) {

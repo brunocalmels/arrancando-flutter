@@ -63,16 +63,8 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                     )
                   : Container(
                       height: 220,
-                      child: ListView.builder(
-                        itemCount: widget.selectCity
-                            ? singleton.categories[SectionType.publicaciones]
-                                    .length -
-                                1
-                            : singleton
-                                .categories[Provider.of<MainState>(context)
-                                    .activePageHome]
-                                .length,
-                        itemBuilder: (BuildContext context, int index) {
+                      child: Builder(
+                        builder: (context) {
                           List<CategoryWrapper> _lista = widget.selectCity
                               ? [
                                   ...singleton
@@ -87,12 +79,21 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                           if (widget.selectCity)
                             _lista.removeWhere((c) => c.id == -1);
 
-                          return ListTile(
-                            onTap: () {
-                              _onItemTap(_lista[index]);
-                            },
-                            leading: Icon(Icons.location_on),
-                            title: Text(_lista[index].nombre),
+                          return SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: _lista
+                                  .map(
+                                    (item) => ListTile(
+                                      onTap: () {
+                                        _onItemTap(item);
+                                      },
+                                      leading: Icon(Icons.location_on),
+                                      title: Text(item.nombre),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
                           );
                         },
                       ),

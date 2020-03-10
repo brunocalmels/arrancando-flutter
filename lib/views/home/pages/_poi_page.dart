@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
@@ -46,8 +48,12 @@ class _PoiPageState extends State<PoiPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<ContentPageState>(context)
-          .setContentSortType(ContentSortType.proximidad);
+      if (Platform.isIOS)
+        Provider.of<ContentPageState>(context)
+            .setContentSortType(ContentSortType.puntuacion);
+      else
+        Provider.of<ContentPageState>(context)
+            .setContentSortType(ContentSortType.proximidad);
       widget.setLocationDenied();
       widget.resetLimit();
       widget.fetchContent(SectionType.pois);

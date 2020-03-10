@@ -101,31 +101,39 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
               Container(
                 color: Colors.black12.withAlpha(9),
                 height: 220,
-                child: ListView.builder(
-                  itemCount: _items.length,
-                  itemBuilder: (context, index) => ListTile(
-                    title: Text(
-                      _items[index].nombre,
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
+                child: Builder(
+                  builder: (context) => SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: _items
+                          .map(
+                            (item) => ListTile(
+                              title: Text(
+                                item.nombre,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                              onTap: () async {
+                                if (widget.onItemTap != null) {
+                                  widget.onItemTap(item);
+                                  if (widget.insideProfile) {
+                                    await Fetcher.put(
+                                      url:
+                                          "/users/${Provider.of<UserState>(context).activeUser.id}.json",
+                                      body: {
+                                        "user": {
+                                          "ciudad_id": "${item.id}",
+                                        }
+                                      },
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                          )
+                          .toList(),
                     ),
-                    onTap: () async {
-                      if (widget.onItemTap != null) {
-                        widget.onItemTap(_items[index]);
-                        if (widget.insideProfile) {
-                          await Fetcher.put(
-                            url:
-                                "/users/${Provider.of<UserState>(context).activeUser.id}.json",
-                            body: {
-                              "user": {
-                                "ciudad_id": "${_items[index].id}",
-                              }
-                            },
-                          );
-                        }
-                      }
-                    },
                   ),
                 ),
               ),
