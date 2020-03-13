@@ -26,6 +26,7 @@ class MainScaffold extends StatefulWidget {
 
 class _MainScaffoldState extends State<MainScaffold> {
   final TextEditingController _searchController = TextEditingController();
+  PersistentBottomSheetController _bottomSheetController;
   List<ContentWrapper> _items;
   int _limit = 50;
   bool _fetching = true;
@@ -54,13 +55,12 @@ class _MainScaffoldState extends State<MainScaffold> {
         ? mainState.selectedCategoryHome[type]
         : userState.preferredCategories[type];
 
-    print(_limit);
-
     _items = await ContentWrapper.fetchItems(
       type,
       search: _searchController.text,
       categoryId: selectedCategory,
       limit: _limit,
+      context: context,
     );
 
     _items = await ContentWrapper.sortItems(
@@ -173,7 +173,9 @@ class _MainScaffoldState extends State<MainScaffold> {
     return WillPopScope(
       onWillPop: () async {
         _setSearchVisibility(false);
+        _bottomSheetController.close();
         if (MyGlobals.mainScaffoldKey.currentState.isDrawerOpen) return true;
+
         return false;
       },
       child: Scaffold(
@@ -184,6 +186,11 @@ class _MainScaffoldState extends State<MainScaffold> {
           child: MainAppBar(
             searchController: _searchController,
             setSearchVisibility: _setSearchVisibility,
+            setBottomSheetController:
+                (PersistentBottomSheetController controller) {
+              _bottomSheetController = controller;
+              if (mounted) setState(() {});
+            },
             fetchContent: () {
               _resetLimit(keepNumber: true);
               _fetchContent(

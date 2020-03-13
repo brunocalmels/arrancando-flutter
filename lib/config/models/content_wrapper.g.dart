@@ -27,6 +27,7 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
     json['ciudad_id'] as int,
     json['categoria_receta_id'] as int,
     json['categoria_poi_id'] as int,
+    json['categoria_publicacion_id'] as int,
     (json['imagenes'] as List)?.map((e) => e as String)?.toList(),
     (json['puntajes'] as List)
         ?.map((e) =>
@@ -56,6 +57,7 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'ciudad_id': instance.ciudadId,
       'categoria_receta_id': instance.categoriaRecetaId,
       'categoria_poi_id': instance.categoriaPoiId,
+      'categoria_publicacion_id': instance.categoriaPublicacionId,
       'latitud': instance.latitud,
       'longitud': instance.longitud,
       'localDistance': instance.localDistance,

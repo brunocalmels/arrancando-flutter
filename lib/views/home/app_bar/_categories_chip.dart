@@ -10,10 +10,14 @@ import 'package:provider/provider.dart';
 class CategoriesChip extends StatefulWidget {
   final Function fetchContent;
   final bool small;
+  final bool alignCenter;
+  final bool pubCateg;
 
   CategoriesChip({
     this.fetchContent,
     this.small = false,
+    this.alignCenter = false,
+    this.pubCateg = false,
   });
 
   @override
@@ -28,7 +32,9 @@ class _CategoriesChipState extends State<CategoriesChip> {
     return Consumer2<MainState, UserState>(
       builder: (context, mainState, userState, child) {
         return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: widget.alignCenter
+              ? MainAxisAlignment.center
+              : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             singleton.categories == null ||
@@ -43,6 +49,7 @@ class _CategoriesChipState extends State<CategoriesChip> {
                           selectCity: mainState.activePageHome != null &&
                               mainState.activePageHome ==
                                   SectionType.publicaciones,
+                          pubCateg: widget.pubCateg,
                         ),
                       );
                       if (selected != null) {
@@ -50,7 +57,9 @@ class _CategoriesChipState extends State<CategoriesChip> {
                           context,
                           listen: false,
                         ).setSelectedCategoryHome(
-                          mainState.activePageHome,
+                          widget.pubCateg
+                              ? SectionType.publicaciones_categoria
+                              : mainState.activePageHome,
                           selected,
                         );
                         if (widget.fetchContent != null) widget.fetchContent();
@@ -70,17 +79,26 @@ class _CategoriesChipState extends State<CategoriesChip> {
                             maxWidth: widget.small ? 20 : 150,
                           ),
                           child: Text(
-                            singleton.categories[mainState.activePageHome]
-                                .firstWhere((c) =>
-                                    mainState.selectedCategoryHome[
-                                                mainState.activePageHome] !=
-                                            null
-                                        ? c.id ==
-                                            mainState.selectedCategoryHome[
-                                                mainState.activePageHome]
-                                        : c.id ==
-                                            userState.preferredCategories[
-                                                mainState.activePageHome])
+                            singleton.categories[widget.pubCateg
+                                    ? SectionType.publicaciones_categoria
+                                    : mainState.activePageHome]
+                                .firstWhere((c) => mainState.selectedCategoryHome[
+                                            widget.pubCateg
+                                                ? SectionType
+                                                    .publicaciones_categoria
+                                                : mainState.activePageHome] !=
+                                        null
+                                    ? c.id ==
+                                        mainState.selectedCategoryHome[
+                                            widget.pubCateg
+                                                ? SectionType
+                                                    .publicaciones_categoria
+                                                : mainState.activePageHome]
+                                    : c.id ==
+                                        userState.preferredCategories[
+                                            widget.pubCateg
+                                                ? SectionType.publicaciones_categoria
+                                                : mainState.activePageHome])
                                 .nombre,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

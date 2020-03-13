@@ -112,7 +112,7 @@ class CardContent extends StatelessWidget {
                             child: Text(
                               content.titulo,
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                              maxLines: MediaQuery.of(context).size.height > 500 ? 2 : 1,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
@@ -124,7 +124,7 @@ class CardContent extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      if (content.type == SectionType.publicaciones)
+                      if (content.type == SectionType.publicaciones && MediaQuery.of(context).size.height > 500)
                         Text(
                           content.cuerpo,
                           overflow: TextOverflow.ellipsis,

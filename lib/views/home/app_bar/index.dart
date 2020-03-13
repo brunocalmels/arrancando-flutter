@@ -6,6 +6,7 @@ import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/home/app_bar/_categories_chip.dart';
 import 'package:arrancando/views/home/app_bar/_search_bar.dart';
+import 'package:arrancando/views/home/filter_bottom_sheet/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,11 +14,13 @@ class MainAppBar extends StatelessWidget {
   final Function(bool) setSearchVisibility;
   final Function fetchContent;
   final TextEditingController searchController;
+  final Function(PersistentBottomSheetController) setBottomSheetController;
 
   MainAppBar({
     this.setSearchVisibility,
     this.fetchContent,
     this.searchController,
+    this.setBottomSheetController,
   });
 
   @override
@@ -54,62 +57,76 @@ class MainAppBar extends StatelessWidget {
             ],
           ),
           backgroundColor: Colors.white,
-          title: contentState.showSearchPage
-              ? SearchBar(
-                  searchController: searchController,
-                )
-              : mainState.activePageHome != SectionType.home
-                  ? CategoriesChip(
-                      fetchContent: fetchContent,
-                    )
-                  : null,
+          // title: contentState.showSearchPage
+          //     ? SearchBar(
+          //         searchController: searchController,
+          //       )
+          //     : mainState.activePageHome != SectionType.home
+          //         ? CategoriesChip(
+          //             fetchContent: fetchContent,
+          //           )
+          //         : null,
           actions: <Widget>[
+            // if (!contentState.showSearchPage &&
+            //     mainState.activePageHome != SectionType.home)
+            //   PopupMenuButton<ContentSortType>(
+            //     icon: Icon(Icons.filter_list),
+            //     onSelected: (type) {
+            //       contentState.setContentSortType(type);
+            //       if (fetchContent != null) fetchContent();
+            //     },
+            //     itemBuilder: (context) => <PopupMenuItem<ContentSortType>>[
+            //       if (mainState.activePageHome != SectionType.pois)
+            //         PopupMenuItem(
+            //           value: ContentSortType.fecha,
+            //           child: Text(
+            //             "Fecha",
+            //             style: TextStyle(
+            //                 color: contentState.sortContentBy ==
+            //                         ContentSortType.fecha
+            //                     ? Theme.of(context).accentColor
+            //                     : null),
+            //           ),
+            //         ),
+            //       if (mainState.activePageHome == SectionType.pois &&
+            //           !Platform.isIOS)
+            //         PopupMenuItem(
+            //           value: ContentSortType.proximidad,
+            //           child: Text(
+            //             "Proximidad",
+            //             style: TextStyle(
+            //                 color: contentState.sortContentBy ==
+            //                         ContentSortType.proximidad
+            //                     ? Theme.of(context).accentColor
+            //                     : null),
+            //           ),
+            //         ),
+            //       PopupMenuItem(
+            //         value: ContentSortType.puntuacion,
+            //         child: Text(
+            //           "Puntuación",
+            //           style: TextStyle(
+            //               color: contentState.sortContentBy ==
+            //                       ContentSortType.puntuacion
+            //                   ? Theme.of(context).accentColor
+            //                   : null),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
             if (!contentState.showSearchPage &&
                 mainState.activePageHome != SectionType.home)
-              PopupMenuButton<ContentSortType>(
-                icon: Icon(Icons.filter_list),
-                onSelected: (type) {
-                  contentState.setContentSortType(type);
-                  if (fetchContent != null) fetchContent();
+              IconButton(
+                onPressed: () {
+                  setBottomSheetController(
+                    MyGlobals.mainScaffoldKey.currentState.showBottomSheet(
+                      (context) => FilterBottomSheet(
+                        fetchContent: fetchContent,
+                      ),
+                    ),
+                  );
                 },
-                itemBuilder: (context) => <PopupMenuItem<ContentSortType>>[
-                  if (mainState.activePageHome != SectionType.pois)
-                    PopupMenuItem(
-                      value: ContentSortType.fecha,
-                      child: Text(
-                        "Fecha",
-                        style: TextStyle(
-                            color: contentState.sortContentBy ==
-                                    ContentSortType.fecha
-                                ? Theme.of(context).accentColor
-                                : null),
-                      ),
-                    ),
-                  if (mainState.activePageHome == SectionType.pois &&
-                      !Platform.isIOS)
-                    PopupMenuItem(
-                      value: ContentSortType.proximidad,
-                      child: Text(
-                        "Proximidad",
-                        style: TextStyle(
-                            color: contentState.sortContentBy ==
-                                    ContentSortType.proximidad
-                                ? Theme.of(context).accentColor
-                                : null),
-                      ),
-                    ),
-                  PopupMenuItem(
-                    value: ContentSortType.puntuacion,
-                    child: Text(
-                      "Puntuación",
-                      style: TextStyle(
-                          color: contentState.sortContentBy ==
-                                  ContentSortType.puntuacion
-                              ? Theme.of(context).accentColor
-                              : null),
-                    ),
-                  ),
-                ],
+                icon: Icon(Icons.filter_list),
               ),
             IconButton(
               onPressed: () {

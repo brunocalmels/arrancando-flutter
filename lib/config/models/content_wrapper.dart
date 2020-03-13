@@ -6,6 +6,7 @@ import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,6 +38,8 @@ class ContentWrapper {
   int categoriaRecetaId;
   @JsonKey(name: 'categoria_poi_id')
   int categoriaPoiId;
+  @JsonKey(name: 'categoria_publicacion_id')
+  int categoriaPublicacionId;
   double latitud;
   double longitud;
   double localDistance;
@@ -62,6 +65,7 @@ class ContentWrapper {
     this.ciudadId,
     this.categoriaRecetaId,
     this.categoriaPoiId,
+    this.categoriaPublicacionId,
     this.imagenes,
     this.puntajes,
     this.user,
@@ -174,6 +178,7 @@ class ContentWrapper {
     String search,
     int limit = 0,
     int categoryId,
+    BuildContext context,
   }) async {
     String rootURL = '/publicaciones';
     String categoryParamName = "ciudad_id";
@@ -198,8 +203,20 @@ class ContentWrapper {
 
     if (search != null && search.isNotEmpty) {
       url = "$rootURL/search.json?term=$search";
-    } else if (categoryId != null && categoryId > 0) {
-      url += "&$categoryParamName=$categoryId";
+    } else {
+      if (categoryId != null && categoryId > 0) {
+        url += "&$categoryParamName=$categoryId";
+      }
+      if (type == SectionType.publicaciones &&
+          context != null &&
+          Provider.of<MainState>(context)
+                  .selectedCategoryHome[SectionType.publicaciones_categoria] !=
+              null &&
+          Provider.of<MainState>(context)
+                  .selectedCategoryHome[SectionType.publicaciones_categoria] >
+              0)
+        url +=
+            '&categoria_publicacion_id=${Provider.of<MainState>(context).selectedCategoryHome[SectionType.publicaciones_categoria]}';
     }
 
     ResponseObject resp = await Fetcher.get(

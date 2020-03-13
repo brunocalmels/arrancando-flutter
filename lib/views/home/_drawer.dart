@@ -147,7 +147,7 @@ class HomeDrawer extends StatelessWidget {
             onTap: () async {
               Share.text(
                 'Arrancando',
-                'Bajate Arrancando y compartí tu pasión por el asado.\nhttps://play.google.com/store/apps/details?id=com.macherit.arrancando\nhttps://apps.apple.com/us/app/arrancando/id1490590335?l=es',
+                'Bajate Arrancando y compartí tu pasión por el asado.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es',
                 'text/plain',
               );
             },

@@ -11,12 +11,14 @@ class DialogCategorySelect extends StatefulWidget {
   final bool allowDismiss;
   final String titleText;
   final bool insideProfile;
+  final bool pubCateg;
 
   DialogCategorySelect({
     this.selectCity = false,
     this.allowDismiss = true,
     this.titleText = "Cambiar filtro",
     this.insideProfile = false,
+    this.pubCateg = false,
   });
 
   @override
@@ -56,7 +58,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                     ),
                   ),
                 ),
-              widget.selectCity
+              widget.selectCity && !widget.pubCateg
                   ? TypeAheadCiudad(
                       onItemTap: _onItemTap,
                       insideProfile: widget.insideProfile,
@@ -65,18 +67,23 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                       height: 220,
                       child: Builder(
                         builder: (context) {
-                          List<CategoryWrapper> _lista = widget.selectCity
+                          List<CategoryWrapper> _lista = widget.pubCateg
                               ? [
-                                  ...singleton
-                                      .categories[SectionType.publicaciones]
-                                ]
-                              : [
                                   ...singleton.categories[
-                                      Provider.of<MainState>(context)
-                                          .activePageHome]
-                                ];
+                                      SectionType.publicaciones_categoria]
+                                ]
+                              : widget.selectCity
+                                  ? [
+                                      ...singleton
+                                          .categories[SectionType.publicaciones]
+                                    ]
+                                  : [
+                                      ...singleton.categories[
+                                          Provider.of<MainState>(context)
+                                              .activePageHome]
+                                    ];
 
-                          if (widget.selectCity)
+                          if (widget.selectCity && !widget.pubCateg)
                             _lista.removeWhere((c) => c.id == -1);
 
                           return SingleChildScrollView(
