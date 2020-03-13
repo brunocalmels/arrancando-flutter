@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -22,6 +23,7 @@ class ShareContentWrapper extends StatefulWidget {
 
 class _ShareContentWrapperState extends State<ShareContentWrapper> {
   bool _esFull = false;
+  bool _esWpp = false;
   int _imagenNro = 0;
   Map<String, File> _videoThumbs = {};
 
@@ -104,6 +106,28 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                   Text("Completo"),
                 ],
               ),
+              if (widget.content.type == SectionType.recetas && _esFull)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Checkbox(
+                      value: _esWpp,
+                      onChanged: (val) {
+                        if (mounted)
+                          setState(() {
+                            _esWpp = val;
+                          });
+                      },
+                    ),
+                    Text(
+                      "Voy a compartir en WhatsApp",
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
               SizedBox(
                 height: 15,
               ),
@@ -223,21 +247,27 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
               ),
               RaisedButton(
                 onPressed: () async {
-                  String i = widget.content.imagenes[_imagenNro];
                   Uint8List imageBytes;
-                  if (['mp4', 'mpg', 'mpeg']
-                          .contains(i.split('.').last.toLowerCase()) &&
-                      _videoThumbs[i] != null) {
-                    imageBytes = _videoThumbs[i].readAsBytesSync();
-                  } else {
-                    http.Response response = await http.get(
-                      "${MyGlobals.SERVER_URL}${widget.content.imagenes[_imagenNro]}",
-                    );
-                    imageBytes = response.bodyBytes;
+                  if (widget.content.imagenes != null &&
+                      widget.content.imagenes.isNotEmpty) {
+                    String i = widget.content.imagenes[_imagenNro];
+
+                    if (['mp4', 'mpg', 'mpeg']
+                            .contains(i.split('.').last.toLowerCase()) &&
+                        _videoThumbs[i] != null) {
+                      imageBytes = _videoThumbs[i].readAsBytesSync();
+                    } else {
+                      http.Response response = await http.get(
+                        "${MyGlobals.SERVER_URL}${widget.content.imagenes[_imagenNro]}",
+                      );
+                      imageBytes = response.bodyBytes;
+                    }
                   }
+
                   widget.content.shareSelf(
                     esFull: _esFull,
                     imageBytes: imageBytes,
+                    esWpp: _esWpp,
                   );
                 },
                 color: Colors.green,

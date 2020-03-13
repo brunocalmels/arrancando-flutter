@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -69,8 +70,11 @@ class _VersionCheckerState extends State<VersionChecker> {
                               ),
                             ),
                             onPressed: () async {
-                              const url =
+                              String url =
                                   'https://play.google.com/store/apps/details?id=com.macherit.arrancando';
+                              if (Platform.isIOS)
+                                url =
+                                    'https://apps.apple.com/us/app/arrancando/id1490590335?l=es';
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

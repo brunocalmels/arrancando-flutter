@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -126,9 +128,11 @@ class HomeDrawer extends StatelessWidget {
             title: Text('Buscar actualizaciones'),
             // subtitle: Text('Enviá el link para que la descarguen.'),
             onTap: () async {
-              // TODO: Reemplazar por link para iOS.
-              const url =
+              String url =
                   'https://play.google.com/store/apps/details?id=com.macherit.arrancando';
+              if (Platform.isIOS)
+                url =
+                    'https://apps.apple.com/us/app/arrancando/id1490590335?l=es';
               if (await canLaunch(url)) {
                 await launch(url);
               } else {
@@ -143,7 +147,7 @@ class HomeDrawer extends StatelessWidget {
             onTap: () async {
               Share.text(
                 'Arrancando',
-                'Bajate Arrancando y compartí tu pasión por el asado.\nhttps://play.google.com/store/apps/details?id=com.macherit.arrancando',
+                'Bajate Arrancando y compartí tu pasión por el asado.\nhttps://play.google.com/store/apps/details?id=com.macherit.arrancando\nhttps://apps.apple.com/us/app/arrancando/id1490590335?l=es',
                 'text/plain',
               );
             },

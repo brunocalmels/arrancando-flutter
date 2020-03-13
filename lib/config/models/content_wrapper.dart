@@ -121,15 +121,30 @@ class ContentWrapper {
     return null;
   }
 
-  shareSelf({bool esFull = false, Uint8List imageBytes}) async {
-    String cabecera =
-        "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}";
+  shareSelf({
+    bool esFull = false,
+    Uint8List imageBytes,
+    bool esWpp = false,
+  }) async {
     String piecera =
-        "Si todavía no te descargaste Arrancando podés hacerlo desde https://play.google.com/store/apps/details?id=com.macherit.arrancando";
+        "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}";
+    String cabecera =
+        "Si todavía no te descargaste Arrancando podés hacerlo desde\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es";
+
+    String cuerpo = this.cuerpo != null ? "\n\n${this.cuerpo}" : "";
+    String introduccion = this.introduccion != null
+        ? "\n\n${esWpp ? '*INTRODUCCIÓN*:\n' : 'INTRODUCCIÓN:\n'}${this.introduccion}"
+        : "";
+    String ingredientes = this.ingredientes != null
+        ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientes}"
+        : "";
+    String instrucciones = this.instrucciones != null
+        ? "\n\n${esWpp ? '*INSTRUCCIONES*:\n' : 'INSTRUCCIONES:\n'}${this.instrucciones}"
+        : "";
 
     String texto = esFull
-        ? "$cabecera\n\n${this.titulo}${this.cuerpo != null ? ('\n\n' + this.cuerpo) : ''}${this.introduccion != null ? ('\n\n' + this.introduccion) : ''}${this.ingredientes != null ? ('\n\n' + this.ingredientes) : ''}${this.instrucciones != null ? ('\n\n' + this.instrucciones) : ''}\n\n$piecera"
-        : "$cabecera\n\n${this.titulo}\n\n$piecera";
+        ? "$cabecera\n\n$piecera\n\n${this.titulo}$cuerpo$introduccion$ingredientes$instrucciones"
+        : "$cabecera\n\n$piecera\n\n${this.titulo}";
 
     if (this.imagenes.length > 0 && imageBytes != null) {
       Share.file(
