@@ -75,40 +75,28 @@ class _SavedContentPageState extends State<SavedContentPage> {
                               (p) => ListTile(
                                 leading: Container(
                                   width: 40,
-                                  child: (p.imagenes == null ||
-                                          p.imagenes.length == 0)
+                                  child: p.thumbnail == null
                                       ? Center(
                                           child: Icon(
                                             Icons.photo_camera,
                                             color: Color(0x33000000),
                                           ),
                                         )
-                                      : ['mp4', 'mpg', 'mpeg'].contains(
-                                              p.imagenes.first.split('.').last)
-                                          ? Center(
-                                              child: Icon(
-                                                Icons.video_library,
-                                                color: Color(0x33000000),
+                                      : CachedNetworkImage(
+                                          imageUrl: "${p.thumbnail}",
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) => Center(
+                                            child: SizedBox(
+                                              width: 25,
+                                              height: 25,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
                                               ),
-                                            )
-                                          : CachedNetworkImage(
-                                              imageUrl: "${p.imagenes.first}",
-                                              fit: BoxFit.cover,
-                                              placeholder: (context, url) =>
-                                                  Center(
-                                                child: SizedBox(
-                                                  width: 25,
-                                                  height: 25,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    strokeWidth: 2,
-                                                  ),
-                                                ),
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
                                             ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                        ),
                                 ),
                                 title: Text(p.titulo),
                                 trailing: IconButton(
