@@ -38,36 +38,27 @@ class TilePoi extends StatelessWidget {
           },
           leading: Container(
             width: 40,
-            child: poi.imagenes == null || poi.imagenes.length == 0
+            child: poi.thumbnail == null
                 ? Center(
                     child: Icon(
                       Icons.photo_camera,
                       color: Color(0x33000000),
                     ),
                   )
-                : ['mp4', 'mpg', 'mpeg']
-                        .contains(poi.imagenes.first.split('.').last)
-                    ? Center(
-                        child: Icon(
-                          Icons.video_library,
-                          color: Color(0x33000000),
+                : CachedNetworkImage(
+                    imageUrl: "${MyGlobals.SERVER_URL}${poi.thumbnail}",
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Center(
+                      child: SizedBox(
+                        width: 25,
+                        height: 25,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
                         ),
-                      )
-                    : CachedNetworkImage(
-                        imageUrl:
-                            "${MyGlobals.SERVER_URL}${poi.imagenes.first}",
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Center(
-                          child: SizedBox(
-                            width: 25,
-                            height: 25,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
           ),
           title: Text(
             poi.titulo,
