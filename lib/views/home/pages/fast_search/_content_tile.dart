@@ -29,21 +29,15 @@ class ContentTile extends StatelessWidget {
       },
       trailing: Container(
         width: 40,
-        child: content != null &&
-                content.imagenes != null &&
-                content.imagenes.length == 0
+        child: content == null || content.thumbnail == null
             ? Center(
                 child: Icon(
                   Icons.photo_camera,
                   color: Color(0x33000000),
                 ),
               )
-            // : Image.network(
-            //     "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-            //     fit: BoxFit.cover,
-            //   ),
             : CachedNetworkImage(
-                imageUrl: "${MyGlobals.SERVER_URL}${content.imagenes.first}",
+                imageUrl: "${MyGlobals.SERVER_URL}${content.thumbnail}",
                 placeholder: (context, url) => Center(
                   child: SizedBox(
                     width: 25,

@@ -30,7 +30,7 @@ class CardContent extends StatelessWidget {
                 borderRadius: BorderRadius.all(
                   Radius.circular(4),
                 ),
-                child: content.imagenes.length == 0
+                child: content.thumbnail == null
                     ? Center(
                         child: Icon(
                           Icons.photo_camera,
@@ -38,31 +38,20 @@ class CardContent extends StatelessWidget {
                           color: Color(0x33000000),
                         ),
                       )
-                    : ['mp4', 'mpg', 'mpeg']
-                            .contains(content.imagenes.first.split('.').last)
-                        ? Center(
-                            child: Icon(
-                              Icons.video_library,
-                              size: 100,
-                              color: Color(0x33000000),
+                    : CachedNetworkImage(
+                        imageUrl: "${MyGlobals.SERVER_URL}${content.thumbnail}",
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Center(
+                          child: SizedBox(
+                            width: 25,
+                            height: 25,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
                             ),
-                          )
-                        : CachedNetworkImage(
-                            imageUrl:
-                                "${MyGlobals.SERVER_URL}${content.imagenes.first}",
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Center(
-                              child: SizedBox(
-                                width: 25,
-                                height: 25,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
                           ),
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
               ),
             ),
             Container(
@@ -112,7 +101,9 @@ class CardContent extends StatelessWidget {
                             child: Text(
                               content.titulo,
                               overflow: TextOverflow.ellipsis,
-                              maxLines: MediaQuery.of(context).size.height > 500 ? 2 : 1,
+                              maxLines: MediaQuery.of(context).size.height > 500
+                                  ? 2
+                                  : 1,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
@@ -124,7 +115,8 @@ class CardContent extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      if (content.type == SectionType.publicaciones && MediaQuery.of(context).size.height > 500)
+                      if (content.type == SectionType.publicaciones &&
+                          MediaQuery.of(context).size.height > 500)
                         Text(
                           content.cuerpo,
                           overflow: TextOverflow.ellipsis,
