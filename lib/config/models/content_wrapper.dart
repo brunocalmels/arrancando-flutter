@@ -253,8 +253,7 @@ class ContentWrapper {
           items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
           break;
         case ContentSortType.proximidad:
-          if (!Platform.isIOS &&
-              calculatedDistance != null &&
+          if (calculatedDistance != null &&
               !(await ActiveUser.locationPermissionDenied())) {
             await Future.wait(
               items.map(

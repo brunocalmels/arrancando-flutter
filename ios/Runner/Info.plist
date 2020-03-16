@@ -53,9 +53,11 @@
 	<string>Podemos llegar a necesitar acceder a tu movimiento para darte las mejores rutas de compras y puntos de interés.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Podemos llegar a necesitar acceder al reconocimiento de voz para reemplazar la escritura normal.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Necesitamos acceder a tu ubicación para mostrarte los puntos de interés más cercanos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Necesitamos acceder a tu ubicación para mostrarte los puntos de interés más cercanos.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Necesitamos acceder a tu ubicación para mostrarte los puntos de interés más cercanos.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>

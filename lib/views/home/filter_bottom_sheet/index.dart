@@ -112,8 +112,7 @@ class FilterBottomSheet extends StatelessWidget {
                                           : null),
                                 ),
                               ),
-                            if (mainState.activePageHome == SectionType.pois &&
-                                !Platform.isIOS)
+                            if (mainState.activePageHome == SectionType.pois)
                               DropdownMenuItem(
                                 value: ContentSortType.proximidad,
                                 child: Text(

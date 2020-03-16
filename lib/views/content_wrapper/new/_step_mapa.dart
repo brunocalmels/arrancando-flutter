@@ -129,7 +129,7 @@ class _StepMapaState extends State<StepMapa> {
                     setState(() {
                       _mapController = controller;
                     });
-                  if (!Platform.isIOS) _setMyLocation();
+                  _setMyLocation();
                 },
                 onPositionChanged: (MapPosition position, bool changed) {
                   if (changed && _mapController != null) {

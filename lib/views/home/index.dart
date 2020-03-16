@@ -230,12 +230,11 @@ class _MainScaffoldState extends State<MainScaffold> {
                 ),
               ),
             ),
-            if (!Platform.isIOS)
-              Positioned(
-                left: 0,
-                bottom: 0,
-                child: VersionChecker(),
-              ),
+            Positioned(
+              left: 0,
+              bottom: 0,
+              child: VersionChecker(),
+            ),
           ],
         ),
       ),
