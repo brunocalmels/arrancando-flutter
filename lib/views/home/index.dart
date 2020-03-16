@@ -159,7 +159,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   _initUserInfo() async {
     await ActiveUser.verifyCorrectLogin(context);
     if (Provider.of<UserState>(context).activeUser != null)
-      ActiveUser.updateAppVersion(context);
+      ActiveUser.updateUserMetadata(context);
   }
 
   @override

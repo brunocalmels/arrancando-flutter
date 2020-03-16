@@ -45,6 +45,7 @@ class ContentWrapper {
   double localDistance;
   String direccion;
   List<String> imagenes;
+  String thumbnail;
   List<Puntaje> puntajes;
   Usuario user;
   List<Comentario> comentarios;
@@ -67,6 +68,7 @@ class ContentWrapper {
     this.categoriaPoiId,
     this.categoriaPublicacionId,
     this.imagenes,
+    this.thumbnail,
     this.puntajes,
     this.user,
     this.comentarios,

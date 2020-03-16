@@ -170,9 +170,10 @@ class _LoginPageState extends State<LoginPage> {
             onPressed: _touched
                 ? null
                 : () async {
-                    setState(() {
-                      _touched = true;
-                    });
+                    if (mounted)
+                      setState(() {
+                        _touched = true;
+                      });
                     if (await canLaunch(url)) {
                       await launch(
                         url,

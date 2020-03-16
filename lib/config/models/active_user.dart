@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -107,12 +108,13 @@ class ActiveUser {
     }
   }
 
-  static updateAppVersion(context) async {
+  static updateUserMetadata(context) async {
     await Fetcher.put(
       url: "/users/${Provider.of<UserState>(context).activeUser.id}.json",
       body: {
         "user": {
           "app_version": "${MyGlobals.APP_VERSION}",
+          "platform": "${Platform.operatingSystem}",
         }
       },
     );

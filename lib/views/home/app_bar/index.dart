@@ -57,10 +57,11 @@ class MainAppBar extends StatelessWidget {
             ],
           ),
           backgroundColor: Colors.white,
-          // title: contentState.showSearchPage
-          //     ? SearchBar(
-          //         searchController: searchController,
-          //       )
+          title: contentState.showSearchPage
+              ? SearchBar(
+                  searchController: searchController,
+                )
+              : null,
           //     : mainState.activePageHome != SectionType.home
           //         ? CategoriesChip(
           //             fetchContent: fetchContent,

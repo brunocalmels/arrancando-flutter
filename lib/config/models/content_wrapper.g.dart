@@ -29,6 +29,7 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
     json['categoria_poi_id'] as int,
     json['categoria_publicacion_id'] as int,
     (json['imagenes'] as List)?.map((e) => e as String)?.toList(),
+    json['thumbnail'] as String,
     (json['puntajes'] as List)
         ?.map((e) =>
             e == null ? null : Puntaje.fromJson(e as Map<String, dynamic>))
@@ -63,6 +64,7 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'localDistance': instance.localDistance,
       'direccion': instance.direccion,
       'imagenes': instance.imagenes,
+      'thumbnail': instance.thumbnail,
       'puntajes': instance.puntajes,
       'user': instance.user,
       'comentarios': instance.comentarios,
@@ -102,6 +104,7 @@ T _$enumDecodeNullable<T>(
 
 const _$SectionTypeEnumMap = {
   SectionType.home: 'home',
+  SectionType.publicaciones_categoria: 'publicaciones_categoria',
   SectionType.publicaciones: 'publicaciones',
   SectionType.recetas: 'recetas',
   SectionType.pois: 'pois',

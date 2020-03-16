@@ -53,6 +53,7 @@ T _$enumDecodeNullable<T>(
 
 const _$SectionTypeEnumMap = {
   SectionType.home: 'home',
+  SectionType.publicaciones_categoria: 'publicaciones_categoria',
   SectionType.publicaciones: 'publicaciones',
   SectionType.recetas: 'recetas',
   SectionType.pois: 'pois',
