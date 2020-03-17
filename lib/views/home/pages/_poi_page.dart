@@ -48,8 +48,12 @@ class _PoiPageState extends State<PoiPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<ContentPageState>(context)
-          .setContentSortType(ContentSortType.proximidad);
+      if (Platform.isIOS)
+        Provider.of<ContentPageState>(context)
+            .setContentSortType(ContentSortType.puntuacion);
+      else
+        Provider.of<ContentPageState>(context)
+            .setContentSortType(ContentSortType.proximidad);
       widget.setLocationDenied();
       widget.resetLimit();
       widget.fetchContent(SectionType.pois);

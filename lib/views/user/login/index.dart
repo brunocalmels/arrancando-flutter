@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
@@ -29,6 +30,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
   final GlobalSingleton singleton = GlobalSingleton();
@@ -92,50 +94,8 @@ class _LoginPageState extends State<LoginPage> {
         emailController.text,
         passwordController.text,
       );
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       if (body != null && body['auth_token'] != null) {
-        prefs.setString(
-          'activeUser',
-          "${json.encode(body)}",
-        );
-        Provider.of<UserState>(context, listen: false).setActiveUser(
-          ActiveUser.fromJson(body),
-        );
-
-        await CategoryWrapper.loadCategories();
-
-        if (prefs.getInt("preferredCiudadId") == null) {
-          // int ciudadId = await showDialog(
-          //   context: context,
-          //   builder: (_) => DialogCategorySelect(
-          //     selectCity: true,
-          //     titleText: "¿Cuál es tu ciudad?",
-          //     allowDismiss: false,
-          //   ),
-          // );
-          int ciudadId = singleton.categories[SectionType.publicaciones]
-              ?.where((c) => c.id > 0)
-              ?.first
-              ?.id;
-          if (ciudadId != null) {
-            Provider.of<UserState>(context, listen: false)
-                .setPreferredCategories(
-              SectionType.publicaciones,
-              ciudadId,
-            );
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setInt("preferredCiudadId", ciudadId);
-          }
-        }
-
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => MainScaffold(),
-          ),
-          (_) => false,
-        );
-
-        ///
+        _performAppLogin(body);
       } else {
         Scaffold.of(buildContext).showSnackBar(
           SnackBar(
@@ -148,6 +108,51 @@ class _LoginPageState extends State<LoginPage> {
           sent = false;
         });
     }
+  }
+
+  _performAppLogin(dynamic body) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+      'activeUser',
+      "${json.encode(body)}",
+    );
+    Provider.of<UserState>(context, listen: false).setActiveUser(
+      ActiveUser.fromJson(body),
+    );
+
+    await CategoryWrapper.loadCategories();
+
+    if (prefs.getInt("preferredCiudadId") == null) {
+      // int ciudadId = await showDialog(
+      //   context: context,
+      //   builder: (_) => DialogCategorySelect(
+      //     selectCity: true,
+      //     titleText: "¿Cuál es tu ciudad?",
+      //     allowDismiss: false,
+      //   ),
+      // );
+      int ciudadId = singleton.categories[SectionType.publicaciones]
+          ?.where((c) => c.id > 0)
+          ?.first
+          ?.id;
+      if (ciudadId != null) {
+        Provider.of<UserState>(context, listen: false).setPreferredCategories(
+          SectionType.publicaciones,
+          ciudadId,
+        );
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setInt("preferredCiudadId", ciudadId);
+      }
+    }
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => MainScaffold(),
+      ),
+      (_) => false,
+    );
+
+    ///
   }
 
   _redirectDialog(url) => AlertDialog(
@@ -188,6 +193,85 @@ class _LoginPageState extends State<LoginPage> {
         ],
       );
 
+  _signInApple() async {
+    if (await AppleSignIn.isAvailable()) {
+      if (mounted)
+        setState(() {
+          sent = true;
+        });
+      final AuthorizationResult result = await AppleSignIn.performRequests(
+        [
+          AppleIdRequest(
+            requestedScopes: [
+              Scope.email,
+            ],
+          ),
+        ],
+      );
+      if (result != null) {
+        switch (result.status) {
+          case AuthorizationStatus.authorized:
+            ResponseObject resp = await Fetcher.post(
+              unauthenticated: true,
+              url: "/apple-login.json",
+              body: {
+                "credentials": {
+                  "email": result.credential.email,
+                  "user": result.credential.user,
+                }
+              },
+            );
+            if (resp != null &&
+                resp.body != null &&
+                resp.status != null &&
+                resp.status == 200) {
+              _performAppLogin(json.decode(resp.body));
+            } else {
+              _scaffoldKey.currentState.showSnackBar(
+                SnackBar(
+                  duration: Duration(seconds: 5),
+                  content: Text(
+                    "Ocurrió un error al iniciar sesión con Apple, por favor, intentá nuevamente más tarde.",
+                  ),
+                ),
+              );
+            }
+            break;
+          default:
+            _scaffoldKey.currentState.showSnackBar(
+              SnackBar(
+                duration: Duration(seconds: 5),
+                content: Text(
+                  "Ocurrió un error al iniciar sesión con Apple, por favor, intentá nuevamente más tarde.",
+                ),
+              ),
+            );
+            break;
+        }
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("No disponible"),
+          content: Text(
+            "El inicio de sesión no está disponible para tu dispositivo. Por favor, iniciá sesión con usuario y contraseña.",
+          ),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text("Aceptar"),
+            )
+          ],
+        ),
+      );
+    }
+    if (mounted)
+      setState(() {
+        sent = false;
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -218,6 +302,7 @@ class _LoginPageState extends State<LoginPage> {
         return false;
       },
       child: Scaffold(
+        key: _scaffoldKey,
         body: Center(
           child: Form(
             key: formKey,
@@ -391,6 +476,17 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ],
                           ),
+                        ),
+                      ),
+
+                    if (Platform.isIOS)
+                      Container(
+                        width: 250,
+                        padding: const EdgeInsets.all(7),
+                        child: AppleSignInButton(
+                          style: ButtonStyle.black,
+                          type: ButtonType.continueButton,
+                          onPressed: _signInApple,
                         ),
                       ),
 
