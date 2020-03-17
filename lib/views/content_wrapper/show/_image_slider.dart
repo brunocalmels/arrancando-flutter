@@ -9,9 +9,11 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 class ImageSlider extends StatefulWidget {
   final List<String> images;
+  final Map<String, String> videoThumbs;
 
   ImageSlider({
     @required this.images,
+    @required this.videoThumbs,
   });
 
   @override
@@ -66,7 +68,7 @@ class _ImageSliderState extends State<ImageSlider> {
     if (oldWidget.images.length != widget.images.length) {
       _activeImage = 0;
       if (mounted) setState(() {});
-      _getVideosThumbs();
+      // _getVideosThumbs();
     }
     super.didUpdateWidget(oldWidget);
   }
@@ -76,7 +78,7 @@ class _ImageSliderState extends State<ImageSlider> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(Duration(seconds: 1));
-      _getVideosThumbs();
+      // _getVideosThumbs();
     });
   }
 
@@ -111,7 +113,7 @@ class _ImageSliderState extends State<ImageSlider> {
           Positioned.fill(
             child: ['mp4', 'mpg', 'mpeg'].contains(
                     widget.images[_activeImage].split('.').last.toLowerCase())
-                ? _videoThumbs[widget.images[_activeImage]] == null
+                ? widget.videoThumbs[widget.images[_activeImage]] == null
                     ? SizedBox(
                         height: 25,
                         width: 25,
@@ -126,9 +128,25 @@ class _ImageSliderState extends State<ImageSlider> {
                         ),
                       )
                     : Stack(
-                        fit: StackFit.passthrough,
+                        fit: StackFit.expand,
                         children: <Widget>[
-                          Image.file(_videoThumbs[widget.images[_activeImage]]),
+                          // Image.file(_videoThumbs[widget.images[_activeImage]]),
+                          CachedNetworkImage(
+                            fit: BoxFit.contain,
+                            imageUrl:
+                                "${MyGlobals.SERVER_URL}${widget.videoThumbs[widget.images[_activeImage]]}",
+                            placeholder: (context, url) => Center(
+                              child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
                           // Container(
                           //   color: Colors.white38,
                           // ),
@@ -136,6 +154,7 @@ class _ImageSliderState extends State<ImageSlider> {
                             child: Icon(
                               Icons.play_arrow,
                               color: Colors.white,
+                              size: 65,
                             ),
                           )
                         ],
@@ -144,6 +163,7 @@ class _ImageSliderState extends State<ImageSlider> {
                 //     "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
                 //   ),
                 : CachedNetworkImage(
+                  fit: BoxFit.contain,
                     imageUrl:
                         "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
                     placeholder: (context, url) => Center(

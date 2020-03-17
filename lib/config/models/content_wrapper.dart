@@ -45,6 +45,8 @@ class ContentWrapper {
   double localDistance;
   String direccion;
   List<String> imagenes;
+  @JsonKey(name: 'video_thumbs')
+  Map<String, String> videoThumbs;
   String thumbnail;
   List<Puntaje> puntajes;
   Usuario user;
@@ -68,6 +70,7 @@ class ContentWrapper {
     this.categoriaPoiId,
     this.categoriaPublicacionId,
     this.imagenes,
+    this.videoThumbs,
     this.thumbnail,
     this.puntajes,
     this.user,

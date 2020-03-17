@@ -441,7 +441,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 25,
                       ),
                     ButtonTheme(
-                      minWidth: Platform.isIOS ? 230 : null,
+                      minWidth: Platform.isIOS ? 230 : 150,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 30,
                         vertical: 10,
@@ -487,6 +487,7 @@ class _LoginPageState extends State<LoginPage> {
                     // Comento hasta que se solucione login con Facebook
                     if (!Platform.isIOS)
                       ButtonTheme(
+                        minWidth: Platform.isIOS ? 230 : 150,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 30,
                           vertical: 10,

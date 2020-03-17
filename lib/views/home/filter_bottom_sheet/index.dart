@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';

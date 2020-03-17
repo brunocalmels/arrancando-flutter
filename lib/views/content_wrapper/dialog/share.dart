@@ -71,7 +71,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
   @override
   void initState() {
     super.initState();
-    _getVideosThumbs();
+    // _getVideosThumbs();
   }
 
   @override
@@ -189,7 +189,8 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                                     children: <Widget>[
                                       ['mp4', 'mpg', 'mpeg'].contains(
                                               i.split('.').last.toLowerCase())
-                                          ? _videoThumbs[i] == null
+                                          ? widget.content.videoThumbs[i] ==
+                                                  null
                                               ? SizedBox(
                                                   height: 25,
                                                   width: 25,
@@ -200,9 +201,27 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                                                     ),
                                                   ),
                                                 )
-                                              : Image.file(
-                                                  _videoThumbs[i],
+                                              : CachedNetworkImage(
+                                                  imageUrl:
+                                                      "${MyGlobals.SERVER_URL}${widget.content.videoThumbs[i]}",
+                                                  placeholder: (context, url) =>
+                                                      Center(
+                                                    child: SizedBox(
+                                                      width: 25,
+                                                      height: 25,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(Icons.error),
                                                 )
+                                          // Image.file(
+                                          //     _videoThumbs[i],
+                                          //   )
                                           : CachedNetworkImage(
                                               imageUrl:
                                                   "${MyGlobals.SERVER_URL}$i",
@@ -252,16 +271,17 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                       widget.content.imagenes.isNotEmpty) {
                     String i = widget.content.imagenes[_imagenNro];
 
+                    String url =
+                        "${MyGlobals.SERVER_URL}${widget.content.imagenes[_imagenNro]}";
+
                     if (['mp4', 'mpg', 'mpeg']
                             .contains(i.split('.').last.toLowerCase()) &&
-                        _videoThumbs[i] != null) {
-                      imageBytes = _videoThumbs[i].readAsBytesSync();
-                    } else {
-                      http.Response response = await http.get(
-                        "${MyGlobals.SERVER_URL}${widget.content.imagenes[_imagenNro]}",
-                      );
-                      imageBytes = response.bodyBytes;
+                        widget.content.videoThumbs[i] != null) {
+                      // _videoThumbs[i].readAsBytesSync();
+                      url = widget.content.videoThumbs[i];
                     }
+                    http.Response response = await http.get(url);
+                    imageBytes = response.bodyBytes;
                   }
 
                   widget.content.shareSelf(

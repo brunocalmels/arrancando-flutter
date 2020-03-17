@@ -338,6 +338,7 @@ class _ShowPageState extends State<ShowPage> {
                                 )
                               : ImageSlider(
                                   images: _content.imagenes,
+                                  videoThumbs: _content.videoThumbs,
                                 ),
                         ),
                         SizedBox(

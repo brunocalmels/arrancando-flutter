@@ -95,7 +95,7 @@ class _EditPageState extends State<EditPage> {
 
     if (mounted) setState(() {});
     await Future.delayed(Duration(seconds: 1));
-    _getVideosThumbs();
+    // _getVideosThumbs();
     _fetching = false;
   }
 
@@ -330,7 +330,7 @@ class _EditPageState extends State<EditPage> {
                                         },
                                         child: ['mp4', 'mpg', 'mpeg'].contains(
                                                 i.split('.').last.toLowerCase())
-                                            ? _videoThumbs[i] == null
+                                            ? _content.videoThumbs[i] == null
                                                 ? SizedBox(
                                                     height: 25,
                                                     width: 25,
@@ -345,8 +345,28 @@ class _EditPageState extends State<EditPage> {
                                                     fit: StackFit.passthrough,
                                                     children: <Widget>[
                                                       Center(
-                                                        child: Image.file(
-                                                          _videoThumbs[i],
+                                                        child:
+                                                            // Image.file(
+                                                            //   _videoThumbs[i],
+                                                            // ),
+                                                            CachedNetworkImage(
+                                                          imageUrl:
+                                                              "${MyGlobals.SERVER_URL}${_content.videoThumbs[i]}",
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  Center(
+                                                            child: SizedBox(
+                                                              width: 25,
+                                                              height: 25,
+                                                              child:
+                                                                  CircularProgressIndicator(
+                                                                strokeWidth: 2,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Icon(Icons.error),
                                                         ),
                                                       ),
                                                       Center(
