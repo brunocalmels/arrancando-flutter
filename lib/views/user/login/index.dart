@@ -15,6 +15,7 @@ import 'package:arrancando/views/user/login/_dev_login.dart';
 import 'package:arrancando/views/user/signup/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -227,25 +228,11 @@ class _LoginPageState extends State<LoginPage> {
                 resp.status == 200) {
               _performAppLogin(json.decode(resp.body));
             } else {
-              _scaffoldKey.currentState.showSnackBar(
-                SnackBar(
-                  duration: Duration(seconds: 5),
-                  content: Text(
-                    "Ocurrió un error al iniciar sesión con Apple, por favor, intentá nuevamente más tarde.",
-                  ),
-                ),
-              );
+              _showLoginErrorSnackbar();
             }
             break;
           default:
-            _scaffoldKey.currentState.showSnackBar(
-              SnackBar(
-                duration: Duration(seconds: 5),
-                content: Text(
-                  "Ocurrió un error al iniciar sesión con Apple, por favor, intentá nuevamente más tarde.",
-                ),
-              ),
-            );
+            _showLoginErrorSnackbar();
             break;
         }
       }
@@ -265,6 +252,63 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       );
+    }
+    if (mounted)
+      setState(() {
+        sent = false;
+      });
+  }
+
+  _showLoginErrorSnackbar() {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 5),
+        content: Text(
+          "Ocurrió un error al iniciar sesión, por favor, intentá nuevamente más tarde.",
+        ),
+      ),
+    );
+  }
+
+  _newSignInGoogle() async {
+    if (mounted)
+      setState(() {
+        sent = true;
+      });
+    try {
+      GoogleSignIn _googleSignIn = GoogleSignIn(
+        scopes: [
+          'email',
+        ],
+      );
+
+      GoogleSignInAccount account = await _googleSignIn.signIn();
+
+      if (account != null) {
+        ResponseObject resp = await Fetcher.post(
+          unauthenticated: true,
+          url: "/new-google-login.json",
+          body: {
+            "credentials": {
+              "email": account.email,
+              "name": account.displayName,
+              "id": account.id,
+            }
+          },
+        );
+        if (resp != null &&
+            resp.body != null &&
+            resp.status != null &&
+            resp.status == 200) {
+          _performAppLogin(json.decode(resp.body));
+        } else {
+          _showLoginErrorSnackbar();
+        }
+      } else {
+        _showLoginErrorSnackbar();
+      }
+    } catch (e) {
+      _showLoginErrorSnackbar();
     }
     if (mounted)
       setState(() {
@@ -404,16 +448,18 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: RaisedButton(
                           color: Color(0xffdddddd),
-                          onPressed: () async {
-                            sent = true;
-                            if (mounted) setState(() {});
-                            const url =
-                                "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
+                          onPressed: () {
+                            // sent = true;
+                            // if (mounted) setState(() {});
+                            // const url =
+                            //     "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
 
-                            showDialog(
-                              context: context,
-                              builder: (_) => _redirectDialog(url),
-                            );
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (_) => _redirectDialog(url),
+                            // );
+
+                            _newSignInGoogle();
                           },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
