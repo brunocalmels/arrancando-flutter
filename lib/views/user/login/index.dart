@@ -440,50 +440,49 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 25,
                       ),
-                    if (!Platform.isIOS)
-                      ButtonTheme(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 10,
-                        ),
-                        child: RaisedButton(
-                          color: Color(0xffdddddd),
-                          onPressed: () {
-                            // sent = true;
-                            // if (mounted) setState(() {});
-                            // const url =
-                            //     "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
+                    ButtonTheme(
+                      minWidth: Platform.isIOS ? 230 : null,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 10,
+                      ),
+                      child: RaisedButton(
+                        color: Color(0xffdddddd),
+                        onPressed: () {
+                          // sent = true;
+                          // if (mounted) setState(() {});
+                          // const url =
+                          //     "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
 
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (_) => _redirectDialog(url),
-                            // );
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (_) => _redirectDialog(url),
+                          // );
 
-                            _newSignInGoogle();
-                          },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text(
-                                'Iniciar con',
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Image.asset(
-                                "assets/images/logo-google.png",
-                                width: 27,
-                                height: 27,
-                              ),
-                            ],
-                          ),
+                          _newSignInGoogle();
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'Iniciar con',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset(
+                              "assets/images/logo-google.png",
+                              width: 27,
+                              height: 27,
+                            ),
+                          ],
                         ),
                       ),
-                    if (!Platform.isIOS)
-                      SizedBox(
-                        height: 10,
-                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
 
                     // Comento hasta que se solucione login con Facebook
                     if (!Platform.isIOS)
@@ -530,8 +529,8 @@ class _LoginPageState extends State<LoginPage> {
                         width: 250,
                         padding: const EdgeInsets.all(7),
                         child: AppleSignInButton(
-                          style: ButtonStyle.black,
-                          type: ButtonType.continueButton,
+                          style: ButtonStyle.whiteOutline,
+                          type: ButtonType.signIn,
                           onPressed: _signInApple,
                         ),
                       ),
