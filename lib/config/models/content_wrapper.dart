@@ -181,9 +181,10 @@ class ContentWrapper {
   static Future<List<ContentWrapper>> fetchItems(
     SectionType type, {
     String search,
-    int limit = 0,
+    int page = 0,
     int categoryId,
     BuildContext context,
+    ContentSortType sortBy,
   }) async {
     String rootURL = '/publicaciones';
     String categoryParamName = "ciudad_id";
@@ -204,25 +205,37 @@ class ContentWrapper {
       default:
     }
 
-    String url = "$rootURL.json?limit=$limit";
+    String url = "$rootURL.json?page=$page";
 
-    if (search != null && search.isNotEmpty) {
-      url = "$rootURL/search.json?term=$search";
-    } else {
-      if (categoryId != null && categoryId > 0) {
-        url += "&$categoryParamName=$categoryId";
+    if (search != null && search.isNotEmpty)
+      url += "&filterrific[search_query]=$search";
+    if (categoryId != null && categoryId > 0)
+      url += "&filterrific[$categoryParamName]=$categoryId";
+
+    if (type == SectionType.publicaciones &&
+        context != null &&
+        Provider.of<MainState>(context)
+                .selectedCategoryHome[SectionType.publicaciones_categoria] !=
+            null &&
+        Provider.of<MainState>(context)
+                .selectedCategoryHome[SectionType.publicaciones_categoria] >
+            0)
+      url +=
+          '&filterrific[categoria_publicacion_id]=${Provider.of<MainState>(context).selectedCategoryHome[SectionType.publicaciones_categoria]}';
+
+    if (sortBy != null)
+      switch (sortBy) {
+        case ContentSortType.fecha:
+          url += '&filterrific[sorted_by]=fecha';
+          break;
+        case ContentSortType.puntuacion:
+          url += '&filterrific[sorted_by]=puntuacion';
+          break;
+        case ContentSortType.proximidad:
+          url += '&filterrific[sorted_by]=proximidad';
+          break;
+        default:
       }
-      if (type == SectionType.publicaciones &&
-          context != null &&
-          Provider.of<MainState>(context)
-                  .selectedCategoryHome[SectionType.publicaciones_categoria] !=
-              null &&
-          Provider.of<MainState>(context)
-                  .selectedCategoryHome[SectionType.publicaciones_categoria] >
-              0)
-        url +=
-            '&categoria_publicacion_id=${Provider.of<MainState>(context).selectedCategoryHome[SectionType.publicaciones_categoria]}';
-    }
 
     ResponseObject resp = await Fetcher.get(
       url: url,
@@ -249,12 +262,6 @@ class ContentWrapper {
     List<ContentWrapper> items = [...elements];
     try {
       switch (type) {
-        case ContentSortType.fecha:
-          items.sort((a, b) => a.createdAt.isAfter(b.createdAt) ? -1 : 1);
-          break;
-        case ContentSortType.puntuacion:
-          items.sort((a, b) => a.puntajePromedio > b.puntajePromedio ? -1 : 1);
-          break;
         case ContentSortType.proximidad:
           if (calculatedDistance != null &&
               !(await ActiveUser.locationPermissionDenied())) {

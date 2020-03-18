@@ -172,7 +172,7 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                 ],
               ),
             Text(
-              "(Si tu ciudad es capital federal, podés buscar por barrios)",
+              "(Si tu ciudad es Capital Federal, podés buscar por barrios)",
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontSize: 9,

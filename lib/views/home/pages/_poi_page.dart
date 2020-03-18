@@ -18,6 +18,7 @@ class PoiPage extends StatefulWidget {
   final bool locationDenied;
   final Function resetLimit;
   final Function(SectionType) fetchContent;
+  final Function increasePage;
   final Function(bool) setLoadingMore;
   final Function setLocationDenied;
   final List<ContentWrapper> items;
@@ -29,6 +30,7 @@ class PoiPage extends StatefulWidget {
     @required this.locationDenied,
     @required this.resetLimit,
     @required this.fetchContent,
+    @required this.increasePage,
     @required this.setLocationDenied,
     @required this.setLoadingMore,
     @required this.items,
@@ -48,12 +50,8 @@ class _PoiPageState extends State<PoiPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (Platform.isIOS)
-        Provider.of<ContentPageState>(context)
-            .setContentSortType(ContentSortType.puntuacion);
-      else
-        Provider.of<ContentPageState>(context)
-            .setContentSortType(ContentSortType.proximidad);
+      Provider.of<ContentPageState>(context)
+          .setContentSortType(ContentSortType.puntuacion);
       widget.setLocationDenied();
       widget.resetLimit();
       widget.fetchContent(SectionType.pois);
@@ -127,6 +125,7 @@ class _PoiPageState extends State<PoiPage> {
                                                         widget.setLoadingMore(
                                                           true,
                                                         );
+                                                        widget.increasePage();
                                                         await widget
                                                             .fetchContent(
                                                           SectionType.pois,

@@ -12,6 +12,7 @@ class ContentCardPage extends StatefulWidget {
   final bool noMore;
   final Function resetLimit;
   final Function(SectionType) fetchContent;
+  final Function increasePage;
   final List<ContentWrapper> items;
 
   ContentCardPage({
@@ -20,6 +21,7 @@ class ContentCardPage extends StatefulWidget {
     @required this.noMore,
     @required this.resetLimit,
     @required this.fetchContent,
+    @required this.increasePage,
     @required this.items,
   });
 
@@ -28,6 +30,8 @@ class ContentCardPage extends StatefulWidget {
 }
 
 class _ContentCardPageState extends State<ContentCardPage> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +40,17 @@ class _ContentCardPageState extends State<ContentCardPage> {
           .setContentSortType(ContentSortType.fecha);
       widget.resetLimit();
       widget.fetchContent(widget.type);
+      _scrollController.addListener(
+        () {
+          if (_scrollController.offset >=
+                  _scrollController.position.maxScrollExtent &&
+              !_scrollController.position.outOfRange &&
+              !widget.noMore) {
+            widget.increasePage();
+            widget.fetchContent(widget.type);
+          }
+        },
+      );
     });
   }
 
@@ -51,10 +66,9 @@ class _ContentCardPageState extends State<ContentCardPage> {
             child: widget.items != null
                 ? widget.items.length > 0
                     ? ListView.builder(
+                        controller: _scrollController,
                         itemCount: widget.items.length,
                         itemBuilder: (context, index) {
-                          if (index == widget.items.length - 1 &&
-                              !widget.noMore) widget.fetchContent(widget.type);
                           Widget item = CardContent(
                             content: widget.items[index],
                           );

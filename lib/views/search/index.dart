@@ -26,10 +26,10 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   SectionType _type;
-  Widget _page;
+  // Widget _page;
   final TextEditingController _searchController = TextEditingController();
   List<ContentWrapper> _items;
-  int _limit = 20;
+  int _page = 1;
   bool _fetching = true;
   bool _noMore = false;
   bool _loadingMore = false;
@@ -60,7 +60,7 @@ class _SearchPageState extends State<SearchPage> {
       type,
       search: _searchController.text,
       categoryId: selectedCategory,
-      limit: _limit,
+      page: _page,
     );
 
     _items = await ContentWrapper.sortItems(
@@ -72,7 +72,7 @@ class _SearchPageState extends State<SearchPage> {
     if (type == SectionType.pois && !_locationDenied)
       _items.map((i) => _calculatedDistance[i.id] = i.localDistance);
 
-    if (!keepLimit) _limit += 20;
+    if (!keepLimit) _page += 1;
 
     _noMore = lastLength == _items.length ? true : false;
     _fetching = false;
@@ -84,7 +84,7 @@ class _SearchPageState extends State<SearchPage> {
     _items = null;
     _fetching = true;
     _noMore = false;
-    if (!keepNumber) _limit = 20;
+    if (!keepNumber) _page = 1;
     if (mounted) setState(() {});
   }
 

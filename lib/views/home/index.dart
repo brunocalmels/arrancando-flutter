@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
@@ -28,14 +26,14 @@ class _MainScaffoldState extends State<MainScaffold> {
   final TextEditingController _searchController = TextEditingController();
   PersistentBottomSheetController _bottomSheetController;
   List<ContentWrapper> _items;
-  int _limit = 50;
+  int _page = 1;
   bool _fetching = true;
   bool _noMore = false;
   bool _loadingMore = false;
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
 
-  Future<void> _fetchContent(type, {bool keepLimit = false}) async {
+  Future<void> _fetchContent(type, {bool keepPage = false}) async {
     MainState mainState = Provider.of<MainState>(
       context,
       listen: false,
@@ -55,26 +53,36 @@ class _MainScaffoldState extends State<MainScaffold> {
         ? mainState.selectedCategoryHome[type]
         : userState.preferredCategories[type];
 
-    _items = await ContentWrapper.fetchItems(
+    if (_items == null) _items = [];
+
+    _items += await ContentWrapper.fetchItems(
       type,
       search: _searchController.text,
       categoryId: selectedCategory,
-      limit: _limit,
+      page: _page,
+      sortBy: contentPageState.sortContentBy,
       context: context,
     );
 
-    _items = await ContentWrapper.sortItems(
-      _items,
-      contentPageState.sortContentBy,
-      calculatedDistance: _calculatedDistance,
-    );
+    if (type == SectionType.pois &&
+        contentPageState.sortContentBy == ContentSortType.proximidad) {
+      _items = await ContentWrapper.sortItems(
+        _items,
+        contentPageState.sortContentBy,
+        calculatedDistance: _calculatedDistance,
+      );
+    }
 
     if (type == SectionType.pois && !_locationDenied)
       _items.map((i) => _calculatedDistance[i.id] = i.localDistance);
 
-    if (!keepLimit) _limit += 20;
+    // if (!keepPage) _page += 1;
 
-    _noMore = lastLength == _items.length ? true : false;
+    _noMore = false;
+    if (lastLength == _items.length) {
+      _noMore = true;
+      _page -= 1;
+    }
     _fetching = false;
     if (mounted) setState(() {});
   }
@@ -83,8 +91,12 @@ class _MainScaffoldState extends State<MainScaffold> {
     _items = null;
     _fetching = true;
     _noMore = false;
-    if (!keepNumber) _limit = 20;
+    if (!keepNumber) _page = 1;
     if (mounted) setState(() {});
+  }
+
+  _increasePage() {
+    _page += 1;
   }
 
   _setLoadingMore(bool val) {
@@ -119,6 +131,7 @@ class _MainScaffoldState extends State<MainScaffold> {
               noMore: _noMore,
               resetLimit: _resetLimit,
               fetchContent: _fetchContent,
+              increasePage: _increasePage,
               items: _items,
             ),
           );
@@ -131,6 +144,7 @@ class _MainScaffoldState extends State<MainScaffold> {
               noMore: _noMore,
               resetLimit: _resetLimit,
               fetchContent: _fetchContent,
+              increasePage: _increasePage,
               items: _items,
             ),
           );
@@ -140,6 +154,7 @@ class _MainScaffoldState extends State<MainScaffold> {
             noMore: _noMore,
             resetLimit: _resetLimit,
             fetchContent: _fetchContent,
+            increasePage: _increasePage,
             items: _items,
             loadingMore: _loadingMore,
             setLoadingMore: _setLoadingMore,
@@ -192,10 +207,10 @@ class _MainScaffoldState extends State<MainScaffold> {
               if (mounted) setState(() {});
             },
             fetchContent: () {
-              _resetLimit(keepNumber: true);
+              _resetLimit();
               _fetchContent(
                 Provider.of<MainState>(context).activePageHome,
-                keepLimit: true,
+                keepPage: true,
               );
             },
           ),
