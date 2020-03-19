@@ -2,8 +2,13 @@ import 'dart:convert';
 
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/content_page.dart';
+import 'package:arrancando/config/state/main.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'category_wrapper.g.dart';
 
@@ -113,5 +118,19 @@ class CategoryWrapper {
     } catch (e) {
       print(e);
     }
+  }
+
+  static restoreSavedFilter(BuildContext context, SectionType type) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int val = prefs.getInt(type.toString());
+    if (val != null)
+      Provider.of<ContentPageState>(context).setSavedFilter(type, val);
+      Provider.of<MainState>(context).setSelectedCategoryHome(type, val);
+  }
+
+  static saveFilter(BuildContext context, SectionType type, int val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt(type.toString(), val);
+    Provider.of<ContentPageState>(context).setSavedFilter(type, val);
   }
 }

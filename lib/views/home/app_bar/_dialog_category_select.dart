@@ -31,6 +31,13 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
 
   _onItemTap(item) {
     _selected = item.id;
+    CategoryWrapper.saveFilter(
+      context,
+      widget.pubCateg
+          ? SectionType.publicaciones_categoria
+          : Provider.of<MainState>(context).activePageHome,
+      _selected,
+    );
     if (mounted) setState(() {});
     Navigator.of(context).pop(item.id);
   }

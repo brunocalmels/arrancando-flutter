@@ -4,6 +4,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/home/app_bar/_categories_chip.dart';
 import 'package:arrancando/views/home/app_bar/_search_bar.dart';
 import 'package:arrancando/views/home/filter_bottom_sheet/index.dart';
@@ -22,6 +23,23 @@ class MainAppBar extends StatelessWidget {
     this.searchController,
     this.setBottomSheetController,
   });
+
+  _anyFilterActive(MainState mainState, ContentPageState contentPageState) {
+    if (mainState.activePageHome != SectionType.publicaciones) {
+      if (mainState.selectedCategoryHome[mainState.activePageHome] != -1 &&
+          mainState.selectedCategoryHome[mainState.activePageHome] != null)
+        return true;
+    } else {
+      if (mainState.selectedCategoryHome[mainState.activePageHome] != -1 ||
+          (mainState.selectedCategoryHome[
+                      SectionType.publicaciones_categoria] !=
+                  -1 &&
+              mainState.selectedCategoryHome[
+                      SectionType.publicaciones_categoria] !=
+                  null)) return true;
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +145,12 @@ class MainAppBar extends StatelessWidget {
                     ),
                   );
                 },
-                icon: Icon(Icons.filter_list),
+                icon: Icon(
+                  Icons.filter_list,
+                  color: _anyFilterActive(mainState, contentState)
+                      ? Theme.of(context).accentColor
+                      : null,
+                ),
               ),
             IconButton(
               onPressed: () {

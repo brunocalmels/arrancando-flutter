@@ -1,6 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
@@ -175,6 +176,11 @@ class _MainScaffoldState extends State<MainScaffold> {
     await ActiveUser.verifyCorrectLogin(context);
     if (Provider.of<UserState>(context).activeUser != null)
       ActiveUser.updateUserMetadata(context);
+    SectionType.values.forEach(
+      (t) {
+        CategoryWrapper.restoreSavedFilter(context, t);
+      },
+    );
   }
 
   @override

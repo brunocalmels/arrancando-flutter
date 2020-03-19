@@ -26,7 +26,7 @@ abstract class MyGlobals {
   static const APPLE_REDIRECT_URI =
       "https://arrancando.herokuapp.com/apple-login";
 
-  static const APP_VERSION = "1.1.14+29";
+  static const APP_VERSION = "1.1.15+30";
 
   static const ICONOS_CATEGORIAS = {
     SectionType.home: Icons.select_all,
