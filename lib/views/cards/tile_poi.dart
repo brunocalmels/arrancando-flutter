@@ -98,7 +98,7 @@ class TilePoi extends StatelessWidget {
               SizedBox(
                 width: 3,
               ),
-              if (!locationDenied)
+              if (poi.localDistance != null)
                 Text(
                   poi.localDistance != null ? poi.distanciaToH() : '',
                   style: TextStyle(

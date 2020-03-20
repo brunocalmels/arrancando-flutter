@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
         passwordController.text,
       );
       if (body != null && body['auth_token'] != null) {
-        _performAppLogin(body);
+        await _performAppLogin(body);
       } else {
         Scaffold.of(buildContext).showSnackBar(
           SnackBar(
@@ -152,6 +152,11 @@ class _LoginPageState extends State<LoginPage> {
       ),
       (_) => false,
     );
+
+    if (mounted)
+      setState(() {
+        sent = false;
+      });
 
     ///
   }
@@ -226,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
                 resp.body != null &&
                 resp.status != null &&
                 resp.status == 200) {
-              _performAppLogin(json.decode(resp.body));
+              await _performAppLogin(json.decode(resp.body));
             } else {
               _showLoginErrorSnackbar();
             }
@@ -300,7 +305,7 @@ class _LoginPageState extends State<LoginPage> {
             resp.body != null &&
             resp.status != null &&
             resp.status == 200) {
-          _performAppLogin(json.decode(resp.body));
+          await _performAppLogin(json.decode(resp.body));
         } else {
           _showLoginErrorSnackbar();
         }
@@ -421,9 +426,11 @@ class _LoginPageState extends State<LoginPage> {
                       Builder(
                         // NECESITA EL CONTEXT PARA EL SNACKBAR
                         builder: (context) => RaisedButton(
-                          onPressed: () {
-                            _login(context);
-                          },
+                          onPressed: sent
+                              ? null
+                              : () {
+                                  _login(context);
+                                },
                           child: Text(
                             'Login',
                           ),
@@ -448,19 +455,21 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: RaisedButton(
                         color: Color(0xffdddddd),
-                        onPressed: () {
-                          // sent = true;
-                          // if (mounted) setState(() {});
-                          // const url =
-                          //     "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
+                        onPressed: sent
+                            ? null
+                            : () {
+                                // sent = true;
+                                // if (mounted) setState(() {});
+                                // const url =
+                                //     "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
 
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (_) => _redirectDialog(url),
-                          // );
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (_) => _redirectDialog(url),
+                                // );
 
-                          _newSignInGoogle();
-                        },
+                                _newSignInGoogle();
+                              },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -494,17 +503,19 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         child: RaisedButton(
                           color: Color(0xffdddddd),
-                          onPressed: () async {
-                            sent = true;
-                            if (mounted) setState(() {});
-                            const url =
-                                "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+                          onPressed: sent
+                              ? null
+                              : () async {
+                                  sent = true;
+                                  if (mounted) setState(() {});
+                                  const url =
+                                      "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
 
-                            showDialog(
-                              context: context,
-                              builder: (_) => _redirectDialog(url),
-                            );
-                          },
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => _redirectDialog(url),
+                                  );
+                                },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -532,7 +543,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: AppleSignInButton(
                           style: ButtonStyle.whiteOutline,
                           type: ButtonType.signIn,
-                          onPressed: _signInApple,
+                          onPressed: sent ? null : _signInApple,
                         ),
                       ),
 
@@ -636,16 +647,19 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
 
-                    SizedBox(
-                      width: 50,
-                      height: 50,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: sent
-                            ? CircularProgressIndicator(
-                                strokeWidth: 2,
-                              )
-                            : Container(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: sent
+                              ? CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                )
+                              : Container(),
+                        ),
                       ),
                     ),
                   ],

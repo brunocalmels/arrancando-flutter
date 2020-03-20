@@ -86,6 +86,12 @@ class _MainScaffoldState extends State<MainScaffold> {
     }
     _fetching = false;
     if (mounted) setState(() {});
+
+    if (type == SectionType.pois &&
+        contentPageState.sortContentBy != ContentSortType.proximidad) {
+      await Future.wait(_items.map((item) => item.distancia));
+      if (mounted) setState(() {});
+    }
   }
 
   _resetLimit({bool keepNumber = false}) {

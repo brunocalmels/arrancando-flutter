@@ -259,7 +259,7 @@ class ContentWrapper {
     ContentSortType type, {
     Map<int, double> calculatedDistance,
   }) async {
-    List<ContentWrapper> items = [...elements];
+    List<ContentWrapper> items = elements;
     try {
       switch (type) {
         case ContentSortType.proximidad:
