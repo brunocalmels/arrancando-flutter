@@ -78,7 +78,7 @@ class TilePoi extends StatelessWidget {
                 width: 3,
               ),
               Text(
-                "${poi.puntajePromedio}",
+                "${poi.puntajePromedio.toStringAsFixed(1)}",
                 style: TextStyle(
                   fontSize: 13,
                   color: Colors.black54,

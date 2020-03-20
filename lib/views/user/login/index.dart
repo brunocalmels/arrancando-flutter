@@ -423,16 +423,19 @@ class _LoginPageState extends State<LoginPage> {
                         height: 25,
                       ),
                     if (Platform.isIOS)
-                      Builder(
-                        // NECESITA EL CONTEXT PARA EL SNACKBAR
-                        builder: (context) => RaisedButton(
-                          onPressed: sent
-                              ? null
-                              : () {
-                                  _login(context);
-                                },
-                          child: Text(
-                            'Login',
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Builder(
+                          // NECESITA EL CONTEXT PARA EL SNACKBAR
+                          builder: (context) => RaisedButton(
+                            onPressed: sent
+                                ? null
+                                : () {
+                                    _login(context);
+                                  },
+                            child: Text(
+                              'Login',
+                            ),
                           ),
                         ),
                       ),
@@ -633,19 +636,19 @@ class _LoginPageState extends State<LoginPage> {
                     //   ),
                     // ),
 
-                    if (Platform.isIOS)
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (_) => SignupPage(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Crear cuenta',
-                        ),
-                      ),
+                    // if (Platform.isIOS)
+                    //   FlatButton(
+                    //     onPressed: () {
+                    //       Navigator.of(context).pushReplacement(
+                    //         MaterialPageRoute(
+                    //           builder: (_) => SignupPage(),
+                    //         ),
+                    //       );
+                    //     },
+                    //     child: Text(
+                    //       'Crear cuenta',
+                    //     ),
+                    //   ),
 
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
