@@ -93,10 +93,10 @@ class _EditPageState extends State<EditPage> {
       _selectedDireccion = _content.direccion;
     }
 
-    if (mounted) setState(() {});
     await Future.delayed(Duration(seconds: 1));
     // _getVideosThumbs();
     _fetching = false;
+    if (mounted) setState(() {});
   }
 
   _setCategory(CategoryWrapper val) {
