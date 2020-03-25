@@ -14,6 +14,7 @@ import 'package:arrancando/views/content_wrapper/show/_image_slider.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -77,6 +78,49 @@ class _ShowPageState extends State<ShowPage> {
           .nombre;
       if (mounted) setState(() {});
     }
+  }
+
+  List<dynamic> _parseTexto(String cuerpo) {
+    var urlPattern =
+        r"(https://?|http://?)([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+
+    var results = new RegExp(
+      urlPattern,
+      caseSensitive: false,
+    ).allMatches(cuerpo);
+    List<dynamic> chunks = [];
+    int lastEnd = 0;
+    results.forEach(
+      (r) {
+        chunks.add(
+          {
+            "texto": cuerpo.substring(
+              lastEnd,
+              r.start,
+            ),
+            "tipo": "texto",
+          },
+        );
+        chunks.add(
+          {
+            "texto": cuerpo.substring(
+              r.start,
+              r.end,
+            ),
+            "tipo": "link",
+          },
+        );
+        lastEnd = r.end;
+      },
+    );
+    if (chunks.length == 0)
+      chunks.add(
+        {
+          "texto": cuerpo,
+          "tipo": "texto",
+        },
+      );
+    return chunks;
   }
 
   @override
@@ -236,9 +280,44 @@ class _ShowPageState extends State<ShowPage> {
                               right: 15,
                               bottom: 25,
                             ),
-                            child: Text(
-                              "${_content.cuerpo}",
+                            // child: Text(
+                            //   "${_content.cuerpo}",
+                            //   textAlign: TextAlign.justify,
+                            // ),
+
+                            child: RichText(
                               textAlign: TextAlign.justify,
+                              text: TextSpan(
+                                children: _parseTexto(_content.cuerpo)
+                                    .map(
+                                      (chunk) => TextSpan(
+                                        text: chunk['texto'],
+                                        style: chunk['tipo'] != 'link'
+                                            ? TextStyle(
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .body1
+                                                    .color)
+                                            : TextStyle(color: Colors.blue),
+                                        recognizer: chunk['tipo'] != 'link'
+                                            ? null
+                                            : (TapGestureRecognizer()
+                                              ..onTap = () async {
+                                                if (await canLaunch(
+                                                    chunk['texto'])) {
+                                                  await launch(
+                                                    chunk['texto'],
+                                                    forceSafariVC: false,
+                                                    forceWebView: false,
+                                                  );
+                                                } else {
+                                                  throw 'Could not launch ${chunk['texto']}';
+                                                }
+                                              }),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
                             ),
                           ),
                         if (_content.introduccion != null &&
@@ -261,9 +340,43 @@ class _ShowPageState extends State<ShowPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text(
-                                  "${_content.introduccion}",
+                                // Text(
+                                //   "${_content.introduccion}",
+                                //   textAlign: TextAlign.justify,
+                                // ),
+                                RichText(
                                   textAlign: TextAlign.justify,
+                                  text: TextSpan(
+                                    children: _parseTexto(_content.introduccion)
+                                        .map(
+                                          (chunk) => TextSpan(
+                                            text: chunk['texto'],
+                                            style: chunk['tipo'] != 'link'
+                                                ? TextStyle(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .body1
+                                                        .color)
+                                                : TextStyle(color: Colors.blue),
+                                            recognizer: chunk['tipo'] != 'link'
+                                                ? null
+                                                : (TapGestureRecognizer()
+                                                  ..onTap = () async {
+                                                    if (await canLaunch(
+                                                        chunk['texto'])) {
+                                                      await launch(
+                                                        chunk['texto'],
+                                                        forceSafariVC: false,
+                                                        forceWebView: false,
+                                                      );
+                                                    } else {
+                                                      throw 'Could not launch ${chunk['texto']}';
+                                                    }
+                                                  }),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -288,9 +401,43 @@ class _ShowPageState extends State<ShowPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text(
-                                  "${_content.ingredientes}",
+                                // Text(
+                                //   "${_content.ingredientes}",
+                                //   textAlign: TextAlign.justify,
+                                // ),
+                                RichText(
                                   textAlign: TextAlign.justify,
+                                  text: TextSpan(
+                                    children: _parseTexto(_content.ingredientes)
+                                        .map(
+                                          (chunk) => TextSpan(
+                                            text: chunk['texto'],
+                                            style: chunk['tipo'] != 'link'
+                                                ? TextStyle(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .body1
+                                                        .color)
+                                                : TextStyle(color: Colors.blue),
+                                            recognizer: chunk['tipo'] != 'link'
+                                                ? null
+                                                : (TapGestureRecognizer()
+                                                  ..onTap = () async {
+                                                    if (await canLaunch(
+                                                        chunk['texto'])) {
+                                                      await launch(
+                                                        chunk['texto'],
+                                                        forceSafariVC: false,
+                                                        forceWebView: false,
+                                                      );
+                                                    } else {
+                                                      throw 'Could not launch ${chunk['texto']}';
+                                                    }
+                                                  }),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
                                 ),
                               ],
                             ),
@@ -315,9 +462,44 @@ class _ShowPageState extends State<ShowPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                Text(
-                                  "${_content.instrucciones}",
+                                // Text(
+                                //   "${_content.instrucciones}",
+                                //   textAlign: TextAlign.justify,
+                                // ),
+                                RichText(
                                   textAlign: TextAlign.justify,
+                                  text: TextSpan(
+                                    children: _parseTexto(
+                                            _content.instrucciones)
+                                        .map(
+                                          (chunk) => TextSpan(
+                                            text: chunk['texto'],
+                                            style: chunk['tipo'] != 'link'
+                                                ? TextStyle(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .body1
+                                                        .color)
+                                                : TextStyle(color: Colors.blue),
+                                            recognizer: chunk['tipo'] != 'link'
+                                                ? null
+                                                : (TapGestureRecognizer()
+                                                  ..onTap = () async {
+                                                    if (await canLaunch(
+                                                        chunk['texto'])) {
+                                                      await launch(
+                                                        chunk['texto'],
+                                                        forceSafariVC: false,
+                                                        forceWebView: false,
+                                                      );
+                                                    } else {
+                                                      throw 'Could not launch ${chunk['texto']}';
+                                                    }
+                                                  }),
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
                                 ),
                               ],
                             ),
