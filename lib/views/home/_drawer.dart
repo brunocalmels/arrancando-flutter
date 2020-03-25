@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/comunidad/index.dart';
 import 'package:arrancando/views/contacto/index.dart';

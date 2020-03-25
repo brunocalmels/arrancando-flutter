@@ -73,8 +73,9 @@ class DataGroup extends StatelessWidget {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (_) => SearchPage(
-                                      originalType: type,
-                                      originalSearch: searchController.text),
+                                    originalType: type,
+                                    originalSearch: searchController.text,
+                                  ),
                                   settings: RouteSettings(name: 'Search'),
                                 ),
                               );

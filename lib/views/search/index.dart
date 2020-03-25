@@ -110,6 +110,7 @@ class _SearchPageState extends State<SearchPage> {
             resetLimit: _resetLimit,
             fetchContent: _fetchContent,
             items: _items,
+            increasePage: null,
           ),
         );
       case SectionType.recetas:
@@ -122,6 +123,7 @@ class _SearchPageState extends State<SearchPage> {
             resetLimit: _resetLimit,
             fetchContent: _fetchContent,
             items: _items,
+            increasePage: null,
           ),
         );
       case SectionType.pois:
@@ -135,6 +137,7 @@ class _SearchPageState extends State<SearchPage> {
           setLoadingMore: _setLoadingMore,
           setLocationDenied: _setLocationDenied,
           locationDenied: _locationDenied,
+          increasePage: null,
         );
       default:
         return Container(
@@ -146,6 +149,7 @@ class _SearchPageState extends State<SearchPage> {
             resetLimit: _resetLimit,
             fetchContent: _fetchContent,
             items: _items,
+            increasePage: null,
           ),
         );
     }
