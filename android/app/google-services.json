@@ -1,0 +1,72 @@
+{
+  "project_info": {
+    "project_number": "585563708448",
+    "firebase_url": "https://arrancando.firebaseio.com",
+    "project_id": "arrancando",
+    "storage_bucket": "arrancando.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585563708448:android:fe15ea4ee22ec72d0a3045",
+        "android_client_info": {
+          "package_name": "com.macherit.arrancando"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585563708448-qgq43b198j9garthq2685nemd662taj6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.macherit.arrancando",
+            "certificate_hash": "56a1d6af5ec6b86c83a08fea68b3110ce01c6793"
+          }
+        },
+        {
+          "client_id": "585563708448-uspfcqoqclr6ncshhgi3o0q4c4fk8ivp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.macherit.arrancando",
+            "certificate_hash": "369d7bf079540b26389cecfa4e6a7ca54f6d1488"
+          }
+        },
+        {
+          "client_id": "585563708448-ve5shkqvlch9ig6a0r7j3i5n0038m4e4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.macherit.arrancando",
+            "certificate_hash": "1bc9e1630ae236a45777eb7c00ec5b39c064d3bf"
+          }
+        },
+        {
+          "client_id": "585563708448-obvggorqgc472lojoc25np9tk7bvfoi9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7cri35EI4J9j6i7Qr5NQisXvzYsUEVzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585563708448-obvggorqgc472lojoc25np9tk7bvfoi9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "585563708448-45e1955gmofsvfe2hltbvs6r769n3m92.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.macherit.arrancando",
+                "app_store_id": "1490590335"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

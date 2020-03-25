@@ -12,6 +12,8 @@ import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,6 +46,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool _loaded = false;
   bool _isLoggedIn = false;
+  FirebaseAnalytics analytics = FirebaseAnalytics();
 
   _loadUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -99,6 +102,9 @@ class _MyAppState extends State<MyApp> {
               },
             )
           : _isLoggedIn ? MainScaffold() : LoginPage(),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
     );
   }
 }
