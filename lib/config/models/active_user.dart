@@ -84,6 +84,7 @@ class ActiveUser {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => LoginPage(),
+        settings: RouteSettings(name: 'Login'),
       ),
       (_) => false,
     );

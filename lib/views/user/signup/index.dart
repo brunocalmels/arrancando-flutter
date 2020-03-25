@@ -160,6 +160,7 @@ class _LoginPageState extends State<SignupPage> {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (_) => MainScaffold(),
+            settings: RouteSettings(name: 'Home'),
           ),
           (_) => false,
         );
@@ -339,6 +340,7 @@ class _LoginPageState extends State<SignupPage> {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (_) => LoginPage(),
+                            settings: RouteSettings(name: 'Login'),
                           ),
                         );
                       },

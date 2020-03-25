@@ -33,6 +33,7 @@ class TilePoi extends StatelessWidget {
                   contentId: poi.id,
                   type: SectionType.pois,
                 ),
+                settings: RouteSettings(name: 'Pois#${poi.id}'),
               ),
             );
           },

@@ -75,6 +75,7 @@ class DataGroup extends StatelessWidget {
                                   builder: (_) => SearchPage(
                                       originalType: type,
                                       originalSearch: searchController.text),
+                                  settings: RouteSettings(name: 'Search'),
                                 ),
                               );
                             },

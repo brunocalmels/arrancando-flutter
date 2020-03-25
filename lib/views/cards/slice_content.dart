@@ -48,8 +48,7 @@ class SliceContent extends StatelessWidget {
                           ),
                         )
                       : CachedNetworkImage(
-                          imageUrl:
-                              "${content.thumbnail}",
+                          imageUrl: "${content.thumbnail}",
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Center(
                             child: SizedBox(
@@ -152,6 +151,10 @@ class SliceContent extends StatelessWidget {
                         builder: (_) => ShowPage(
                           contentId: content.id,
                           type: content.type,
+                        ),
+                        settings: RouteSettings(
+                          name:
+                              '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}',
                         ),
                       ),
                     );

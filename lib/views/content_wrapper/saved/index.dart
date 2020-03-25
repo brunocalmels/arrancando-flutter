@@ -117,6 +117,10 @@ class _SavedContentPageState extends State<SavedContentPage> {
                                         contentId: p.id,
                                         type: p.type,
                                       ),
+                                      settings: RouteSettings(
+                                        name:
+                                            '${p.type.toString().split('.').last[0].toLowerCase()}${p.type.toString().split('.').last.substring(1)}#${p.id}',
+                                      ),
                                     ),
                                   );
                                   _fetchContent();

@@ -24,6 +24,10 @@ class ContentTile extends StatelessWidget {
               contentId: content.id,
               type: type,
             ),
+            settings: RouteSettings(
+              name:
+                  '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}',
+            ),
           ),
         );
       },

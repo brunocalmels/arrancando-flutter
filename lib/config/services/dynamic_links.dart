@@ -57,6 +57,7 @@ abstract class DynamicLinks {
       MyGlobals.mainNavigatorKey.currentState.pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => MainScaffold(),
+          settings: RouteSettings(name: 'Home'),
         ),
         (_) => false,
       );
@@ -99,6 +100,7 @@ abstract class DynamicLinks {
                       contentId: id,
                       type: SectionType.publicaciones,
                     ),
+                    settings: RouteSettings(name: 'Publicaciones#$id'),
                   ),
                 );
               }
@@ -113,6 +115,7 @@ abstract class DynamicLinks {
                       contentId: id,
                       type: SectionType.recetas,
                     ),
+                    settings: RouteSettings(name: 'Recetas#$id'),
                   ),
                 );
               }
@@ -127,6 +130,7 @@ abstract class DynamicLinks {
                       contentId: id,
                       type: SectionType.pois,
                     ),
+                    settings: RouteSettings(name: 'Pois#$id'),
                   ),
                 );
               }

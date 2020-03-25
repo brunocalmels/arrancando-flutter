@@ -67,6 +67,7 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ProfilePage(),
+                  settings: RouteSettings(name: 'Profile'),
                 ),
               );
             },
@@ -80,6 +81,7 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => SavedContentPage(),
+                  settings: RouteSettings(name: 'Saved'),
                 ),
               );
             },
@@ -93,6 +95,7 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ComunidadPage(),
+                  settings: RouteSettings(name: 'Comunidad'),
                 ),
               );
             },
@@ -106,6 +109,7 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ReglasPage(),
+                  settings: RouteSettings(name: 'Reglas'),
                 ),
               );
             },
@@ -118,6 +122,7 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => ContactPage(),
+                  settings: RouteSettings(name: 'Contacto'),
                 ),
               );
             },
@@ -165,6 +170,7 @@ class HomeDrawer extends StatelessWidget {
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                   builder: (_) => LoginPage(),
+                  settings: RouteSettings(name: 'Login'),
                 ),
                 (_) => false,
               );

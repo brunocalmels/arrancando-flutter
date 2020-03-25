@@ -92,6 +92,7 @@ class _ImageSliderState extends State<ImageSlider> {
               tag: "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
               url: "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
             ),
+            settings: RouteSettings(name: 'ImageViewer'),
           ),
         );
       },
@@ -163,7 +164,7 @@ class _ImageSliderState extends State<ImageSlider> {
                 //     "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
                 //   ),
                 : CachedNetworkImage(
-                  fit: BoxFit.contain,
+                    fit: BoxFit.contain,
                     imageUrl:
                         "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
                     placeholder: (context, url) => Center(

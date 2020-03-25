@@ -177,6 +177,10 @@ class _ShowPageState extends State<ShowPage> {
                       contentId: _content.id,
                       type: _content.type,
                     ),
+                    settings: RouteSettings(
+                      name:
+                          '${_content.type.toString().split('.').last[0].toLowerCase()}${_content.type.toString().split('.').last.substring(1)}#${_content.id}#Edit',
+                    ),
                   ),
                 );
                 await Future.delayed(Duration(seconds: 1));

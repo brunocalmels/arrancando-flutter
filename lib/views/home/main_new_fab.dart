@@ -50,6 +50,7 @@ class _MainNewFabState extends State<MainNewFab>
                             builder: (_) => NewContent(
                               type: SectionType.publicaciones,
                             ),
+                            settings: RouteSettings(name: 'Publicaciones#New'),
                           ),
                         );
                       },
@@ -71,6 +72,7 @@ class _MainNewFabState extends State<MainNewFab>
                                 builder: (_) => NewContent(
                                   type: SectionType.recetas,
                                 ),
+                                settings: RouteSettings(name: 'Recetas#New'),
                               ),
                             );
                           },
@@ -92,6 +94,7 @@ class _MainNewFabState extends State<MainNewFab>
                             builder: (_) => NewContent(
                               type: SectionType.pois,
                             ),
+                            settings: RouteSettings(name: 'Pois#New'),
                           ),
                         );
                       },

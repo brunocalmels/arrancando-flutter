@@ -149,6 +149,10 @@ class _NewContentState extends State<NewContent> {
               contentId: json.decode(res.body)['id'],
               type: widget.type,
             ),
+            settings: RouteSettings(
+              name:
+                  '${widget.type.toString().split('.').last[0].toLowerCase()}${widget.type.toString().split('.').last.substring(1)}#${json.decode(res.body)['id']}',
+            ),
           ),
         );
       } else {
