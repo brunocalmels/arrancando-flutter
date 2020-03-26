@@ -200,7 +200,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return WillPopScope(
       onWillPop: () async {
         _setSearchVisibility(false);
-        _bottomSheetController.close();
+        // _bottomSheetController.close();
         if (MyGlobals.mainScaffoldKey.currentState.isDrawerOpen) return true;
 
         return false;
@@ -215,8 +215,8 @@ class _MainScaffoldState extends State<MainScaffold> {
             setSearchVisibility: _setSearchVisibility,
             setBottomSheetController:
                 (PersistentBottomSheetController controller) {
-              _bottomSheetController = controller;
-              if (mounted) setState(() {});
+              // _bottomSheetController = controller;
+              // if (mounted) setState(() {});
             },
             fetchContent: () {
               _resetLimit();

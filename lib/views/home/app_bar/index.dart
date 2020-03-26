@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
-import 'package:arrancando/config/state/user.dart';
-import 'package:arrancando/views/home/app_bar/_categories_chip.dart';
 import 'package:arrancando/views/home/app_bar/_search_bar.dart';
 import 'package:arrancando/views/home/filter_bottom_sheet/index.dart';
 import 'package:flutter/material.dart';
@@ -137,13 +133,26 @@ class MainAppBar extends StatelessWidget {
                 mainState.activePageHome != SectionType.home)
               IconButton(
                 onPressed: () {
-                  setBottomSheetController(
-                    MyGlobals.mainScaffoldKey.currentState.showBottomSheet(
-                      (context) => FilterBottomSheet(
-                        fetchContent: fetchContent,
+                  showModalBottomSheet(
+                    context: MyGlobals.mainScaffoldKey.currentContext,
+                    builder: (_) => FilterBottomSheet(
+                      fetchContent: fetchContent,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
                       ),
                     ),
+                    backgroundColor: Colors.white,
                   );
+                  // setBottomSheetController(
+                  //   MyGlobals.mainScaffoldKey.currentState.showBottomSheet(
+                  //     (context) => FilterBottomSheet(
+                  //       fetchContent: fetchContent,
+                  //     ),
+                  //   ),
+                  // );
                 },
                 icon: Icon(
                   Icons.filter_list,

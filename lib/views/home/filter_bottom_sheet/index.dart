@@ -17,19 +17,6 @@ class FilterBottomSheet extends StatelessWidget {
     return Consumer2<MainState, ContentPageState>(
       builder: (context, mainState, contentState, child) {
         return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 2,
-                color: Colors.black,
-              ),
-            ],
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            ),
-          ),
           constraints: BoxConstraints(
             minWidth: MediaQuery.of(context).size.width,
             maxHeight: MediaQuery.of(context).size.height * 0.5,
@@ -40,13 +27,15 @@ class FilterBottomSheet extends StatelessWidget {
               Padding(
                 padding:
                     EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
-                child: Container(
-                  width: 20,
-                  height: 7,
-                  decoration: BoxDecoration(
-                    color: Colors.black12,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(15),
+                child: Center(
+                  child: Container(
+                    width: 20,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15),
+                      ),
                     ),
                   ),
                 ),

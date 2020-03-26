@@ -17,15 +17,27 @@ class StepImagenes extends StatelessWidget {
     @required this.removeImage,
   });
   void _openFileExplorer(FileType type) async {
-    Map<String, String> _paths;
+    if (Platform.isIOS) {
+      File _image;
+      try {
+        _image = await ImagePicker.pickImage(
+          source: ImageSource.gallery,
+        );
+      } catch (e) {
+        print(e);
+      }
+      if (_image != null) setImages([...images, _image]);
+    } else {
+      Map<String, String> _paths;
 
-    try {
-      _paths = await FilePicker.getMultiFilePath(type: type);
-    } catch (e) {
-      print("Unsupported operation" + e.toString());
+      try {
+        _paths = await FilePicker.getMultiFilePath(type: type);
+      } catch (e) {
+        print("Unsupported operation" + e.toString());
+      }
+      if (_paths != null && _paths.length > 0)
+        setImages([...images, ..._paths.values.map((p) => File(p)).toList()]);
     }
-    if (_paths != null && _paths.length > 0)
-      setImages([...images, ..._paths.values.map((p) => File(p)).toList()]);
   }
 
   @override
