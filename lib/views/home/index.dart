@@ -205,65 +205,54 @@ class _MainScaffoldState extends State<MainScaffold> {
 
         return false;
       },
-      child: Scaffold(
-        key: MyGlobals.mainScaffoldKey,
-        drawer: HomeDrawer(),
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(55),
-          child: MainAppBar(
-            searchController: _searchController,
-            setSearchVisibility: _setSearchVisibility,
-            setBottomSheetController:
-                (PersistentBottomSheetController controller) {
-              // _bottomSheetController = controller;
-              // if (mounted) setState(() {});
-            },
-            fetchContent: () {
-              _resetLimit();
-              _fetchContent(
-                Provider.of<MainState>(context).activePageHome,
-                keepPage: true,
-              );
-            },
-          ),
-        ),
-        body: Stack(
-          fit: StackFit.passthrough,
-          children: <Widget>[
-            _getPage(
-              Provider.of<MainState>(context).activePageHome,
-            ),
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    MainNewFab(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    MainBottomBar(
-                      setSearchVisibility: _setSearchVisibility,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                  ],
-                ),
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: <Widget>[
+          Scaffold(
+            // backgroundColor: Theme.of(context).backgroundColor,
+            key: MyGlobals.mainScaffoldKey,
+            endDrawer: HomeDrawer(),
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(55),
+              child: MainAppBar(
+                searchController: _searchController,
+                setSearchVisibility: _setSearchVisibility,
+                setBottomSheetController:
+                    (PersistentBottomSheetController controller) {
+                  // _bottomSheetController = controller;
+                  // if (mounted) setState(() {});
+                },
+                fetchContent: () {
+                  _resetLimit();
+                  _fetchContent(
+                    Provider.of<MainState>(context).activePageHome,
+                    keepPage: true,
+                  );
+                },
               ),
             ),
-            Positioned(
-              left: 0,
-              bottom: 0,
-              child: VersionChecker(),
+            body: _getPage(
+              Provider.of<MainState>(context).activePageHome,
             ),
-          ],
-        ),
+
+            extendBody: true,
+            // floatingActionButton: MainNewFab(),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {},
+              child: Icon(Icons.add),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            bottomNavigationBar: MainBottomBar(
+              setSearchVisibility: _setSearchVisibility,
+            ),
+          ),
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: VersionChecker(),
+          ),
+        ],
       ),
     );
   }

@@ -348,6 +348,7 @@ class _LoginPageState extends State<LoginPage> {
         return false;
       },
       child: Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         key: _scaffoldKey,
         body: Center(
           child: Form(
@@ -454,7 +455,7 @@ class _LoginPageState extends State<LoginPage> {
                         vertical: 10,
                       ),
                       child: RaisedButton(
-                        color: Color(0xffdddddd),
+                        color: Theme.of(context).accentColor,
                         onPressed: sent
                             ? null
                             : () {
@@ -474,8 +475,10 @@ class _LoginPageState extends State<LoginPage> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             Text(
-                              'Iniciar con',
-                              style: TextStyle(color: Colors.black),
+                              'INICIAR CON',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                             SizedBox(
                               width: 10,
@@ -502,7 +505,7 @@ class _LoginPageState extends State<LoginPage> {
                           vertical: 10,
                         ),
                         child: RaisedButton(
-                          color: Color(0xffdddddd),
+                          color: Theme.of(context).accentColor,
                           onPressed: sent
                               ? null
                               : () async {
@@ -520,8 +523,8 @@ class _LoginPageState extends State<LoginPage> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
-                                'Iniciar con',
-                                style: TextStyle(color: Colors.black),
+                                'INICIAR CON',
+                                style: TextStyle(color: Colors.white),
                               ),
                               SizedBox(
                                 width: 10,
@@ -554,7 +557,7 @@ class _LoginPageState extends State<LoginPage> {
                     //     vertical: 10,
                     //   ),
                     //   child: RaisedButton(
-                    //     color: Color(0xffdddddd),
+                    //     color: Theme.of(context).accentColor,
                     //     onPressed: () async {
                     //       sent = true;
                     //       if (mounted) setState(() {});
@@ -616,7 +619,7 @@ class _LoginPageState extends State<LoginPage> {
                     //       mainAxisSize: MainAxisSize.min,
                     //       children: <Widget>[
                     //         Text(
-                    //           'Iniciar con',
+                    //           'INICIAR CON',
                     //           style: TextStyle(color: Colors.black),
                     //         ),
                     //         SizedBox(
