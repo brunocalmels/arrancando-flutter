@@ -16,6 +16,8 @@ class SliceContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).backgroundColor,
+      elevation: 10,
       child: Stack(
         fit: StackFit.passthrough,
         children: <Widget>[

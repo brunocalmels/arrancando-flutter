@@ -5,6 +5,7 @@ enum SectionType {
   recetas,
   pois,
   pois_ciudad,
+  wiki,
 }
 
 enum ContentSortType {

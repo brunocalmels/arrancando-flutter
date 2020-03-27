@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
       child: Stack(
         children: <Widget>[
           Positioned.fill(

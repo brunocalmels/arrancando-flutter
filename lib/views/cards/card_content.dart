@@ -22,6 +22,7 @@ class CardContent extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.37,
       child: Card(
+        color: Theme.of(context).backgroundColor,
         child: Stack(
           fit: StackFit.passthrough,
           children: <Widget>[

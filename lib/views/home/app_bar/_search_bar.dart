@@ -29,7 +29,6 @@ class _SearchBarState extends State<SearchBar> {
             await Future.delayed(Duration(seconds: 3));
           }
         },
-        autofocus: true,
         decoration: InputDecoration(
           hasFloatingPlaceholder: false,
           hintText: "Buscar",
