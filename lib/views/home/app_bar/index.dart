@@ -43,93 +43,17 @@ class MainAppBar extends StatelessWidget {
     return Consumer2<MainState, ContentPageState>(
       builder: (context, mainState, contentState, child) {
         return AppBar(
-          elevation: 0,
-          iconTheme: IconThemeData(
-            color: Colors.black,
+          leading: Center(
+            child: SizedBox(
+              width: 40,
+              height: 40,
+              child: Image.asset('assets/images/icon.png'),
+            ),
           ),
-          leading: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  type: MaterialType.circle,
-                  child: InkWell(
-                    onTap: () {
-                      MyGlobals.mainScaffoldKey.currentState.openDrawer();
-                    },
-                    child: Image.asset('assets/images/icon.png'),
-                  ),
-                ),
-              ),
-            ],
+          title: SearchBar(
+            searchController: searchController,
           ),
-          backgroundColor: Colors.white,
-          title: contentState.showSearchPage
-              ? SearchBar(
-                  searchController: searchController,
-                )
-              : null,
-          //     : mainState.activePageHome != SectionType.home
-          //         ? CategoriesChip(
-          //             fetchContent: fetchContent,
-          //           )
-          //         : null,
           actions: <Widget>[
-            // if (!contentState.showSearchPage &&
-            //     mainState.activePageHome != SectionType.home)
-            //   PopupMenuButton<ContentSortType>(
-            //     icon: Icon(Icons.filter_list),
-            //     onSelected: (type) {
-            //       contentState.setContentSortType(type);
-            //       if (fetchContent != null) fetchContent();
-            //     },
-            //     itemBuilder: (context) => <PopupMenuItem<ContentSortType>>[
-            //       if (mainState.activePageHome != SectionType.pois)
-            //         PopupMenuItem(
-            //           value: ContentSortType.fecha,
-            //           child: Text(
-            //             "Fecha",
-            //             style: TextStyle(
-            //                 color: contentState.sortContentBy ==
-            //                         ContentSortType.fecha
-            //                     ? Theme.of(context).accentColor
-            //                     : null),
-            //           ),
-            //         ),
-            //       if (mainState.activePageHome == SectionType.pois &&
-            //           !Platform.isIOS)
-            //         PopupMenuItem(
-            //           value: ContentSortType.proximidad,
-            //           child: Text(
-            //             "Proximidad",
-            //             style: TextStyle(
-            //                 color: contentState.sortContentBy ==
-            //                         ContentSortType.proximidad
-            //                     ? Theme.of(context).accentColor
-            //                     : null),
-            //           ),
-            //         ),
-            //       PopupMenuItem(
-            //         value: ContentSortType.puntuacion,
-            //         child: Text(
-            //           "Puntuación",
-            //           style: TextStyle(
-            //               color: contentState.sortContentBy ==
-            //                       ContentSortType.puntuacion
-            //                   ? Theme.of(context).accentColor
-            //                   : null),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
             if (!contentState.showSearchPage &&
                 mainState.activePageHome != SectionType.home)
               IconButton(
@@ -147,13 +71,6 @@ class MainAppBar extends StatelessWidget {
                     ),
                     backgroundColor: Colors.white,
                   );
-                  // setBottomSheetController(
-                  //   MyGlobals.mainScaffoldKey.currentState.showBottomSheet(
-                  //     (context) => FilterBottomSheet(
-                  //       fetchContent: fetchContent,
-                  //     ),
-                  //   ),
-                  // );
                 },
                 icon: Icon(
                   Icons.filter_list,
@@ -169,6 +86,12 @@ class MainAppBar extends StatelessWidget {
               icon: Icon(
                 contentState.showSearchPage ? Icons.close : Icons.search,
               ),
+            ),
+            IconButton(
+              onPressed: () {
+                MyGlobals.mainScaffoldKey.currentState.openEndDrawer();
+              },
+              icon: Icon(Icons.menu),
             ),
           ],
         );
