@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
+import 'package:arrancando/views/general/type_ahead_ciudad.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -9,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 
 class StepMapa extends StatefulWidget {
+  final Function(CategoryWrapper) setCiudadPoi;
   final Function(String) setDireccion;
   final Function(double, double) setLatLng;
   final double latitud;
@@ -16,6 +18,7 @@ class StepMapa extends StatefulWidget {
   final String direccion;
 
   StepMapa({
+    @required this.setCiudadPoi,
     @required this.setDireccion,
     @required this.setLatLng,
     this.latitud,
@@ -35,6 +38,7 @@ class _StepMapaState extends State<StepMapa> {
   bool _searching = false;
   bool _locating = false;
   Timer _debounce;
+  CategoryWrapper _selectedCiudadPoi;
 
   _fetchPlaceByName() async {
     if (mounted) {
@@ -114,6 +118,25 @@ class _StepMapaState extends State<StepMapa> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        // Text("Ciudad"),
+        // Container(
+        //   height: 150,
+        //   child: SingleChildScrollView(
+        //     child: TypeAheadCiudad(
+        //       insideEdit: true,
+        //       onItemTap: (CategoryWrapper ciudad) {
+        //         _selectedCiudadPoi = ciudad;
+        //         widget.setCiudadPoi(ciudad);
+        //         if (mounted) setState(() {});
+        //       },
+        //     ),
+        //   ),
+        // ),
+        // if (_selectedCiudadPoi != null)
+        //   Padding(
+        //     padding: const EdgeInsets.all(15),
+        //     child: Text("Ciudad: ${_selectedCiudadPoi.nombre}"),
+        //   ),
         Container(
           height: 200,
           child: Stack(

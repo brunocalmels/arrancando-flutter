@@ -14,6 +14,7 @@ import 'package:arrancando/views/content_wrapper/new/_step_mapa.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,6 +40,7 @@ class _NewContentState extends State<NewContent> {
       TextEditingController();
   final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
   CategoryWrapper _selectedCategory;
+  CategoryWrapper _selectedCiudadPoi;
   // List<Asset> _images = List<Asset>();
   List<File> _images = List<File>();
   String _selectedDireccion;
@@ -127,12 +129,32 @@ class _NewContentState extends State<NewContent> {
           );
           break;
         case SectionType.pois:
+          String nombreProvincia;
+          String nombreCiudad;
+          List<Placemark> places = await Geolocator().placemarkFromCoordinates(
+            _selectedLatitud,
+            _selectedLongitud,
+          );
+          if (places != null && places.length > 0) {
+            if (places.first.administrativeArea != null &&
+                places.first.administrativeArea.isNotEmpty)
+              nombreProvincia = places.first.administrativeArea;
+            if (places.first.subLocality != null &&
+                places.first.subLocality.isNotEmpty)
+              nombreCiudad = places.first.subLocality;
+            else if (places.first.locality != null &&
+                places.first.locality.isNotEmpty)
+              nombreCiudad = places.first.locality;
+          }
           res = await Fetcher.post(
             url: "/pois.json",
             throwError: true,
             body: {
               ...body,
               "categoria_poi_id": _selectedCategory.id,
+              // "ciudad_id": _selectedCiudadPoi.id,
+              "nombre_provincia": nombreProvincia,
+              "nombre_ciudad": nombreCiudad,
               "lat": _selectedLatitud,
               "long": _selectedLongitud,
               "direccion": _selectedDireccion,
@@ -173,6 +195,12 @@ class _NewContentState extends State<NewContent> {
   _setCategory(CategoryWrapper val) {
     setState(() {
       _selectedCategory = val;
+    });
+  }
+
+  _setCiudadPoi(CategoryWrapper ciudad) {
+    setState(() {
+      _selectedCiudadPoi = ciudad;
     });
   }
 
@@ -377,6 +405,7 @@ class _NewContentState extends State<NewContent> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     StepMapa(
+                      setCiudadPoi: _setCiudadPoi,
                       setDireccion: _setDireccion,
                       setLatLng: _setLatLng,
                     ),
