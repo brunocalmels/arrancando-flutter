@@ -223,6 +223,17 @@ class ContentWrapper {
       url +=
           '&filterrific[categoria_publicacion_id]=${Provider.of<MainState>(context).selectedCategoryHome[SectionType.publicaciones_categoria]}';
 
+    if (type == SectionType.pois &&
+        context != null &&
+        Provider.of<MainState>(context)
+                .selectedCategoryHome[SectionType.pois_ciudad] !=
+            null &&
+        Provider.of<MainState>(context)
+                .selectedCategoryHome[SectionType.pois_ciudad] >
+            0)
+      url +=
+          '&filterrific[ciudad_id]=${Provider.of<MainState>(context).selectedCategoryHome[SectionType.pois_ciudad]}';
+
     if (sortBy != null)
       switch (sortBy) {
         case ContentSortType.fecha:

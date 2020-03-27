@@ -25,7 +25,7 @@ class MainScaffold extends StatefulWidget {
 
 class _MainScaffoldState extends State<MainScaffold> {
   final TextEditingController _searchController = TextEditingController();
-  PersistentBottomSheetController _bottomSheetController;
+  // PersistentBottomSheetController _bottomSheetController;
   List<ContentWrapper> _items;
   int _page = 1;
   bool _fetching = true;

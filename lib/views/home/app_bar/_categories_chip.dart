@@ -12,12 +12,14 @@ class CategoriesChip extends StatefulWidget {
   final bool small;
   final bool alignCenter;
   final bool pubCateg;
+  final bool poiCity;
 
   CategoriesChip({
     this.fetchContent,
     this.small = false,
     this.alignCenter = false,
     this.pubCateg = false,
+    this.poiCity = false,
   });
 
   @override
@@ -50,16 +52,16 @@ class _CategoriesChipState extends State<CategoriesChip> {
                               mainState.activePageHome ==
                                   SectionType.publicaciones,
                           pubCateg: widget.pubCateg,
+                          poiCity: widget.poiCity,
                         ),
                       );
                       if (selected != null) {
-                        Provider.of<MainState>(
-                          context,
-                          listen: false,
-                        ).setSelectedCategoryHome(
+                        mainState.setSelectedCategoryHome(
                           widget.pubCateg
                               ? SectionType.publicaciones_categoria
-                              : mainState.activePageHome,
+                              : widget.poiCity
+                                  ? SectionType.pois_ciudad
+                                  : mainState.activePageHome,
                           selected,
                         );
                         if (widget.fetchContent != null) widget.fetchContent();
@@ -79,13 +81,12 @@ class _CategoriesChipState extends State<CategoriesChip> {
                             maxWidth: widget.small ? 20 : 150,
                           ),
                           child: Text(
-                            singleton.categories[widget.pubCateg
-                                    ? SectionType.publicaciones_categoria
-                                    : mainState.activePageHome]
-                                .firstWhere((c) => mainState.selectedCategoryHome[
-                                            widget.pubCateg
-                                                ? SectionType
-                                                    .publicaciones_categoria
+                            singleton.categories[widget.pubCateg ? SectionType.publicaciones_categoria : widget.poiCity ? SectionType.pois_ciudad : mainState.activePageHome]
+                                .firstWhere((c) => mainState.selectedCategoryHome[widget.pubCateg
+                                            ? SectionType
+                                                .publicaciones_categoria
+                                            : widget.poiCity
+                                                ? SectionType.pois_ciudad
                                                 : mainState.activePageHome] !=
                                         null
                                     ? c.id ==
@@ -93,11 +94,15 @@ class _CategoriesChipState extends State<CategoriesChip> {
                                             widget.pubCateg
                                                 ? SectionType
                                                     .publicaciones_categoria
-                                                : mainState.activePageHome]
+                                                : widget.poiCity
+                                                    ? SectionType.pois_ciudad
+                                                    : mainState.activePageHome]
                                     : c.id ==
-                                        userState.preferredCategories[
-                                            widget.pubCateg
-                                                ? SectionType.publicaciones_categoria
+                                        userState.preferredCategories[widget.pubCateg
+                                            ? SectionType
+                                                .publicaciones_categoria
+                                            : widget.poiCity
+                                                ? SectionType.pois_ciudad
                                                 : mainState.activePageHome])
                                 .nombre,
                             overflow: TextOverflow.ellipsis,

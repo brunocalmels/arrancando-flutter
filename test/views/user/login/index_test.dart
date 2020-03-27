@@ -16,18 +16,18 @@ void main() {
       await tester.pumpWidget(LoginPage());
 
       var logoFinder = find.byType(Image);
-      var botonGoogle = find.byType(RaisedButton);
+      // var botonGoogle = find.byType(RaisedButton);
 
       expect(logoFinder, findsOneWidget);
-      expect(botonGoogle, findsNothing);
+      // expect(botonGoogle, findsOneWidget);
 
-      // Tap the '+' icon and trigger a frame.
-      await tester.tap(find.byIcon(Icons.add));
-      await tester.pump();
+      // // Tap the '+' icon and trigger a frame.
+      // await tester.tap(find.byIcon(Icons.add));
+      // await tester.pump();
 
-      // Verify that our counter has incremented.
-      expect(find.text('0'), findsNothing);
-      expect(find.text('1'), findsOneWidget);
+      // // Verify that our counter has incremented.
+      // expect(find.text('0'), findsNothing);
+      // expect(find.text('1'), findsOneWidget);
     },
   );
 }

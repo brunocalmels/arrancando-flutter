@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
     ResponseObject resp = await Fetcher.get(url: "/ciudades/$id.json");
     if (resp != null) {
       return json.decode(resp.body)['populada'] != null
-          ? json.decode(resp.body)['populada']
+          ? (json.decode(resp.body)['populada'] as bool)
           : false;
     }
     return false;

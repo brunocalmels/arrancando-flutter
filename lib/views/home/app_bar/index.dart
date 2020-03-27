@@ -22,6 +22,7 @@ class MainAppBar extends StatelessWidget {
 
   _anyFilterActive(MainState mainState, ContentPageState contentPageState) {
     if (mainState.activePageHome != SectionType.publicaciones) {
+      if (mainState.activePageHome == SectionType.pois) return true;
       if (mainState.selectedCategoryHome[mainState.activePageHome] != -1 &&
           mainState.selectedCategoryHome[mainState.activePageHome] != null)
         return true;

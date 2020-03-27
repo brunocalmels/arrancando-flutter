@@ -75,6 +75,12 @@ class CategoryWrapper {
           ...categs,
         ],
       );
+      gs.setCategories(
+        SectionType.pois_ciudad,
+        [
+          ...categs,
+        ],
+      );
 
       categs = [];
 
@@ -109,7 +115,7 @@ class CategoryWrapper {
       gs.setCategories(
         SectionType.pois,
         [
-          todos,
+          // todos,
           ...categs,
         ],
       );
@@ -125,7 +131,7 @@ class CategoryWrapper {
     int val = prefs.getInt(type.toString());
     if (val != null)
       Provider.of<ContentPageState>(context).setSavedFilter(type, val);
-      Provider.of<MainState>(context).setSelectedCategoryHome(type, val);
+    Provider.of<MainState>(context).setSelectedCategoryHome(type, val);
   }
 
   static saveFilter(BuildContext context, SectionType type, int val) async {

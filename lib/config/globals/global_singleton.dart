@@ -18,8 +18,19 @@ class GlobalSingleton {
       MyGlobals.mainNavigatorKey.currentContext,
       listen: false,
     );
-    if (st.preferredCategories[type] == null)
-      st.setPreferredCategories(type, list.first.id);
+    if (st.preferredCategories[type] == null) {
+      if (type == SectionType.pois) {
+        CategoryWrapper verdulerias = list.firstWhere(
+          (i) => i.nombre == "Verdulerías",
+          orElse: () => null,
+        );
+        if (verdulerias != null)
+          st.setPreferredCategories(type, verdulerias.id);
+        else
+          st.setPreferredCategories(type, list.first.id);
+      } else
+        st.setPreferredCategories(type, list.first.id);
+    }
   }
 
   factory GlobalSingleton() {

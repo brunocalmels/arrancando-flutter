@@ -76,6 +76,20 @@ class FilterBottomSheet extends StatelessWidget {
                           pubCateg: mainState.activePageHome ==
                               SectionType.publicaciones,
                         ),
+                      if (mainState.activePageHome == SectionType.pois)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Seleccionar ciudad: "),
+                          ),
+                        ),
+                      if (mainState.activePageHome == SectionType.pois)
+                        CategoriesChip(
+                          fetchContent: fetchContent,
+                          alignCenter: true,
+                          poiCity: true,
+                        ),
                       Container(
                         padding: const EdgeInsets.only(top: 15),
                         width: MediaQuery.of(context).size.width / 2.5,

@@ -10,6 +10,7 @@ class ContentPageState extends ChangeNotifier {
     SectionType.publicaciones_categoria: -1,
     SectionType.recetas: -1,
     SectionType.pois: -1,
+    SectionType.pois_ciudad: -1,
   };
 
   setSearchPageVisible(bool val) {

@@ -12,6 +12,7 @@ class DialogCategorySelect extends StatefulWidget {
   final String titleText;
   final bool insideProfile;
   final bool pubCateg;
+  final bool poiCity;
 
   DialogCategorySelect({
     this.selectCity = false,
@@ -19,6 +20,7 @@ class DialogCategorySelect extends StatefulWidget {
     this.titleText = "Cambiar filtro",
     this.insideProfile = false,
     this.pubCateg = false,
+    this.poiCity = false,
   });
 
   @override
@@ -35,7 +37,9 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
       context,
       widget.pubCateg
           ? SectionType.publicaciones_categoria
-          : Provider.of<MainState>(context).activePageHome,
+          : widget.poiCity
+              ? SectionType.pois_ciudad
+              : Provider.of<MainState>(context).activePageHome,
       _selected,
     );
     if (mounted) setState(() {});
@@ -65,10 +69,11 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                     ),
                   ),
                 ),
-              widget.selectCity && !widget.pubCateg
+              (widget.selectCity || widget.poiCity) && !widget.pubCateg
                   ? TypeAheadCiudad(
                       onItemTap: _onItemTap,
-                      insideProfile: widget.insideProfile,
+                      insideProfile: true,
+                      insideEdit: true,
                     )
                   : Container(
                       height: 220,

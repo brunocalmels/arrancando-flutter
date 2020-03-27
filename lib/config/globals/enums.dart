@@ -4,6 +4,7 @@ enum SectionType {
   publicaciones,
   recetas,
   pois,
+  pois_ciudad,
 }
 
 enum ContentSortType {
