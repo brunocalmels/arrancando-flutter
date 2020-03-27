@@ -2,8 +2,8 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:flutter/material.dart';
 
 abstract class MyGlobals {
-  // static const bool SHOW_DEV_LOGIN = false;
-  static const bool SHOW_DEV_LOGIN = true;
+  static const bool SHOW_DEV_LOGIN = false;
+  // static const bool SHOW_DEV_LOGIN = true;
 
   // static const String SERVER_URL = "http://192.168.0.4:5050";
   // static const String SERVER_URL = "http://192.168.0.11:5000";
@@ -26,7 +26,7 @@ abstract class MyGlobals {
   static const APPLE_REDIRECT_URI =
       "https://arrancando.herokuapp.com/apple-login";
 
-  static const APP_VERSION = "1.2.2+34";
+  static const APP_VERSION = "1.2.3+35";
 
   static const ICONOS_CATEGORIAS = {
     SectionType.home: Icons.select_all,
