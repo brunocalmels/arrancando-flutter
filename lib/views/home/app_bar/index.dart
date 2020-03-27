@@ -183,6 +183,12 @@ class MainAppBar extends StatelessWidget {
               },
               icon: Icon(Icons.menu),
             ),
+            IconButton(
+              onPressed: () {
+                MyGlobals.mainScaffoldKey.currentState.openEndDrawer();
+              },
+              icon: Icon(Icons.menu),
+            ),
           ],
         );
       },
