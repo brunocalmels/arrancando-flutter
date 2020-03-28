@@ -73,7 +73,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                   ? TypeAheadCiudad(
                       onItemTap: _onItemTap,
                       insideProfile: true,
-                      insideEdit: true,
+                      insideEdit: (widget.selectCity || widget.poiCity),
                     )
                   : Container(
                       height: 220,
@@ -95,7 +95,9 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                                               .activePageHome]
                                     ];
 
-                          if (widget.selectCity && !widget.pubCateg)
+                          if ((widget.selectCity && !widget.pubCateg) ||
+                              Provider.of<MainState>(context).activePageHome ==
+                                  SectionType.pois)
                             _lista.removeWhere((c) => c.id == -1);
 
                           return SingleChildScrollView(

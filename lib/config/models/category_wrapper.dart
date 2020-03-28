@@ -115,7 +115,7 @@ class CategoryWrapper {
       gs.setCategories(
         SectionType.pois,
         [
-          // todos,
+          todos,
           ...categs,
         ],
       );
