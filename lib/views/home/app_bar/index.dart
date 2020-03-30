@@ -52,6 +52,7 @@ class MainAppBar extends StatelessWidget {
           ),
           title: SearchBar(
             searchController: searchController,
+            setSearchVisibility: setSearchVisibility,
           ),
           actions: <Widget>[
             if (!contentState.showSearchPage &&
@@ -79,14 +80,13 @@ class MainAppBar extends StatelessWidget {
                       : null,
                 ),
               ),
-            IconButton(
-              onPressed: () {
-                setSearchVisibility(!contentState.showSearchPage);
-              },
-              icon: Icon(
-                contentState.showSearchPage ? Icons.close : Icons.search,
+            if (contentState.showSearchPage)
+              IconButton(
+                onPressed: () {
+                  setSearchVisibility(false);
+                },
+                icon: Icon(Icons.close),
               ),
-            ),
             IconButton(
               onPressed: () {
                 MyGlobals.mainScaffoldKey.currentState.openEndDrawer();

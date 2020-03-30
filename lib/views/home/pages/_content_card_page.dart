@@ -69,9 +69,32 @@ class _ContentCardPageState extends State<ContentCardPage> {
                         controller: _scrollController,
                         itemCount: widget.items.length,
                         itemBuilder: (context, index) {
-                          Widget item = CardContent(
-                            content: widget.items[index],
+                          Widget item = Padding(
+                            padding: const EdgeInsets.only(bottom: 15),
+                            child: CardContent(
+                              content: widget.items[index],
+                            ),
                           );
+                          if (index == 0)
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+                                    print("TAP");
+                                  },
+                                  child: Image.asset(
+                                    "assets/images/plato-filtrar.png",
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.6,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                item,
+                              ],
+                            );
                           if (index == widget.items.length - 1) {
                             if (!widget.noMore)
                               return Column(

@@ -6,6 +6,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/general/curved_text.dart';
 import 'package:arrancando/views/general/version_checker.dart';
 import 'package:arrancando/views/home/_drawer.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
@@ -237,9 +238,27 @@ class _MainScaffoldState extends State<MainScaffold> {
 
             extendBody: true,
             // floatingActionButton: MainNewFab(),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              child: Icon(Icons.add),
+            floatingActionButton: Stack(
+              fit: StackFit.passthrough,
+              children: <Widget>[
+                Positioned.fill(
+                  child: CurvedText(
+                    radius: 30,
+                    text: "NUEVO",
+                    textStyle: TextStyle(),
+                    startAngle: 5.5,
+                  ),
+                ),
+                FloatingActionButton(
+                  elevation: 10,
+                  backgroundColor: Theme.of(context).backgroundColor,
+                  onPressed: () {},
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,

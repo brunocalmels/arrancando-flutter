@@ -23,143 +23,10 @@ class CardContent extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.37,
       child: Card(
         color: Theme.of(context).backgroundColor,
+        elevation: 10,
         child: Stack(
           fit: StackFit.passthrough,
           children: <Widget>[
-            Positioned(
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4),
-                ),
-                child: content.thumbnail == null
-                    ? Center(
-                        child: Icon(
-                          Icons.photo_camera,
-                          size: 100,
-                          color: Color(0x33000000),
-                        ),
-                      )
-                    : CachedNetworkImage(
-                        imageUrl: "${MyGlobals.SERVER_URL}${content.thumbnail}",
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Center(
-                          child: SizedBox(
-                            width: 25,
-                            height: 25,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                      ),
-              ),
-            ),
-            Container(
-              color: Color(0x77000000),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-                bottom: 10,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Tooltip(
-                          waitDuration: Duration(milliseconds: 50),
-                          message: "@${content.user.username}",
-                          child: CircleAvatar(
-                            backgroundColor: Colors.transparent,
-                            radius: 20,
-                            backgroundImage: content.user != null &&
-                                    content.user.avatar != null
-                                ? CachedNetworkImageProvider(
-                                    "${MyGlobals.SERVER_URL}${content.user.avatar}",
-                                  )
-                                : null,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: Container(),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Flexible(
-                            child: Text(
-                              content.titulo,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: MediaQuery.of(context).size.height > 500
-                                  ? 2
-                                  : 1,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      if (content.type == SectionType.publicaciones &&
-                          MediaQuery.of(context).size.height > 500)
-                        Text(
-                          content.cuerpo,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: Theme.of(context).textTheme.body1.merge(
-                                TextStyle(
-                                  color: Colors.white,
-                                ),
-                              ),
-                        ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(children: <Widget>[
-                            RowPuntajes(
-                              content: content,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            RowCantComments(
-                              content: content,
-                            ),
-                          ]),
-                          Text(
-                            content.fecha,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
             Positioned(
               child: Material(
                 color: Colors.transparent,
@@ -183,50 +50,273 @@ class CardContent extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                right: 10,
-                bottom: 10,
-              ),
-              child: Column(
+              padding: const EdgeInsets.all(10),
+              child: Row(
                 children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      if (content != null)
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            CircleAvatar(
+                              radius: 15,
+                              backgroundImage: content.user != null &&
+                                      content.user.avatar != null
+                                  ? CachedNetworkImageProvider(
+                                      "${MyGlobals.SERVER_URL}${content.user.avatar}",
+                                    )
+                                  : null,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(content.user == null
+                                ? "------"
+                                : "@${content.user.username}"),
+                          ],
+                        ),
                         SizedBox(
-                          width: 35,
-                          child: IconButton(
-                            onPressed: () =>
-                                SavedContent.toggleSave(content, context),
-                            icon: Icon(
-                              SavedContent.isSaved(content, context)
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: Colors.white,
+                          height: 10,
+                        ),
+                        Text(
+                          content.titulo.toUpperCase(),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.timer,
+                              color: Theme.of(context).accentColor,
+                              size: 15,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "40 minutos",
+                              style: TextStyle(
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.kitchen,
+                              color: Theme.of(context).accentColor,
+                              size: 15,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Pastas",
+                              style: TextStyle(
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.add_box,
+                              color: Theme.of(context).accentColor,
+                              size: 15,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Complicado",
+                              style: TextStyle(
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            GestureDetector(
+                              child: Icon(
+                                Icons.favorite,
+                                color: Theme.of(context).accentColor,
+                              ),
+                              onTap: () {
+                                print('favorite');
+                              },
+                            ),
+                            SizedBox(
+                              width: 7,
+                            ),
+                            GestureDetector(
+                              child: Icon(
+                                Icons.chat_bubble_outline,
+                                color: Theme.of(context).accentColor,
+                              ),
+                              onTap: () {
+                                print('chat_bubble_outline');
+                              },
+                            ),
+                            SizedBox(
+                              width: 7,
+                            ),
+                            GestureDetector(
+                              child: Icon(
+                                Icons.camera_alt,
+                                color: Theme.of(context).accentColor,
+                              ),
+                              onTap: () {
+                                print('camera_alt');
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              content.fecha,
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Icon(
+                              Icons.person_outline,
+                              color: Theme.of(context).accentColor,
+                            ),
+                          ],
+                        ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        SizedBox(
+                          width: 150,
+                          height: 125,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 10,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4),
+                              ),
+                              child: content.thumbnail == null
+                                  ? Center(
+                                      child: Icon(
+                                        Icons.photo_camera,
+                                        size: 50,
+                                        color: Color(0x33000000),
+                                      ),
+                                    )
+                                  : CachedNetworkImage(
+                                      imageUrl: content.thumbnail
+                                              .contains('http')
+                                          ? "${content.thumbnail}"
+                                          : "${MyGlobals.SERVER_URL}${content.thumbnail}",
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) => Center(
+                                        child: SizedBox(
+                                          width: 15,
+                                          height: 15,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                          ),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
                             ),
                           ),
                         ),
-                      SizedBox(
-                        width: 35,
-                        child: IconButton(
-                          // onPressed: content.shareSelf,
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (_) => ShareContentWrapper(
-                                content: content,
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.share,
-                            color: Colors.white,
-                          ),
+                        Expanded(
+                          child: Container(),
                         ),
-                      ),
-                    ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => ShareContentWrapper(
+                                    content: content,
+                                  ),
+                                );
+                              },
+                              child: Icon(
+                                Icons.share,
+                                color: Theme.of(context).accentColor,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 7,
+                            ),
+                            GestureDetector(
+                              onTap: () =>
+                                  SavedContent.toggleSave(content, context),
+                              child: Icon(
+                                SavedContent.isSaved(content, context)
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                                color: Theme.of(context).accentColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
