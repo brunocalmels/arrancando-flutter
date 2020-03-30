@@ -181,12 +181,24 @@ class _PoiPageState extends State<PoiPage> {
                               textAlign: TextAlign.center,
                             ),
                           )
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        child: Text(
-                          "Ocurrió un error",
-                          textAlign: TextAlign.center,
-                        ),
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            child: Text(
+                              "Ocurrió un error",
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Text(
+                            "(Si el problema persiste, cerrá sesión y volvé a iniciar)",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 10,
+                            ),
+                          ),
+                        ],
                       ),
           ),
         ],

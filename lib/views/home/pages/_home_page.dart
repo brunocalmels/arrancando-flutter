@@ -123,7 +123,14 @@ class _HomePageState extends State<HomePage> {
                               Text(
                                 "Ocurrió un error",
                                 textAlign: TextAlign.center,
-                              )
+                              ),
+                              Text(
+                                "(Si el problema persiste, cerrá sesión y volvé a iniciar)",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                ),
+                              ),
                             ],
                           ),
                   ),

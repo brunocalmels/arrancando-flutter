@@ -21,7 +21,7 @@ class _VersionCheckerState extends State<VersionChecker> {
     if (resp != null && resp.body != null) {
       if (json.decode(resp.body)['version'] != MyGlobals.APP_VERSION) {
         showNewVersionBanner = true;
-        setState(() {});
+        if (mounted) setState(() {});
       }
     }
   }

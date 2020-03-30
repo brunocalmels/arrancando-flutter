@@ -124,6 +124,13 @@ class _ContentCardPageState extends State<ContentCardPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
+                      Text(
+                        "(Si el problema persiste, cerrá sesión y volvé a iniciar)",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 10,
+                        ),
+                      ),
                     ],
                   ),
           );

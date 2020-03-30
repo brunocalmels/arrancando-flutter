@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -102,6 +103,26 @@ class ActiveUser {
       if (au.id == null || au.email == null || au.authToken == null) {
         print('Active user lacks either id or email or token');
         ActiveUser.logout(context);
+      } else if (au.authToken != null && au.authToken.split('.').length > 1) {
+        try {
+          String s1 = au.authToken.split('.')[1];
+          Uint8List b64 = base64.decode(base64.normalize(s1));
+          String decoded = utf8.decode(b64);
+          dynamic jeison = json.decode(decoded);
+          int exp = jeison['exp'] * 1000;
+          DateTime date = DateTime.fromMillisecondsSinceEpoch(exp);
+          if (date.isBefore(DateTime.now())) {
+            ActiveUser.logout(context);
+          } else {
+            await Fetcher.get(
+              url: "/ciudades/1.json",
+              throwError: true,
+            );
+          }
+        } catch (e) {
+          print(e);
+          ActiveUser.logout(context);
+        }
       }
     } else {
       print('Active user was null but the app landed on /home somehow');
