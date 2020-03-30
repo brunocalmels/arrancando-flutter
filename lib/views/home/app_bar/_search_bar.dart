@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   final TextEditingController searchController;
+  final Function(bool) setSearchVisibility;
 
   SearchBar({
     this.searchController,
+    this.setSearchVisibility,
   });
 
   @override
@@ -24,6 +26,7 @@ class _SearchBarState extends State<SearchBar> {
         textCapitalization: TextCapitalization.sentences,
         onChanged: (val) async {
           if (val != null && val.isNotEmpty) {
+            widget.setSearchVisibility(true);
             Provider.of<ContentPageState>(context)
                 .setSearchResultsVisible(true);
             await Future.delayed(Duration(seconds: 3));
