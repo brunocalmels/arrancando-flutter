@@ -26,7 +26,7 @@ abstract class MyGlobals {
   static const APPLE_REDIRECT_URI =
       "https://arrancando.herokuapp.com/apple-login";
 
-  static const APP_VERSION = "1.2.4+38";
+  static const APP_VERSION = "1.2.4+39";
 
   static const ICONOS_CATEGORIAS = {
     SectionType.home: Icons.select_all,
@@ -53,4 +53,6 @@ abstract class MyGlobals {
       GlobalKey<NavigatorState>();
   static final GlobalKey<ScaffoldState> mainScaffoldKey =
       GlobalKey<ScaffoldState>();
+
+  static const int MUCHO_PESO_PUBLICACION = 25000000;
 }

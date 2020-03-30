@@ -47,6 +47,7 @@ class _NewContentState extends State<NewContent> {
   double _selectedLatitud;
   double _selectedLongitud;
   bool _sent = false;
+  bool _hideButtonVeryBadError = false;
   String _errorMsg;
   final GlobalSingleton gs = GlobalSingleton();
 
@@ -178,8 +179,14 @@ class _NewContentState extends State<NewContent> {
           ),
         );
       } else {
-        _errorMsg =
-            (json.decode(res.body) as Map).values.expand((i) => i).join(',');
+        if (res != null && res.body != null) {
+          _errorMsg =
+              (json.decode(res.body) as Map).values.expand((i) => i).join(',');
+        } else {
+          _errorMsg =
+              "Ocurrió un error, por favor intentalo nuevamente más tarde.";
+          _hideButtonVeryBadError = true;
+        }
         if (mounted) setState(() {});
       }
     } catch (e) {
@@ -229,6 +236,39 @@ class _NewContentState extends State<NewContent> {
       _selectedLongitud = l2;
     });
   }
+
+  Future<int> _computeSize() async {
+    int pesos = (await Future.wait(
+      _images.map(
+        (i) => i.length(),
+      ),
+    ))
+        .fold(
+      0,
+      (sum, i) => sum + i,
+    );
+    return pesos;
+  }
+
+  Widget _muchoPesoArchivos() => FutureBuilder(
+        future: _computeSize(),
+        builder: (context, AsyncSnapshot<int> snapshot) {
+          if (snapshot.hasData &&
+              snapshot.data >= MyGlobals.MUCHO_PESO_PUBLICACION)
+            return Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Text(
+                "Estás subiendo archivos muy pesados, la creación puede tardar.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 13,
+                ),
+              ),
+            );
+          return Container();
+        },
+      );
 
   _onStepContinue() {
     switch (_currentStep) {
@@ -326,20 +366,21 @@ class _NewContentState extends State<NewContent> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  FlatButton(
-                    onPressed: _sent ? null : onStepContinue,
-                    child: _sent
-                        ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 1,
+                  if (!_hideButtonVeryBadError)
+                    FlatButton(
+                      onPressed: _sent ? null : onStepContinue,
+                      child: _sent
+                          ? SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1,
+                              ),
+                            )
+                          : Text(
+                              'Continuar',
                             ),
-                          )
-                        : Text(
-                            'Continuar',
-                          ),
-                  ),
+                    ),
                 ],
               ),
             );
@@ -392,6 +433,7 @@ class _NewContentState extends State<NewContent> {
                         style: TextStyle(color: Colors.red),
                       ),
                     ),
+                  if (widget.type != SectionType.pois) _muchoPesoArchivos(),
                 ],
               ),
             ),
@@ -417,6 +459,7 @@ class _NewContentState extends State<NewContent> {
                           style: TextStyle(color: Colors.red),
                         ),
                       ),
+                    _muchoPesoArchivos(),
                   ],
                 ),
               ),
