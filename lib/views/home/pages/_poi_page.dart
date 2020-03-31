@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/views/cards/tile_poi.dart';
+import 'package:arrancando/views/home/filter_bottom_sheet/index.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +69,40 @@ class _PoiPageState extends State<PoiPage> {
       },
       child: ListView(
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: MyGlobals.mainScaffoldKey.currentContext,
+                    builder: (_) => FilterBottomSheet(
+                      fetchContent: () {
+                        widget.resetLimit();
+                        widget.fetchContent(
+                          SectionType.pois,
+                        );
+                      },
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                    ),
+                    backgroundColor: Colors.white,
+                  );
+                },
+                child: Image.asset(
+                  "assets/images/content/index/plato-filtrar.png",
+                  width: MediaQuery.of(context).size.width * 0.6,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 15,
+          ),
           PoisMap(
             height: MediaQuery.of(context).size.height * 0.33,
             latitud: _latitud,
@@ -79,7 +115,9 @@ class _PoiPageState extends State<PoiPage> {
           Container(
             height: MediaQuery.of(context).size.height * 0.66,
             child: widget.fetching
-                ? LoadingWidget()
+                ? LoadingWidget(
+                    height: 50,
+                  )
                 : widget.items != null
                     ? widget.items.length > 0
                         ? ListView.builder(

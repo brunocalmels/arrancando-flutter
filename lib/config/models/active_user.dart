@@ -78,6 +78,44 @@ class ActiveUser {
     return false;
   }
 
+  static Future<bool> storagePermissionDenied() async {
+    PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.storage);
+
+    if (permission == PermissionStatus.denied) {
+      Map<PermissionGroup, PermissionStatus> permissions =
+          await PermissionHandler()
+              .requestPermissions([PermissionGroup.storage]);
+
+      if (permissions.containsKey(PermissionGroup.storage) &&
+          permissions[PermissionGroup.storage] != PermissionStatus.granted) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+    return false;
+  }
+
+  static Future<bool> photosPermissionDenied() async {
+    PermissionStatus permission =
+        await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
+
+    if (permission == PermissionStatus.denied) {
+      Map<PermissionGroup, PermissionStatus> permissions =
+          await PermissionHandler()
+              .requestPermissions([PermissionGroup.photos]);
+
+      if (permissions.containsKey(PermissionGroup.photos) &&
+          permissions[PermissionGroup.photos] != PermissionStatus.granted) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+    return false;
+  }
+
   static logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('activeUser');

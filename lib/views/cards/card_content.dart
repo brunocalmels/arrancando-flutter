@@ -239,6 +239,7 @@ class CardContent extends StatelessWidget {
                           height: 125,
                           child: Container(
                             decoration: BoxDecoration(
+                              color: Colors.black,
                               boxShadow: [
                                 BoxShadow(
                                   blurRadius: 10,

@@ -6,6 +6,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/_publicacion.dart';
 import 'package:arrancando/views/general/curved_text.dart';
 import 'package:arrancando/views/general/version_checker.dart';
 import 'package:arrancando/views/home/_drawer.dart';
@@ -27,13 +28,24 @@ class MainScaffold extends StatefulWidget {
 class _MainScaffoldState extends State<MainScaffold> {
   final TextEditingController _searchController = TextEditingController();
   // PersistentBottomSheetController _bottomSheetController;
-  List<ContentWrapper> _items;
+  Map<SectionType, List<ContentWrapper>> _itemsMap = {
+    SectionType.publicaciones: null,
+    SectionType.recetas: null,
+    SectionType.pois: null,
+  };
   int _page = 1;
   bool _fetching = true;
   bool _noMore = false;
   bool _loadingMore = false;
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
+  Map<SectionType, IconData> _sectionTypeIconMapper = {
+    SectionType.home: Icons.public,
+    SectionType.publicaciones: Icons.public,
+    SectionType.recetas: Icons.fastfood,
+    SectionType.pois: Icons.location_on,
+    SectionType.wiki: Icons.library_books,
+  };
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
     MainState mainState = Provider.of<MainState>(
@@ -49,15 +61,18 @@ class _MainScaffoldState extends State<MainScaffold> {
       listen: false,
     );
 
-    int lastLength = _items != null ? _items.length : 0;
+    int lastLength = _itemsMap[mainState.activePageHome] != null
+        ? _itemsMap[mainState.activePageHome].length
+        : 0;
 
     int selectedCategory = mainState.selectedCategoryHome[type] != null
         ? mainState.selectedCategoryHome[type]
         : userState.preferredCategories[type];
 
-    if (_items == null) _items = [];
+    if (_itemsMap[mainState.activePageHome] == null)
+      _itemsMap[mainState.activePageHome] = [];
 
-    _items += await ContentWrapper.fetchItems(
+    _itemsMap[mainState.activePageHome] += await ContentWrapper.fetchItems(
       type,
       search: _searchController.text,
       categoryId: selectedCategory,
@@ -68,20 +83,24 @@ class _MainScaffoldState extends State<MainScaffold> {
 
     if (type == SectionType.pois &&
         contentPageState.sortContentBy == ContentSortType.proximidad) {
-      _items = await ContentWrapper.sortItems(
-        _items,
+      _itemsMap[mainState.activePageHome] = await ContentWrapper.sortItems(
+        _itemsMap[mainState.activePageHome],
         contentPageState.sortContentBy,
         calculatedDistance: _calculatedDistance,
       );
     }
 
-    if (type == SectionType.pois && !_locationDenied)
-      _items.map((i) => _calculatedDistance[i.id] = i.localDistance);
+    if (type == SectionType.pois &&
+        !_locationDenied &&
+        _itemsMap[mainState.activePageHome] != null)
+      _itemsMap[mainState.activePageHome]
+          .map((i) => _calculatedDistance[i.id] = i.localDistance);
 
     // if (!keepPage) _page += 1;
 
     _noMore = false;
-    if (lastLength == _items.length) {
+    if (_itemsMap[mainState.activePageHome] != null &&
+        lastLength == _itemsMap[mainState.activePageHome].length) {
       _noMore = true;
       _page -= 1;
     }
@@ -90,13 +109,14 @@ class _MainScaffoldState extends State<MainScaffold> {
 
     if (type == SectionType.pois &&
         contentPageState.sortContentBy != ContentSortType.proximidad) {
-      await Future.wait(_items.map((item) => item.distancia));
+      await Future.wait(
+          _itemsMap[mainState.activePageHome].map((item) => item.distancia));
       if (mounted) setState(() {});
     }
   }
 
   _resetLimit({bool keepNumber = false}) {
-    _items = null;
+    _itemsMap[Provider.of<MainState>(context).activePageHome] = null;
     _fetching = true;
     _noMore = false;
     if (!keepNumber) _page = 1;
@@ -140,7 +160,7 @@ class _MainScaffoldState extends State<MainScaffold> {
               resetLimit: _resetLimit,
               fetchContent: _fetchContent,
               increasePage: _increasePage,
-              items: _items,
+              items: _itemsMap[SectionType.publicaciones],
             ),
           );
         case SectionType.recetas:
@@ -153,7 +173,7 @@ class _MainScaffoldState extends State<MainScaffold> {
               resetLimit: _resetLimit,
               fetchContent: _fetchContent,
               increasePage: _increasePage,
-              items: _items,
+              items: _itemsMap[SectionType.recetas],
             ),
           );
         case SectionType.pois:
@@ -163,7 +183,7 @@ class _MainScaffoldState extends State<MainScaffold> {
             resetLimit: _resetLimit,
             fetchContent: _fetchContent,
             increasePage: _increasePage,
-            items: _items,
+            items: _itemsMap[SectionType.pois],
             loadingMore: _loadingMore,
             setLoadingMore: _setLoadingMore,
             setLocationDenied: _setLocationDenied,
@@ -181,19 +201,23 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   _initUserInfo() async {
     await ActiveUser.verifyCorrectLogin(context);
-    if (Provider.of<UserState>(context).activeUser != null)
+    if (Provider.of<UserState>(context).activeUser != null) {
       ActiveUser.updateUserMetadata(context);
-    SectionType.values.forEach(
-      (t) {
-        CategoryWrapper.restoreSavedFilter(context, t);
-      },
-    );
+      SectionType.values.forEach(
+        (t) {
+          CategoryWrapper.restoreSavedFilter(context, t);
+        },
+      );
+      CategoryWrapper.restoreContentHome(context);
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _initUserInfo();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initUserInfo();
+    });
   }
 
   @override
@@ -252,10 +276,44 @@ class _MainScaffoldState extends State<MainScaffold> {
                 FloatingActionButton(
                   elevation: 10,
                   backgroundColor: Theme.of(context).backgroundColor,
-                  onPressed: () {},
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
+                  onPressed: () {
+                    Widget page;
+
+                    switch (Provider.of<MainState>(context).activePageHome) {
+                      case SectionType.home:
+                        page = PublicacionNew();
+                        break;
+                      default:
+                        page = PublicacionNew();
+                    }
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => page,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned.fill(
+                          right: -22,
+                          top: -22,
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: 15,
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Icon(
+                            _sectionTypeIconMapper[
+                                Provider.of<MainState>(context).activePageHome],
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

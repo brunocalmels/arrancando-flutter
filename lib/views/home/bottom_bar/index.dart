@@ -103,7 +103,7 @@ class MainBottomBar extends StatelessWidget {
                         color: Provider.of<MainState>(context).activePageHome ==
                                 SectionType.home
                             ? Theme.of(context).accentColor
-                            : Colors.white,
+                            : null,
                       ),
                       Text(
                         "Home",
@@ -112,7 +112,7 @@ class MainBottomBar extends StatelessWidget {
                               Provider.of<MainState>(context).activePageHome ==
                                       SectionType.home
                                   ? Theme.of(context).accentColor
-                                  : Colors.white,
+                                  : null,
                         ),
                       ),
                     ],
@@ -138,7 +138,7 @@ class MainBottomBar extends StatelessWidget {
                         color: Provider.of<MainState>(context).activePageHome ==
                                 SectionType.recetas
                             ? Theme.of(context).accentColor
-                            : Colors.white,
+                            : null,
                       ),
                       Text(
                         "Recetas",
@@ -147,7 +147,7 @@ class MainBottomBar extends StatelessWidget {
                               Provider.of<MainState>(context).activePageHome ==
                                       SectionType.recetas
                                   ? Theme.of(context).accentColor
-                                  : Colors.white,
+                                  : null,
                         ),
                       ),
                     ],
@@ -176,7 +176,7 @@ class MainBottomBar extends StatelessWidget {
                         color: Provider.of<MainState>(context).activePageHome ==
                                 SectionType.pois
                             ? Theme.of(context).accentColor
-                            : Colors.white,
+                            : null,
                       ),
                       Text(
                         "P. Interés",
@@ -185,7 +185,7 @@ class MainBottomBar extends StatelessWidget {
                               Provider.of<MainState>(context).activePageHome ==
                                       SectionType.pois
                                   ? Theme.of(context).accentColor
-                                  : Colors.white,
+                                  : null,
                         ),
                       ),
                     ],
@@ -211,7 +211,7 @@ class MainBottomBar extends StatelessWidget {
                         color: Provider.of<MainState>(context).activePageHome ==
                                 SectionType.wiki
                             ? Theme.of(context).accentColor
-                            : Colors.white,
+                            : null,
                       ),
                       Text(
                         "Wiki",
@@ -220,7 +220,7 @@ class MainBottomBar extends StatelessWidget {
                               Provider.of<MainState>(context).activePageHome ==
                                       SectionType.wiki
                                   ? Theme.of(context).accentColor
-                                  : Colors.white,
+                                  : null,
                         ),
                       ),
                     ],

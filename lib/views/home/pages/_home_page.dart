@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/cards/card_content.dart';
 import 'package:arrancando/views/cards/slice_content.dart';
+import 'package:arrancando/views/home/_dialog_contenidos_home.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -74,11 +77,22 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
                                     GestureDetector(
-                                      onTap: () {
-                                        print("TAP");
+                                      onTap: () async {
+                                        List<SectionType> _contenidos =
+                                            await showDialog(
+                                          context: context,
+                                          builder: (_) =>
+                                              DialogContenidosHome(),
+                                        );
+                                        if (_contenidos != null) {
+                                          CategoryWrapper.saveContentHome(
+                                            context,
+                                            _contenidos,
+                                          );
+                                        }
                                       },
                                       child: Image.asset(
-                                        "assets/images/plato-personalizar.png",
+                                        "assets/images/content/index/plato-personalizar.png",
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.6,

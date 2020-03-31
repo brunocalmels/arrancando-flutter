@@ -1,7 +1,10 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/cards/card_content.dart';
+import 'package:arrancando/views/home/filter_bottom_sheet/index.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -81,10 +84,28 @@ class _ContentCardPageState extends State<ContentCardPage> {
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
-                                    print("TAP");
+                                    showModalBottomSheet(
+                                      context: MyGlobals
+                                          .mainScaffoldKey.currentContext,
+                                      builder: (_) =>
+                                          FilterBottomSheet(fetchContent: () {
+                                        widget.resetLimit();
+                                        widget.fetchContent(
+                                          Provider.of<MainState>(context)
+                                              .activePageHome,
+                                        );
+                                      }),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(15),
+                                          topRight: Radius.circular(15),
+                                        ),
+                                      ),
+                                      backgroundColor: Colors.white,
+                                    );
                                   },
                                   child: Image.asset(
-                                    "assets/images/plato-filtrar.png",
+                                    "assets/images/content/index/plato-filtrar.png",
                                     width:
                                         MediaQuery.of(context).size.width * 0.6,
                                   ),

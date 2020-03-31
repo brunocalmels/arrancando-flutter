@@ -43,7 +43,7 @@ class TilePoi extends StatelessWidget {
                 ? Center(
                     child: Icon(
                       Icons.photo_camera,
-                      color: Color(0x33000000),
+                      color: Colors.white38,
                     ),
                   )
                 : CachedNetworkImage(
@@ -72,7 +72,7 @@ class TilePoi extends StatelessWidget {
             children: <Widget>[
               Icon(
                 Icons.star,
-                color: Colors.yellow,
+                color: Theme.of(context).accentColor,
                 size: 14,
               ),
               SizedBox(
@@ -80,20 +80,14 @@ class TilePoi extends StatelessWidget {
               ),
               Text(
                 "${poi.puntajePromedio.toStringAsFixed(1)}",
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.black54,
-                ),
+                style: TextStyle(fontSize: 13, color: Colors.white),
               ),
-              Text(
-                " | ",
-                style: TextStyle(
-                  color: Colors.black12,
-                ),
+              SizedBox(
+                width: 5,
               ),
               Icon(
                 Icons.location_on,
-                color: Colors.black38,
+                color: Theme.of(context).accentColor,
                 size: 14,
               ),
               SizedBox(
@@ -104,7 +98,7 @@ class TilePoi extends StatelessWidget {
                   poi.localDistance != null ? poi.distanciaToH() : '',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.black54,
+                    color: Colors.white,
                   ),
                 ),
             ],
@@ -139,6 +133,7 @@ class TilePoi extends StatelessWidget {
                 width: 35,
                 child: IconButton(
                   onPressed: () => SavedContent.toggleSave(poi, context),
+                  color: Theme.of(context).accentColor,
                   icon: Icon(
                     SavedContent.isSaved(poi, context)
                         ? Icons.bookmark
@@ -150,6 +145,7 @@ class TilePoi extends StatelessWidget {
                 width: 35,
                 child: IconButton(
                   onPressed: onTap,
+                  color: Theme.of(context).accentColor,
                   icon: Icon(
                     Icons.location_on,
                   ),

@@ -55,31 +55,31 @@ class MainAppBar extends StatelessWidget {
             setSearchVisibility: setSearchVisibility,
           ),
           actions: <Widget>[
-            if (!contentState.showSearchPage &&
-                mainState.activePageHome != SectionType.home)
-              IconButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: MyGlobals.mainScaffoldKey.currentContext,
-                    builder: (_) => FilterBottomSheet(
-                      fetchContent: fetchContent,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
-                      ),
-                    ),
-                    backgroundColor: Colors.white,
-                  );
-                },
-                icon: Icon(
-                  Icons.filter_list,
-                  color: _anyFilterActive(mainState, contentState)
-                      ? Theme.of(context).accentColor
-                      : null,
-                ),
-              ),
+            // if (!contentState.showSearchPage &&
+            //     mainState.activePageHome != SectionType.home)
+            //   IconButton(
+            //     onPressed: () {
+            //       showModalBottomSheet(
+            //         context: MyGlobals.mainScaffoldKey.currentContext,
+            //         builder: (_) => FilterBottomSheet(
+            //           fetchContent: fetchContent,
+            //         ),
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.only(
+            //             topLeft: Radius.circular(15),
+            //             topRight: Radius.circular(15),
+            //           ),
+            //         ),
+            //         backgroundColor: Colors.white,
+            //       );
+            //     },
+            //     icon: Icon(
+            //       Icons.filter_list,
+            //       color: _anyFilterActive(mainState, contentState)
+            //           ? Theme.of(context).accentColor
+            //           : null,
+            //     ),
+            //   ),
             if (contentState.showSearchPage)
               IconButton(
                 onPressed: () {
@@ -87,12 +87,6 @@ class MainAppBar extends StatelessWidget {
                 },
                 icon: Icon(Icons.close),
               ),
-            IconButton(
-              onPressed: () {
-                MyGlobals.mainScaffoldKey.currentState.openEndDrawer();
-              },
-              icon: Icon(Icons.menu),
-            ),
             IconButton(
               onPressed: () {
                 MyGlobals.mainScaffoldKey.currentState.openEndDrawer();
