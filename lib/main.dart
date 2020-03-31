@@ -89,6 +89,14 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Monserrat',
         backgroundColor: Color(0xff242a36),
         scaffoldBackgroundColor: Color(0xff232935),
+        cardColor: Color(0xff232935),
+        dialogBackgroundColor: Color(0xff232935),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Color(0xff242a36),
+        ),
         primaryColor: Color(0xff222835),
         accentColor: Color(0xff57b668),
         hintColor: Colors.white54,

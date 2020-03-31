@@ -83,8 +83,12 @@ flutter:
     - assets/images/marca.jpg
     - assets/images/icon-no-fire.png
     - assets/flare/fuego.flr
-    - assets/images/plato-filtrar.png
-    - assets/images/plato-personalizar.png
+    - assets/images/content/index/plato-filtrar.png
+    - assets/images/content/index/plato-personalizar.png
+    - assets/images/content/new/cubiertos.png
+    - assets/images/content/new/fideos.png
+    - assets/images/content/new/tomates.png
+    - assets/images/content/new/wok.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -114,6 +118,28 @@ flutter:
           weight: 800
         - asset: assets/fonts/Nunito_Sans/NunitoSans-Black.ttf
           weight: 900
+    - family: Monserrat
+      fonts:
+        - asset: assets/fonts/Monserrat/Montserrat-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Monserrat/Montserrat-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Monserrat/Montserrat-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Monserrat/Montserrat-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Monserrat/Montserrat-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/Monserrat/Montserrat-Regular.ttf
+        - asset: assets/fonts/Monserrat/Montserrat-SemiBold.ttf
+          weight: 400
+        - asset: assets/fonts/Monserrat/Montserrat-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Monserrat/Montserrat-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Monserrat/Montserrat-Thin.ttf
+          weight: 100
+          
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

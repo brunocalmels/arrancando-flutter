@@ -139,4 +139,38 @@ class CategoryWrapper {
     prefs.setInt(type.toString(), val);
     Provider.of<ContentPageState>(context).setSavedFilter(type, val);
   }
+
+  static saveContentHome(BuildContext context, List<SectionType> list) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+      "content-home",
+      json.encode(
+        list.map((i) => "$i").toList(),
+      ),
+    );
+    Provider.of<MainState>(context).setContenidosHome(list);
+  }
+
+  static restoreContentHome(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String contentHome = prefs.getString("content-home");
+    if (contentHome != null) {
+      try {
+        Provider.of<MainState>(context).setContenidosHome(
+          (json.decode(contentHome) as List)
+              .map((i) => sectionTypeMapper[i])
+              .toList(),
+        );
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
 }
+
+final Map<String, SectionType> sectionTypeMapper = {
+  "SectionType.publicaciones": SectionType.publicaciones,
+  "SectionType.recetas": SectionType.recetas,
+  "SectionType.wiki": SectionType.wiki,
+  "SectionType.pois": SectionType.pois,
+};
