@@ -2,27 +2,40 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/_crear_boton.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_error_message.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/_mucho_peso_archivos.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_multimedia_thumbs.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_new_content_input.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_new_content_multimedia.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_scaffold.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
 
-class PublicacionNew extends StatefulWidget {
+class PublicacionForm extends StatefulWidget {
+  final ContentWrapper content;
+
+  PublicacionForm({
+    this.content,
+  });
+
   @override
-  _PublicacionNewState createState() => _PublicacionNewState();
+  _PublicacionFormState createState() => _PublicacionFormState();
 }
 
-class _PublicacionNewState extends State<PublicacionNew> {
+class _PublicacionFormState extends State<PublicacionForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _cuerpoController = TextEditingController();
   List<File> _images = [];
+  List<String> _currentImages = [];
+  Map<String, String> _currentVideoThumbs = {};
+  List<String> _imagesToRemove = [];
+  int _id;
+  bool _isEdit = false;
   bool _sent = false;
   bool _hideButtonVeryBadError = false;
   String _errorMsg;
@@ -37,11 +50,19 @@ class _PublicacionNewState extends State<PublicacionNew> {
     if (mounted) setState(() {});
   }
 
+  _removeCurrentImage(String asset) {
+    if (_imagesToRemove.contains(asset))
+      _imagesToRemove.remove(asset);
+    else
+      _imagesToRemove.add(asset);
+    if (mounted) setState(() {});
+  }
+
   _crearPublicacion() async {
     _errorMsg = null;
     if (_formKey.currentState.validate() &&
-        _images != null &&
-        _images.isNotEmpty) {
+        ((_images != null && _images.isNotEmpty) ||
+            (_currentImages != null && _currentImages.isNotEmpty))) {
       _sent = true;
       if (mounted) setState(() {});
 
@@ -59,19 +80,31 @@ class _PublicacionNewState extends State<PublicacionNew> {
               },
             ),
           ),
+          "remove_imagenes": _imagesToRemove,
           // TODO: Remove next line
           "ciudad_id": 1,
         };
 
-        ResponseObject res = await Fetcher.post(
-          url: "/publicaciones.json",
-          throwError: true,
-          body: {
-            ...body,
-          },
-        );
+        ResponseObject res;
 
-        if (res != null && res.status == 201) {
+        if (_isEdit && _id != null)
+          res = await Fetcher.put(
+            url: "/publicaciones/$_id.json",
+            throwError: true,
+            body: {
+              ...body,
+            },
+          );
+        else
+          res = await Fetcher.post(
+            url: "/publicaciones.json",
+            throwError: true,
+            body: {
+              ...body,
+            },
+          );
+
+        if (res != null && (res.status == 201 || res.status == 200)) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (_) => ShowPage(
@@ -107,12 +140,30 @@ class _PublicacionNewState extends State<PublicacionNew> {
     if (mounted) setState(() {});
   }
 
+  _loadForEdit() {
+    if (widget.content != null && widget.content.id != null) {
+      _isEdit = true;
+      _id = widget.content.id;
+      _tituloController.text = widget.content.titulo;
+      _cuerpoController.text = widget.content.cuerpo;
+      _currentImages = widget.content.imagenes;
+      _currentVideoThumbs = widget.content.videoThumbs;
+      if (mounted) setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadForEdit();
+  }
+
   @override
   Widget build(BuildContext context) {
     return NewContentScaffold(
       scaffoldKey: _scaffoldKey,
       formKey: _formKey,
-      title: "NUEVA PUBLICACIÓN",
+      title: _isEdit ? "EDITAR PUBLICACIÓN" : "NUEVA PUBLICACIÓN",
       children: [
         NewContentInput(
           label: "Título",
@@ -137,15 +188,23 @@ class _PublicacionNewState extends State<PublicacionNew> {
         ),
         MultimediaThumbs(
           images: _images,
+          currentImages: _currentImages,
+          currentVideoThumbs: _currentVideoThumbs,
           removeImage: _removeImage,
+          removeCurrentImage: _removeCurrentImage,
+          imagesToRemove: _imagesToRemove,
+        ),
+        MuchoPesoArchivos(
+          images: _images,
         ),
         NewContentErrorMessage(
           message: _errorMsg,
         ),
         if (!_hideButtonVeryBadError)
-          NewContentCrearBoton(
+          NewContentSendBoton(
             onPressed: _crearPublicacion,
             sent: _sent,
+            isEdit: _isEdit,
           ),
       ],
     );

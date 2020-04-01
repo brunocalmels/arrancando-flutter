@@ -9,6 +9,7 @@ import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/dialog/share.dart';
 import 'package:arrancando/views/content_wrapper/edit/index.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/publicacion.dart';
 import 'package:arrancando/views/content_wrapper/show/_comentarios_section.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_slider.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
@@ -171,12 +172,24 @@ class _ShowPageState extends State<ShowPage> {
           if (_content != null && _content.esOwner(context))
             IconButton(
               onPressed: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => EditPage(
+                Widget page;
+
+                switch (_content.type) {
+                  case SectionType.publicaciones:
+                    page = PublicacionForm(
+                      content: _content,
+                    );
+                    break;
+                  default:
+                    page = EditPage(
                       contentId: _content.id,
                       type: _content.type,
-                    ),
+                    );
+                }
+
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => page,
                     settings: RouteSettings(
                       name:
                           '${_content.type.toString().split('.').last[0].toLowerCase()}${_content.type.toString().split('.').last.substring(1)}#${_content.id}#Edit',

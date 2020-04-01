@@ -57,7 +57,6 @@ class MainAppBar extends StatelessWidget {
             setSearchVisibility: setSearchVisibility,
           ),
           actions: <Widget>[
-<<<<<<< HEAD
             if (!contentState.showSearchPage &&
                 mainState.activePageHome != SectionType.home)
               IconButton(
@@ -171,33 +170,6 @@ class MainAppBar extends StatelessWidget {
                   );
                 },
               ),
-=======
-            // if (!contentState.showSearchPage &&
-            //     mainState.activePageHome != SectionType.home)
-            //   IconButton(
-            //     onPressed: () {
-            //       showModalBottomSheet(
-            //         context: MyGlobals.mainScaffoldKey.currentContext,
-            //         builder: (_) => FilterBottomSheet(
-            //           fetchContent: fetchContent,
-            //         ),
-            //         shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.only(
-            //             topLeft: Radius.circular(15),
-            //             topRight: Radius.circular(15),
-            //           ),
-            //         ),
-            //         backgroundColor: Colors.white,
-            //       );
-            //     },
-            //     icon: Icon(
-            //       Icons.filter_list,
-            //       color: _anyFilterActive(mainState, contentState)
-            //           ? Theme.of(context).accentColor
-            //           : null,
-            //     ),
-            //   ),
->>>>>>> feat: Ajuste index + Modularización + New Publicación
             if (contentState.showSearchPage)
               IconButton(
                 onPressed: () {

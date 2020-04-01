@@ -51,8 +51,19 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
     return WillPopScope(
       onWillPop: () async => widget.allowDismiss ? true : _selected != null,
       child: AlertDialog(
+        titlePadding: const EdgeInsets.all(0),
         contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-        title: Text(widget.titleText),
+        title: Container(
+          padding: const EdgeInsets.all(15),
+          color: Theme.of(context).backgroundColor,
+          child: Text(
+            widget.titleText.toUpperCase(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 9,
+            ),
+          ),
+        ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -109,7 +120,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                                       onTap: () {
                                         _onItemTap(item);
                                       },
-                                      leading: Icon(Icons.location_on),
+                                      // leading: Icon(Icons.location_on),
                                       title: Text(item.nombre),
                                     ),
                                   )

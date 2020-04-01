@@ -6,7 +6,8 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/_publicacion.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/publicacion.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/receta.dart';
 import 'package:arrancando/views/general/curved_text.dart';
 import 'package:arrancando/views/general/version_checker.dart';
 import 'package:arrancando/views/home/_drawer.dart';
@@ -281,10 +282,13 @@ class _MainScaffoldState extends State<MainScaffold> {
 
                     switch (Provider.of<MainState>(context).activePageHome) {
                       case SectionType.home:
-                        page = PublicacionNew();
+                        page = PublicacionForm();
+                        break;
+                      case SectionType.recetas:
+                        page = RecetaForm();
                         break;
                       default:
-                        page = PublicacionNew();
+                        page = PublicacionForm();
                     }
                     Navigator.of(context).push(
                       MaterialPageRoute(

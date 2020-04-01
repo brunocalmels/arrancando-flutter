@@ -46,7 +46,9 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      titlePadding: const EdgeInsets.all(0),
       title: Container(
+        padding: const EdgeInsets.all(15),
         color: Theme.of(context).backgroundColor,
         child: Text(
           "ELIGE EL TIPO DE CONTENIDO QUE DESEAS VER",

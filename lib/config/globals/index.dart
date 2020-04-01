@@ -13,8 +13,8 @@ abstract class MyGlobals {
   // static const String SERVER_URL = "http://192.168.0.11:5000";
   // static const String SERVER_URL = "http://192.168.43.138:5000";
   // static const String SERVER_URL = "http://192.168.1.3:5000";
-  static const String SERVER_URL = "https://arrancando.herokuapp.com";
-  // static const String SERVER_URL = "https://arrancando-staging.herokuapp.com";
+  // static const String SERVER_URL = "https://arrancando.herokuapp.com";
+  static const String SERVER_URL = "https://arrancando-staging.herokuapp.com";
 
   static const GOOGLE_CLIENT_ID =
       "585563708448-5n5f3dg0ptbbm4p3eoh1l0c4u7fhrbrl.apps.googleusercontent.com";
@@ -62,4 +62,81 @@ abstract class MyGlobals {
       FirebaseAnalyticsObserver(
     analytics: FirebaseAnalytics(),
   );
+  static const List CATEGORIAS_RECETA = [
+    {
+      "id": 1,
+      "titulo": "Parrilla",
+      "imagen": "assets/images/content/categories/parrilla.png",
+    },
+    {
+      "id": 2,
+      "titulo": "Asador",
+      "imagen": "assets/images/content/categories/asador.png",
+    },
+    {
+      "id": 3,
+      "titulo": "Olla",
+      "imagen": "assets/images/content/categories/olla.png",
+    },
+    {
+      "id": 4,
+      "titulo": "Plancha",
+      "imagen": "assets/images/content/categories/plancha.png",
+    },
+    {
+      "id": 5,
+      "titulo": "Disco",
+      "imagen": "assets/images/content/categories/disco.png",
+    },
+    {
+      "id": 6,
+      "titulo": "Horno",
+      "imagen": "assets/images/content/categories/horno.png",
+    },
+    {
+      "id": 7,
+      "titulo": "Sarten",
+      "imagen": "assets/images/content/categories/sarten.png",
+    },
+    {
+      "id": 8,
+      "titulo": "Al Bowl",
+      "imagen": "assets/images/content/categories/bowl.png",
+    },
+  ];
+
+  static const List SUBCATEGORIAS_RECETA = [
+    {
+      "id": 1,
+      "titulo": "Carne roja",
+    },
+    {
+      "id": 2,
+      "titulo": "Carne blanca",
+    },
+    {
+      "id": 3,
+      "titulo": "Vegatales",
+    },
+    {
+      "id": 4,
+      "titulo": "Frutos",
+    },
+    {
+      "id": 5,
+      "titulo": "Frutos secos",
+    },
+    {
+      "id": 6,
+      "titulo": "Especias",
+    },
+  ];
+
+  static const List<String> INGREDIENTES = [
+    "Papa",
+    "Batata",
+    "Manzana",
+    "Oregano",
+    "Pepino",
+  ];
 }

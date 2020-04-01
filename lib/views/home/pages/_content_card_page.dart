@@ -35,6 +35,30 @@ class ContentCardPage extends StatefulWidget {
 class _ContentCardPageState extends State<ContentCardPage> {
   final ScrollController _scrollController = ScrollController();
 
+  Widget get _plato => GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            context: MyGlobals.mainScaffoldKey.currentContext,
+            builder: (_) => FilterBottomSheet(fetchContent: () {
+              widget.resetLimit();
+              widget.fetchContent(
+                Provider.of<MainState>(context).activePageHome,
+              );
+            }),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              ),
+            ),
+          );
+        },
+        child: Image.asset(
+          "assets/images/content/index/plato-filtrar.png",
+          width: MediaQuery.of(context).size.width * 0.6,
+        ),
+      );
+
   @override
   void initState() {
     super.initState();
@@ -82,34 +106,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
                             return Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      context: MyGlobals
-                                          .mainScaffoldKey.currentContext,
-                                      builder: (_) =>
-                                          FilterBottomSheet(fetchContent: () {
-                                        widget.resetLimit();
-                                        widget.fetchContent(
-                                          Provider.of<MainState>(context)
-                                              .activePageHome,
-                                        );
-                                      }),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(15),
-                                          topRight: Radius.circular(15),
-                                        ),
-                                      ),
-                                      backgroundColor: Colors.white,
-                                    );
-                                  },
-                                  child: Image.asset(
-                                    "assets/images/content/index/plato-filtrar.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.6,
-                                  ),
-                                ),
+                                _plato,
                                 SizedBox(
                                   height: 15,
                                 ),
@@ -150,6 +147,14 @@ class _ContentCardPageState extends State<ContentCardPage> {
                       )
                     : ListView(
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              _plato,
+                            ],
+                          ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             child: Text(
