@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-class NewContentCrearBoton extends StatelessWidget {
+class NewContentSendBoton extends StatelessWidget {
   final Function onPressed;
   final bool sent;
+  final bool isEdit;
 
-  NewContentCrearBoton({
+  NewContentSendBoton({
     @required this.onPressed,
     @required this.sent,
+    this.isEdit = false,
   });
 
   @override
@@ -29,7 +31,7 @@ class NewContentCrearBoton extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    "CREAR",
+                    isEdit ? "GUARDAR" : "CREAR",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

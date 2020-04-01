@@ -87,6 +87,14 @@ flutter:
     - assets/images/content/new/fideos.png
     - assets/images/content/new/tomates.png
     - assets/images/content/new/wok.png
+    - assets/images/content/categories/asador.png
+    - assets/images/content/categories/bowl.png
+    - assets/images/content/categories/disco.png
+    - assets/images/content/categories/horno.png
+    - assets/images/content/categories/olla.png
+    - assets/images/content/categories/parrilla.png
+    - assets/images/content/categories/plancha.png
+    - assets/images/content/categories/sarten.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

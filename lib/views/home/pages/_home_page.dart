@@ -37,6 +37,25 @@ class _HomePageState extends State<HomePage> {
     if (mounted) setState(() {});
   }
 
+  Widget get _plato => GestureDetector(
+        onTap: () async {
+          List<SectionType> _contenidos = await showDialog(
+            context: context,
+            builder: (_) => DialogContenidosHome(),
+          );
+          if (_contenidos != null) {
+            CategoryWrapper.saveContentHome(
+              context,
+              _contenidos,
+            );
+          }
+        },
+        child: Image.asset(
+          "assets/images/content/index/plato-personalizar.png",
+          width: MediaQuery.of(context).size.width * 0.6,
+        ),
+      );
+
   @override
   void initState() {
     super.initState();
@@ -76,28 +95,7 @@ class _HomePageState extends State<HomePage> {
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () async {
-                                        List<SectionType> _contenidos =
-                                            await showDialog(
-                                          context: context,
-                                          builder: (_) =>
-                                              DialogContenidosHome(),
-                                        );
-                                        if (_contenidos != null) {
-                                          CategoryWrapper.saveContentHome(
-                                            context,
-                                            _contenidos,
-                                          );
-                                        }
-                                      },
-                                      child: Image.asset(
-                                        "assets/images/content/index/plato-personalizar.png",
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.6,
-                                      ),
-                                    ),
+                                    _plato,
                                     SizedBox(
                                       height: 15,
                                     ),
@@ -121,6 +119,14 @@ class _HomePageState extends State<HomePage> {
                         )
                       : ListView(
                           children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                _plato,
+                              ],
+                            ),
                             Text(
                               "No hay elementos para mostrar",
                               textAlign: TextAlign.center,

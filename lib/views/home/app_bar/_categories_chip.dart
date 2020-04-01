@@ -81,30 +81,35 @@ class _CategoriesChipState extends State<CategoriesChip> {
                             maxWidth: widget.small ? 20 : 150,
                           ),
                           child: Text(
-                            singleton.categories[widget.pubCateg ? SectionType.publicaciones_categoria : widget.poiCity ? SectionType.pois_ciudad : mainState.activePageHome]
-                                .firstWhere((c) => mainState.selectedCategoryHome[widget.pubCateg
-                                            ? SectionType
-                                                .publicaciones_categoria
-                                            : widget.poiCity
-                                                ? SectionType.pois_ciudad
-                                                : mainState.activePageHome] !=
-                                        null
-                                    ? c.id ==
-                                        mainState.selectedCategoryHome[
-                                            widget.pubCateg
-                                                ? SectionType
-                                                    .publicaciones_categoria
-                                                : widget.poiCity
-                                                    ? SectionType.pois_ciudad
-                                                    : mainState.activePageHome]
-                                    : c.id ==
-                                        userState.preferredCategories[widget.pubCateg
-                                            ? SectionType
-                                                .publicaciones_categoria
-                                            : widget.poiCity
-                                                ? SectionType.pois_ciudad
-                                                : mainState.activePageHome])
-                                .nombre,
+                            singleton.categories[widget.pubCateg
+                                        ? SectionType.publicaciones_categoria
+                                        : widget.poiCity
+                                            ? SectionType.pois_ciudad
+                                            : mainState.activePageHome]
+                                    .firstWhere(
+                                        (c) => mainState.selectedCategoryHome[widget.pubCateg ? SectionType.publicaciones_categoria : widget.poiCity ? SectionType.pois_ciudad : mainState.activePageHome] != null
+                                            ? c.id ==
+                                                mainState.selectedCategoryHome[
+                                                    widget.pubCateg
+                                                        ? SectionType
+                                                            .publicaciones_categoria
+                                                        : widget.poiCity
+                                                            ? SectionType
+                                                                .pois_ciudad
+                                                            : mainState
+                                                                .activePageHome]
+                                            : c.id ==
+                                                userState
+                                                    .preferredCategories[widget
+                                                        .pubCateg
+                                                    ? SectionType
+                                                        .publicaciones_categoria
+                                                    : widget.poiCity
+                                                        ? SectionType.pois_ciudad
+                                                        : mainState.activePageHome],
+                                        orElse: () => null)
+                                    ?.nombre ??
+                                "",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.black,
