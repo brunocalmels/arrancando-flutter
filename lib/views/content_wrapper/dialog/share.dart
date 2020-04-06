@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -23,7 +22,6 @@ class ShareContentWrapper extends StatefulWidget {
 
 class _ShareContentWrapperState extends State<ShareContentWrapper> {
   bool _esFull = false;
-  bool _esWpp = false;
   int _imagenNro = 0;
   Map<String, File> _videoThumbs = {};
 
@@ -68,6 +66,34 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
     }
   }
 
+  _shareGeneric({bool esFbk = false, bool esWpp = false}) async {
+    Uint8List imageBytes;
+    if (widget.content.imagenes != null && widget.content.imagenes.isNotEmpty) {
+      String i = widget.content.imagenes[_imagenNro];
+
+      String url =
+          "${MyGlobals.SERVER_URL}${widget.content.imagenes[_imagenNro]}";
+
+      if (['mp4', 'mpg', 'mpeg'].contains(i.split('.').last.toLowerCase()) &&
+          widget.content.videoThumbs[i] != null) {
+        // _videoThumbs[i].readAsBytesSync();
+        url = widget.content.videoThumbs[i];
+      }
+
+      url = url.contains('http') ? url : "${MyGlobals.SERVER_URL}$url";
+
+      http.Response response = await http.get(url);
+      imageBytes = response.bodyBytes;
+    }
+
+    widget.content.shareSelf(
+      esFull: _esFull,
+      imageBytes: imageBytes,
+      esWpp: esWpp,
+      esFbk: esFbk,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -106,28 +132,28 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                   Text("Completo"),
                 ],
               ),
-              if (widget.content.type == SectionType.recetas && _esFull)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Checkbox(
-                      value: _esWpp,
-                      onChanged: (val) {
-                        if (mounted)
-                          setState(() {
-                            _esWpp = val;
-                          });
-                      },
-                    ),
-                    Text(
-                      "Voy a compartir en WhatsApp",
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
+              // if (widget.content.type == SectionType.recetas && _esFull)
+              //   Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: <Widget>[
+              //       Checkbox(
+              //         value: _esWpp,
+              //         onChanged: (val) {
+              //           if (mounted)
+              //             setState(() {
+              //               _esWpp = val;
+              //             });
+              //         },
+              //       ),
+              //       Text(
+              //         "Voy a compartir en WhatsApp",
+              //         style: TextStyle(
+              //           fontSize: 12,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
               SizedBox(
                 height: 15,
               ),
@@ -264,41 +290,29 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
               SizedBox(
                 height: 15,
               ),
-              RaisedButton(
-                onPressed: () async {
-                  Uint8List imageBytes;
-                  if (widget.content.imagenes != null &&
-                      widget.content.imagenes.isNotEmpty) {
-                    String i = widget.content.imagenes[_imagenNro];
-
-                    String url =
-                        "${MyGlobals.SERVER_URL}${widget.content.imagenes[_imagenNro]}";
-
-                    if (['mp4', 'mpg', 'mpeg']
-                            .contains(i.split('.').last.toLowerCase()) &&
-                        widget.content.videoThumbs[i] != null) {
-                      // _videoThumbs[i].readAsBytesSync();
-                      url = widget.content.videoThumbs[i];
-                    }
-                    http.Response response = await http.get(url);
-                    imageBytes = response.bodyBytes;
-                  }
-
-                  widget.content.shareSelf(
-                    esFull: _esFull,
-                    imageBytes: imageBytes,
-                    esWpp: _esWpp,
-                  );
-                },
-                color: Colors.green,
-                child: Text(
-                  "Compartir",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  IconButton(
+                    icon: Image.asset('assets/images/logo-whatsapp.png'),
+                    onPressed: () {
+                      _shareGeneric(esWpp: true);
+                    },
                   ),
-                ),
-              )
+                  IconButton(
+                    icon: Image.asset('assets/images/logo-facebook.png'),
+                    onPressed: () {
+                      _shareGeneric(esFbk: true);
+                    },
+                  ),
+                  IconButton(
+                    color: Colors.black45,
+                    icon: Icon(Icons.add_box),
+                    onPressed: _shareGeneric,
+                  ),
+                ],
+              ),
             ],
           ),
         ),

@@ -134,6 +134,7 @@ class ContentWrapper {
     bool esFull = false,
     Uint8List imageBytes,
     bool esWpp = false,
+    bool esFbk = false,
   }) async {
     String piecera =
         "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}";
@@ -155,26 +156,34 @@ class ContentWrapper {
         ? "$cabecera\n\n$piecera\n\n${this.titulo}$cuerpo$introduccion$ingredientes$instrucciones"
         : "$cabecera\n\n$piecera\n\n${this.titulo}";
 
-    if (this.imagenes.length > 0 && imageBytes != null) {
-      Share.file(
-        'Compartir imagen',
-        'imagen.jpg',
-        imageBytes,
-        'image/jpg',
-        text: texto,
+    if (esFbk) {
+      Share.text(
+        "Compartir contenido",
+        "https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}",
+        "text/plain",
       );
     } else {
-      var img = (await rootBundle.load('assets/images/icon.png'))
-          .buffer
-          .asUint8List();
+      if (this.imagenes.length > 0 && imageBytes != null) {
+        Share.file(
+          'Compartir imagen',
+          'imagen.jpg',
+          imageBytes,
+          'image/jpg',
+          text: texto,
+        );
+      } else {
+        var img = (await rootBundle.load('assets/images/icon.png'))
+            .buffer
+            .asUint8List();
 
-      Share.file(
-        'Compartir imagen',
-        'imagen.jpg',
-        img,
-        'image/jpg',
-        text: texto,
-      );
+        Share.file(
+          'Compartir imagen',
+          'imagen.jpg',
+          img,
+          'image/jpg',
+          text: texto,
+        );
+      }
     }
   }
 

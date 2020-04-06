@@ -52,6 +52,16 @@
                     android:scheme="https"
                     android:host="arrancando.com.ar" />
             </intent-filter>
+
+            <!-- Deep Links -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                android:scheme="arrancando"
+                android:host="arrancando.com.ar" />
+            </intent-filter>
         </activity>
     </application>
 </manifest>
