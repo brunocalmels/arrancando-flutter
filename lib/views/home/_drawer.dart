@@ -5,6 +5,7 @@ import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/comunidad/index.dart';
 import 'package:arrancando/views/contacto/index.dart';
 import 'package:arrancando/views/content_wrapper/saved/index.dart';
+import 'package:arrancando/views/privacy-policy/index.dart';
 import 'package:arrancando/views/reglas/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:arrancando/views/user/profile/index.dart';
@@ -153,6 +154,20 @@ class HomeDrawer extends StatelessWidget {
                 'Arrancando',
                 'Bajate Arrancando y compartí tu pasión por el asado.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es',
                 'text/plain',
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.security,
+            ),
+            title: Text('Política de privacidad'),
+            onTap: () async {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => PrivacyPolicyPage(),
+                  settings: RouteSettings(name: 'Privacy policy'),
+                ),
               );
             },
           ),
