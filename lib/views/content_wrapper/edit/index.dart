@@ -493,6 +493,7 @@ class _EditPageState extends State<EditPage> {
                             latitud: _content.latitud,
                             longitud: _content.longitud,
                             direccion: _content.direccion,
+                            setCiudadPoi: _setCategory,
                           ),
                         SizedBox(
                           height: 15,

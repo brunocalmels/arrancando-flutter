@@ -109,7 +109,8 @@ class _MainScaffoldState extends State<MainScaffold> {
     if (mounted) setState(() {});
 
     if (type == SectionType.pois &&
-        contentPageState.sortContentBy != ContentSortType.proximidad) {
+        contentPageState.sortContentBy != ContentSortType.proximidad &&
+        _itemsMap[mainState.activePageHome] != null) {
       await Future.wait(
           _itemsMap[mainState.activePageHome].map((item) => item.distancia));
       if (mounted) setState(() {});
