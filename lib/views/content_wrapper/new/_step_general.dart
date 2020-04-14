@@ -1,7 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
-import 'package:arrancando/views/general/type_ahead_publicaciones_recetas.dart';
+import 'package:arrancando/views/general/type_ahead_publicaciones_recetas_pois.dart';
 import 'package:flutter/material.dart';
 
 class StepGeneral extends StatelessWidget {
@@ -28,7 +28,7 @@ class StepGeneral extends StatelessWidget {
     TextEditingController controller,
   ) =>
       Tooltip(
-        message: "Añadir link a publicación/receta",
+        message: "Añadir link a publicación/receta/p. interés",
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white70,
@@ -39,12 +39,12 @@ class StepGeneral extends StatelessWidget {
             onPressed: () async {
               ContentWrapper item = await showDialog(
                 context: context,
-                builder: (_) => TypeAheadPublicacionesRecetas(),
+                builder: (_) => TypeAheadPublicacionesRecetasPois(),
               );
 
               if (item != null) {
                 controller.text +=
-                    " https://arrancando.com.ar/${item.type == SectionType.publicaciones ? 'publicaciones' : 'recetas'}/${item.id}";
+                    " https://arrancando.com.ar/${item.type == SectionType.publicaciones ? 'publicaciones' : item.type == SectionType.recetas ? 'recetas' : 'pois'}/${item.id}";
               }
             },
           ),

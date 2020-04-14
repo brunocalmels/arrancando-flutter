@@ -6,14 +6,14 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:flutter/material.dart';
 
-class TypeAheadPublicacionesRecetas extends StatefulWidget {
+class TypeAheadPublicacionesRecetasPois extends StatefulWidget {
   @override
-  _TypeAheadPublicacionesRecetasState createState() =>
-      _TypeAheadPublicacionesRecetasState();
+  _TypeAheadPublicacionesRecetasPoisState createState() =>
+      _TypeAheadPublicacionesRecetasPoisState();
 }
 
-class _TypeAheadPublicacionesRecetasState
-    extends State<TypeAheadPublicacionesRecetas> {
+class _TypeAheadPublicacionesRecetasPoisState
+    extends State<TypeAheadPublicacionesRecetasPois> {
   List<ContentWrapper> _items;
   final TextEditingController _searchController = TextEditingController();
   Timer _debounce;
@@ -28,6 +28,9 @@ class _TypeAheadPublicacionesRecetasState
       ResponseObject resp2 = await Fetcher.get(
         url:
             "/recetas.json?filterrific[search_query]=${_searchController.text}",
+      );
+      ResponseObject resp3 = await Fetcher.get(
+        url: "/pois.json?filterrific[search_query]=${_searchController.text}",
       );
 
       _items = [];
@@ -56,6 +59,18 @@ class _TypeAheadPublicacionesRecetasState
           ).toList()
         ];
       }
+      if (resp3 != null && resp3.body != null) {
+        _items = [
+          ..._items,
+          ...(json.decode(resp3.body) as List).map(
+            (c) {
+              ContentWrapper wrapper = ContentWrapper.fromJson(c);
+              wrapper.type = SectionType.pois;
+              return wrapper;
+            },
+          ).toList()
+        ];
+      }
     }
 
     _searching = false;
@@ -75,7 +90,13 @@ class _TypeAheadPublicacionesRecetasState
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Buscar publicación/receta para añadir link"),
+      title: Text(
+        "Buscar publicación/receta/p. interés para añadir link",
+        style: TextStyle(
+          fontSize: 13,
+        ),
+        textAlign: TextAlign.center,
+      ),
       content: Container(
         height: 150,
         child: SingleChildScrollView(
