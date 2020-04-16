@@ -10,8 +10,10 @@ import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/dialog/share.dart';
 import 'package:arrancando/views/content_wrapper/edit/index.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/publicacion.dart';
+import 'package:arrancando/views/content_wrapper/show/_cabecera_show.dart';
 import 'package:arrancando/views/content_wrapper/show/_comentarios_section.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_slider.dart';
+import 'package:arrancando/views/content_wrapper/show/_show_app_bar.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -33,11 +35,12 @@ class ShowPage extends StatefulWidget {
 }
 
 class _ShowPageState extends State<ShowPage> {
+  final GlobalSingleton gs = GlobalSingleton();
   ContentWrapper _content;
   bool _fetching = true;
   String _url;
   String _categoryName = "";
-  final GlobalSingleton gs = GlobalSingleton();
+  String _imageSrc;
 
   Future<void> _fetchContent() async {
     switch (widget.type) {
@@ -77,6 +80,7 @@ class _ShowPageState extends State<ShowPage> {
       _categoryName = gs.categories[_content.type]
           .firstWhere((c) => c.id == _content.categID)
           .nombre;
+      _getFirstImage();
       if (mounted) setState(() {});
     }
   }
@@ -124,6 +128,23 @@ class _ShowPageState extends State<ShowPage> {
     return chunks;
   }
 
+  void _getFirstImage() {
+    if (_content.imagenes != null && _content.imagenes.isNotEmpty) {
+      if (['mp4', 'mpg', 'mpeg'].contains(
+        _content.imagenes.first.split('.').last.toLowerCase(),
+      )) {
+        _imageSrc = _content.videoThumbs[_content.imagenes.first]
+                .contains('http')
+            ? _content.videoThumbs[_content.imagenes.first]
+            : "${MyGlobals.SERVER_URL}${_content.videoThumbs[_content.imagenes.first]}";
+      } else {
+        _imageSrc = _content.imagenes.first.contains('http')
+            ? _content.imagenes.first
+            : "${MyGlobals.SERVER_URL}${_content.imagenes.first}";
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -133,97 +154,12 @@ class _ShowPageState extends State<ShowPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(
-          color: Colors.black,
+      appBar: PreferredSize(
+        child: ShowAppBar(
+          content: _content,
+          fetchContent: _fetchContent,
         ),
-        actions: <Widget>[
-          if (_content != null &&
-              widget.type == SectionType.pois &&
-              _content.latitud != null &&
-              _content.longitud != null)
-            SizedBox(
-              width: 50,
-              child: GestureDetector(
-                onTap: () async {
-                  String url =
-                      "http://maps.google.com/maps?z=15&t=m&q=loc:${_content.latitud}+${_content.longitud}";
-                  if (await canLaunch(url)) {
-                    await launch(
-                      url,
-                      forceSafariVC: false,
-                      forceWebView: false,
-                    );
-                  } else {
-                    throw 'Could not launch $url';
-                  }
-                },
-                child: Center(
-                  child: Image.asset(
-                    "assets/images/logo-google.png",
-                    width: 25,
-                    height: 25,
-                  ),
-                ),
-              ),
-            ),
-          if (_content != null && _content.esOwner(context))
-            IconButton(
-              onPressed: () async {
-                Widget page;
-
-                switch (_content.type) {
-                  case SectionType.publicaciones:
-                    page = PublicacionForm(
-                      content: _content,
-                    );
-                    break;
-                  default:
-                    page = EditPage(
-                      contentId: _content.id,
-                      type: _content.type,
-                    );
-                }
-
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => page,
-                    settings: RouteSettings(
-                      name:
-                          '${_content.type.toString().split('.').last[0].toLowerCase()}${_content.type.toString().split('.').last.substring(1)}#${_content.id}#Edit',
-                    ),
-                  ),
-                );
-                await Future.delayed(Duration(seconds: 1));
-                _fetchContent();
-              },
-              icon: Icon(Icons.edit),
-            ),
-          if (_content != null)
-            IconButton(
-              onPressed: () => SavedContent.toggleSave(_content, context),
-              icon: Icon(
-                SavedContent.isSaved(_content, context)
-                    ? Icons.bookmark
-                    : Icons.bookmark_border,
-              ),
-            ),
-          IconButton(
-            onPressed: _content == null
-                ? null
-                : () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => ShareContentWrapper(
-                        content: _content,
-                      ),
-                    );
-                  },
-            icon: Icon(Icons.share),
-          ),
-        ],
+        preferredSize: Size.fromHeight(kToolbarHeight),
       ),
       body: RefreshIndicator(
         onRefresh: _fetchContent,
@@ -237,6 +173,10 @@ class _ShowPageState extends State<ShowPage> {
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        CabeceraShow(
+                          content: _content,
+                          imageSrc: _imageSrc,
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(15),
                           child: Column(

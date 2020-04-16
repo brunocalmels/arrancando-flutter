@@ -147,6 +147,9 @@ flutter:
           weight: 200
         - asset: assets/fonts/Monserrat/Montserrat-Thin.ttf
           weight: 100
+    - family: DefiantIcons
+      fonts:
+        - asset: assets/fonts/ArrancandoIcons.ttf
           
   #   - family: Schyler
   #     fonts:
