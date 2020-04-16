@@ -138,8 +138,9 @@ class ContentWrapper {
   }) async {
     String piecera =
         "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}";
-    String cabecera =
-        "Si todavía no te descargaste Arrancando podés hacerlo desde\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es";
+    // String cabecera =
+    //     "Si todavía no te descargaste Arrancando podés hacerlo desde\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es";
+    String cabecera = "";
 
     String cuerpo = this.cuerpo != null ? "\n\n${this.cuerpo}" : "";
     String introduccion = this.introduccion != null

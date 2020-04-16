@@ -146,6 +146,8 @@ class SliceContent extends StatelessWidget {
                 type: MaterialType.card,
                 child: InkWell(
                   onTap: () {
+                    print(
+                        '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}');
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => ShowPage(

@@ -5,6 +5,8 @@ import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
+import 'package:arrancando/config/state/content_page.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/index.dart';
@@ -88,60 +90,148 @@ abstract class DynamicLinks {
           _invalidUser = true;
         }
 
-        if (path[0] != null && path[1] != null) {
-          switch (path[0]) {
-            case 'publicaciones':
-              if (context != null && !_invalidUser) {
-                int id = int.parse(path[1]);
+        if (path.length >= 1) {
+          if (path.length >= 2) {
+            int id = int.parse(path[1]);
 
-                MyGlobals.mainNavigatorKey.currentState.push(
-                  MaterialPageRoute(
-                    builder: (_) => ShowPage(
-                      contentId: id,
-                      type: SectionType.publicaciones,
+            switch (path[0]) {
+              case 'publicaciones':
+                if (context != null && !_invalidUser) {
+                  MyGlobals.mainNavigatorKey.currentState.push(
+                    MaterialPageRoute(
+                      builder: (_) => ShowPage(
+                        contentId: id,
+                        type: SectionType.publicaciones,
+                      ),
+                      settings: RouteSettings(name: 'Publicaciones#$id'),
                     ),
-                    settings: RouteSettings(name: 'Publicaciones#$id'),
-                  ),
-                );
-              }
-              break;
-            case 'recetas':
-              if (context != null && !_invalidUser) {
-                int id = int.parse(path[1]);
+                  );
+                }
+                break;
+              case 'recetas':
+                if (context != null && !_invalidUser) {
+                  MyGlobals.mainNavigatorKey.currentState.push(
+                    MaterialPageRoute(
+                      builder: (_) => ShowPage(
+                        contentId: id,
+                        type: SectionType.recetas,
+                      ),
+                      settings: RouteSettings(name: 'Recetas#$id'),
+                    ),
+                  );
+                }
+                break;
+              case 'pois':
+                if (context != null && !_invalidUser) {
+                  MyGlobals.mainNavigatorKey.currentState.push(
+                    MaterialPageRoute(
+                      builder: (_) => ShowPage(
+                        contentId: id,
+                        type: SectionType.pois,
+                      ),
+                      settings: RouteSettings(name: 'Pois#$id'),
+                    ),
+                  );
+                }
+                break;
+              case 'google-signin':
+                buildUserOAuth(context, path);
+                break;
+              case 'facebook-signin':
+                buildUserOAuth(context, path);
+                break;
+              default:
+            }
+          } else if (context != null) {
+            // TODO: SHOULDN'T USE DELAY
+            await Future.delayed(Duration(seconds: 1));
+            MainState mainState = Provider.of<MainState>(
+              context,
+              listen: false,
+            );
+            ContentPageState contentPageState = Provider.of<ContentPageState>(
+              context,
+              listen: false,
+            );
+            var q = uri.queryParameters;
 
-                MyGlobals.mainNavigatorKey.currentState.push(
-                  MaterialPageRoute(
-                    builder: (_) => ShowPage(
-                      contentId: id,
-                      type: SectionType.recetas,
-                    ),
-                    settings: RouteSettings(name: 'Recetas#$id'),
-                  ),
-                );
-              }
-              break;
-            case 'pois':
-              if (context != null && !_invalidUser) {
-                int id = int.parse(path[1]);
+            switch (q['sorted_by']) {
+              case 'fecha':
+                contentPageState.setContentSortType(ContentSortType.fecha);
+                break;
+              case 'proximidad':
+                contentPageState.setContentSortType(ContentSortType.proximidad);
+                break;
+              case 'puntuacion':
+                contentPageState.setContentSortType(ContentSortType.puntuacion);
+                break;
+              default:
+            }
 
-                MyGlobals.mainNavigatorKey.currentState.push(
-                  MaterialPageRoute(
-                    builder: (_) => ShowPage(
-                      contentId: id,
-                      type: SectionType.pois,
+            switch (path[0]) {
+              case 'publicaciones':
+                if (context != null && !_invalidUser) {
+                  mainState.setSelectedCategoryHome(
+                    SectionType.publicaciones,
+                    int.tryParse(q['ciudad_id']),
+                  );
+                  mainState.setSelectedCategoryHome(
+                    SectionType.publicaciones_categoria,
+                    int.tryParse(q['categoria_publicacion_id']),
+                  );
+                  mainState.setActivePageHome(SectionType.publicaciones);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MainScaffold(),
                     ),
-                    settings: RouteSettings(name: 'Pois#$id'),
-                  ),
-                );
-              }
-              break;
-            case 'google-signin':
-              buildUserOAuth(context, path);
-              break;
-            case 'facebook-signin':
-              buildUserOAuth(context, path);
-              break;
-            default:
+                  );
+                  MyGlobals.firebaseAnalyticsObserver.analytics
+                      .setCurrentScreen(
+                    screenName: 'Home/Publicaciones',
+                  );
+                }
+                break;
+              case 'recetas':
+                if (context != null && !_invalidUser) {
+                  mainState.setSelectedCategoryHome(
+                    SectionType.recetas,
+                    int.tryParse(q['categoria_receta_id']),
+                  );
+                  mainState.setActivePageHome(SectionType.recetas);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MainScaffold(),
+                    ),
+                  );
+                  MyGlobals.firebaseAnalyticsObserver.analytics
+                      .setCurrentScreen(
+                    screenName: 'Home/Recetas',
+                  );
+                }
+                break;
+              case 'pois':
+                if (context != null && !_invalidUser) {
+                  mainState.setSelectedCategoryHome(
+                    SectionType.pois,
+                    int.tryParse(q['categoria_poi_id']),
+                  );
+                  mainState.setSelectedCategoryHome(
+                    SectionType.pois_ciudad,
+                    int.tryParse(q['ciudad_id']),
+                  );
+                  mainState.setActivePageHome(SectionType.pois);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => MainScaffold(),
+                    ),
+                  );
+                  MyGlobals.firebaseAnalyticsObserver.analytics
+                      .setCurrentScreen(
+                    screenName: 'Home/Pois',
+                  );
+                }
+                break;
+            }
           }
         }
       } catch (e) {

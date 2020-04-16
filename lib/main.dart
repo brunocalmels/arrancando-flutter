@@ -46,7 +46,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   bool _loaded = false;
   bool _isLoggedIn = false;
-  FirebaseAnalytics analytics = FirebaseAnalytics();
 
   _loadUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -103,7 +102,7 @@ class _MyAppState extends State<MyApp> {
             )
           : _isLoggedIn ? MainScaffold() : LoginPage(),
       navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: analytics),
+        MyGlobals.firebaseAnalyticsObserver,
       ],
     );
   }

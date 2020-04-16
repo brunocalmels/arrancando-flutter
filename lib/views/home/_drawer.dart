@@ -12,6 +12,7 @@ import 'package:arrancando/views/user/profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -146,16 +147,44 @@ class HomeDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.share),
+            leading: Icon(Icons.send),
             title: Text('Compartí la aplicación'),
-            subtitle: Text('Enviá el link para que la descarguen.'),
-            onTap: () async {
-              Share.text(
-                'Arrancando',
-                'Bajate Arrancando y compartí tu pasión por el asado.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es',
-                'text/plain',
-              );
-            },
+            // subtitle: Text('Enviá el link para que la descarguen.'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  icon: Image.asset('assets/images/logo-facebook.png'),
+                  onPressed: () {
+                    Share.text(
+                      'Compartir contenido',
+                      'https://arrancando.com.ar/',
+                      'text/plain',
+                    );
+                  },
+                ),
+                IconButton(
+                  color: Colors.black45,
+                  icon: Icon(Icons.share),
+                  onPressed: () async {
+                    var img = (await rootBundle.load('assets/images/icon.png'))
+                        .buffer
+                        .asUint8List();
+
+                    Share.file(
+                      'Compartir imagen',
+                      'imagen.jpg',
+                      img,
+                      'image/jpg',
+                      text:
+                          "Bajate Arrancando y compartí tu pasión por el asado.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es",
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
           ListTile(
             leading: Icon(

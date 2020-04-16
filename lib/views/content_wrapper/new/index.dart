@@ -166,6 +166,8 @@ class _NewContentState extends State<NewContent> {
       }
 
       if (res != null && res.status == 201) {
+        print(
+            '${widget.type.toString().split('.').last[0].toLowerCase()}${widget.type.toString().split('.').last.substring(1)}#${json.decode(res.body)['id']}');
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => ShowPage(

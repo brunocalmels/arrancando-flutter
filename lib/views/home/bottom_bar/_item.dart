@@ -1,5 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/main.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +38,12 @@ class _BBButtonItemState extends State<BBButtonItem> {
     if (mounted) setState(() {});
   }
 
+  void _sendCurrentTabToAnalytics(BBItem item) {
+    MyGlobals.firebaseAnalyticsObserver.analytics.setCurrentScreen(
+      screenName: 'Home/${item.text}',
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -65,6 +73,7 @@ class _BBButtonItemState extends State<BBButtonItem> {
             widget.setSearchVisibility(false);
             Provider.of<MainState>(context, listen: false)
                 .setActivePageHome(widget.item.value);
+            _sendCurrentTabToAnalytics(widget.item);
           },
           child: Row(
             children: <Widget>[

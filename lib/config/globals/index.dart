@@ -1,7 +1,11 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 abstract class MyGlobals {
+  static const APP_VERSION = "1.2.7+43";
+
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
 
@@ -25,8 +29,6 @@ abstract class MyGlobals {
 
   static const APPLE_REDIRECT_URI =
       "https://arrancando.herokuapp.com/apple-login";
-
-  static const APP_VERSION = "1.2.6+42";
 
   static const ICONOS_CATEGORIAS = {
     SectionType.home: Icons.select_all,
@@ -55,4 +57,9 @@ abstract class MyGlobals {
       GlobalKey<ScaffoldState>();
 
   static const int MUCHO_PESO_PUBLICACION = 25000000;
+
+  static FirebaseAnalyticsObserver firebaseAnalyticsObserver =
+      FirebaseAnalyticsObserver(
+    analytics: FirebaseAnalytics(),
+  );
 }

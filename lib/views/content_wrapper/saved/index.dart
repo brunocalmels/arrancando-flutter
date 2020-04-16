@@ -111,6 +111,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
                                   ),
                                 ),
                                 onTap: () async {
+                                  print('${p.type.toString().split('.').last[0].toLowerCase()}${p.type.toString().split('.').last.substring(1)}#${p.id}');
                                   await Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (_) => ShowPage(

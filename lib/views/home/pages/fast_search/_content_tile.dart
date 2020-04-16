@@ -18,6 +18,8 @@ class ContentTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
+        print(
+            '${type.toString().split('.').last[0].toLowerCase()}${type.toString().split('.').last.substring(1)}#${content.id}');
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ShowPage(
@@ -26,7 +28,7 @@ class ContentTile extends StatelessWidget {
             ),
             settings: RouteSettings(
               name:
-                  '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}',
+                  '${type.toString().split('.').last[0].toLowerCase()}${type.toString().split('.').last.substring(1)}#${content.id}',
             ),
           ),
         );
