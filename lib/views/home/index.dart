@@ -6,11 +6,13 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/poi.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/publicacion.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/receta.dart';
 import 'package:arrancando/views/general/curved_text.dart';
 import 'package:arrancando/views/general/version_checker.dart';
 import 'package:arrancando/views/home/_drawer.dart';
+import 'package:arrancando/views/home/_home_fab.dart';
 import 'package:arrancando/views/home/main_new_fab.dart';
 import 'package:arrancando/views/home/pages/_content_card_page.dart';
 import 'package:arrancando/views/home/pages/_home_page.dart';
@@ -40,13 +42,6 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _loadingMore = false;
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
-  Map<SectionType, IconData> _sectionTypeIconMapper = {
-    SectionType.home: Icons.public,
-    SectionType.publicaciones: Icons.public,
-    SectionType.recetas: Icons.fastfood,
-    SectionType.pois: Icons.location_on,
-    SectionType.wiki: Icons.library_books,
-  };
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
     MainState mainState = Provider.of<MainState>(
@@ -263,66 +258,7 @@ class _MainScaffoldState extends State<MainScaffold> {
             ),
 
             extendBody: true,
-            // floatingActionButton: MainNewFab(),
-            floatingActionButton: Stack(
-              fit: StackFit.passthrough,
-              children: <Widget>[
-                Positioned.fill(
-                  child: CurvedText(
-                    radius: 30,
-                    text: "NUEVO",
-                    textStyle: TextStyle(),
-                    startAngle: 5.5,
-                  ),
-                ),
-                FloatingActionButton(
-                  elevation: 10,
-                  backgroundColor: Theme.of(context).backgroundColor,
-                  onPressed: () {
-                    Widget page;
-
-                    switch (Provider.of<MainState>(context).activePageHome) {
-                      case SectionType.home:
-                        page = PublicacionForm();
-                        break;
-                      case SectionType.recetas:
-                        page = RecetaForm();
-                        break;
-                      default:
-                        page = PublicacionForm();
-                    }
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => page,
-                      ),
-                    );
-                  },
-                  child: Container(
-                    child: Stack(
-                      children: <Widget>[
-                        Positioned.fill(
-                          right: -22,
-                          top: -22,
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: 15,
-                          ),
-                        ),
-                        Positioned.fill(
-                          child: Icon(
-                            _sectionTypeIconMapper[
-                                Provider.of<MainState>(context).activePageHome],
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            floatingActionButton: HomeFab(),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: MainBottomBar(

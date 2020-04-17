@@ -2,44 +2,39 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_error_message.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/_ingredientes_type_ahead.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_mucho_peso_archivos.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_multimedia_thumbs.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_new_content_input.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_new_content_multimedia.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/_new_poi_mapa.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_scaffold.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_selector_categoria.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/_selector_subcategoria.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
-class RecetaForm extends StatefulWidget {
+class PoiForm extends StatefulWidget {
   final ContentWrapper content;
 
-  RecetaForm({
+  PoiForm({
     this.content,
   });
 
   @override
-  RecetaFormState createState() => RecetaFormState();
+  _PoiFormState createState() => _PoiFormState();
 }
 
-class RecetaFormState extends State<RecetaForm> {
+class _PoiFormState extends State<PoiForm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _tituloController = TextEditingController();
-  final TextEditingController _introduccionController = TextEditingController();
-  // final TextEditingController _ingredientesController = TextEditingController();
-  List<String> _ingredientes = [];
-  final TextEditingController _instruccionesController =
-      TextEditingController();
-  dynamic _categoria;
-  List<dynamic> _subcategorias;
+  final TextEditingController _cuerpoController = TextEditingController();
+  CategoryWrapper _categoria;
   List<File> _images = [];
   List<String> _currentImages = [];
   Map<String, String> _currentVideoThumbs = {};
@@ -49,6 +44,25 @@ class RecetaFormState extends State<RecetaForm> {
   bool _sent = false;
   bool _hideButtonVeryBadError = false;
   String _errorMsg;
+  double _latitud;
+  double _longitud;
+  String _direccion;
+
+  _setDireccion(String direccion) {
+    _direccion = direccion;
+    if (mounted) setState(() {});
+  }
+
+  _setLatLng(double latitud, double longitud) {
+    _latitud = latitud;
+    _longitud = longitud;
+    if (mounted) setState(() {});
+  }
+
+  _setCategoria(dynamic categoria) {
+    _categoria = categoria;
+    if (mounted) setState(() {});
+  }
 
   _setImages(List<File> images) {
     _images = images;
@@ -68,22 +82,7 @@ class RecetaFormState extends State<RecetaForm> {
     if (mounted) setState(() {});
   }
 
-  _setCategoria(dynamic categoria) {
-    _categoria = categoria;
-    if (mounted) setState(() {});
-  }
-
-  _setSubCategorias(List<dynamic> subcategorias) {
-    _subcategorias = subcategorias;
-    if (mounted) setState(() {});
-  }
-
-  _setIngredientes(List<String> ingredientes) {
-    _ingredientes = ingredientes;
-    if (mounted) setState(() {});
-  }
-
-  _crearReceta() async {
+  _crearPublicacion() async {
     _errorMsg = null;
     if (_formKey.currentState.validate() &&
         ((_images != null && _images.isNotEmpty) ||
@@ -92,12 +91,33 @@ class RecetaFormState extends State<RecetaForm> {
       if (mounted) setState(() {});
 
       try {
+        String nombreProvincia;
+        String nombreCiudad;
+        List<Placemark> places = await Geolocator().placemarkFromCoordinates(
+          _latitud,
+          _longitud,
+        );
+        if (places != null && places.length > 0) {
+          if (places.first.administrativeArea != null &&
+              places.first.administrativeArea.isNotEmpty)
+            nombreProvincia = places.first.administrativeArea;
+          if (places.first.subLocality != null &&
+              places.first.subLocality.isNotEmpty)
+            nombreCiudad = places.first.subLocality;
+          else if (places.first.locality != null &&
+              places.first.locality.isNotEmpty)
+            nombreCiudad = places.first.locality;
+        }
+
         Map<String, dynamic> body = {
-          "categoria_receta_id": _categoria['id'],
           "titulo": _tituloController.text,
-          "introduccion": _introduccionController.text,
-          "ingredientes": _ingredientes,
-          "instrucciones": _instruccionesController.text,
+          "cuerpo": _cuerpoController.text,
+          "categoria_poi_id": _categoria.id,
+          "nombre_provincia": nombreProvincia,
+          "nombre_ciudad": nombreCiudad,
+          "lat": _latitud,
+          "long": _longitud,
+          "direccion": _direccion,
           "imagenes": await Future.wait(
             _images.map(
               (i) async => {
@@ -115,7 +135,7 @@ class RecetaFormState extends State<RecetaForm> {
 
         if (_isEdit && _id != null)
           res = await Fetcher.put(
-            url: "/recetas/$_id.json",
+            url: "/publicaciones/$_id.json",
             throwError: true,
             body: {
               ...body,
@@ -123,7 +143,7 @@ class RecetaFormState extends State<RecetaForm> {
           );
         else
           res = await Fetcher.post(
-            url: "/recetas.json",
+            url: "/publicaciones.json",
             throwError: true,
             body: {
               ...body,
@@ -135,10 +155,10 @@ class RecetaFormState extends State<RecetaForm> {
             MaterialPageRoute(
               builder: (_) => ShowPage(
                 contentId: json.decode(res.body)['id'],
-                type: SectionType.recetas,
+                type: SectionType.publicaciones,
               ),
               settings: RouteSettings(
-                name: 'Recetas#${json.decode(res.body)['id']}',
+                name: 'Publicaciones#${json.decode(res.body)['id']}',
               ),
             ),
           );
@@ -171,14 +191,9 @@ class RecetaFormState extends State<RecetaForm> {
       _isEdit = true;
       _id = widget.content.id;
       _tituloController.text = widget.content.titulo;
-      _introduccionController.text = widget.content.introduccion;
-      _ingredientes = []; //widget.content.ingredientes;
-      _instruccionesController.text = widget.content.instrucciones;
+      _cuerpoController.text = widget.content.cuerpo;
       _currentImages = widget.content.imagenes;
       _currentVideoThumbs = widget.content.videoThumbs;
-      _categoria = MyGlobals.CATEGORIAS_RECETA.firstWhere(
-          (c) => c['id'] == widget.content.categoriaRecetaId,
-          orElse: () => null);
       if (mounted) setState(() {});
     }
   }
@@ -194,47 +209,44 @@ class RecetaFormState extends State<RecetaForm> {
     return NewContentScaffold(
       scaffoldKey: _scaffoldKey,
       formKey: _formKey,
-      title: _isEdit ? "EDITAR RECETA" : "NUEVA RECETA",
+      title: _isEdit ? "EDITAR P. INTERÉS" : "NUEVO P. INTERÉS",
       children: [
         SelectorCategoria(
           label: "Categoría",
           setCategoria: _setCategoria,
           categoria: _categoria,
         ),
-        SelectorSubCategoria(
-          label: "Subcategorías",
-          setSubCategorias: _setSubCategorias,
-          subcategorias: _subcategorias,
-        ),
         NewContentInput(
           label: "Título",
           controller: _tituloController,
-          hint: "Merengue italiano",
+          hint: "Verdulería Palermo",
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",
         ),
         NewContentInput(
-          label: "Introducción",
-          controller: _introduccionController,
-          hint: "Para hacer merengue...",
+          label: "Descripcion",
+          controller: _cuerpoController,
+          hint: "La mejor verdulería de la zona...",
           multiline: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",
-        ),
-        IngredientesTypeAhead(
-          ingredientes: _ingredientes,
-          setIngredientes: _setIngredientes,
         ),
         NewContentInput(
-          label: "Instrucciones",
-          controller: _instruccionesController,
-          hint: "- Se baten las claras a punto de nieve...",
-          multiline: true,
+          label: "Rubro",
+          controller: _tituloController,
+          hint: "Verdulería",
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",
+        ),
+        NewPoiMapa(
+          setDireccion: _setDireccion,
+          setLatLng: _setLatLng,
+          latitud: _latitud,
+          longitud: _longitud,
+          direccion: _direccion,
         ),
         NewContentMultimedia(
           images: _images,
@@ -256,7 +268,7 @@ class RecetaFormState extends State<RecetaForm> {
         ),
         if (!_hideButtonVeryBadError)
           NewContentSendBoton(
-            onPressed: _crearReceta,
+            onPressed: _crearPublicacion,
             sent: _sent,
             isEdit: _isEdit,
           ),

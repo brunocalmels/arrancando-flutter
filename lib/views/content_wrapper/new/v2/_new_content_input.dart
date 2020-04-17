@@ -8,12 +8,14 @@ class NewContentInput extends StatelessWidget {
   final InputDecoration decoration;
   final TextStyle style;
   final TextInputType keyboardType;
+  final Function(String) onChanged;
   final bool multiline;
 
   NewContentInput({
     @required this.label,
     @required this.hint,
     @required this.controller,
+    this.onChanged,
     this.validator,
     this.decoration,
     this.style,
@@ -57,6 +59,7 @@ class NewContentInput extends StatelessWidget {
           ),
           child: TextFormField(
             controller: controller,
+            onChanged: onChanged,
             decoration: decoration != null
                 ? decoration.copyWith(
                     hintText: hint,

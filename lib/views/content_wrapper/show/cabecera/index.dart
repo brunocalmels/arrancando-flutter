@@ -1,28 +1,42 @@
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
-import 'package:arrancando/views/cards/_row_puntajes.dart';
-import 'package:arrancando/views/content_wrapper/show/_avatar_bubble.dart';
-import 'package:arrancando/views/content_wrapper/show/_image_cabecera.dart';
-import 'package:arrancando/views/content_wrapper/show/_row_estrellas.dart';
-import 'package:arrancando/views/content_wrapper/show/_row_iconos.dart';
-import 'package:arrancando/views/content_wrapper/show/_row_puntuaciones.dart';
-import 'package:arrancando/views/content_wrapper/show/_row_share.dart';
-import 'package:arrancando/views/content_wrapper/show/_titulo_cabecera.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_avatar_bubble.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_image_cabecera.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_row_estrellas.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_row_iconos.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_row_puntuaciones.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_row_share.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_titulo_cabecera.dart';
 import 'package:flutter/material.dart';
 
 class CabeceraShow extends StatelessWidget {
   final ContentWrapper content;
-  final String imageSrc;
 
   CabeceraShow({
     @required this.content,
-    @required this.imageSrc,
   });
+
+  String _getFirstImage() {
+    if (content.imagenes != null && content.imagenes.isNotEmpty) {
+      if (['mp4', 'mpg', 'mpeg'].contains(
+        content.imagenes.first.split('.').last.toLowerCase(),
+      )) {
+        return content.videoThumbs[content.imagenes.first].contains('http')
+            ? content.videoThumbs[content.imagenes.first]
+            : "${MyGlobals.SERVER_URL}${content.videoThumbs[content.imagenes.first]}";
+      } else {
+        return content.imagenes.first.contains('http')
+            ? content.imagenes.first
+            : "${MyGlobals.SERVER_URL}${content.imagenes.first}";
+      }
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.75,
       child: Stack(
         children: <Widget>[
           Positioned.fill(
@@ -31,7 +45,7 @@ class CabeceraShow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ImageCabecera(
-                  src: imageSrc,
+                  src: _getFirstImage(),
                 ),
                 Expanded(
                   child: Container(),
@@ -46,8 +60,8 @@ class CabeceraShow extends StatelessWidget {
               RowShare(
                 content: content,
               ),
-              Expanded(
-                child: Container(),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.26,
               ),
               SizedBox(
                 height: 5,

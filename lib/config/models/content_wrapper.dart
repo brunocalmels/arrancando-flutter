@@ -84,6 +84,24 @@ class ContentWrapper {
 
   get fecha =>
       "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' : '/' + createdAt.toLocal().year.toString()}";
+
+  String get fechaTexto {
+    final List<String> meses = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Noviembre",
+      "Diciembre",
+    ];
+    return "${createdAt.toLocal().day.toString().padLeft(2, '0')} de ${meses[createdAt.toLocal().month - 1]} ${createdAt.toLocal().year == DateTime.now().year ? '' : createdAt.toLocal().year}";
+  }
+
   // "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
 
   double get puntajePromedio => puntajes != null && puntajes.length > 0

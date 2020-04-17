@@ -32,6 +32,9 @@ class CardContent extends StatelessWidget {
                 color: Colors.transparent,
                 type: MaterialType.card,
                 child: InkWell(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(4),
+                  ),
                   onTap: () {
                     print(
                         '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}');

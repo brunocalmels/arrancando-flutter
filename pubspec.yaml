@@ -49,6 +49,7 @@ dependencies:
   google_sign_in: any
   firebase_analytics: any
   flutter_html: any
+  snaplist: any
 
 dev_dependencies:
   flutter_test:
