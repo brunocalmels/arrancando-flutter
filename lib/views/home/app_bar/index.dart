@@ -75,12 +75,7 @@ class MainAppBar extends StatelessWidget {
                     backgroundColor: Colors.white,
                   );
                 },
-                icon: Icon(
-                  Icons.filter_list,
-                  color: _anyFilterActive(mainState, contentState)
-                      ? Theme.of(context).accentColor
-                      : null,
-                ),
+                icon: Icon(Icons.close),
               ),
             if (!contentState.showSearchPage &&
                 mainState.activePageHome != SectionType.home)

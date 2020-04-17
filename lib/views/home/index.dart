@@ -42,6 +42,13 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _loadingMore = false;
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
+  Map<SectionType, IconData> _sectionTypeIconMapper = {
+    SectionType.home: Icons.public,
+    SectionType.publicaciones: Icons.public,
+    SectionType.recetas: Icons.fastfood,
+    SectionType.pois: Icons.location_on,
+    SectionType.wiki: Icons.library_books,
+  };
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
     MainState mainState = Provider.of<MainState>(
