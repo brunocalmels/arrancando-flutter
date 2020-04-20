@@ -2,10 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
-<<<<<<< HEAD
 import 'package:arrancando/config/globals/index.dart';
-=======
->>>>>>> 4ca8ad1a95b7978f9af70634bc0e7250f472bb33
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_error_message.dart';
@@ -96,10 +93,7 @@ class RecetaFormState extends State<RecetaForm> {
 
       try {
         Map<String, dynamic> body = {
-<<<<<<< HEAD
           "categoria_receta_id": _categoria['id'],
-=======
->>>>>>> 4ca8ad1a95b7978f9af70634bc0e7250f472bb33
           "titulo": _tituloController.text,
           "introduccion": _introduccionController.text,
           "ingredientes": _ingredientes,
@@ -115,11 +109,6 @@ class RecetaFormState extends State<RecetaForm> {
             ),
           ),
           "remove_imagenes": _imagesToRemove,
-<<<<<<< HEAD
-=======
-          // TODO: Remove next line
-          "ciudad_id": 1,
->>>>>>> 4ca8ad1a95b7978f9af70634bc0e7250f472bb33
         };
 
         ResponseObject res;
@@ -187,12 +176,9 @@ class RecetaFormState extends State<RecetaForm> {
       _instruccionesController.text = widget.content.instrucciones;
       _currentImages = widget.content.imagenes;
       _currentVideoThumbs = widget.content.videoThumbs;
-<<<<<<< HEAD
       _categoria = MyGlobals.CATEGORIAS_RECETA.firstWhere(
           (c) => c['id'] == widget.content.categoriaRecetaId,
           orElse: () => null);
-=======
->>>>>>> 4ca8ad1a95b7978f9af70634bc0e7250f472bb33
       if (mounted) setState(() {});
     }
   }
@@ -233,6 +219,7 @@ class RecetaFormState extends State<RecetaForm> {
           controller: _introduccionController,
           hint: "Para hacer merengue...",
           multiline: true,
+          addLinkButton: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",
@@ -246,6 +233,7 @@ class RecetaFormState extends State<RecetaForm> {
           controller: _instruccionesController,
           hint: "- Se baten las claras a punto de nieve...",
           multiline: true,
+          addLinkButton: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",

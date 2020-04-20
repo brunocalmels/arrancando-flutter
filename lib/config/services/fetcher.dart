@@ -42,7 +42,7 @@ abstract class Fetcher {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
       if (throwError)
-        throw e;
+        rethrow;
       else
         return null;
     }
@@ -82,10 +82,7 @@ abstract class Fetcher {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
       if (throwError)
-        return ResponseObject(
-          body: e.body,
-          status: e.statusCode,
-        );
+        rethrow;
       else
         return null;
     }
@@ -121,7 +118,7 @@ abstract class Fetcher {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
       if (throwError)
-        throw e;
+        rethrow;
       else
         return null;
     }
@@ -156,7 +153,7 @@ abstract class Fetcher {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
       if (throwError)
-        throw e;
+        rethrow;
       else
         return null;
     }

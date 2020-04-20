@@ -7,17 +7,8 @@ class ComunidadPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "COMUNIDAD",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Colors.black,
         ),
       ),
-      backgroundColor: Colors.white,
       body: Container(
         padding: const EdgeInsets.all(45),
         child: Center(

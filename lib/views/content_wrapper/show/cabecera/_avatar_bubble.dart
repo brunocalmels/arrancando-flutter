@@ -14,7 +14,9 @@ class AvatarBubble extends StatelessWidget {
 
   double _calculateCurveAngle() {
     if (user != null && user.username != null) {
-      return degToRadian((-6.7 * user.username.length).toDouble());
+      return degToRadian(
+          ((user.username.length >= 4 ? -6 : -8) * user.username.length)
+              .toDouble());
     }
     return 0;
   }

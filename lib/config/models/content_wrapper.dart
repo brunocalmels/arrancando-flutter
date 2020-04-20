@@ -96,6 +96,7 @@ class ContentWrapper {
       "Julio",
       "Agosto",
       "Septiembre",
+      "Octubre",
       "Noviembre",
       "Diciembre",
     ];

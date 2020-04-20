@@ -41,30 +41,33 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
       body: Container(
         child: Center(
-          child: Stack(
-            fit: StackFit.passthrough,
-            children: <Widget>[
-              SizedBox(
-                width: 200,
-                height: 200,
-                child: Image.asset(
-                  "assets/images/icon-no-fire.png",
-                ),
-              ),
-              Positioned(
-                left: 70,
-                bottom: 15,
-                child: SizedBox(
-                  width: 60,
-                  height: 60,
-                  child: FlareActor(
-                    "assets/flare/fuego.flr",
-                    animation: 'Fuegando',
-                  ),
-                ),
-              ),
-            ],
+          // child: Stack(
+          //   fit: StackFit.passthrough,
+          //   children: <Widget>[
+          //     SizedBox(
+          //       width: 200,
+          //       height: 200,
+          //       child: Image.asset(
+          //         "assets/images/icon.png",
+          //       ),
+          //     ),
+          //     Positioned(
+          //       left: 70,
+          //       bottom: 15,
+          //       child:
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.width * 0.8,
+            child: FlareActor(
+              // "assets/flare/fuego.flr",
+              "assets/flare/logo.flr",
+              // animation: 'Fuegando',
+              animation: 'Splash',
+            ),
           ),
+          //       ),
+          //     ],
+          //   ),
         ),
       ),
     );

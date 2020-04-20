@@ -111,6 +111,8 @@ class _FormSendCommentState extends State<FormSendComment> {
                     child: TextField(
                       textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.multiline,
+                      minLines: 1,
+                      maxLines: 2,
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
                         hintText: "Comentario",

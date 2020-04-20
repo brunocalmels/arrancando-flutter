@@ -1,3 +1,4 @@
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:flutter/material.dart';
@@ -29,15 +30,16 @@ class RowIconosFecha extends StatelessWidget {
                 ),
               ),
             ),
-            GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Icon(
-                  Icons.chat_bubble_outline,
-                  color: Theme.of(context).accentColor,
+            if (content.type != SectionType.pois)
+              GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Icon(
+                    Icons.chat_bubble_outline,
+                    color: Theme.of(context).accentColor,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         Text(
@@ -53,15 +55,16 @@ class RowIconosFecha extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Icon(
-                  Icons.camera_alt,
-                  color: Theme.of(context).accentColor,
+            if (content.type != SectionType.pois)
+              GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Theme.of(context).accentColor,
+                  ),
                 ),
               ),
-            ),
             GestureDetector(
               onTap: () => SavedContent.toggleSave(content, context),
               child: Padding(

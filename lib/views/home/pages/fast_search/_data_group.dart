@@ -35,6 +35,9 @@ class DataGroup extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Icon(icon),
+                SizedBox(
+                  width: 5,
+                ),
                 Text(title),
               ],
             ),
@@ -80,7 +83,12 @@ class DataGroup extends StatelessWidget {
                                 ),
                               );
                             },
-                            child: Text("VER MÁS"),
+                            child: Text(
+                              "VER MÁS",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ],
                       ),

@@ -47,8 +47,8 @@ class MainAppBar extends StatelessWidget {
         return AppBar(
           leading: Center(
             child: SizedBox(
-              width: 40,
-              height: 40,
+              width: kToolbarHeight,
+              height: kToolbarHeight,
               child: Image.asset('assets/images/icon.png'),
             ),
           ),
@@ -75,7 +75,7 @@ class MainAppBar extends StatelessWidget {
                     backgroundColor: Colors.white,
                   );
                 },
-                icon: Icon(Icons.close),
+                icon: Icon(Icons.filter_list),
               ),
             if (!contentState.showSearchPage &&
                 mainState.activePageHome != SectionType.home)

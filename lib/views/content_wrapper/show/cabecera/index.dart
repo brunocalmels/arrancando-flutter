@@ -5,15 +5,17 @@ import 'package:arrancando/views/content_wrapper/show/cabecera/_image_cabecera.d
 import 'package:arrancando/views/content_wrapper/show/cabecera/_row_estrellas.dart';
 import 'package:arrancando/views/content_wrapper/show/cabecera/_row_iconos.dart';
 import 'package:arrancando/views/content_wrapper/show/cabecera/_row_puntuaciones.dart';
-import 'package:arrancando/views/content_wrapper/show/cabecera/_row_share.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_row_share_edit.dart';
 import 'package:arrancando/views/content_wrapper/show/cabecera/_titulo_cabecera.dart';
 import 'package:flutter/material.dart';
 
 class CabeceraShow extends StatelessWidget {
   final ContentWrapper content;
+  final Function fetchContent;
 
   CabeceraShow({
     @required this.content,
+    @required this.fetchContent,
   });
 
   String _getFirstImage() {
@@ -41,14 +43,12 @@ class CabeceraShow extends StatelessWidget {
         children: <Widget>[
           Positioned.fill(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 ImageCabecera(
                   src: _getFirstImage(),
-                ),
-                Expanded(
-                  child: Container(),
                 ),
               ],
             ),
@@ -57,11 +57,12 @@ class CabeceraShow extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              RowShare(
+              RowShareEdit(
                 content: content,
+                fetchContent: fetchContent,
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.26,
+                height: MediaQuery.of(context).size.height * 0.16,
               ),
               SizedBox(
                 height: 5,

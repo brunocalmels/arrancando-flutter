@@ -52,43 +52,43 @@ class ShowAppBar extends StatelessWidget {
         //       ),
         //     ),
         //   ),
-        if (content != null && content.esOwner(context))
-          IconButton(
-            onPressed: () async {
-              Widget page;
+        // if (content != null && content.esOwner(context))
+        //   IconButton(
+        //     onPressed: () async {
+        //       Widget page;
 
-              switch (content.type) {
-                case SectionType.publicaciones:
-                  page = PublicacionForm(
-                    content: content,
-                  );
-                  break;
-                case SectionType.recetas:
-                  page = RecetaForm(
-                    content: content,
-                  );
-                  break;
-                default:
-                  page = EditPage(
-                    contentId: content.id,
-                    type: content.type,
-                  );
-              }
+        //       switch (content.type) {
+        //         case SectionType.publicaciones:
+        //           page = PublicacionForm(
+        //             content: content,
+        //           );
+        //           break;
+        //         case SectionType.recetas:
+        //           page = RecetaForm(
+        //             content: content,
+        //           );
+        //           break;
+        //         default:
+        //           page = EditPage(
+        //             contentId: content.id,
+        //             type: content.type,
+        //           );
+        //       }
 
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => page,
-                  settings: RouteSettings(
-                    name:
-                        '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}#Edit',
-                  ),
-                ),
-              );
-              await Future.delayed(Duration(seconds: 1));
-              fetchContent();
-            },
-            icon: Icon(Icons.edit),
-          ),
+        //       await Navigator.of(context).push(
+        //         MaterialPageRoute(
+        //           builder: (_) => page,
+        //           settings: RouteSettings(
+        //             name:
+        //                 '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}#Edit',
+        //           ),
+        //         ),
+        //       );
+        //       await Future.delayed(Duration(seconds: 1));
+        //       fetchContent();
+        //     },
+        //     icon: Icon(Icons.edit),
+        //   ),
         // if (content != null)
         //   IconButton(
         //     onPressed: () => SavedContent.toggleSave(content, context),

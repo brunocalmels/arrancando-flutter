@@ -359,16 +359,16 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                      height: 35,
-                    ),
+                    // SizedBox(
+                    //   height: 35,
+                    // ),
                     Image.asset(
                       "assets/images/icon.png",
-                      width: MediaQuery.of(context).size.width / 3,
+                      width: MediaQuery.of(context).size.width * 0.75,
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
                     if (Platform.isIOS)
                       Column(
                         mainAxisSize: MainAxisSize.min,

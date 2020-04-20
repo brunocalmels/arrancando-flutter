@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:arrancando/config/models/active_user.dart';
-import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_new_content_input.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
@@ -133,7 +132,8 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
                     setState(() {
                       _mapController = controller;
                     });
-                  _setMyLocation();
+                  if (widget.latitud == null || widget.longitud == null)
+                    _setMyLocation();
                 },
                 onPositionChanged: (MapPosition position, bool changed) {
                   if (changed && _mapController != null) {

@@ -111,6 +111,7 @@ class _SearchPageState extends State<SearchPage> {
             fetchContent: _fetchContent,
             items: _items,
             increasePage: null,
+            hideFilter: true,
           ),
         );
       case SectionType.recetas:
@@ -124,6 +125,7 @@ class _SearchPageState extends State<SearchPage> {
             fetchContent: _fetchContent,
             items: _items,
             increasePage: null,
+            hideFilter: true,
           ),
         );
       case SectionType.pois:
@@ -138,6 +140,7 @@ class _SearchPageState extends State<SearchPage> {
           setLocationDenied: _setLocationDenied,
           locationDenied: _locationDenied,
           increasePage: null,
+          hideFilter: true,
         );
       default:
         return Container(
@@ -150,6 +153,7 @@ class _SearchPageState extends State<SearchPage> {
             fetchContent: _fetchContent,
             items: _items,
             increasePage: null,
+            hideFilter: true,
           ),
         );
     }
@@ -177,11 +181,6 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
         title: SearchField(
           searchController: _searchController,
           onChanged: (val) {

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -12,7 +13,7 @@ import 'package:arrancando/views/content_wrapper/new/v2/_new_content_input.dart'
 import 'package:arrancando/views/content_wrapper/new/v2/_new_content_multimedia.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_new_poi_mapa.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_scaffold.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/_selector_categoria.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/_selector_categoria_poi.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +31,12 @@ class PoiForm extends StatefulWidget {
 }
 
 class _PoiFormState extends State<PoiForm> {
+  final GlobalSingleton gs = GlobalSingleton();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _cuerpoController = TextEditingController();
+  final TextEditingController _rubroController = TextEditingController();
   CategoryWrapper _categoria;
   List<File> _images = [];
   List<String> _currentImages = [];
@@ -59,7 +62,7 @@ class _PoiFormState extends State<PoiForm> {
     if (mounted) setState(() {});
   }
 
-  _setCategoria(dynamic categoria) {
+  _setCategoria(CategoryWrapper categoria) {
     _categoria = categoria;
     if (mounted) setState(() {});
   }
@@ -135,7 +138,7 @@ class _PoiFormState extends State<PoiForm> {
 
         if (_isEdit && _id != null)
           res = await Fetcher.put(
-            url: "/publicaciones/$_id.json",
+            url: "/pois/$_id.json",
             throwError: true,
             body: {
               ...body,
@@ -143,7 +146,7 @@ class _PoiFormState extends State<PoiForm> {
           );
         else
           res = await Fetcher.post(
-            url: "/publicaciones.json",
+            url: "/pois.json",
             throwError: true,
             body: {
               ...body,
@@ -155,7 +158,7 @@ class _PoiFormState extends State<PoiForm> {
             MaterialPageRoute(
               builder: (_) => ShowPage(
                 contentId: json.decode(res.body)['id'],
-                type: SectionType.publicaciones,
+                type: SectionType.pois,
               ),
               settings: RouteSettings(
                 name: 'Publicaciones#${json.decode(res.body)['id']}',
@@ -192,6 +195,13 @@ class _PoiFormState extends State<PoiForm> {
       _id = widget.content.id;
       _tituloController.text = widget.content.titulo;
       _cuerpoController.text = widget.content.cuerpo;
+      // _rubroController.text = widget.content.rubro;
+      _categoria = gs?.categories[SectionType.pois]?.firstWhere(
+          (c) => c.id == widget.content.categoriaPoiId,
+          orElse: () => null);
+      _latitud = widget.content.latitud;
+      _longitud = widget.content.longitud;
+      _direccion = widget.content.direccion;
       _currentImages = widget.content.imagenes;
       _currentVideoThumbs = widget.content.videoThumbs;
       if (mounted) setState(() {});
@@ -211,7 +221,7 @@ class _PoiFormState extends State<PoiForm> {
       formKey: _formKey,
       title: _isEdit ? "EDITAR P. INTERÉS" : "NUEVO P. INTERÉS",
       children: [
-        SelectorCategoria(
+        SelectorCategoriaPoi(
           label: "Categoría",
           setCategoria: _setCategoria,
           categoria: _categoria,
@@ -229,13 +239,14 @@ class _PoiFormState extends State<PoiForm> {
           controller: _cuerpoController,
           hint: "La mejor verdulería de la zona...",
           multiline: true,
+          addLinkButton: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",
         ),
         NewContentInput(
           label: "Rubro",
-          controller: _tituloController,
+          controller: _rubroController,
           hint: "Verdulería",
           validator: (val) => val != null && val.isNotEmpty
               ? null

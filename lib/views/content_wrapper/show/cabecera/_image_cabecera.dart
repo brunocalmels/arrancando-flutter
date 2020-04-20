@@ -17,7 +17,7 @@ class ImageCabecera extends StatelessWidget {
       ),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: MediaQuery.of(context).size.height * 0.4,
         child: src != null
             ? CachedNetworkImage(
                 fit: BoxFit.cover,

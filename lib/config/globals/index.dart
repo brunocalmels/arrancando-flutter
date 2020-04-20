@@ -4,15 +4,10 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 abstract class MyGlobals {
-<<<<<<< HEAD
   static const APP_VERSION = "1.2.7+43";
 
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
-=======
-  // static const bool SHOW_DEV_LOGIN = false;
-  static const bool SHOW_DEV_LOGIN = true;
->>>>>>> 4ca8ad1a95b7978f9af70634bc0e7250f472bb33
 
   // static const String SERVER_URL = "http://192.168.0.4:5050";
   // static const String SERVER_URL = "http://192.168.0.11:5000";
@@ -36,10 +31,10 @@ abstract class MyGlobals {
       "https://arrancando.herokuapp.com/apple-login";
 
   static const ICONOS_CATEGORIAS = {
-    SectionType.home: Icons.select_all,
+    SectionType.home: Icons.public,
     SectionType.publicaciones: Icons.public,
-    SectionType.recetas: Icons.book,
-    SectionType.pois: Icons.map,
+    SectionType.recetas: Icons.fastfood,
+    SectionType.pois: Icons.location_on,
   };
 
   static const NOMBRES_CATEGORIAS = {
@@ -107,6 +102,11 @@ abstract class MyGlobals {
       "id": 8,
       "titulo": "Al Bowl",
       "imagen": "assets/images/content/categories/bowl.png",
+    },
+    {
+      "id": 9,
+      "titulo": "Al Wok",
+      "imagen": "assets/images/content/categories/wok.png",
     },
   ];
 

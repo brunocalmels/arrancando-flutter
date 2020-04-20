@@ -107,16 +107,8 @@ class _ShowPageState extends State<ShowPage> {
                       children: <Widget>[
                         CabeceraShow(
                           content: _content,
+                          fetchContent: _fetchContent,
                         ),
-                        if (widget.type == SectionType.pois &&
-                            _content.latitud != null &&
-                            _content.longitud != null)
-                          PoisMap(
-                            height: 200,
-                            latitud: _content.latitud,
-                            longitud: _content.longitud,
-                            zoom: 15,
-                          ),
                         SizedBox(
                           height: 10,
                         ),
@@ -127,6 +119,18 @@ class _ShowPageState extends State<ShowPage> {
                         SizedBox(
                           height: 10,
                         ),
+                        if (widget.type == SectionType.pois &&
+                            _content.latitud != null &&
+                            _content.longitud != null)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: PoisMap(
+                              height: 200,
+                              latitud: _content.latitud,
+                              longitud: _content.longitud,
+                              zoom: 15,
+                            ),
+                          ),
                         TextosShow(
                           content: _content,
                         ),

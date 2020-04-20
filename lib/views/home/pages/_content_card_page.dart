@@ -17,6 +17,7 @@ class ContentCardPage extends StatefulWidget {
   final Function(SectionType) fetchContent;
   final Function increasePage;
   final List<ContentWrapper> items;
+  final bool hideFilter;
 
   ContentCardPage({
     @required this.type,
@@ -26,6 +27,7 @@ class ContentCardPage extends StatefulWidget {
     @required this.fetchContent,
     @required this.increasePage,
     @required this.items,
+    this.hideFilter = false,
   });
 
   @override
@@ -102,7 +104,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
                               content: widget.items[index],
                             ),
                           );
-                          if (index == 0)
+                          if (index == 0 && !widget.hideFilter)
                             return Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[

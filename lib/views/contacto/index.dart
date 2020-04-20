@@ -76,13 +76,6 @@ class _ContactPageState extends State<ContactPage> {
       appBar: AppBar(
         title: Text(
           "Mensaje/Reporte",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Colors.black,
         ),
       ),
       body: SingleChildScrollView(

@@ -24,6 +24,7 @@ class PoiPage extends StatefulWidget {
   final Function(bool) setLoadingMore;
   final Function setLocationDenied;
   final List<ContentWrapper> items;
+  final bool hideFilter;
 
   PoiPage({
     @required this.fetching,
@@ -36,6 +37,7 @@ class PoiPage extends StatefulWidget {
     @required this.setLocationDenied,
     @required this.setLoadingMore,
     @required this.items,
+    this.hideFilter = false,
   });
 
   @override
@@ -69,37 +71,38 @@ class _PoiPageState extends State<PoiPage> {
       },
       child: ListView(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: MyGlobals.mainScaffoldKey.currentContext,
-                    builder: (_) => FilterBottomSheet(
-                      fetchContent: () {
-                        widget.resetLimit();
-                        widget.fetchContent(
-                          SectionType.pois,
-                        );
-                      },
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
+          if (!widget.hideFilter)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: MyGlobals.mainScaffoldKey.currentContext,
+                      builder: (_) => FilterBottomSheet(
+                        fetchContent: () {
+                          widget.resetLimit();
+                          widget.fetchContent(
+                            SectionType.pois,
+                          );
+                        },
                       ),
-                    ),
-                    backgroundColor: Colors.white,
-                  );
-                },
-                child: Image.asset(
-                  "assets/images/content/index/plato-filtrar.png",
-                  width: MediaQuery.of(context).size.width * 0.6,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                      ),
+                      backgroundColor: Colors.white,
+                    );
+                  },
+                  child: Image.asset(
+                    "assets/images/content/index/plato-filtrar.png",
+                    width: MediaQuery.of(context).size.width * 0.6,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           SizedBox(
             height: 15,
           ),

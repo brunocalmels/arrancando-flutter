@@ -1,9 +1,6 @@
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
-import 'package:arrancando/views/cards/_row_cant_comments.dart';
-import 'package:arrancando/views/cards/_row_puntajes.dart';
 import 'package:arrancando/views/content_wrapper/dialog/share.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -79,9 +76,14 @@ class CardContent extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text(content.user == null
-                                ? "------"
-                                : "@${content.user.username}"),
+                            Expanded(
+                              child: Text(
+                                content.user == null
+                                    ? "------"
+                                    : "@${content.user.username}",
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(

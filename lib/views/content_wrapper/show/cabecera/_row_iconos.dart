@@ -40,7 +40,7 @@ class RowIconos extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Icon(
-                Icons.crop_square,
+                Icons.kitchen,
                 color: Theme.of(context).accentColor,
               ),
               Text(

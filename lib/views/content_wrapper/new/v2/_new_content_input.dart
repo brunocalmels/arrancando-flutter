@@ -1,3 +1,4 @@
+import 'package:arrancando/views/content_wrapper/new/v2/_add_link_button.dart';
 import 'package:flutter/material.dart';
 
 class NewContentInput extends StatelessWidget {
@@ -10,6 +11,7 @@ class NewContentInput extends StatelessWidget {
   final TextInputType keyboardType;
   final Function(String) onChanged;
   final bool multiline;
+  final bool addLinkButton;
 
   NewContentInput({
     @required this.label,
@@ -21,6 +23,7 @@ class NewContentInput extends StatelessWidget {
     this.style,
     this.keyboardType,
     this.multiline = false,
+    this.addLinkButton = false,
   });
 
   @override
@@ -41,52 +44,65 @@ class NewContentInput extends StatelessWidget {
         SizedBox(
           height: 5,
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xff1a1c28),
-                offset: Offset(0.0, 0.0),
-              ),
-              BoxShadow(
-                color: Color(0xff2d3548),
-                offset: Offset(0.0, 0.0),
-                spreadRadius: -12.0,
-                blurRadius: 12.0,
-              ),
-            ],
-          ),
-          child: TextFormField(
-            controller: controller,
-            onChanged: onChanged,
-            decoration: decoration != null
-                ? decoration.copyWith(
-                    hintText: hint,
-                    alignLabelWithHint: true,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 12,
-                    ),
-                  )
-                : InputDecoration(
-                    hintText: hint,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 12,
-                    ),
+        Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xff1a1c28),
+                    offset: Offset(0.0, 0.0),
                   ),
-            textCapitalization: TextCapitalization.sentences,
-            style: style != null
-                ? style.copyWith(fontSize: 14)
-                : TextStyle(
-                    fontSize: 14,
+                  BoxShadow(
+                    color: Color(0xff2d3548),
+                    offset: Offset(0.0, 0.0),
+                    spreadRadius: -12.0,
+                    blurRadius: 12.0,
                   ),
-            minLines: multiline ? 7 : null,
-            maxLines: multiline ? 7 : null,
-            keyboardType: multiline ? TextInputType.multiline : keyboardType,
-            validator: validator,
-          ),
+                ],
+              ),
+              child: TextFormField(
+                controller: controller,
+                onChanged: onChanged,
+                decoration: decoration != null
+                    ? decoration.copyWith(
+                        hintText: hint,
+                        alignLabelWithHint: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 12,
+                        ),
+                      )
+                    : InputDecoration(
+                        hintText: hint,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 12,
+                        ),
+                      ),
+                textCapitalization: TextCapitalization.sentences,
+                style: style != null
+                    ? style.copyWith(fontSize: 14)
+                    : TextStyle(
+                        fontSize: 14,
+                      ),
+                minLines: multiline ? 7 : null,
+                maxLines: multiline ? 7 : null,
+                keyboardType:
+                    multiline ? TextInputType.multiline : keyboardType,
+                validator: validator,
+              ),
+            ),
+            if (addLinkButton)
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: AddLinkButton(
+                  controller: controller,
+                ),
+              ),
+          ],
         ),
         SizedBox(
           height: 5,

@@ -34,13 +34,6 @@ class _SearchFieldState extends State<SearchField> {
               controller: widget.searchController,
             ),
           ),
-          // Container(
-          //   height: 35,
-          //   child: VerticalDivider(),
-          // ),
-          CategoriesChip(
-            small: true,
-          ),
         ],
       ),
     );

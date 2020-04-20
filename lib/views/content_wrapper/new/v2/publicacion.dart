@@ -178,6 +178,7 @@ class _PublicacionFormState extends State<PublicacionForm> {
           controller: _cuerpoController,
           hint: "Pasamos un domingo espectacular. No nos queríamos ir...",
           multiline: true,
+          addLinkButton: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",
