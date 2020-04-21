@@ -50,6 +50,7 @@ dependencies:
   firebase_analytics: any
   flutter_html: any
   snaplist: any
+  icon_shadow: any
 
 dev_dependencies:
   flutter_test:
@@ -150,7 +151,7 @@ flutter:
           weight: 200
         - asset: assets/fonts/Monserrat/Montserrat-Thin.ttf
           weight: 100
-    - family: DefiantIcons
+    - family: ArrancandoIcons
       fonts:
         - asset: assets/fonts/ArrancandoIcons.ttf
           

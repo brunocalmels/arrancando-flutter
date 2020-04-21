@@ -44,6 +44,8 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : Comentario.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['duracion'] as int,
+    json['complejidad'] as String,
   )..localDistance = (json['localDistance'] as num)?.toDouble();
 }
 
@@ -72,6 +74,8 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'puntajes': instance.puntajes,
       'user': instance.user,
       'comentarios': instance.comentarios,
+      'duracion': instance.duracion,
+      'complejidad': instance.complejidad,
     };
 
 T _$enumDecode<T>(

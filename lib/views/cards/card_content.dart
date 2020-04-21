@@ -1,12 +1,17 @@
+import 'package:arrancando/config/fonts/arrancando_icons_icons.dart';
+import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/content_wrapper/dialog/share.dart';
+import 'package:arrancando/views/content_wrapper/show/_heart_plus5.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CardContent extends StatelessWidget {
+  final GlobalSingleton gs = GlobalSingleton();
   final ContentWrapper content;
 
   CardContent({
@@ -102,75 +107,104 @@ class CardContent extends StatelessWidget {
                         SizedBox(
                           height: 15,
                         ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.timer,
-                              color: Theme.of(context).accentColor,
-                              size: 15,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "40 minutos",
-                              style: TextStyle(
-                                fontSize: 10,
+                        content.type == SectionType.recetas
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.timer,
+                                        color: Theme.of(context).accentColor,
+                                        size: 15,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        content.duracion != null
+                                            ? "${content.duracion} minutos"
+                                            : "Desconocido",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                        ArrancandoIcons.horno,
+                                        color: Theme.of(context).accentColor,
+                                        size: 15,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        gs.categories[SectionType.recetas]
+                                                .firstWhere(
+                                                  (c) =>
+                                                      c.id ==
+                                                      content.categoriaRecetaId,
+                                                  orElse: () => null,
+                                                )
+                                                ?.nombre ??
+                                            'Desconocida',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(
+                                        ArrancandoIcons.dificultad,
+                                        color: Theme.of(context).accentColor,
+                                        size: 15,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        content.complejidad ?? "Desconocida",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                content.cuerpo ?? '',
+                                maxLines: 5,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.kitchen,
-                              color: Theme.of(context).accentColor,
-                              size: 15,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "Pastas",
-                              style: TextStyle(
-                                fontSize: 10,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.add_box,
-                              color: Theme.of(context).accentColor,
-                              size: 15,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "Complicado",
-                              style: TextStyle(
-                                fontSize: 10,
-                              ),
-                            ),
-                          ],
-                        ),
                         Expanded(
                           child: Container(),
                         ),
@@ -179,14 +213,8 @@ class CardContent extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            GestureDetector(
-                              child: Icon(
-                                Icons.favorite,
-                                color: Theme.of(context).accentColor,
-                              ),
-                              onTap: () {
-                                print('favorite');
-                              },
+                            HeartPlus5(
+                              content: content,
                             ),
                             SizedBox(
                               width: 7,

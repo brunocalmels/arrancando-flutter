@@ -1,13 +1,16 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
+import 'package:arrancando/views/content_wrapper/show/_heart_plus5.dart';
 import 'package:flutter/material.dart';
 
 class RowIconosFecha extends StatelessWidget {
   final ContentWrapper content;
+  final Function fetchContent;
 
   RowIconosFecha({
     @required this.content,
+    this.fetchContent,
   });
 
   @override
@@ -21,14 +24,9 @@ class RowIconosFecha extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Icon(
-                  Icons.favorite,
-                  color: Theme.of(context).accentColor,
-                ),
-              ),
+            HeartPlus5(
+              content: content,
+              fetchContent: fetchContent,
             ),
             if (content.type != SectionType.pois)
               GestureDetector(

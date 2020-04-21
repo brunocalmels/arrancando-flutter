@@ -1,3 +1,4 @@
+import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/views/content_wrapper/show/cabecera/_avatar_bubble.dart';
@@ -67,7 +68,11 @@ class CabeceraShow extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              RowIconos(),
+              content.type == SectionType.recetas
+                  ? RowIconos(
+                    content: content,
+                  )
+                  : SizedBox(height: 30),
               SizedBox(
                 height: 5,
               ),
@@ -85,6 +90,7 @@ class CabeceraShow extends StatelessWidget {
               ),
               RowEstrellas(
                 content: content,
+                fetchContent: fetchContent,
               ),
               SizedBox(
                 height: 5,

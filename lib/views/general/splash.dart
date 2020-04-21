@@ -62,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
               // "assets/flare/fuego.flr",
               "assets/flare/logo.flr",
               // animation: 'Fuegando',
-              animation: 'Splash',
+              animation: 'Splash2',
             ),
           ),
           //       ),

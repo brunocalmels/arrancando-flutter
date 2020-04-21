@@ -6,6 +6,7 @@ import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/dynamic_links.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -69,6 +70,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   _initApp() async {
+    Utils.restoreThemeMode(context);
     DynamicLinks.initUniLinks(
       context: context,
     );
@@ -85,7 +87,7 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: MyGlobals.mainNavigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Arrancando',
-      themeMode: ThemeMode.dark,
+      themeMode: Provider.of<MainState>(context).activeTheme ?? ThemeMode.dark,
       theme: ThemeData(
         fontFamily: 'Monserrat',
         backgroundColor: Colors.grey,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:arrancando/config/models/active_user.dart';
@@ -51,6 +50,8 @@ class ContentWrapper {
   List<Puntaje> puntajes;
   Usuario user;
   List<Comentario> comentarios;
+  int duracion; // De cocción
+  String complejidad; // De preparación
 
   ContentWrapper(
     this.id,
@@ -75,6 +76,8 @@ class ContentWrapper {
     this.puntajes,
     this.user,
     this.comentarios,
+    this.duracion,
+    this.complejidad,
   );
 
   factory ContentWrapper.fromJson(Map<String, dynamic> json) =>
@@ -104,6 +107,15 @@ class ContentWrapper {
   }
 
   // "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
+
+  int myPuntaje(int uid) =>
+      puntajes
+          ?.firstWhere(
+            (p) => p.usuario.id == uid,
+            orElse: () => null,
+          )
+          ?.puntaje ??
+      0;
 
   double get puntajePromedio => puntajes != null && puntajes.length > 0
       ? (puntajes.fold<double>(0, (sum, p) => sum + p.puntaje) /
@@ -148,6 +160,52 @@ class ContentWrapper {
     }
     return null;
   }
+
+  // Future<void> refetchSelf() async {
+  //   String _url;
+
+  //   switch (type) {
+  //     case SectionType.publicaciones:
+  //       _url = "/publicaciones";
+  //       break;
+  //     case SectionType.recetas:
+  //       _url = "/recetas";
+  //       break;
+  //     case SectionType.pois:
+  //       _url = "/pois";
+  //       break;
+  //     default:
+  //       _url = "/publicaciones";
+  //   }
+
+  //   ResponseObject res = await Fetcher.get(url: "$_url/$id.json");
+
+  //   if (res != null && res.body != null) {
+  //     ContentWrapper newContent =
+  //         ContentWrapper.fromJson(json.decode(res.body));
+  //     updatedAt = newContent.updatedAt;
+  //     titulo = newContent.titulo;
+  //     cuerpo = newContent.cuerpo;
+  //     introduccion = newContent.introduccion;
+  //     ingredientes = newContent.ingredientes;
+  //     instrucciones = newContent.instrucciones;
+  //     latitud = newContent.latitud;
+  //     longitud = newContent.longitud;
+  //     direccion = newContent.direccion;
+  //     ciudadId = newContent.ciudadId;
+  //     categoriaRecetaId = newContent.categoriaRecetaId;
+  //     categoriaPoiId = newContent.categoriaPoiId;
+  //     categoriaPublicacionId = newContent.categoriaPublicacionId;
+  //     imagenes = newContent.imagenes;
+  //     videoThumbs = newContent.videoThumbs;
+  //     thumbnail = newContent.thumbnail;
+  //     puntajes = newContent.puntajes;
+  //     user = newContent.user;
+  //     comentarios = newContent.comentarios;
+  //     duracion = newContent.duracion;
+  //     complejidad = newContent.complejidad;
+  //   }
+  // }
 
   shareSelf({
     bool esFull = false,

@@ -1,4 +1,3 @@
-
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/saved_content.dart';
@@ -8,6 +7,7 @@ class UserState extends ChangeNotifier {
   ActiveUser activeUser;
   Map<SectionType, int> preferredCategories = {};
   List<SavedContent> savedContent = [];
+  Map<String, int> myPuntuaciones = {};
 
   setActiveUser(ActiveUser val) {
     activeUser = val;
@@ -30,6 +30,11 @@ class UserState extends ChangeNotifier {
     } else {
       savedContent.remove(all.first);
     }
+    notifyListeners();
+  }
+
+  setMyPuntuacion(String key, int val) {
+    myPuntuaciones[key] = val;
     notifyListeners();
   }
 }

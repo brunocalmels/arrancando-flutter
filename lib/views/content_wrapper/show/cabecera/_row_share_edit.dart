@@ -6,6 +6,7 @@ import 'package:arrancando/views/content_wrapper/new/v2/poi.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/publicacion.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/receta.dart';
 import 'package:flutter/material.dart';
+import 'package:icon_shadow/icon_shadow.dart';
 
 class RowShareEdit extends StatelessWidget {
   final ContentWrapper content;
@@ -64,9 +65,11 @@ class RowShareEdit extends StatelessWidget {
                 await Future.delayed(Duration(seconds: 1));
                 fetchContent();
               },
-              icon: Icon(
-                Icons.edit,
-                color: Theme.of(context).accentColor,
+              icon: IconShadowWidget(
+                Icon(
+                  Icons.edit,
+                  color: Theme.of(context).accentColor,
+                ),
               ),
             ),
           IconButton(
@@ -80,9 +83,11 @@ class RowShareEdit extends StatelessWidget {
                       ),
                     );
                   },
-            icon: Icon(
-              Icons.share,
-              color: Theme.of(context).accentColor,
+            icon: IconShadowWidget(
+              Icon(
+                Icons.share,
+                color: Theme.of(context).accentColor,
+              ),
             ),
           ),
         ],

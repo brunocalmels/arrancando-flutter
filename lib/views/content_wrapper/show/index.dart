@@ -136,6 +136,7 @@ class _ShowPageState extends State<ShowPage> {
                         ),
                         RowIconosFecha(
                           content: _content,
+                          fetchContent: _fetchContent,
                         ),
                         if (_content.type != SectionType.pois)
                           ComentariosSection(

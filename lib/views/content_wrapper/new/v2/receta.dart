@@ -5,6 +5,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/_dropdrown_select.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_error_message.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_ingredientes_type_ahead.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_mucho_peso_archivos.dart';
@@ -38,6 +39,8 @@ class RecetaFormState extends State<RecetaForm> {
   List<String> _ingredientes = [];
   final TextEditingController _instruccionesController =
       TextEditingController();
+  final TextEditingController _duracionController = TextEditingController();
+  String _complejidad;
   dynamic _categoria;
   List<dynamic> _subcategorias;
   List<File> _images = [];
@@ -83,6 +86,11 @@ class RecetaFormState extends State<RecetaForm> {
     if (mounted) setState(() {});
   }
 
+  _setComplejidad(dynamic val) {
+    _complejidad = val;
+    if (mounted) setState(() {});
+  }
+
   _crearReceta() async {
     _errorMsg = null;
     if (_formKey.currentState.validate() &&
@@ -98,6 +106,8 @@ class RecetaFormState extends State<RecetaForm> {
           "introduccion": _introduccionController.text,
           "ingredientes": _ingredientes,
           "instrucciones": _instruccionesController.text,
+          "duracion": int.tryParse(_duracionController.text.split('.')[0]),
+          "complejidad": _complejidad,
           "imagenes": await Future.wait(
             _images.map(
               (i) async => {
@@ -213,6 +223,32 @@ class RecetaFormState extends State<RecetaForm> {
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",
+        ),
+        NewContentInput(
+          label: "Duración",
+          controller: _duracionController,
+          hint: "45 minutos",
+          keyboardType: TextInputType.number,
+        ),
+        DropdownSelect(
+          label: "Complejidad",
+          hint: "Definir",
+          onChanged: _setComplejidad,
+          value: _complejidad,
+          items: [
+            {
+              "label": "Simple",
+              "value": "Simple",
+            },
+            {
+              "label": "Media",
+              "value": "Media",
+            },
+            {
+              "label": "Compleja",
+              "value": "Compleja",
+            },
+          ],
         ),
         NewContentInput(
           label: "Introducción",
