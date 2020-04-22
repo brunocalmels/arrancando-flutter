@@ -17,11 +17,13 @@ class CategoryWrapper {
   final int id;
   final SectionType type;
   String nombre;
+  int version;
 
   CategoryWrapper({
     this.id,
     this.type,
     this.nombre,
+    this.version,
   });
 
   factory CategoryWrapper.fromJson(Map<String, dynamic> json) =>

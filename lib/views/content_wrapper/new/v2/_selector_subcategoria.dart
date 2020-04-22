@@ -1,10 +1,11 @@
+import 'package:arrancando/config/models/subcategoria_receta.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_page_subcategorias.dart';
 import 'package:flutter/material.dart';
 
 class SelectorSubCategoria extends StatelessWidget {
   final String label;
-  final Function(List<dynamic>) setSubCategorias;
-  final List<dynamic> subcategorias;
+  final Function(List<SubcategoriaReceta>) setSubCategorias;
+  final List<SubcategoriaReceta> subcategorias;
 
   SelectorSubCategoria({
     @required this.label,
@@ -43,7 +44,7 @@ class SelectorSubCategoria extends StatelessWidget {
                     child: Text(
                       subcategorias != null && subcategorias.length > 0
                           ? subcategorias
-                              .map((s) => s['titulo'])
+                              .map((s) => s.nombre)
                               .toList()
                               .join(", ")
                           : "DEFINIR",
@@ -58,7 +59,7 @@ class SelectorSubCategoria extends StatelessWidget {
                 type: MaterialType.card,
                 child: InkWell(
                   onTap: () async {
-                    List<dynamic> selectedSubCategorias =
+                    List<SubcategoriaReceta> selectedSubCategorias =
                         await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => PageSubCategorias(

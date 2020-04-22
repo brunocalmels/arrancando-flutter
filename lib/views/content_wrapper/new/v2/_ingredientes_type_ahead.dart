@@ -1,15 +1,20 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/ingrediente.dart';
+import 'package:arrancando/config/services/fetcher.dart';
 import 'package:flutter/material.dart';
 
 class IngredientesTypeAhead extends StatefulWidget {
-  final List<String> ingredientes;
-  final Function(List<String>) setIngredientes;
+  final List<dynamic> ingredientes;
+  final Function(List<dynamic>) setIngredientes;
+  final Function(dynamic) removeIngrediente;
 
   IngredientesTypeAhead({
     @required this.ingredientes,
     @required this.setIngredientes,
+    @required this.removeIngrediente,
   });
 
   @override
@@ -17,28 +22,39 @@ class IngredientesTypeAhead extends StatefulWidget {
 }
 
 class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
-  List<String> _items;
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  List<Ingrediente> _items;
+  Ingrediente _selected;
+  String _unidad;
   Timer _debounce;
   bool _searching = false;
 
   _fetchResults() async {
     if (_searchController.text != null && _searchController.text.length >= 1) {
-      // ResponseObject resp = await Fetcher.get(
-      //   url: "/ciudades/search.json?term=${_searchController.text}",
-      // );
+      ResponseObject resp = await Fetcher.get(
+        url:
+            "/ingredientes/search.json?filterrific[search_query]=${_searchController.text}",
+      );
 
-      // if (resp != null && resp.body != null) {
-      //   _items = (json.decode(resp.body) as List)
-      //       .map((c) => CategoryWrapper.fromJson(c))
-      //       .toList();
-      // } else {
-      //   _items = [];
-      // }
-      _items = MyGlobals.INGREDIENTES
-          .where((i) =>
-              i.toLowerCase().contains(_searchController.text.toLowerCase()))
-          .toList();
+      if (resp != null && resp.body != null) {
+        _items = (json.decode(resp.body) as List)
+            .where((i) => !widget.ingredientes.contains(i['nombre']))
+            .map((i) => Ingrediente.fromJson(i))
+            .toList();
+      } else {
+        _items = [];
+      }
+      // _items = MyGlobals.INGREDIENTES
+      //     .where(
+      //       (i) =>
+      //           i.toLowerCase().contains(
+      //                 _searchController.text.toLowerCase(),
+      //               ) &&
+      //           !widget.ingredientes.contains(i),
+      //     )
+      //     .map((i) => Ingrediente(1, i))
+      //     .toList();
     }
 
     _searching = false;
@@ -121,7 +137,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
             ],
           ),
         ),
-        if (_items == null)
+        if (_items == null && _selected == null)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
@@ -132,36 +148,255 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
             ),
           ),
         if (_items != null && _items.length > 0)
-          ..._items
-              .map(
-                (item) => ListTile(
+          Material(
+            color: Color(0x991a1c28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: _items
+                  .map(
+                    (item) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0,
+                            horizontal: 10,
+                          ),
+                          title: Text(
+                            item.nombre,
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                          onTap: () {
+                            _items = null;
+                            _selected = item;
+                            if (mounted) setState(() {});
+                          },
+                        ),
+                        Divider(
+                          height: 1,
+                          color:
+                              Theme.of(context).textTheme.body1.color.withAlpha(
+                                    100,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        if (_items != null && _items.length == 0)
+          Material(
+            color: Color(0x991a1c28),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 10,
+                  ),
                   title: Text(
-                    item,
+                    "No se encontró el ingrediente",
                     style: TextStyle(
                       fontSize: 14,
                     ),
                   ),
+                  subtitle: Text(
+                    "Tocá acá para añadirlo como 'nuevo'",
+                    style: TextStyle(
+                      fontSize: 10,
+                    ),
+                  ),
                   onTap: () {
-                    widget.setIngredientes(
-                      [...widget.ingredientes, item],
-                    );
-                    _searchController.clear();
+                    _items = null;
+                    _selected = Ingrediente(-1, _searchController.text);
+                    if (mounted) setState(() {});
                   },
                 ),
-              )
-              .toList(),
-        if (_items != null && _items.length == 0)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Text(
-              'No hay coincidencias',
-              style: TextStyle(
-                fontSize: 13,
+                Divider(
+                  height: 1,
+                  color: Theme.of(context).textTheme.body1.color.withAlpha(
+                        100,
+                      ),
+                ),
+              ],
+            ),
+          ),
+        if (_selected != null)
+          Material(
+            color: Color(0x991a1c28),
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      _selected.nombre,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xff1a1c28),
+                            offset: Offset(0.0, 0.0),
+                          ),
+                          BoxShadow(
+                            color: Color(0xff2d3548),
+                            offset: Offset(0.0, 0.0),
+                            spreadRadius: -12.0,
+                            blurRadius: 12.0,
+                          ),
+                        ],
+                      ),
+                      child: TextFormField(
+                        controller: _quantityController,
+                        decoration: InputDecoration(
+                          hintText: "Cant.",
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 15,
+                          ),
+                        ),
+                        textCapitalization: TextCapitalization.sentences,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xff1a1c28),
+                            offset: Offset(0.0, 0.0),
+                          ),
+                          BoxShadow(
+                            color: Color(0xff2d3548),
+                            offset: Offset(0.0, 0.0),
+                            spreadRadius: -12.0,
+                            blurRadius: 12.0,
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Theme(
+                          data: ThemeData(
+                            canvasColor: Theme.of(context).backgroundColor,
+                            textTheme: Theme.of(context).textTheme,
+                          ),
+                          child: DropdownButton(
+                            isExpanded: true,
+                            hint: Text(
+                              "Unidad",
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .body1
+                                    .color
+                                    .withAlpha(150),
+                              ),
+                            ),
+                            value: _unidad,
+                            onChanged: (val) {
+                              _unidad = val;
+                              if (mounted) setState(() {});
+                            },
+                            items: MyGlobals.UNIDADES
+                                .map(
+                                  (i) => DropdownMenuItem(
+                                    value: i,
+                                    child: Text(
+                                      i,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  IconButton(
+                    icon: Icon(
+                      Icons.check_circle,
+                      color: Theme.of(context)
+                          .textTheme
+                          .body1
+                          .color
+                          .withAlpha(180),
+                    ),
+                    onPressed: () {
+                      widget.setIngredientes(
+                        [
+                          ...widget.ingredientes,
+                          {
+                            "ingrediente": _selected.nombre,
+                            "cantidad": _quantityController.text,
+                            "unidad": _unidad,
+                          },
+                        ],
+                      );
+                      _searchController.clear();
+                      _quantityController.clear();
+                      _unidad = null;
+                      _items = null;
+                      _selected = null;
+                      if (mounted) setState(() {});
+                    },
+                  ),
+                ],
               ),
             ),
           ),
         if (widget.ingredientes != null && widget.ingredientes.length > 0)
-          ...widget.ingredientes.map((i) => Text(i)).toList(),
+          Wrap(
+            runSpacing: 5,
+            spacing: 5,
+            children: <Widget>[
+              ...widget.ingredientes
+                  .map(
+                    (i) => Chip(
+                      deleteIconColor: Colors.red,
+                      label: Text(
+                        i['ingrediente'],
+                        style: TextStyle(
+                          fontSize: 10,
+                        ),
+                      ),
+                      onDeleted: () => widget.removeIngrediente(i),
+                    ),
+                  )
+                  .toList(),
+            ],
+          ),
         SizedBox(
           height: 5,
         ),

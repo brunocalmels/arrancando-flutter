@@ -20,6 +20,9 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
     json['cuerpo'] as String,
     json['introduccion'] as String,
     json['ingredientes'] as String,
+    (json['ingredientes_items'] as List)
+        ?.map((e) => e as Map<String, dynamic>)
+        ?.toList(),
     json['instrucciones'] as String,
     (json['latitud'] as num)?.toDouble(),
     (json['longitud'] as num)?.toDouble(),
@@ -46,7 +49,13 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
         ?.toList(),
     json['duracion'] as int,
     json['complejidad'] as String,
-  )..localDistance = (json['localDistance'] as num)?.toDouble();
+  )
+    ..subcategoriaRecetas = (json['subcategoria_recetas'] as List)
+        ?.map((e) => e == null
+            ? null
+            : SubcategoriaReceta.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..localDistance = (json['localDistance'] as num)?.toDouble();
 }
 
 Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
@@ -59,9 +68,11 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'cuerpo': instance.cuerpo,
       'introduccion': instance.introduccion,
       'ingredientes': instance.ingredientes,
+      'ingredientes_items': instance.ingredientesItems,
       'instrucciones': instance.instrucciones,
       'ciudad_id': instance.ciudadId,
       'categoria_receta_id': instance.categoriaRecetaId,
+      'subcategoria_recetas': instance.subcategoriaRecetas,
       'categoria_poi_id': instance.categoriaPoiId,
       'categoria_publicacion_id': instance.categoriaPublicacionId,
       'latitud': instance.latitud,

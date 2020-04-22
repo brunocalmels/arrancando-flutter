@@ -1,10 +1,11 @@
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_page_categorias.dart';
 import 'package:flutter/material.dart';
 
 class SelectorCategoria extends StatelessWidget {
   final String label;
-  final Function(dynamic) setCategoria;
-  final dynamic categoria;
+  final Function(CategoryWrapper) setCategoria;
+  final CategoryWrapper categoria;
 
   SelectorCategoria({
     @required this.label,
@@ -42,8 +43,8 @@ class SelectorCategoria extends StatelessWidget {
                     padding: const EdgeInsets.all(5),
                     color: Color(0xff1a1c28),
                     child: Text(
-                      categoria != null && categoria['titulo'] != null
-                          ? categoria['titulo']
+                      categoria != null && categoria.nombre != null
+                          ? categoria.nombre
                           : "DEFINIR",
                     ),
                   ),
@@ -56,7 +57,7 @@ class SelectorCategoria extends StatelessWidget {
                 type: MaterialType.card,
                 child: InkWell(
                   onTap: () async {
-                    dynamic selectedCategoria =
+                    CategoryWrapper selectedCategoria =
                         await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => PageCategorias(),

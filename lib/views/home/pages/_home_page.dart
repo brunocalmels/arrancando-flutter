@@ -5,7 +5,6 @@ import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/cards/card_content.dart';
-import 'package:arrancando/views/cards/slice_content.dart';
 import 'package:arrancando/views/home/_dialog_contenidos_home.dart';
 import 'package:flutter/material.dart';
 

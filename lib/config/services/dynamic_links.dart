@@ -56,6 +56,8 @@ abstract class DynamicLinks {
         }
       }
 
+      ActiveUser.updateUserMetadata(context);
+
       MyGlobals.mainNavigatorKey.currentState.pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => MainScaffold(),

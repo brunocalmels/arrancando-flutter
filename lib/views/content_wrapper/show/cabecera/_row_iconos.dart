@@ -36,7 +36,7 @@ class RowIconos extends StatelessWidget {
               Text(
                 content.duracion != null
                     ? "${content.duracion} minutos"
-                    : "Desconocido",
+                    : "Descon...",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.visible,
                 softWrap: false,
@@ -73,7 +73,7 @@ class RowIconos extends StatelessWidget {
                           orElse: () => null,
                         )
                         ?.nombre ??
-                    'Desconocida',
+                    'Descon...',
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.visible,
                 softWrap: false,
@@ -104,7 +104,7 @@ class RowIconos extends StatelessWidget {
                 ),
               ),
               Text(
-                content.complejidad ?? "Desconocida",
+                content.complejidad ?? "Descon...",
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.visible,
                 softWrap: false,

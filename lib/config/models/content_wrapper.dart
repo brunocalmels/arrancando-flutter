@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/comentario.dart';
+import 'package:arrancando/config/models/subcategoria_receta.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/main.dart';
@@ -30,11 +31,15 @@ class ContentWrapper {
   String cuerpo;
   String introduccion;
   String ingredientes;
+  @JsonKey(name: 'ingredientes_items')
+  List<Map> ingredientesItems;
   String instrucciones;
   @JsonKey(name: 'ciudad_id')
   int ciudadId;
   @JsonKey(name: 'categoria_receta_id')
   int categoriaRecetaId;
+  @JsonKey(name: 'subcategoria_recetas')
+  List<SubcategoriaReceta> subcategoriaRecetas;
   @JsonKey(name: 'categoria_poi_id')
   int categoriaPoiId;
   @JsonKey(name: 'categoria_publicacion_id')
@@ -62,6 +67,7 @@ class ContentWrapper {
     this.cuerpo,
     this.introduccion,
     this.ingredientes,
+    this.ingredientesItems,
     this.instrucciones,
     this.latitud,
     this.longitud,
@@ -219,20 +225,29 @@ class ContentWrapper {
     //     "Si todavía no te descargaste Arrancando podés hacerlo desde\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es";
     String cabecera = "";
 
-    String cuerpo = this.cuerpo != null ? "\n\n${this.cuerpo}" : "";
-    String introduccion = this.introduccion != null
+    String cuerpo = this.cuerpo != null && this.cuerpo.isNotEmpty
+        ? "\n\n${this.cuerpo}"
+        : "";
+    String introduccion = this.introduccion != null &&
+            this.introduccion.isNotEmpty
         ? "\n\n${esWpp ? '*INTRODUCCIÓN*:\n' : 'INTRODUCCIÓN:\n'}${this.introduccion}"
         : "";
-    String ingredientes = this.ingredientes != null
-        ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientes}"
-        : "";
-    String instrucciones = this.instrucciones != null
+    String ingredientes = this.ingredientesItems != null &&
+            this.ingredientesItems.isNotEmpty
+        ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientesItems.join('\n')}"
+        : this.ingredientes != null && this.ingredientes.isNotEmpty
+            ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientes}"
+            : "";
+    String instrucciones = this.instrucciones != null &&
+            this.instrucciones.isNotEmpty
         ? "\n\n${esWpp ? '*INSTRUCCIONES*:\n' : 'INSTRUCCIONES:\n'}${this.instrucciones}"
         : "";
 
+    String titulo = esWpp ? "*${this.titulo}*" : this.titulo;
+
     String texto = esFull
-        ? "$cabecera\n\n$piecera\n\n${this.titulo}$cuerpo$introduccion$ingredientes$instrucciones"
-        : "$cabecera\n\n$piecera\n\n${this.titulo}";
+        ? "$cabecera\n\n$piecera\n\n$titulo$cuerpo$introduccion$ingredientes$instrucciones"
+        : "$cabecera\n\n$titulo\n\n$piecera";
 
     if (esFbk) {
       Share.text(

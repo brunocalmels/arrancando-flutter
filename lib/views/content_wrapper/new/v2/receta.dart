@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/models/subcategoria_receta.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_dropdrown_select.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_error_message.dart';
@@ -31,18 +33,19 @@ class RecetaForm extends StatefulWidget {
 }
 
 class RecetaFormState extends State<RecetaForm> {
+  final GlobalSingleton gs = GlobalSingleton();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _introduccionController = TextEditingController();
   // final TextEditingController _ingredientesController = TextEditingController();
-  List<String> _ingredientes = [];
+  List<dynamic> _ingredientes = [];
   final TextEditingController _instruccionesController =
       TextEditingController();
   final TextEditingController _duracionController = TextEditingController();
   String _complejidad;
-  dynamic _categoria;
-  List<dynamic> _subcategorias;
+  CategoryWrapper _categoria;
+  List<SubcategoriaReceta> _subcategorias;
   List<File> _images = [];
   List<String> _currentImages = [];
   Map<String, String> _currentVideoThumbs = {};
@@ -71,18 +74,23 @@ class RecetaFormState extends State<RecetaForm> {
     if (mounted) setState(() {});
   }
 
-  _setCategoria(dynamic categoria) {
+  _setCategoria(CategoryWrapper categoria) {
     _categoria = categoria;
     if (mounted) setState(() {});
   }
 
-  _setSubCategorias(List<dynamic> subcategorias) {
+  _setSubCategorias(List<SubcategoriaReceta> subcategorias) {
     _subcategorias = subcategorias;
     if (mounted) setState(() {});
   }
 
-  _setIngredientes(List<String> ingredientes) {
+  _setIngredientes(List<dynamic> ingredientes) {
     _ingredientes = ingredientes;
+    if (mounted) setState(() {});
+  }
+
+  _removeIngrediente(dynamic ingrediente) {
+    if (_ingredientes.contains(ingrediente)) _ingredientes.remove(ingrediente);
     if (mounted) setState(() {});
   }
 
@@ -101,10 +109,11 @@ class RecetaFormState extends State<RecetaForm> {
 
       try {
         Map<String, dynamic> body = {
-          "categoria_receta_id": _categoria['id'],
+          "categoria_receta_id": _categoria.id,
+          "subcategoria_receta_ids": _subcategorias.map((s) => s.id).toList(),
           "titulo": _tituloController.text,
           "introduccion": _introduccionController.text,
-          "ingredientes": _ingredientes,
+          "ingredientes_items": _ingredientes,
           "instrucciones": _instruccionesController.text,
           "duracion": int.tryParse(_duracionController.text.split('.')[0]),
           "complejidad": _complejidad,
@@ -182,13 +191,17 @@ class RecetaFormState extends State<RecetaForm> {
       _id = widget.content.id;
       _tituloController.text = widget.content.titulo;
       _introduccionController.text = widget.content.introduccion;
-      _ingredientes = []; //widget.content.ingredientes;
+      _ingredientes = [...widget.content.ingredientesItems];
       _instruccionesController.text = widget.content.instrucciones;
       _currentImages = widget.content.imagenes;
       _currentVideoThumbs = widget.content.videoThumbs;
-      _categoria = MyGlobals.CATEGORIAS_RECETA.firstWhere(
-          (c) => c['id'] == widget.content.categoriaRecetaId,
-          orElse: () => null);
+      _categoria = gs.categories[SectionType.recetas].firstWhere(
+        (c) => c.id == widget.content.categoriaRecetaId,
+        orElse: () => null,
+      );
+      _subcategorias = [...widget.content.subcategoriaRecetas];
+      _duracionController.text = "${widget.content.duracion}";
+      _complejidad = widget.content.complejidad;
       if (mounted) setState(() {});
     }
   }
@@ -225,7 +238,7 @@ class RecetaFormState extends State<RecetaForm> {
               : "Este campo no puede estar vacío",
         ),
         NewContentInput(
-          label: "Duración",
+          label: "Duración (minutos)",
           controller: _duracionController,
           hint: "45 minutos",
           keyboardType: TextInputType.number,
@@ -237,8 +250,8 @@ class RecetaFormState extends State<RecetaForm> {
           value: _complejidad,
           items: [
             {
-              "label": "Simple",
-              "value": "Simple",
+              "label": "Fácil",
+              "value": "Fácil",
             },
             {
               "label": "Media",
@@ -263,6 +276,7 @@ class RecetaFormState extends State<RecetaForm> {
         IngredientesTypeAhead(
           ingredientes: _ingredientes,
           setIngredientes: _setIngredientes,
+          removeIngrediente: _removeIngrediente,
         ),
         NewContentInput(
           label: "Instrucciones",

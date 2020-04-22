@@ -142,6 +142,8 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
 
+    ActiveUser.updateUserMetadata(context);
+
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => MainScaffold(),

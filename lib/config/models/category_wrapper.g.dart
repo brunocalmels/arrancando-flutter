@@ -11,6 +11,7 @@ CategoryWrapper _$CategoryWrapperFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     type: _$enumDecodeNullable(_$SectionTypeEnumMap, json['type']),
     nombre: json['nombre'] as String,
+    version: json['version'] as int,
   );
 }
 
@@ -19,6 +20,7 @@ Map<String, dynamic> _$CategoryWrapperToJson(CategoryWrapper instance) =>
       'id': instance.id,
       'type': _$SectionTypeEnumMap[instance.type],
       'nombre': instance.nombre,
+      'version': instance.version,
     };
 
 T _$enumDecode<T>(
