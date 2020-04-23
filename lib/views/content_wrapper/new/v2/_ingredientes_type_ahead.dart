@@ -45,16 +45,6 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
       } else {
         _items = [];
       }
-      // _items = MyGlobals.INGREDIENTES
-      //     .where(
-      //       (i) =>
-      //           i.toLowerCase().contains(
-      //                 _searchController.text.toLowerCase(),
-      //               ) &&
-      //           !widget.ingredientes.contains(i),
-      //     )
-      //     .map((i) => Ingrediente(1, i))
-      //     .toList();
     }
 
     _searching = false;

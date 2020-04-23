@@ -10,9 +10,14 @@ class DialogContenidosHome extends StatefulWidget {
 
 class _DialogContenidosHomeState extends State<DialogContenidosHome> {
   final List _items = [
+    // {
+    //   "type": SectionType.publicaciones,
+    //   "text": "Comunidad",
+    //   "icon": Icons.home,
+    // },
     {
       "type": SectionType.publicaciones,
-      "text": "Comunidad",
+      "text": "Publicaciones",
       "icon": Icons.home,
     },
     {
@@ -22,14 +27,14 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
     },
     {
       "type": SectionType.pois,
-      "text": "Pois",
+      "text": "P. Interés",
       "icon": Icons.location_on,
     },
-    {
-      "type": SectionType.wiki,
-      "text": "Wiki",
-      "icon": Icons.library_books,
-    },
+    // {
+    //   "type": SectionType.wiki,
+    //   "text": "Wiki",
+    //   "icon": Icons.library_books,
+    // },
   ];
 
   List<SectionType> _contenidos = [];

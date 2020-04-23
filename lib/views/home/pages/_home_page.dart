@@ -4,9 +4,11 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/cards/card_content.dart';
 import 'package:arrancando/views/home/_dialog_contenidos_home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,15 +16,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<ContentWrapper> _items = [];
+  List<ContentWrapper> _items;
   bool _fetching = true;
   int _offset = -5;
   bool _noMore = false;
 
-  Future<void> _fetchContent() async {
+  Future<void> _fetchContent({bool reset = false}) async {
+    if (reset) {
+      _items = null;
+      _fetching = true;
+      _offset = -5;
+      _noMore = false;
+    }
+
     int lastLength = _items != null ? _items.length : 0;
+    List<String> contenidosHome = Provider.of<MainState>(context)
+        .contenidosHome
+        .map((ch) => ch.toString().split('.').last.toLowerCase())
+        .toList();
+
     ResponseObject resp = await Fetcher.get(
-      url: "/content.json?offset=${_offset + 5}",
+      url:
+          "/content.json?offset=${_offset + 5}${contenidosHome != null && contenidosHome.isNotEmpty ? ('&contenidos_home=' + json.encode(contenidosHome)) : ''}",
     );
 
     if (resp != null)
@@ -43,10 +58,11 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => DialogContenidosHome(),
           );
           if (_contenidos != null) {
-            CategoryWrapper.saveContentHome(
+            await CategoryWrapper.saveContentHome(
               context,
               _contenidos,
             );
+            _fetchContent(reset: true);
           }
         },
         child: Image.asset(
@@ -58,7 +74,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchContent();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchContent();
+    });
   }
 
   @override

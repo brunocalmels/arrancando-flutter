@@ -4,12 +4,12 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 abstract class MyGlobals {
-  static const APP_VERSION = "2.0.0-alpha+44";
+  static const APP_VERSION = "2.0.1-alpha+45";
 
-  static const bool SHOW_DEV_LOGIN = false;
-  // static const bool SHOW_DEV_LOGIN = true;
+  // static const bool SHOW_DEV_LOGIN = false;
+  static const bool SHOW_DEV_LOGIN = true;
 
-  // static const String SERVER_URL = "http://192.168.0.4:5050";
+  // static const String SERVER_URL = "http://192.168.0.4:5051";
   // static const String SERVER_URL = "http://192.168.0.11:5000";
   // static const String SERVER_URL = "http://192.168.43.138:5000";
   // static const String SERVER_URL = "http://192.168.1.3:5000";
@@ -75,39 +75,19 @@ abstract class MyGlobals {
     "Wok": "assets/images/content/categories/wok.png",
   };
 
-  static const List SUBCATEGORIAS_RECETA = [
+  static const List<Map<String, String>> COMPLEJIDAD = [
     {
-      "id": 1,
-      "titulo": "Carne roja",
+      "label": "Fácil",
+      "value": "Fácil",
     },
     {
-      "id": 2,
-      "titulo": "Carne blanca",
+      "label": "Media",
+      "value": "Media",
     },
     {
-      "id": 3,
-      "titulo": "Vegatales",
+      "label": "Compleja",
+      "value": "Compleja",
     },
-    {
-      "id": 4,
-      "titulo": "Frutos",
-    },
-    {
-      "id": 5,
-      "titulo": "Frutos secos",
-    },
-    {
-      "id": 6,
-      "titulo": "Especias",
-    },
-  ];
-
-  static const List<String> INGREDIENTES = [
-    "Papa",
-    "Batata",
-    "Manzana",
-    "Oregano",
-    "Pepino",
   ];
 
   static const List<String> UNIDADES = [

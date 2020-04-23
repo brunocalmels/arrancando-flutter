@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/subcategoria_receta.dart';
@@ -248,20 +249,7 @@ class RecetaFormState extends State<RecetaForm> {
           hint: "Definir",
           onChanged: _setComplejidad,
           value: _complejidad,
-          items: [
-            {
-              "label": "Fácil",
-              "value": "Fácil",
-            },
-            {
-              "label": "Media",
-              "value": "Media",
-            },
-            {
-              "label": "Compleja",
-              "value": "Compleja",
-            },
-          ],
+          items: MyGlobals.COMPLEJIDAD,
         ),
         NewContentInput(
           label: "Introducción",
