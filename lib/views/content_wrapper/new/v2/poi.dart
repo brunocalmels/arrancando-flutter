@@ -180,6 +180,9 @@ class _PoiFormState extends State<PoiForm> {
         }
       } catch (e) {
         print(e);
+        _errorMsg =
+            "Ocurrió un error, por favor intentalo nuevamente más tarde.";
+        _hideButtonVeryBadError = true;
       }
       _sent = false;
     } else if (_images == null || _images.isEmpty) {
