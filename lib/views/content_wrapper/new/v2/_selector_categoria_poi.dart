@@ -41,11 +41,11 @@ class SelectorCategoriaPoi extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.all(5),
-                    color: Color(0xff1a1c28),
+                    color: Color(0xff262a3d),
                     child: Text(
                       categoria != null && categoria.nombre != null
                           ? categoria.nombre
-                          : "DEFINIR",
+                          : "SELECCIONAR",
                     ),
                   ),
                 ],

@@ -77,6 +77,21 @@ class _ShowPageState extends State<ShowPage> {
     }
   }
 
+  List<String> _reorderImages() {
+    if (_content != null &&
+        _content.imagenes != null &&
+        _content.imagenes.isNotEmpty) {
+      if (_content.imagenes.length > 1) {
+        var newList = [..._content.imagenes];
+        var aux = newList.removeAt(0);
+        newList.insert(1, aux);
+        return [...newList];
+      }
+      return _content.imagenes;
+    }
+    return [];
+  }
+
   @override
   void initState() {
     super.initState();
@@ -113,7 +128,7 @@ class _ShowPageState extends State<ShowPage> {
                           height: 10,
                         ),
                         ImagesSlider(
-                          images: _content.imagenes,
+                          images: _reorderImages(),
                           videoThumbs: _content.videoThumbs,
                         ),
                         SizedBox(

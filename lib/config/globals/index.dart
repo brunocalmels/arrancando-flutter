@@ -4,7 +4,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 abstract class MyGlobals {
-  static const APP_VERSION = "2.0.1-alpha+45";
+  static const APP_VERSION = "2.0.2-alpha+46";
 
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
@@ -85,8 +85,8 @@ abstract class MyGlobals {
       "value": "Media",
     },
     {
-      "label": "Compleja",
-      "value": "Compleja",
+      "label": "Dificil",
+      "value": "Dificil",
     },
   ];
 

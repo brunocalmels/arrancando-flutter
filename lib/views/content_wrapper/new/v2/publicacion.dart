@@ -131,9 +131,12 @@ class _PublicacionFormState extends State<PublicacionForm> {
         }
       } catch (e) {
         print(e);
+        _errorMsg =
+            "Ocurrió un error, por favor intentalo nuevamente más tarde.";
       }
       _sent = false;
-    } else if (_images == null || _images.isEmpty) {
+    } else if (!((_images != null && _images.isNotEmpty) ||
+        (_currentImages != null && _currentImages.isNotEmpty))) {
       _errorMsg = "Debes añadir al menos 1 imagen/video";
     }
 

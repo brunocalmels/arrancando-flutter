@@ -40,14 +40,14 @@ class SelectorSubCategoria extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.all(5),
-                    color: Color(0xff1a1c28),
+                    color: Color(0xff262a3d),
                     child: Text(
                       subcategorias != null && subcategorias.length > 0
                           ? subcategorias
                               .map((s) => s.nombre)
                               .toList()
                               .join(", ")
-                          : "DEFINIR",
+                          : "SELECCIONAR",
                     ),
                   ),
                 ],

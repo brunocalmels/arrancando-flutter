@@ -104,7 +104,11 @@ class RecetaFormState extends State<RecetaForm> {
     _errorMsg = null;
     if (_formKey.currentState.validate() &&
         ((_images != null && _images.isNotEmpty) ||
-            (_currentImages != null && _currentImages.isNotEmpty))) {
+            (_currentImages != null && _currentImages.isNotEmpty)) &&
+        (_categoria != null &&
+            _subcategorias != null &&
+            _subcategorias.isNotEmpty) &&
+        (_ingredientes != null && _ingredientes.isNotEmpty)) {
       _sent = true;
       if (mounted) setState(() {});
 
@@ -177,10 +181,19 @@ class RecetaFormState extends State<RecetaForm> {
         }
       } catch (e) {
         print(e);
+        _errorMsg =
+            "Ocurrió un error, por favor intentalo nuevamente más tarde.";
       }
       _sent = false;
-    } else if (_images == null || _images.isEmpty) {
+    } else if (!((_images != null && _images.isNotEmpty) ||
+        (_currentImages != null && _currentImages.isNotEmpty))) {
       _errorMsg = "Debes añadir al menos 1 imagen/video";
+    } else if (!(_categoria != null &&
+        _subcategorias != null &&
+        _subcategorias.isNotEmpty)) {
+      _errorMsg = "Debes seleccionar 1 categoría y al menos 1 subcategoría";
+    } else if (!(_ingredientes != null && _ingredientes.isNotEmpty)) {
+      _errorMsg = "Debes añadir al menos 1 ingrediente";
     }
 
     if (mounted) setState(() {});
@@ -192,7 +205,10 @@ class RecetaFormState extends State<RecetaForm> {
       _id = widget.content.id;
       _tituloController.text = widget.content.titulo;
       _introduccionController.text = widget.content.introduccion;
-      _ingredientes = [...widget.content.ingredientesItems];
+      _ingredientes = widget.content.ingredientesItems != null &&
+              widget.content.ingredientesItems.length > 0
+          ? [...widget.content.ingredientesItems]
+          : [];
       _instruccionesController.text = widget.content.instrucciones;
       _currentImages = widget.content.imagenes;
       _currentVideoThumbs = widget.content.videoThumbs;
@@ -200,8 +216,12 @@ class RecetaFormState extends State<RecetaForm> {
         (c) => c.id == widget.content.categoriaRecetaId,
         orElse: () => null,
       );
-      _subcategorias = [...widget.content.subcategoriaRecetas];
-      _duracionController.text = "${widget.content.duracion}";
+      _subcategorias = widget.content.subcategoriaRecetas != null &&
+              widget.content.subcategoriaRecetas.length > 0
+          ? [...widget.content.subcategoriaRecetas]
+          : [];
+      _duracionController.text =
+          widget.content.duracion != null ? "${widget.content.duracion}" : null;
       _complejidad = widget.content.complejidad;
       if (mounted) setState(() {});
     }
@@ -246,7 +266,7 @@ class RecetaFormState extends State<RecetaForm> {
         ),
         DropdownSelect(
           label: "Complejidad",
-          hint: "Definir",
+          hint: "Seleccionar",
           onChanged: _setComplejidad,
           value: _complejidad,
           items: MyGlobals.COMPLEJIDAD,

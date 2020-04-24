@@ -27,6 +27,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
   List<Ingrediente> _items;
   Ingrediente _selected;
   String _unidad;
+  String _errorIngred;
   Timer _debounce;
   bool _searching = false;
 
@@ -37,7 +38,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
             "/ingredientes/search.json?filterrific[search_query]=${_searchController.text}",
       );
 
-      if (resp != null && resp.body != null) {
+      if (resp != null && resp.body != null && resp.body.isNotEmpty) {
         _items = (json.decode(resp.body) as List)
             .where((i) => !widget.ingredientes.contains(i['nombre']))
             .map((i) => Ingrediente.fromJson(i))
@@ -181,7 +182,10 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                   .toList(),
             ),
           ),
-        if (_items != null && _items.length == 0)
+        if (_items != null &&
+            _items.length == 0 &&
+            _searchController.text != null &&
+            _searchController.text.isNotEmpty)
           Material(
             color: Color(0x991a1c28),
             child: Column(
@@ -221,7 +225,9 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
               ],
             ),
           ),
-        if (_selected != null)
+        if (_selected != null &&
+            _searchController.text != null &&
+            _searchController.text.isNotEmpty)
           Material(
             color: Color(0x991a1c28),
             child: Padding(
@@ -344,25 +350,52 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                           .withAlpha(180),
                     ),
                     onPressed: () {
-                      widget.setIngredientes(
-                        [
-                          ...widget.ingredientes,
-                          {
-                            "ingrediente": _selected.nombre,
-                            "cantidad": _quantityController.text,
-                            "unidad": _unidad,
-                          },
-                        ],
-                      );
-                      _searchController.clear();
-                      _quantityController.clear();
-                      _unidad = null;
-                      _items = null;
-                      _selected = null;
+                      _errorIngred = null;
+                      if (_selected != null &&
+                          _selected.nombre != null &&
+                          _selected.nombre.isNotEmpty &&
+                          _quantityController.text != null &&
+                          _quantityController.text.isNotEmpty &&
+                          _unidad != null &&
+                          _unidad.isNotEmpty) {
+                        widget.setIngredientes(
+                          [
+                            ...widget.ingredientes,
+                            {
+                              "ingrediente": _selected.nombre,
+                              "cantidad": _quantityController.text,
+                              "unidad": _unidad,
+                            },
+                          ],
+                        );
+                        _searchController.clear();
+                        _quantityController.clear();
+                        _unidad = null;
+                        _items = null;
+                        _selected = null;
+                      } else {
+                        _errorIngred = "Todos los campos deben estar completos";
+                      }
                       if (mounted) setState(() {});
                     },
                   ),
                 ],
+              ),
+            ),
+          ),
+        if (_selected != null && _errorIngred != null)
+          Padding(
+            padding: const EdgeInsets.all(7),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Text(
+                _errorIngred,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 11,
+                ),
+                textAlign: TextAlign.center,
+                softWrap: true,
               ),
             ),
           ),

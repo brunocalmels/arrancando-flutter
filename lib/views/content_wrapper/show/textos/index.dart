@@ -79,8 +79,8 @@ class TextosShow extends StatelessWidget {
                   ),
                 ),
               ),
-            SelectableText.rich(
-              TextSpan(
+            RichText(
+              text: TextSpan(
                 children: _parseTexto(texto)
                     .map(
                       (chunk) => TextSpan(

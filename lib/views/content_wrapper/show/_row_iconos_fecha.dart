@@ -28,16 +28,16 @@ class RowIconosFecha extends StatelessWidget {
               content: content,
               fetchContent: fetchContent,
             ),
-            if (content.type != SectionType.pois)
-              GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Icon(
-                    Icons.chat_bubble_outline,
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-              ),
+            // if (content.type != SectionType.pois)
+            //   GestureDetector(
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(5),
+            //       child: Icon(
+            //         Icons.chat_bubble_outline,
+            //         color: Theme.of(context).accentColor,
+            //       ),
+            //     ),
+            //   ),
           ],
         ),
         Text(
@@ -53,16 +53,16 @@ class RowIconosFecha extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            if (content.type != SectionType.pois)
-              GestureDetector(
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: Icon(
-                    Icons.camera_alt,
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-              ),
+            // if (content.type != SectionType.pois)
+            //   GestureDetector(
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(5),
+            //       child: Icon(
+            //         Icons.camera_alt,
+            //         color: Theme.of(context).accentColor,
+            //       ),
+            //     ),
+            //   ),
             GestureDetector(
               onTap: () => SavedContent.toggleSave(content, context),
               child: Padding(

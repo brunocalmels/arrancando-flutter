@@ -15,113 +15,107 @@ class RowIconos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          width: 50,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              IconShadowWidget(
-                Icon(
-                  Icons.timer,
-                  color: Theme.of(context).accentColor,
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.85,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                IconShadowWidget(
+                  Icon(
+                    Icons.timer,
+                    color: Theme.of(context).accentColor,
+                  ),
                 ),
-              ),
-              Text(
-                content.duracion != null
-                    ? "${content.duracion} minutos"
-                    : "Descon...",
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.visible,
-                softWrap: false,
-                style: TextStyle(
-                  fontSize: 9,
-                  shadows: [
-                    Shadow(
-                      color: Theme.of(context).textTheme.body1.color,
-                      blurRadius: 5,
-                    ),
-                  ],
+                Text(
+                  content.duracion != null
+                      ? "${content.duracion} minutos"
+                      : "Desconocida",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 9,
+                    shadows: [
+                      Shadow(
+                        color: Theme.of(context).textTheme.body1.color,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Container(
-          width: 50,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              IconShadowWidget(
-                Icon(
-                  ArrancandoIcons.horno,
-                  color: Theme.of(context).accentColor,
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                IconShadowWidget(
+                  Icon(
+                    ArrancandoIcons.horno,
+                    color: Theme.of(context).accentColor,
+                  ),
                 ),
-              ),
-              Text(
-                gs.categories[SectionType.recetas]
-                        .firstWhere(
-                          (c) => c.id == content.categoriaRecetaId,
-                          orElse: () => null,
-                        )
-                        ?.nombre ??
-                    'Descon...',
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.visible,
-                softWrap: false,
-                style: TextStyle(
-                  fontSize: 9,
-                  shadows: [
-                    Shadow(
-                      color: Theme.of(context).textTheme.body1.color,
-                      blurRadius: 5,
-                    ),
-                  ],
+                Text(
+                  gs.categories[SectionType.recetas]
+                          .firstWhere(
+                            (c) => c.id == content.categoriaRecetaId,
+                            orElse: () => null,
+                          )
+                          ?.nombre ??
+                      'Desconocida',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 9,
+                    shadows: [
+                      Shadow(
+                        color: Theme.of(context).textTheme.body1.color,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Container(
-          width: 50,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              IconShadowWidget(
-                Icon(
-                  ArrancandoIcons.dificultad,
-                  color: Theme.of(context).accentColor,
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                IconShadowWidget(
+                  Icon(
+                    ArrancandoIcons.dificultad,
+                    color: Theme.of(context).accentColor,
+                  ),
                 ),
-              ),
-              Text(
-                content.complejidad ?? "Descon...",
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.visible,
-                softWrap: false,
-                style: TextStyle(
-                  fontSize: 9,
-                  shadows: [
-                    Shadow(
-                      color: Theme.of(context).textTheme.body1.color,
-                      blurRadius: 5,
-                    ),
-                  ],
+                Text(
+                  content.complejidad ?? "Desconocida",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 9,
+                    shadows: [
+                      Shadow(
+                        color: Theme.of(context).textTheme.body1.color,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
