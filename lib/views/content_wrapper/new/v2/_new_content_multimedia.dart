@@ -20,9 +20,15 @@ class NewContentMultimedia extends StatelessWidget {
     if (Platform.isIOS) {
       File _image;
       try {
-        _image = await ImagePicker.pickImage(
-          source: ImageSource.gallery,
-        );
+        if (type == FileType.VIDEO) {
+          _image = await ImagePicker.pickVideo(
+            source: ImageSource.gallery,
+          );
+        } else {
+          _image = await ImagePicker.pickImage(
+            source: ImageSource.gallery,
+          );
+        }
       } catch (e) {
         print(e);
       }

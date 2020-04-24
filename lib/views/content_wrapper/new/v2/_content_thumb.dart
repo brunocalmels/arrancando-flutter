@@ -16,7 +16,7 @@ class ContentThumb extends StatelessWidget {
 
   Widget _buildThumb(BuildContext context, dynamic asset) {
     if (asset is File && asset.path != null) {
-      return ['mp4', 'mpg', 'mpeg']
+      return MyGlobals.VIDEO_FORMATS
               .contains(asset.path.split('.').last.toLowerCase())
           ? FutureBuilder(
               future: VideoThumbnail.thumbnailData(
@@ -60,7 +60,7 @@ class ContentThumb extends StatelessWidget {
               fit: BoxFit.cover,
             );
     } else if (asset is String) {
-      return ['mp4', 'mpg', 'mpeg']
+      return MyGlobals.VIDEO_FORMATS
               .contains(asset.split('.').last.toLowerCase())
           ? currentVideoThumbs != null && currentVideoThumbs[asset] == null
               ? SizedBox(

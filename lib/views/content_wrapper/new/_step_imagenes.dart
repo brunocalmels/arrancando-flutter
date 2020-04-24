@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -178,7 +179,7 @@ class StepImagenes extends StatelessWidget {
                             child: Stack(
                               fit: StackFit.passthrough,
                               children: <Widget>[
-                                ['mp4', 'mpg', 'mpeg'].contains(asset.path
+                                MyGlobals.VIDEO_FORMATS.contains(asset.path
                                         .split('.')
                                         .last
                                         .toLowerCase())

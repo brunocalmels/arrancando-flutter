@@ -63,6 +63,8 @@ abstract class MyGlobals {
     analytics: FirebaseAnalytics(),
   );
 
+  static const VIDEO_FORMATS = ['mp4', 'mpg', 'mpeg', 'mov'];
+
   static const Map<String, String> IMAGENES_CATEGORIAS_RECETAS = {
     "Parrilla": "assets/images/content/categories/parrilla.png",
     "Asador": "assets/images/content/categories/asador.png",

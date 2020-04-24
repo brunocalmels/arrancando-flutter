@@ -31,7 +31,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
       String thumbPath = (await getTemporaryDirectory()).path;
       List<String> vids = widget.content.imagenes
           .where((i) =>
-              ['mp4', 'mpg', 'mpeg'].contains(i.split('.').last.toLowerCase()))
+              MyGlobals.VIDEO_FORMATS.contains(i.split('.').last.toLowerCase()))
           .toList();
 
       await Future.wait(
@@ -74,7 +74,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
       String url =
           "${MyGlobals.SERVER_URL}${widget.content.imagenes[_imagenNro]}";
 
-      if (['mp4', 'mpg', 'mpeg'].contains(i.split('.').last.toLowerCase()) &&
+      if (MyGlobals.VIDEO_FORMATS.contains(i.split('.').last.toLowerCase()) &&
           widget.content.videoThumbs[i] != null) {
         // _videoThumbs[i].readAsBytesSync();
         url = widget.content.videoThumbs[i];
@@ -213,7 +213,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                                   child: Stack(
                                     fit: StackFit.expand,
                                     children: <Widget>[
-                                      ['mp4', 'mpg', 'mpeg'].contains(
+                                      MyGlobals.VIDEO_FORMATS.contains(
                                               i.split('.').last.toLowerCase())
                                           ? widget.content.videoThumbs[i] ==
                                                   null

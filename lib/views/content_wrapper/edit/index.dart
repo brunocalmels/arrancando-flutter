@@ -210,7 +210,7 @@ class _EditPageState extends State<EditPage> {
     await Future.wait(
       _content.imagenes.map(
         (i) async {
-          if (['mp4', 'mpg', 'mpeg']
+          if (MyGlobals.VIDEO_FORMATS
               .contains(i.split('.').last.toLowerCase())) {
             _videoThumbs[i] = File(
               await VideoThumbnail.thumbnailFile(
@@ -328,7 +328,7 @@ class _EditPageState extends State<EditPage> {
                                           _removeImagenes.add(i);
                                           setState(() {});
                                         },
-                                        child: ['mp4', 'mpg', 'mpeg'].contains(
+                                        child: MyGlobals.VIDEO_FORMATS.contains(
                                                 i.split('.').last.toLowerCase())
                                             ? _content.videoThumbs[i] == null
                                                 ? SizedBox(

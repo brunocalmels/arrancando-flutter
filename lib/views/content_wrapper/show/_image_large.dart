@@ -1,3 +1,4 @@
+import 'package:arrancando/config/globals/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -24,7 +25,7 @@ class _ImageLargeState extends State<ImageLarge> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (['mp4', 'mpg', 'mpeg']
+      if (MyGlobals.VIDEO_FORMATS
           .contains(widget.url.split('.').last.toLowerCase()))
         _controller = VideoPlayerController.network(widget.url)
           ..initialize().then((_) {
@@ -53,7 +54,7 @@ class _ImageLargeState extends State<ImageLarge> {
         ),
         backgroundColor: Colors.black,
       ),
-      body: ['mp4', 'mpg', 'mpeg']
+      body: MyGlobals.VIDEO_FORMATS
               .contains(widget.url.split('.').last.toLowerCase())
           ? GestureDetector(
               onTap: () {

@@ -21,7 +21,7 @@ class CabeceraShow extends StatelessWidget {
 
   String _getFirstImage() {
     if (content.imagenes != null && content.imagenes.isNotEmpty) {
-      if (['mp4', 'mpg', 'mpeg'].contains(
+      if (MyGlobals.VIDEO_FORMATS.contains(
         content.imagenes.first.split('.').last.toLowerCase(),
       )) {
         return content.videoThumbs[content.imagenes.first].contains('http')

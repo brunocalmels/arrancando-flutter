@@ -29,7 +29,7 @@ class _ImageSliderState extends State<ImageSlider> {
     String thumbPath = (await getTemporaryDirectory()).path;
     List<String> vids = widget.images
         .where((i) =>
-            ['mp4', 'mpg', 'mpeg'].contains(i.split('.').last.toLowerCase()))
+            MyGlobals.VIDEO_FORMATS.contains(i.split('.').last.toLowerCase()))
         .toList();
 
     await Future.wait(
@@ -112,7 +112,7 @@ class _ImageSliderState extends State<ImageSlider> {
         fit: StackFit.passthrough,
         children: <Widget>[
           Positioned.fill(
-            child: ['mp4', 'mpg', 'mpeg'].contains(
+            child: MyGlobals.VIDEO_FORMATS.contains(
                     widget.images[_activeImage].split('.').last.toLowerCase())
                 ? widget.videoThumbs[widget.images[_activeImage]] == null
                     ? SizedBox(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class BottomSheetMultimedia extends StatelessWidget {
@@ -53,29 +55,30 @@ class BottomSheetMultimedia extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop("video");
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    Icons.filter,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Video",
-                    style: TextStyle(
+          if (!Platform.isIOS)
+            Expanded(
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop("video");
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.filter,
                       color: Colors.white,
                     ),
-                  ),
-                ],
+                    Text(
+                      "Video",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

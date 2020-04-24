@@ -49,7 +49,7 @@ class SliceContent extends StatelessWidget {
                                       color: Color(0x33000000),
                                     ),
                                   )
-                                : ['mp4', 'mpg', 'mpeg'].contains(
+                                : MyGlobals.VIDEO_FORMATS.contains(
                                         content.imagenes.first.split('.').last)
                                     ? Center(
                                         child: Icon(
