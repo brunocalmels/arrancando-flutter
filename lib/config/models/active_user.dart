@@ -152,10 +152,15 @@ class ActiveUser {
           if (date.isBefore(DateTime.now())) {
             ActiveUser.logout(context);
           } else {
-            await Fetcher.get(
+            ResponseObject resp = await Fetcher.get(
               url: "/ciudades/1.json",
-              throwError: true,
             );
+            if (resp == null ||
+                resp.body == null ||
+                resp.status == null ||
+                resp.status > 300) {
+              ActiveUser.logout(context);
+            }
           }
         } catch (e) {
           print(e);
