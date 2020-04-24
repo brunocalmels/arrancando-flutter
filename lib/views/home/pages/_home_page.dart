@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
 
     _fetching = false;
     _offset += 5;
-    _noMore = lastLength == _items.length ? true : false;
+    _noMore = _items != null && lastLength == _items.length ? true : false;
     if (mounted) setState(() {});
   }
 
