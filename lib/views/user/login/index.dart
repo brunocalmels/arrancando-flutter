@@ -15,10 +15,12 @@ import 'package:arrancando/views/user/login/_dev_login.dart';
 import 'package:arrancando/views/user/signup/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -320,6 +322,48 @@ class _LoginPageState extends State<LoginPage> {
       });
   }
 
+  _newSignInFacebook() async {
+    if (mounted)
+      setState(() {
+        sent = true;
+      });
+    try {
+      final facebookLogin = FacebookLogin();
+      final result = await facebookLogin.logIn(['email']);
+
+      if (result != null &&
+          result.accessToken != null &&
+          result.accessToken.token != null &&
+          result.status == FacebookLoginStatus.loggedIn) {
+        ResponseObject resp = await Fetcher.post(
+          unauthenticated: true,
+          url: "/new-facebook-login.json",
+          body: {
+            "credentials": {
+              "id": result.accessToken.userId,
+            }
+          },
+        );
+        if (resp != null &&
+            resp.body != null &&
+            resp.status != null &&
+            resp.status == 200) {
+          await _performAppLogin(json.decode(resp.body));
+        } else {
+          _showLoginErrorSnackbar();
+        }
+      } else {
+        _showLoginErrorSnackbar();
+      }
+    } catch (e) {
+      _showLoginErrorSnackbar();
+    }
+    if (mounted)
+      setState(() {
+        sent = false;
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -510,16 +554,17 @@ class _LoginPageState extends State<LoginPage> {
                           color: Theme.of(context).accentColor,
                           onPressed: sent
                               ? null
-                              : () async {
-                                  sent = true;
-                                  if (mounted) setState(() {});
-                                  const url =
-                                      "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+                              : () {
+                                  // sent = true;
+                                  // if (mounted) setState(() {});
+                                  // const url =
+                                  //     "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
 
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => _redirectDialog(url),
-                                  );
+                                  // showDialog(
+                                  //   context: context,
+                                  //   builder: (_) => _redirectDialog(url),
+                                  // );
+                                  _newSignInFacebook();
                                 },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,

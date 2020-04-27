@@ -234,7 +234,7 @@ class ContentWrapper {
         : "";
     String ingredientes = this.ingredientesItems != null &&
             this.ingredientesItems.isNotEmpty
-        ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientesItems.join('\n')}"
+        ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientesItems.map((i) => "${i['cantidad']} ${i['unidad']} de ${i['ingrediente']}").join('\n')}"
         : this.ingredientes != null && this.ingredientes.isNotEmpty
             ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientes}"
             : "";

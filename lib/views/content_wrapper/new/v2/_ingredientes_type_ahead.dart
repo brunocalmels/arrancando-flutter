@@ -62,6 +62,38 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
     }
   }
 
+  _agregarNuevoIngrediente({bool cantNecesaria = false}) {
+    _errorIngred = null;
+    if (_selected != null &&
+        _selected.nombre != null &&
+        _selected.nombre.isNotEmpty &&
+        (cantNecesaria
+            ? true
+            : _quantityController.text != null &&
+                _quantityController.text.isNotEmpty &&
+                _unidad != null &&
+                _unidad.isNotEmpty)) {
+      widget.setIngredientes(
+        [
+          ...widget.ingredientes,
+          {
+            "ingrediente": _selected.nombre,
+            "cantidad": cantNecesaria ? "" : _quantityController.text,
+            "unidad": cantNecesaria ? "Cant. necesaria" : _unidad,
+          },
+        ],
+      );
+      _searchController.clear();
+      _quantityController.clear();
+      _unidad = null;
+      _items = null;
+      _selected = null;
+    } else {
+      _errorIngred = "Todos los campos deben estar completos";
+    }
+    if (mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -236,6 +268,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       _selected.nombre,
@@ -305,7 +338,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                           child: DropdownButton(
                             isExpanded: true,
                             hint: Text(
-                              "Unidad",
+                              "Unid",
                               style: TextStyle(
                                 fontSize: 10,
                                 color: Theme.of(context)
@@ -340,44 +373,26 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                     ),
                   ),
                   SizedBox(width: 3),
+                  ButtonTheme(
+                    minWidth: 30,
+                    child: FlatButton(
+                      child: Text(
+                        "C/N",
+                        style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                      onPressed: () => _agregarNuevoIngrediente(
+                        cantNecesaria: true,
+                      ),
+                    ),
+                  ),
                   IconButton(
                     icon: Icon(
                       Icons.check_circle,
-                      color: Theme.of(context)
-                          .textTheme
-                          .body1
-                          .color
-                          .withAlpha(180),
+                      color: Theme.of(context).accentColor,
                     ),
-                    onPressed: () {
-                      _errorIngred = null;
-                      if (_selected != null &&
-                          _selected.nombre != null &&
-                          _selected.nombre.isNotEmpty &&
-                          _quantityController.text != null &&
-                          _quantityController.text.isNotEmpty &&
-                          _unidad != null &&
-                          _unidad.isNotEmpty) {
-                        widget.setIngredientes(
-                          [
-                            ...widget.ingredientes,
-                            {
-                              "ingrediente": _selected.nombre,
-                              "cantidad": _quantityController.text,
-                              "unidad": _unidad,
-                            },
-                          ],
-                        );
-                        _searchController.clear();
-                        _quantityController.clear();
-                        _unidad = null;
-                        _items = null;
-                        _selected = null;
-                      } else {
-                        _errorIngred = "Todos los campos deben estar completos";
-                      }
-                      if (mounted) setState(() {});
-                    },
+                    onPressed: _agregarNuevoIngrediente,
                   ),
                 ],
               ),

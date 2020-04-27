@@ -64,9 +64,9 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-		<!-- Google Sign-in Section -->
 	<key>CFBundleURLTypes</key>
 	<array>
+		<!-- Google Sign-in Section -->
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -77,7 +77,42 @@
 				<string>com.googleusercontent.apps.585563708448-45e1955gmofsvfe2hltbvs6r769n3m92</string>
 			</array>
 		</dict>
+		<!-- End of the Google Sign-in Section -->
+			<!--
+			<dict>
+			... Some other CFBundleURLTypes definition.
+			</dict>
+			-->
+		<!-- Facebook Sign-in Section -->
+		<dict>
+				<key>CFBundleURLSchemes</key>
+				<array>
+						<!--
+							Replace "000000000000" with your Facebook App ID here.
+							**NOTE**: The scheme needs to start with `fb` and then your ID.
+						-->
+						<string>fb909518196171089</string>
+				</array>
+		</dict>
+		<!-- End Facebook Sign-in Section -->
 	</array>
-	<!-- End of the Google Sign-in Section -->
+	<!-- Facebook Sign-in Section -->
+	<key>FacebookAppID</key>
+
+	<!-- Replace "000000000000" with your Facebook App ID here. -->
+	<string>909518196171089</string>
+	<key>FacebookDisplayName</key>
+
+	<!-- Replace "YOUR_APP_NAME" with your Facebook App name. -->
+	<string>Arrancando</string>
+
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+			<string>fbapi</string>
+			<string>fb-messenger-share-api</string>
+			<string>fbauth2</string>
+			<string>fbshareextension</string>
+	</array>
+	<!-- End Facebook Sign-in Section -->
 </dict>
 </plist>

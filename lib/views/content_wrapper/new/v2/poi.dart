@@ -88,6 +88,7 @@ class _PoiFormState extends State<PoiForm> {
   _crearPublicacion() async {
     _errorMsg = null;
     if (_formKey.currentState.validate() &&
+        (_latitud != null && _longitud != null) &&
         ((_images != null && _images.isNotEmpty) ||
             (_currentImages != null && _currentImages.isNotEmpty))) {
       _sent = true;
@@ -185,6 +186,18 @@ class _PoiFormState extends State<PoiForm> {
         _hideButtonVeryBadError = true;
       }
       _sent = false;
+    } else if (!_formKey.currentState.validate()) {
+      if (_tituloController.text == null || _tituloController.text.isEmpty) {
+        _errorMsg = "El título no puede estar vacio";
+      } else if (_cuerpoController.text == null ||
+          _cuerpoController.text.isEmpty) {
+        _errorMsg = "La descripción no puede estar vacia";
+      } else if (_rubroController.text == null ||
+          _rubroController.text.isEmpty) {
+        _errorMsg = "El rubro no puede estar vacio";
+      }
+    } else if (!(_latitud != null && _longitud != null)) {
+      _errorMsg = "Debes seleccionar un punto en el mapa";
     } else if (!((_images != null && _images.isNotEmpty) ||
         (_currentImages != null && _currentImages.isNotEmpty))) {
       _errorMsg = "Debes añadir al menos 1 imagen/video";

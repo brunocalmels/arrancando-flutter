@@ -135,6 +135,13 @@ class _PublicacionFormState extends State<PublicacionForm> {
             "Ocurrió un error, por favor intentalo nuevamente más tarde.";
       }
       _sent = false;
+    } else if (!_formKey.currentState.validate()) {
+      if (_tituloController.text == null || _tituloController.text.isEmpty) {
+        _errorMsg = "El título no puede estar vacio";
+      } else if (_cuerpoController.text == null ||
+          _cuerpoController.text.isEmpty) {
+        _errorMsg = "El cuerpo no puede estar vacio";
+      }
     } else if (!((_images != null && _images.isNotEmpty) ||
         (_currentImages != null && _currentImages.isNotEmpty))) {
       _errorMsg = "Debes añadir al menos 1 imagen/video";

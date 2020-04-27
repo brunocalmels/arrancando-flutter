@@ -120,7 +120,10 @@ class RecetaFormState extends State<RecetaForm> {
           "introduccion": _introduccionController.text,
           "ingredientes_items": _ingredientes,
           "instrucciones": _instruccionesController.text,
-          "duracion": int.tryParse(_duracionController.text.split('.')[0]),
+          "duracion": _duracionController.text != null &&
+                  _duracionController.text.isNotEmpty
+              ? int.tryParse(_duracionController.text.split('.')[0])
+              : null,
           "complejidad": _complejidad,
           "imagenes": await Future.wait(
             _images.map(
@@ -185,6 +188,16 @@ class RecetaFormState extends State<RecetaForm> {
             "Ocurrió un error, por favor intentalo nuevamente más tarde.";
       }
       _sent = false;
+    } else if (!_formKey.currentState.validate()) {
+      if (_tituloController.text == null || _tituloController.text.isEmpty) {
+        _errorMsg = "El título no puede estar vacio";
+      } else if (_introduccionController.text == null ||
+          _introduccionController.text.isEmpty) {
+        _errorMsg = "La introducción no puede estar vacia";
+      } else if (_instruccionesController.text == null ||
+          _instruccionesController.text.isEmpty) {
+        _errorMsg = "Las instrucciones no pueden estar vacias";
+      }
     } else if (!((_images != null && _images.isNotEmpty) ||
         (_currentImages != null && _currentImages.isNotEmpty))) {
       _errorMsg = "Debes añadir al menos 1 imagen/video";
