@@ -52,6 +52,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
                   : "${MyGlobals.SERVER_URL}${widget.images[index]}",
               esVideo: MyGlobals.VIDEO_FORMATS
                   .contains(widget.images[index].split('.').last.toLowerCase()),
+              originalSrc: "${MyGlobals.SERVER_URL}${widget.images[index]}",
             ),
             count: widget.images.length,
           ),

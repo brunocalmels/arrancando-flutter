@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 
 class SliderThumb extends StatelessWidget {
   final String src;
+  final String originalSrc;
   final bool esVideo;
 
   SliderThumb({
     @required this.src,
+    this.originalSrc,
     this.esVideo = false,
   });
 
@@ -86,8 +88,12 @@ class SliderThumb extends StatelessWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => ImageLarge(
-                            tag: src,
-                            url: src,
+                            tag: esVideo && originalSrc != null
+                                ? originalSrc
+                                : src,
+                            url: esVideo && originalSrc != null
+                                ? originalSrc
+                                : src,
                           ),
                           settings: RouteSettings(name: 'ImageViewer'),
                         ),
