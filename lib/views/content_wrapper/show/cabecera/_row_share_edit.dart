@@ -5,8 +5,10 @@ import 'package:arrancando/views/content_wrapper/edit/index.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/poi.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/publicacion.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/receta.dart';
+import 'package:arrancando/views/general/_image_icon_shadow.dart';
 import 'package:flutter/material.dart';
 import 'package:icon_shadow/icon_shadow.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RowShareEdit extends StatelessWidget {
   final ContentWrapper content;
@@ -68,6 +70,37 @@ class RowShareEdit extends StatelessWidget {
               icon: IconShadowWidget(
                 Icon(
                   Icons.edit,
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+            ),
+          if (content != null && content.type == SectionType.pois)
+            SizedBox(
+              width: 35,
+              child: GestureDetector(
+                onTap: () async {
+                  String url =
+                      "http://maps.google.com/maps?z=15&t=m&q=loc:${content.latitud}+${content.longitud}";
+                  if (await canLaunch(url)) {
+                    await launch(
+                      url,
+                      forceSafariVC: false,
+                      forceWebView: false,
+                    );
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                },
+                // child: Image.asset(
+                //   "assets/images/logo-google.png",
+                //   width: 20,
+                //   height: 20,
+                // ),
+                child: ImageIcon(
+                  AssetImage(
+                    "assets/images/logo-google.png",
+                  ),
+                  size: 20,
                   color: Theme.of(context).accentColor,
                 ),
               ),

@@ -100,50 +100,70 @@ class FilterBottomSheet extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.only(top: 15),
                         width: MediaQuery.of(context).size.width / 2.5,
-                        child: DropdownButton<ContentSortType>(
-                          isExpanded: true,
-                          value: contentState.sortContentBy,
-                          onChanged: (type) {
-                            contentState.setContentSortType(type);
-                            if (fetchContent != null) fetchContent();
-                          },
-                          items: <DropdownMenuItem<ContentSortType>>[
-                            if (mainState.activePageHome != SectionType.pois)
-                              DropdownMenuItem(
-                                value: ContentSortType.fecha,
-                                child: Text(
-                                  "Fecha",
-                                  style: TextStyle(
+                        child: Theme(
+                          data: ThemeData(
+                            canvasColor: Theme.of(context).backgroundColor,
+                          ),
+                          child: DropdownButton<ContentSortType>(
+                            isExpanded: true,
+                            value: contentState.sortContentBy,
+                            onChanged: (type) {
+                              contentState.setContentSortType(type);
+                              if (fetchContent != null) fetchContent();
+                            },
+                            items: <DropdownMenuItem<ContentSortType>>[
+                              if (mainState.activePageHome != SectionType.pois)
+                                DropdownMenuItem(
+                                  value: ContentSortType.fecha,
+                                  child: Text(
+                                    "Fecha",
+                                    style: TextStyle(
                                       color: contentState.sortContentBy ==
                                               ContentSortType.fecha
                                           ? Theme.of(context).accentColor
-                                          : null),
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .body1
+                                              .color
+                                              .withAlpha(150),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            if (mainState.activePageHome == SectionType.pois)
-                              DropdownMenuItem(
-                                value: ContentSortType.proximidad,
-                                child: Text(
-                                  "Proximidad",
-                                  style: TextStyle(
+                              if (mainState.activePageHome == SectionType.pois)
+                                DropdownMenuItem(
+                                  value: ContentSortType.proximidad,
+                                  child: Text(
+                                    "Proximidad",
+                                    style: TextStyle(
                                       color: contentState.sortContentBy ==
                                               ContentSortType.proximidad
                                           ? Theme.of(context).accentColor
-                                          : null),
+                                          : Theme.of(context)
+                                              .textTheme
+                                              .body1
+                                              .color
+                                              .withAlpha(150),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            DropdownMenuItem(
-                              value: ContentSortType.puntuacion,
-                              child: Text(
-                                "Puntuación",
-                                style: TextStyle(
+                              DropdownMenuItem(
+                                value: ContentSortType.puntuacion,
+                                child: Text(
+                                  "Puntuación",
+                                  style: TextStyle(
                                     color: contentState.sortContentBy ==
                                             ContentSortType.puntuacion
                                         ? Theme.of(context).accentColor
-                                        : null),
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .body1
+                                            .color
+                                            .withAlpha(150),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],

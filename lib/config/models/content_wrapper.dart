@@ -219,8 +219,24 @@ class ContentWrapper {
     bool esWpp = false,
     bool esFbk = false,
   }) async {
+    String miraEsta = "esta publicación";
+
+    switch (type) {
+      case SectionType.publicaciones:
+        miraEsta = "esta publicación";
+        break;
+      case SectionType.recetas:
+        miraEsta = "esta receta";
+        break;
+      case SectionType.pois:
+        miraEsta = "este Pto. de interés";
+        break;
+      default:
+        miraEsta = "esta publicación";
+    }
+
     String piecera =
-        "Mirá esta publicación: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}";
+        "Mirá $miraEsta: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}";
     // String cabecera =
     //     "Si todavía no te descargaste Arrancando podés hacerlo desde\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es";
     String cabecera = "";
