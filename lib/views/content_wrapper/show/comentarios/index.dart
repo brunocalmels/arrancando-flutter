@@ -87,8 +87,9 @@ class _ComentariosSectionState extends State<ComentariosSection> {
       });
 
       String url = "/comentario_publicaciones/$id.json";
-
-      url = "/comentario_recetas/$id.json";
+      if (widget.content.type == SectionType.recetas) {
+        url = "/comentario_recetas/$id.json";
+      }
 
       await Fetcher.destroy(
         url: url,
