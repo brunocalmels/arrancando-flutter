@@ -55,30 +55,30 @@ class BottomSheetMultimedia extends StatelessWidget {
               ),
             ),
           ),
-          if (!Platform.isIOS)
-            Expanded(
-              child: FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop("video");
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.filter,
+          // if (!Platform.isIOS)
+          Expanded(
+            child: FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop("video");
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.filter,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    "Video",
+                    style: TextStyle(
                       color: Colors.white,
                     ),
-                    Text(
-                      "Video",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
+          ),
         ],
       ),
     );

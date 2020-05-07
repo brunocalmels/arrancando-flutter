@@ -43,11 +43,8 @@ class _ImagesSliderState extends State<ImagesSlider> {
             separatorProvider: (index, data) =>
                 Size(MediaQuery.of(context).size.width * 0.15, 30),
             builder: (context, index, data) => SliderThumb(
-              src: [
-                'mp4',
-                'mpg',
-                'mpeg'
-              ].contains(widget.images[index].split('.').last.toLowerCase())
+              src: MyGlobals.VIDEO_FORMATS.contains(
+                      widget.images[index].split('.').last.toLowerCase())
                   ? "${MyGlobals.SERVER_URL}${widget.videoThumbs[widget.images[index]]}"
                   : "${MyGlobals.SERVER_URL}${widget.images[index]}",
               esVideo: MyGlobals.VIDEO_FORMATS

@@ -543,48 +543,48 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     // Comento hasta que se solucione login con Facebook
-                    if (!Platform.isIOS)
-                      ButtonTheme(
-                        minWidth: Platform.isIOS ? 230 : 150,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 10,
-                        ),
-                        child: RaisedButton(
-                          color: Theme.of(context).accentColor,
-                          onPressed: sent
-                              ? null
-                              : () {
-                                  // sent = true;
-                                  // if (mounted) setState(() {});
-                                  // const url =
-                                  //     "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+                    // if (!Platform.isIOS)
+                    ButtonTheme(
+                      minWidth: Platform.isIOS ? 230 : 150,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 10,
+                      ),
+                      child: RaisedButton(
+                        color: Theme.of(context).accentColor,
+                        onPressed: sent
+                            ? null
+                            : () {
+                                // sent = true;
+                                // if (mounted) setState(() {});
+                                // const url =
+                                //     "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
 
-                                  // showDialog(
-                                  //   context: context,
-                                  //   builder: (_) => _redirectDialog(url),
-                                  // );
-                                  _newSignInFacebook();
-                                },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Text(
-                                'INICIAR CON',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Image.asset(
-                                "assets/images/logo-facebook.png",
-                                width: 27,
-                                height: 27,
-                              ),
-                            ],
-                          ),
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (_) => _redirectDialog(url),
+                                // );
+                                _newSignInFacebook();
+                              },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                              'INICIAR CON',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Image.asset(
+                              "assets/images/logo-facebook.png",
+                              width: 27,
+                              height: 27,
+                            ),
+                          ],
                         ),
                       ),
+                    ),
 
                     if (Platform.isIOS)
                       Container(
