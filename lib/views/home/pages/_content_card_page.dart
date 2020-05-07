@@ -41,12 +41,14 @@ class _ContentCardPageState extends State<ContentCardPage> {
         onTap: () {
           showModalBottomSheet(
             context: MyGlobals.mainScaffoldKey.currentContext,
-            builder: (_) => FilterBottomSheet(fetchContent: () {
-              widget.resetLimit();
-              widget.fetchContent(
-                Provider.of<MainState>(context).activePageHome,
-              );
-            }),
+            builder: (_) => FilterBottomSheet(
+              fetchContent: () {
+                widget.resetLimit();
+                widget.fetchContent(
+                  Provider.of<MainState>(context).activePageHome,
+                );
+              },
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(15),

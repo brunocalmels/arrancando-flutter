@@ -3,6 +3,7 @@ import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/_page_categorias.dart';
 import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,15 +46,23 @@ class _CategoriesChipState extends State<CategoriesChip> {
                 ? Container()
                 : ChoiceChip(
                     onSelected: (val) async {
+                      print(mainState.activePageHome == SectionType.recetas);
                       int selected = await showDialog(
                         context: context,
-                        builder: (_) => DialogCategorySelect(
-                          selectCity: mainState.activePageHome != null &&
-                              mainState.activePageHome ==
-                                  SectionType.publicaciones,
-                          pubCateg: widget.pubCateg,
-                          poiCity: widget.poiCity,
-                        ),
+                        builder: (_) =>
+                            mainState.activePageHome == SectionType.recetas
+                                ? PageCategorias(
+                                    returnOnlyId: true,
+                                    showTodas: true,
+                                  )
+                                : DialogCategorySelect(
+                                    selectCity:
+                                        mainState.activePageHome != null &&
+                                            mainState.activePageHome ==
+                                                SectionType.publicaciones,
+                                    pubCateg: widget.pubCateg,
+                                    poiCity: widget.poiCity,
+                                  ),
                       );
                       if (selected != null) {
                         mainState.setSelectedCategoryHome(
@@ -69,13 +78,13 @@ class _CategoriesChipState extends State<CategoriesChip> {
                     },
                     label: Row(
                       children: <Widget>[
-                        Icon(
-                          MyGlobals.ICONOS_CATEGORIAS[mainState.activePageHome],
-                          size: widget.small ? 12 : 15,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
+                        // Icon(
+                        //   MyGlobals.ICONOS_CATEGORIAS[mainState.activePageHome],
+                        //   size: widget.small ? 12 : 15,
+                        // ),
+                        // SizedBox(
+                        //   width: 5,
+                        // ),
                         Container(
                           constraints: BoxConstraints(
                             maxWidth: widget.small ? 20 : 150,

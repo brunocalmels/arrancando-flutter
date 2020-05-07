@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/ingrediente.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +29,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
   String _errorIngred;
   Timer _debounce;
   bool _searching = false;
+  List _unidadesIngredientes = [];
 
   _fetchResults() async {
     if (_searchController.text != null && _searchController.text.length >= 1) {
@@ -92,6 +92,26 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
       _errorIngred = "Todos los campos deben estar completos";
     }
     if (mounted) setState(() {});
+  }
+
+  _fetchUnidadesIngredientes() async {
+    try {
+      ResponseObject resp = await Fetcher.get(
+        url: "/unidades_ingredientes.json",
+      );
+      if (resp != null && resp.body != null) {
+        _unidadesIngredientes = (json.decode(resp.body) as List);
+        if (mounted) setState(() {});
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUnidadesIngredientes();
   }
 
   @override
@@ -349,24 +369,30 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                               ),
                             ),
                             value: _unidad,
-                            onChanged: (val) {
-                              _unidad = val;
-                              if (mounted) setState(() {});
-                            },
-                            items: MyGlobals.UNIDADES
-                                .map(
-                                  (i) => DropdownMenuItem(
-                                    value: i,
-                                    child: Text(
-                                      i,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 11,
+                            onChanged: _unidadesIngredientes != null &&
+                                    _unidadesIngredientes.length > 0
+                                ? (val) {
+                                    _unidad = val;
+                                    if (mounted) setState(() {});
+                                  }
+                                : null,
+                            items: _unidadesIngredientes != null &&
+                                    _unidadesIngredientes.length > 0
+                                ? _unidadesIngredientes
+                                    .map(
+                                      (i) => DropdownMenuItem(
+                                        value: i,
+                                        child: Text(
+                                          i,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
+                                    )
+                                    .toList()
+                                : [],
                           ),
                         ),
                       ),

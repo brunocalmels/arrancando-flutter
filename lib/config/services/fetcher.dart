@@ -130,7 +130,6 @@ abstract class Fetcher {
 
   static Future<ResponseObject> destroy({
     @required String url,
-    @required dynamic body,
     bool throwError = false,
   }) async {
     try {

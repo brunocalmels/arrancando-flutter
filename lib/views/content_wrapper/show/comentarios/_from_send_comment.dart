@@ -7,66 +7,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class FormSendComment extends StatefulWidget {
-  final ContentWrapper content;
-  final Function fetchContent;
+class FormSendComment extends StatelessWidget {
+  final TextEditingController mensajeController;
+  final bool sent;
+  final Function sendComentario;
 
   FormSendComment({
-    @required this.content,
-    @required this.fetchContent,
+    @required this.mensajeController,
+    @required this.sent,
+    @required this.sendComentario,
   });
-
-  @override
-  _FormSendCommentState createState() => _FormSendCommentState();
-}
-
-class _FormSendCommentState extends State<FormSendComment> {
-  final TextEditingController _mensajeController = TextEditingController();
-  bool _sent = false;
-
-  _sendComentario() async {
-    if (_mensajeController != null &&
-        _mensajeController.text != null &&
-        _mensajeController.text.isNotEmpty) {
-      try {
-        setState(() {
-          _sent = true;
-        });
-
-        String url = "/comentario_publicaciones.json";
-
-        var body = {
-          "comentario_publicacion": {
-            "publicacion_id": widget.content.id,
-            "mensaje": _mensajeController.text,
-          }
-        };
-
-        if (widget.content.type == SectionType.recetas) {
-          url = "/comentario_recetas.json";
-          body = {
-            "comentario_receta": {
-              "receta_id": widget.content.id,
-              "mensaje": _mensajeController.text,
-            }
-          };
-        }
-
-        await Fetcher.post(
-          url: url,
-          body: body,
-        );
-        setState(() {});
-        await widget.fetchContent();
-        _mensajeController.clear();
-      } catch (e) {
-        print(e);
-      }
-    }
-    setState(() {
-      _sent = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,11 +77,11 @@ class _FormSendCommentState extends State<FormSendComment> {
                         fontSize: 12,
                         color: Colors.black,
                       ),
-                      controller: _mensajeController,
+                      controller: mensajeController,
                     ),
                   ),
                   FlatButton(
-                    onPressed: _sent ? null : _sendComentario,
+                    onPressed: sent ? null : sendComentario,
                     child: Text(
                       "COMENTAR",
                       style: TextStyle(

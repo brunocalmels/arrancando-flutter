@@ -1,5 +1,8 @@
 import 'package:arrancando/config/models/usuario.dart';
+import 'package:arrancando/config/state/user.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:provider/provider.dart';
 
 part 'comentario.g.dart';
 
@@ -28,4 +31,7 @@ class Comentario {
 
   get fecha =>
       "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
+
+  esOwner(BuildContext context) =>
+      this.user.id == Provider.of<UserState>(context).activeUser.id;
 }

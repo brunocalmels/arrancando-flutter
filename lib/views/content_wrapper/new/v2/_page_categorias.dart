@@ -1,10 +1,18 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:flutter/material.dart';
 
 class PageCategorias extends StatelessWidget {
   final GlobalSingleton gs = GlobalSingleton();
+  final bool returnOnlyId;
+  final bool showTodas;
+
+  PageCategorias({
+    this.returnOnlyId = false,
+    this.showTodas = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +33,17 @@ class PageCategorias extends StatelessWidget {
           ? SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: gs.categories[SectionType.recetas]
-                    .where((c) => c.version == 2)
+                children: (showTodas
+                        ? [
+                            CategoryWrapper(
+                              id: -1,
+                              nombre: "Todos",
+                            ),
+                            ...gs.categories[SectionType.recetas]
+                                .where((c) => c.version == 2),
+                          ]
+                        : gs.categories[SectionType.recetas]
+                            .where((c) => c.version == 2))
                     .map(
                       (c) => Stack(
                         children: <Widget>[
@@ -81,7 +98,10 @@ class PageCategorias extends StatelessWidget {
                               type: MaterialType.card,
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.of(context).pop(c);
+                                  if (returnOnlyId)
+                                    Navigator.of(context).pop(c.id);
+                                  else
+                                    Navigator.of(context).pop(c);
                                 },
                               ),
                             ),

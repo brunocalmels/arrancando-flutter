@@ -3,33 +3,31 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class CommentsList extends StatefulWidget {
+class CommentsList extends StatelessWidget {
   final ContentWrapper content;
+  final Function(int, String) setEditCommentId;
+  final Function(int) setDeleteCommentId;
 
   CommentsList({
     @required this.content,
+    @required this.setEditCommentId,
+    @required this.setDeleteCommentId,
   });
 
-  @override
-  _CommentsListState createState() => _CommentsListState();
-}
-
-class _CommentsListState extends State<CommentsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints(
         maxHeight: 260,
       ),
-      child: widget.content.comentarios != null &&
-              widget.content.comentarios.length > 0
+      child: content.comentarios != null && content.comentarios.length > 0
           ? SingleChildScrollView(
               child: Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [...widget.content.comentarios]
+                  children: [...content.comentarios]
                       .reversed
                       .map(
                         (c) => Padding(
@@ -46,6 +44,7 @@ class _CommentsListState extends State<CommentsList> {
                               ],
                             ),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 CircleAvatar(
                                   radius: 30,
@@ -85,6 +84,36 @@ class _CommentsListState extends State<CommentsList> {
                                     ],
                                   ),
                                 ),
+                                if (c.esOwner(context))
+                                  PopupMenuButton(
+                                    icon: Icon(
+                                      Icons.more_vert,
+                                      size: 20,
+                                      color: Theme.of(context)
+                                          .accentColor
+                                          .withAlpha(150),
+                                    ),
+                                    onSelected: (val) {
+                                      if (val == 'editar') {
+                                        setEditCommentId(
+                                          c.id,
+                                          c.mensaje,
+                                        );
+                                      } else if (val == 'eliminar') {
+                                        setDeleteCommentId(c.id);
+                                      }
+                                    },
+                                    itemBuilder: (_) => [
+                                      PopupMenuItem(
+                                        child: Text("Editar"),
+                                        value: "editar",
+                                      ),
+                                      PopupMenuItem(
+                                        child: Text("Eliminar"),
+                                        value: "eliminar",
+                                      ),
+                                    ],
+                                  ),
                               ],
                             ),
                           ),

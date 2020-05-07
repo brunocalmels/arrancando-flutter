@@ -3,6 +3,7 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -207,12 +208,15 @@ class _MainScaffoldState extends State<MainScaffold> {
     await ActiveUser.verifyCorrectLogin(context);
     if (Provider.of<UserState>(context).activeUser != null) {
       ActiveUser.updateUserMetadata(context);
-      SectionType.values.forEach(
-        (t) {
-          CategoryWrapper.restoreSavedFilter(context, t);
-        },
+      await Future.wait(
+        SectionType.values.map(
+          (t) async {
+            await CategoryWrapper.restoreSavedFilter(context, t);
+            await CategoryWrapper.restoreSavedShowMine(context, t);
+          },
+        ),
       );
-      CategoryWrapper.restoreContentHome(context);
+      await CategoryWrapper.restoreContentHome(context);
     }
   }
 

@@ -4,7 +4,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 abstract class MyGlobals {
-  static const APP_VERSION = "2.0.4-alpha+48";
+  static const APP_VERSION = "2.0.5+49";
 
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
@@ -66,6 +66,7 @@ abstract class MyGlobals {
   static const VIDEO_FORMATS = ['mp4', 'mpg', 'mpeg', 'mov'];
 
   static const Map<String, String> IMAGENES_CATEGORIAS_RECETAS = {
+    "Todos": "assets/images/icon.png",
     "Parrilla": "assets/images/content/categories/parrilla.png",
     "Asador": "assets/images/content/categories/asador.png",
     "Olla": "assets/images/content/categories/olla.png",

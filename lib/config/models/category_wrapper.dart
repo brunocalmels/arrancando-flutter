@@ -133,7 +133,7 @@ class CategoryWrapper {
     int val = prefs.getInt(type.toString());
     if (val != null)
       Provider.of<ContentPageState>(context).setSavedFilter(type, val);
-    Provider.of<MainState>(context).setSelectedCategoryHome(type, val);
+    Provider.of<MainState>(context).setSelectedCategoryHome(type, -1);
   }
 
   static saveFilter(BuildContext context, SectionType type, int val) async {
@@ -151,6 +151,20 @@ class CategoryWrapper {
       ),
     );
     Provider.of<MainState>(context).setContenidosHome(list);
+  }
+
+  static restoreSavedShowMine(BuildContext context, SectionType type) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool val = prefs.getBool("${type.toString()}-show-mine");
+    if (val != null)
+      Provider.of<ContentPageState>(context).setShowMine(type, val);
+    Provider.of<ContentPageState>(context).setShowMine(type, false);
+  }
+
+  static saveShowMine(BuildContext context, SectionType type, bool val) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("${type.toString()}-show-mine", val);
+    Provider.of<ContentPageState>(context).setShowMine(type, val);
   }
 
   static restoreContentHome(BuildContext context) async {

@@ -12,6 +12,11 @@ class ContentPageState extends ChangeNotifier {
     SectionType.pois: -1,
     SectionType.pois_ciudad: -1,
   };
+  Map<SectionType, bool> showMine = {
+    SectionType.publicaciones: false,
+    SectionType.recetas: false,
+    SectionType.pois: false,
+  };
 
   setSearchPageVisible(bool val) {
     showSearchPage = val;
@@ -30,6 +35,11 @@ class ContentPageState extends ChangeNotifier {
 
   setSavedFilter(SectionType type, int val) {
     savedFilters[type] = val;
+    notifyListeners();
+  }
+
+  setShowMine(SectionType type, bool val) {
+    showMine[type] = val;
     notifyListeners();
   }
 }

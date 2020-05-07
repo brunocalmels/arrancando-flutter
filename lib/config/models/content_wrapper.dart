@@ -6,6 +6,7 @@ import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/subcategoria_receta.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
@@ -304,6 +305,10 @@ class ContentWrapper {
     BuildContext context,
     ContentSortType sortBy,
   }) async {
+    MainState mainState = Provider.of<MainState>(context);
+    UserState userState = Provider.of<UserState>(context);
+    ContentPageState contentPageState = Provider.of<ContentPageState>(context);
+
     String rootURL = '/publicaciones';
     String categoryParamName = "ciudad_id";
 
@@ -332,25 +337,23 @@ class ContentWrapper {
 
     if (type == SectionType.publicaciones &&
         context != null &&
-        Provider.of<MainState>(context)
-                .selectedCategoryHome[SectionType.publicaciones_categoria] !=
+        mainState.selectedCategoryHome[SectionType.publicaciones_categoria] !=
             null &&
-        Provider.of<MainState>(context)
-                .selectedCategoryHome[SectionType.publicaciones_categoria] >
-            0)
+        mainState.selectedCategoryHome[SectionType.publicaciones_categoria] > 0)
       url +=
-          '&filterrific[categoria_publicacion_id]=${Provider.of<MainState>(context).selectedCategoryHome[SectionType.publicaciones_categoria]}';
+          '&filterrific[categoria_publicacion_id]=${mainState.selectedCategoryHome[SectionType.publicaciones_categoria]}';
 
     if (type == SectionType.pois &&
         context != null &&
-        Provider.of<MainState>(context)
-                .selectedCategoryHome[SectionType.pois_ciudad] !=
-            null &&
-        Provider.of<MainState>(context)
-                .selectedCategoryHome[SectionType.pois_ciudad] >
-            0)
+        mainState.selectedCategoryHome[SectionType.pois_ciudad] != null &&
+        mainState.selectedCategoryHome[SectionType.pois_ciudad] > 0)
       url +=
-          '&filterrific[ciudad_id]=${Provider.of<MainState>(context).selectedCategoryHome[SectionType.pois_ciudad]}';
+          '&filterrific[ciudad_id]=${mainState.selectedCategoryHome[SectionType.pois_ciudad]}';
+
+    if (context != null &&
+        contentPageState.showMine[type] != null &&
+        contentPageState.showMine[type])
+      url += '&filterrific[user_id]=${userState.activeUser.id}';
 
     if (sortBy != null)
       switch (sortBy) {
