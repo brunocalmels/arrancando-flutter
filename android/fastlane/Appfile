@@ -1,0 +1,2 @@
+json_key_file("~/MacherIT/Content/Arrancando/api-5313406567334451076-65536-f4848bfc7b77.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.macherit.arrancando") # e.g. com.krausefx.app
