@@ -61,6 +61,7 @@ class _SearchPageState extends State<SearchPage> {
       search: _searchController.text,
       categoryId: selectedCategory,
       page: _page,
+      context: context,
     );
 
     _items = await ContentWrapper.sortItems(

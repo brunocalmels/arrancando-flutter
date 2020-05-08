@@ -3,18 +3,12 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
-import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/poi.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/publicacion.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/receta.dart';
-import 'package:arrancando/views/general/curved_text.dart';
 import 'package:arrancando/views/general/version_checker.dart';
 import 'package:arrancando/views/home/_drawer.dart';
 import 'package:arrancando/views/home/_home_fab.dart';
-import 'package:arrancando/views/home/main_new_fab.dart';
 import 'package:arrancando/views/home/pages/_content_card_page.dart';
 import 'package:arrancando/views/home/pages/_home_page.dart';
 import 'package:arrancando/views/home/pages/_poi_page.dart';
@@ -43,13 +37,6 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _loadingMore = false;
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
-  Map<SectionType, IconData> _sectionTypeIconMapper = {
-    SectionType.home: Icons.public,
-    SectionType.publicaciones: Icons.public,
-    SectionType.recetas: Icons.fastfood,
-    SectionType.pois: Icons.location_on,
-    SectionType.wiki: Icons.library_books,
-  };
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
     MainState mainState = Provider.of<MainState>(

@@ -16,16 +16,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<ContentWrapper> _items;
+  List<ContentWrapper> _items = [];
   bool _fetching = true;
-  int _offset = -5;
+  int _page = 1;
   bool _noMore = false;
 
   Future<void> _fetchContent({bool reset = false}) async {
     if (reset) {
       _items = null;
       _fetching = true;
-      _offset = -5;
+      _page = 1;
       _noMore = false;
     }
 
@@ -37,17 +37,21 @@ class _HomePageState extends State<HomePage> {
 
     ResponseObject resp = await Fetcher.get(
       url:
-          "/content.json?offset=${_offset + 5}${contenidosHome != null && contenidosHome.isNotEmpty ? ('&contenidos_home=' + json.encode(contenidosHome)) : ''}",
+          "/content.json?page=$_page${contenidosHome != null && contenidosHome.isNotEmpty ? ('&contenidos_home=' + json.encode(contenidosHome)) : ''}",
     );
 
-    if (resp != null)
-      _items = (json.decode(resp.body) as List)
+    if (resp != null && resp.body != null)
+      _items += (json.decode(resp.body) as List)
           .map((p) => ContentWrapper.fromJson(p))
           .toList();
 
+    _page += 1;
+    _noMore = false;
+    if (_items != null && lastLength == _items.length) {
+      _noMore = true;
+      _page -= 1;
+    }
     _fetching = false;
-    _offset += 5;
-    _noMore = _items != null && lastLength == _items.length ? true : false;
     if (mounted) setState(() {});
   }
 
