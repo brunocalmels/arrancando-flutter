@@ -21,11 +21,11 @@ or alternatively using `brew cask install fastlane`
 fastlane android beta
 ```
 Deployar bundle como beta
-### android deploy
+### android main
 ```
-fastlane android deploy
+fastlane android main
 ```
-Deploy a new version to the Google Play
+Deployar bundle a producción
 
 ----
 
