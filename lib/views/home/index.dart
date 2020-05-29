@@ -220,8 +220,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return WillPopScope(
       onWillPop: () async {
         _setSearchVisibility(false);
-        // _bottomSheetController.close();
-        if (MyGlobals.mainScaffoldKey.currentState.isDrawerOpen) return true;
+        if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen) return true;
 
         return false;
       },
