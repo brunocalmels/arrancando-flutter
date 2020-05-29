@@ -49,6 +49,7 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
         ?.toList(),
     json['duracion'] as int,
     json['complejidad'] as String,
+    json['habilitado'] as bool,
   )
     ..subcategoriaRecetas = (json['subcategoria_recetas'] as List)
         ?.map((e) => e == null
@@ -87,6 +88,7 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'comentarios': instance.comentarios,
       'duracion': instance.duracion,
       'complejidad': instance.complejidad,
+      'habilitado': instance.habilitado,
     };
 
 T _$enumDecode<T>(

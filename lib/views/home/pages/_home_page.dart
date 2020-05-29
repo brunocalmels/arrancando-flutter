@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
     if (resp != null && resp.body != null)
       _items += (json.decode(resp.body) as List)
           .map((p) => ContentWrapper.fromJson(p))
+          .where((p) => p.habilitado == null || p.habilitado)
           .toList();
 
     _page += 1;

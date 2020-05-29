@@ -52,6 +52,7 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
   Widget build(BuildContext context) {
     return AlertDialog(
       titlePadding: const EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       title: Container(
         padding: const EdgeInsets.all(15),
         color: Theme.of(context).backgroundColor,
@@ -68,13 +69,22 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
         children: _items
             .map(
               (i) => CheckboxListTile(
-                title: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(i['text']),
-                    ),
-                    Icon(i['icon']),
-                  ],
+                title: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          i['text'],
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      Icon(i['icon']),
+                    ],
+                  ),
                 ),
                 value: _contenidos.contains(i['type']),
                 onChanged: (val) {

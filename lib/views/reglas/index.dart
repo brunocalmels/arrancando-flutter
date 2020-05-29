@@ -13,7 +13,7 @@ class ReglasPage extends StatelessWidget {
         padding: const EdgeInsets.all(45),
         child: Center(
           child: Text(
-            'Grupo para compartir nuestras experiencias en el asado de todo el mundo.\n\nNo hay fútbol, política, religión, promociones, ventas, beneficios o propaganda de ninguna clase. Esta aplicación está para compartir ideas de como cocinar todo aquello que relacione asar carne sobre fuego o brasas. No se permite la falta de respeto hacia otros usuarios y en estos casos la publicación o los malos comentarios serán eliminados.',
+            'Grupo para compartir nuestras experiencias en el buen asado y el buen comer de todo el mundo.\n\nNo hay fútbol, política, religión, promociones, ventas, beneficios o propaganda de ninguna clase. Esta aplicación está para compartir ideas de como cocinar todo aquello que relacione asar carne sobre fuego o brasas. No se permite la falta de respeto hacia otros usuarios y en estos casos la publicación o los malos comentarios serán eliminados.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 17,

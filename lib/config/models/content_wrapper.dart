@@ -58,6 +58,7 @@ class ContentWrapper {
   List<Comentario> comentarios;
   int duracion; // De cocción
   String complejidad; // De preparación
+  bool habilitado;
 
   ContentWrapper(
     this.id,
@@ -85,6 +86,7 @@ class ContentWrapper {
     this.comentarios,
     this.duracion,
     this.complejidad,
+    this.habilitado,
   );
 
   factory ContentWrapper.fromJson(Map<String, dynamic> json) =>
@@ -374,13 +376,18 @@ class ContentWrapper {
     );
 
     if (resp != null) {
-      return (json.decode(resp.body) as List).map(
-        (p) {
-          var content = ContentWrapper.fromJson(p);
-          content.type = type;
-          return content;
-        },
-      ).toList();
+      return (json.decode(resp.body) as List)
+          .map(
+            (p) {
+              var content = ContentWrapper.fromJson(p);
+              content.type = type;
+              return content;
+            },
+          )
+          .where(
+            (p) => p.habilitado == null || p.habilitado,
+          )
+          .toList();
     }
 
     return [];

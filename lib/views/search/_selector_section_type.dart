@@ -19,25 +19,27 @@ class SelectorSectionType extends StatelessWidget {
           data: ThemeData(
             canvasColor: Theme.of(context).backgroundColor,
           ),
-          child: DropdownButton(
-            onChanged: setActiveType,
-            value: activeType,
-            isDense: true,
-            items: [
-              SectionType.publicaciones,
-              SectionType.recetas,
-              SectionType.pois
-            ]
-                .map(
-                  (v) => DropdownMenuItem(
-                    value: v,
-                    child: Icon(
-                      MyGlobals.ICONOS_CATEGORIAS[v],
-                      color: Theme.of(context).accentColor,
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+              onChanged: setActiveType,
+              value: activeType,
+              isDense: true,
+              items: [
+                SectionType.publicaciones,
+                SectionType.recetas,
+                SectionType.pois
+              ]
+                  .map(
+                    (v) => DropdownMenuItem(
+                      value: v,
+                      child: Icon(
+                        MyGlobals.ICONOS_CATEGORIAS[v],
+                        color: Theme.of(context).accentColor,
+                      ),
                     ),
-                  ),
-                )
-                .toList(),
+                  )
+                  .toList(),
+            ),
           ),
         ),
       ],

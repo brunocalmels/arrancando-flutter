@@ -51,6 +51,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
           .map(
             (c) => ContentWrapper.fromJson(c),
           )
+          .where((p) => p.habilitado == null || p.habilitado)
           .toList();
 
     _fetching[type] = false;
