@@ -62,7 +62,8 @@ class _PublicacionFormState extends State<PublicacionForm> {
     _errorMsg = null;
     if (_formKey.currentState.validate() &&
         ((_images != null && _images.isNotEmpty) ||
-            (_currentImages != null && _currentImages.isNotEmpty))) {
+            (_currentImages != null && _currentImages.isNotEmpty)) &&
+        [...(_images ?? []), _currentImages ?? []].length <= 6) {
       _sent = true;
       if (mounted) setState(() {});
 
@@ -145,6 +146,8 @@ class _PublicacionFormState extends State<PublicacionForm> {
     } else if (!((_images != null && _images.isNotEmpty) ||
         (_currentImages != null && _currentImages.isNotEmpty))) {
       _errorMsg = "Debes añadir al menos 1 imagen/video";
+    } else if (!([...(_images ?? []), _currentImages ?? []].length <= 6)) {
+      _errorMsg = "Podés subir como máximo 6 imágenes y/o videos";
     }
 
     if (mounted) setState(() {});

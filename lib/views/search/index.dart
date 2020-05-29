@@ -28,7 +28,7 @@ class _SearchPageState extends State<SearchPage> {
   SectionType _type;
   // Widget _page;
   final TextEditingController _searchController = TextEditingController();
-  List<ContentWrapper> _items;
+  List<ContentWrapper> _items = [];
   int _page = 1;
   bool _fetching = true;
   bool _noMore = false;
@@ -56,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
         ? mainState.selectedCategoryHome[type]
         : userState.preferredCategories[type];
 
-    _items = await ContentWrapper.fetchItems(
+    _items += await ContentWrapper.fetchItems(
       type,
       search: _searchController.text,
       categoryId: selectedCategory,
@@ -82,7 +82,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _resetLimit({bool keepNumber = false}) {
-    _items = null;
+    _items = [];
     _fetching = true;
     _noMore = false;
     if (!keepNumber) _page = 1;

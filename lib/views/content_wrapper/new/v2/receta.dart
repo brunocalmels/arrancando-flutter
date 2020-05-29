@@ -105,6 +105,7 @@ class RecetaFormState extends State<RecetaForm> {
     if (_formKey.currentState.validate() &&
         ((_images != null && _images.isNotEmpty) ||
             (_currentImages != null && _currentImages.isNotEmpty)) &&
+        [...(_images ?? []), _currentImages ?? []].length <= 6 &&
         (_categoria != null &&
             _subcategorias != null &&
             _subcategorias.isNotEmpty) &&
@@ -207,6 +208,8 @@ class RecetaFormState extends State<RecetaForm> {
       _errorMsg = "Debes seleccionar 1 categoría y al menos 1 subcategoría";
     } else if (!(_ingredientes != null && _ingredientes.isNotEmpty)) {
       _errorMsg = "Debes añadir al menos 1 ingrediente";
+    } else if (!([...(_images ?? []), _currentImages ?? []].length <= 6)) {
+      _errorMsg = "Podés subir como máximo 6 imágenes y/o videos";
     }
 
     if (mounted) setState(() {});
