@@ -76,6 +76,7 @@ abstract class MyGlobals {
     "Sartén": "assets/images/content/categories/sarten.png",
     "Bowl": "assets/images/content/categories/bowl.png",
     "Wok": "assets/images/content/categories/wok.png",
+    "Tragos y Bebidas": "assets/images/content/categories/tragos.png",
   };
 
   static const List<Map<String, String>> COMPLEJIDAD = [
