@@ -23,56 +23,17 @@ class ShareContentWrapper extends StatefulWidget {
 class _ShareContentWrapperState extends State<ShareContentWrapper> {
   bool _esFull = false;
   int _imagenNro = 0;
-  Map<String, File> _videoThumbs = {};
-
-  _getVideosThumbs() async {
-    if (widget.content.imagenes != null && widget.content.imagenes.length > 0) {
-      _videoThumbs = {};
-      String thumbPath = (await getTemporaryDirectory()).path;
-      List<String> vids = widget.content.imagenes
-          .where((i) =>
-              MyGlobals.VIDEO_FORMATS.contains(i.split('.').last.toLowerCase()))
-          .toList();
-
-      await Future.wait(
-        vids.map(
-          (v) async {
-            String filename = v.split('/').last;
-            filename = filename.replaceRange(
-              filename[filename.length - 4] == '.'
-                  ? filename.length - 3
-                  : filename.length - 4,
-              filename.length,
-              'jpg',
-            );
-            File thumb = File("$thumbPath/$filename");
-            if (thumb.existsSync()) {
-              _videoThumbs[v] = thumb;
-            } else {
-              _videoThumbs[v] = File(
-                await VideoThumbnail.thumbnailFile(
-                  video: "${MyGlobals.SERVER_URL}$v",
-                  thumbnailPath: thumbPath,
-                  imageFormat: ImageFormat.JPEG,
-                  maxHeightOrWidth: 350,
-                  quality: 95,
-                ),
-              );
-            }
-          },
-        ),
-      );
-      if (mounted) setState(() {});
-    }
-  }
+  List _imagenes;
 
   _shareGeneric({bool esFbk = false, bool esWpp = false}) async {
     Uint8List imageBytes;
-    if (widget.content.imagenes != null && widget.content.imagenes.isNotEmpty) {
-      String i = widget.content.imagenes[_imagenNro];
+    if (_imagenes != null && _imagenes.isNotEmpty) {
+      String i = _imagenes[_imagenNro];
 
-      String url =
-          "${MyGlobals.SERVER_URL}${widget.content.imagenes[_imagenNro]}";
+      String url = _imagenes[_imagenNro].contains('http')
+          ? _imagenes[_imagenNro]
+          : "${MyGlobals.SERVER_URL}${_imagenes[_imagenNro]}"
+              "${MyGlobals.SERVER_URL}";
 
       if (MyGlobals.VIDEO_FORMATS.contains(i.split('.').last.toLowerCase()) &&
           widget.content.videoThumbs[i] != null) {
@@ -86,6 +47,8 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
       imageBytes = response.bodyBytes;
     }
 
+    widget.content.sharedThisContent();
+
     widget.content.shareSelf(
       esFull: _esFull,
       imageBytes: imageBytes,
@@ -97,7 +60,10 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
   @override
   void initState() {
     super.initState();
-    // _getVideosThumbs();
+    _imagenes = widget.content.imagenes != null &&
+            widget.content.imagenes.length > 0
+        ? widget.content.imagenes
+        : widget.content.thumbnail != null ? [widget.content.thumbnail] : [];
   }
 
   @override
@@ -157,8 +123,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
               SizedBox(
                 height: 15,
               ),
-              if (widget.content.imagenes == null ||
-                  widget.content.imagenes.length == 0)
+              if (_imagenes == null || _imagenes.length == 0)
                 Text(
                   "No hay imágenes para compartir",
                   textAlign: TextAlign.center,
@@ -166,8 +131,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                     fontSize: 11,
                   ),
                 ),
-              if (widget.content.imagenes != null &&
-                  widget.content.imagenes.length > 0)
+              if (_imagenes != null && _imagenes.length > 0)
                 Padding(
                   padding: const EdgeInsets.only(
                     bottom: 7,
@@ -180,8 +144,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                     ),
                   ),
                 ),
-              if (widget.content.imagenes != null &&
-                  widget.content.imagenes.length > 0)
+              if (_imagenes != null && _imagenes.length > 0)
                 Container(
                   constraints: BoxConstraints(
                     maxHeight:
@@ -190,7 +153,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                   child: SingleChildScrollView(
                     child: Wrap(
                       direction: Axis.horizontal,
-                      children: widget.content.imagenes
+                      children: _imagenes
                           .asMap()
                           .map(
                             (index, i) => MapEntry(
@@ -249,8 +212,9 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                                           //     _videoThumbs[i],
                                           //   )
                                           : CachedNetworkImage(
-                                              imageUrl:
-                                                  "${MyGlobals.SERVER_URL}$i",
+                                              imageUrl: i.contains('http')
+                                                  ? i
+                                                  : "${MyGlobals.SERVER_URL}$i",
                                               placeholder: (context, url) =>
                                                   Center(
                                                 child: SizedBox(

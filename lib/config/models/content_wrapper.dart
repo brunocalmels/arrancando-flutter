@@ -216,6 +216,20 @@ class ContentWrapper {
   //   }
   // }
 
+  sharedThisContent() async {
+    try {
+      await Fetcher.post(
+        url: "/content/shared_this.json",
+        body: {
+          "id": id,
+          "type": type.toString().split('.').last,
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
   shareSelf({
     bool esFull = false,
     Uint8List imageBytes,
@@ -275,7 +289,7 @@ class ContentWrapper {
         "text/plain",
       );
     } else {
-      if (this.imagenes.length > 0 && imageBytes != null) {
+      if (imageBytes != null) {
         Share.file(
           'Compartir imagen',
           'imagen.jpg',
