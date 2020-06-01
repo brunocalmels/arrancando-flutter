@@ -68,7 +68,7 @@ abstract class DynamicLinks {
     }
   }
 
-  static _parseURI(Uri uri, context) async {
+  static parseURI(Uri uri, context) async {
     if (uri != null) {
       try {
         List<String> path = uri.path.split('/');
@@ -247,11 +247,11 @@ abstract class DynamicLinks {
     Uri uri = await getInitialUri();
     print("Afuera");
     if (uri != null) print(uri.path);
-    _parseURI(uri, context);
+    DynamicLinks.parseURI(uri, context);
     Stream<Uri> streamURI = getUriLinksStream();
     //Parse the uri when the app is started but the user leaves it and comes back
     streamURI.listen(
-      (Uri uri) => _parseURI(uri, context),
+      (Uri uri) => DynamicLinks.parseURI(uri, context),
       onError: (e) {
         print(e);
       },

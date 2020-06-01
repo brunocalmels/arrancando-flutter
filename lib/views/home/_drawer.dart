@@ -7,6 +7,8 @@ import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/comunidad/index.dart';
 import 'package:arrancando/views/contacto/index.dart';
 import 'package:arrancando/views/content_wrapper/saved/index.dart';
+import 'package:arrancando/views/general/_badge_wrapper.dart';
+import 'package:arrancando/views/notificaciones/index.dart';
 import 'package:arrancando/views/privacy-policy/index.dart';
 import 'package:arrancando/views/reglas/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
@@ -20,6 +22,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeDrawer extends StatelessWidget {
+  final bool unreadNotificaciones;
+
+  HomeDrawer({
+    this.unreadNotificaciones = false,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -97,6 +105,28 @@ class HomeDrawer extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (_) => SavedContentPage(),
                               settings: RouteSettings(name: 'Saved'),
+                            ),
+                          );
+                        },
+                      ),
+                      ListTile(
+                        leading: BadgeWrapper(
+                          showBadge: unreadNotificaciones,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: Icon(
+                              Icons.notifications,
+                              color: Theme.of(context).accentColor,
+                            ),
+                          ),
+                        ),
+                        title: Text('Notificaciones'),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => NotificacionesPage(),
+                              settings:
+                                  RouteSettings(name: 'NotificacionesPage'),
                             ),
                           );
                         },

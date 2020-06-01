@@ -3,6 +3,7 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/models/notificacion.dart';
 import 'package:arrancando/config/services/notificaciones.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
@@ -38,6 +39,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _loadingMore = false;
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
+  List<Notificacion> _unreadNotificaciones;
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
     MainState mainState = Provider.of<MainState>(
@@ -192,6 +194,11 @@ class _MainScaffoldState extends State<MainScaffold> {
     }
   }
 
+  _fetchUnreadNotificaciones() async {
+    _unreadNotificaciones = await Notificacion.fetchUnread();
+    if (mounted) setState(() {});
+  }
+
   _initUserInfo() async {
     await ActiveUser.verifyCorrectLogin(context);
     if (Provider.of<UserState>(context).activeUser != null) {
@@ -206,6 +213,7 @@ class _MainScaffoldState extends State<MainScaffold> {
       );
       await CategoryWrapper.restoreContentHome(context);
       await NotificacionesService.initFirebaseNotifications();
+      _fetchUnreadNotificaciones();
     }
   }
 
@@ -215,6 +223,24 @@ class _MainScaffoldState extends State<MainScaffold> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initUserInfo();
     });
+  }
+
+  @override
+  void didUpdateWidget(MainScaffold oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _fetchUnreadNotificaciones();
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    _fetchUnreadNotificaciones();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fetchUnreadNotificaciones();
   }
 
   @override
@@ -232,7 +258,10 @@ class _MainScaffoldState extends State<MainScaffold> {
           Scaffold(
             // backgroundColor: Theme.of(context).backgroundColor,
             key: MyGlobals.mainScaffoldKey,
-            endDrawer: HomeDrawer(),
+            endDrawer: HomeDrawer(
+              unreadNotificaciones: _unreadNotificaciones != null &&
+                  _unreadNotificaciones.length > 0,
+            ),
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(55),
               child: MainAppBar(
@@ -250,6 +279,8 @@ class _MainScaffoldState extends State<MainScaffold> {
                     keepPage: true,
                   );
                 },
+                unreadNotificaciones: _unreadNotificaciones != null &&
+                    _unreadNotificaciones.length > 0,
               ),
             ),
             body: _getPage(

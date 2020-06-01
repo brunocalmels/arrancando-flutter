@@ -147,6 +147,11 @@ class _MyAppState extends State<MyApp> {
           subtitle: TextStyle(color: Colors.white),
           overline: TextStyle(color: Colors.white),
         ),
+        appBarTheme: AppBarTheme(
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+        ),
       ),
       home: !_loaded
           ? SplashScreen(

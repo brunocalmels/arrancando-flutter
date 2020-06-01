@@ -3,6 +3,7 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/general/_badge_wrapper.dart';
 import 'package:arrancando/views/home/app_bar/_search_bar.dart';
 import 'package:arrancando/views/home/filter_bottom_sheet/index.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
@@ -14,12 +15,14 @@ class MainAppBar extends StatelessWidget {
   final Function fetchContent;
   final TextEditingController searchController;
   final Function(PersistentBottomSheetController) setBottomSheetController;
+  final bool unreadNotificaciones;
 
   MainAppBar({
     this.setSearchVisibility,
     this.fetchContent,
     this.searchController,
     this.setBottomSheetController,
+    this.unreadNotificaciones = false,
   });
 
   _anyFilterActive(MainState mainState, ContentPageState contentPageState) {
@@ -172,11 +175,14 @@ class MainAppBar extends StatelessWidget {
                 },
                 icon: Icon(Icons.close),
               ),
-            IconButton(
-              onPressed: () {
-                MyGlobals.mainScaffoldKey.currentState.openEndDrawer();
-              },
-              icon: Icon(Icons.menu),
+            BadgeWrapper(
+              showBadge: unreadNotificaciones,
+              child: IconButton(
+                onPressed: () {
+                  MyGlobals.mainScaffoldKey.currentState.openEndDrawer();
+                },
+                icon: Icon(Icons.menu),
+              ),
             ),
           ],
         );

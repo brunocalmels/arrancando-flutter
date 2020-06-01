@@ -98,9 +98,6 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(
-          color: Colors.black,
-        ),
       ),
       body: ListView(
         children: <Widget>[
@@ -152,7 +149,10 @@ class _ProfilePageState extends State<ProfilePage> {
               );
               if (valor != null) _updateActiveUser(context, "Nombre", valor);
             },
-            trailing: Icon(Icons.edit),
+            trailing: Icon(
+              Icons.edit,
+              color: Theme.of(context).accentColor,
+            ),
           ),
           ListTile(
             title: Text('Apellido'),
@@ -172,7 +172,10 @@ class _ProfilePageState extends State<ProfilePage> {
               );
               if (valor != null) _updateActiveUser(context, "Apellido", valor);
             },
-            trailing: Icon(Icons.edit),
+            trailing: Icon(
+              Icons.edit,
+              color: Theme.of(context).accentColor,
+            ),
           ),
           ListTile(
             title: Text('Username'),
@@ -189,7 +192,10 @@ class _ProfilePageState extends State<ProfilePage> {
               );
               if (valor != null) _updateActiveUser(context, "Username", valor);
             },
-            trailing: Icon(Icons.edit),
+            trailing: Icon(
+              Icons.edit,
+              color: Theme.of(context).accentColor,
+            ),
           ),
           ListTile(
             title: Text("Mi ciudad"),
@@ -201,7 +207,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           .preferredCategories[SectionType.publicaciones])
                   .nombre,
             ),
-            trailing: Icon(Icons.edit),
+            trailing: Icon(
+              Icons.edit,
+              color: Theme.of(context).accentColor,
+            ),
             onTap: () async {
               int ciudadId = await showDialog(
                 context: context,
