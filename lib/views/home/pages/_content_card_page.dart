@@ -77,8 +77,8 @@ class _ContentCardPageState extends State<ContentCardPage> {
                   _scrollController.position.maxScrollExtent &&
               !_scrollController.position.outOfRange &&
               !widget.noMore) {
-            widget.increasePage();
-            widget.fetchContent(widget.type);
+            if (widget.increasePage != null) widget.increasePage();
+            if (widget.fetchContent != null) widget.fetchContent(widget.type);
           }
         },
       );
