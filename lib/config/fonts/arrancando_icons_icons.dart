@@ -12,6 +12,10 @@
 ///       - asset: fonts/ArrancandoIcons.ttf
 ///
 /// 
+/// * Font Awesome 4, Copyright (C) 2016 by Dave Gandy
+///         Author:    Dave Gandy
+///         License:   SIL ()
+///         Homepage:  http://fortawesome.github.com/Font-Awesome/
 ///
 import 'package:flutter/widgets.dart';
 
@@ -23,4 +27,5 @@ class ArrancandoIcons {
 
   static const IconData dificultad = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData horno = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData whatsapp = IconData(0xf232, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

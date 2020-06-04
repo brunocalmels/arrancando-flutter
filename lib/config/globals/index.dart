@@ -9,11 +9,11 @@ abstract class MyGlobals {
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
 
-  static const String SERVER_URL = "http://192.168.0.4:3000";
+  // static const String SERVER_URL = "http://192.168.0.4:3000";
   // static const String SERVER_URL = "http://192.168.0.11:5000";
   // static const String SERVER_URL = "http://192.168.43.138:5000";
   // static const String SERVER_URL = "http://192.168.1.3:5000";
-  // static const String SERVER_URL = "https://arrancando.herokuapp.com";
+  static const String SERVER_URL = "https://arrancando.herokuapp.com";
   // static const String SERVER_URL = "https://arrancando-staging.herokuapp.com";
 
   static const GOOGLE_CLIENT_ID =

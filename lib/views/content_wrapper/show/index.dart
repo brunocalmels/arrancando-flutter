@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:arrancando/config/fonts/arrancando_icons_icons.dart';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
@@ -14,6 +15,7 @@ import 'package:arrancando/views/content_wrapper/show/textos/index.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShowPage extends StatefulWidget {
   final int contentId;
@@ -161,6 +163,54 @@ class _ShowPageState extends State<ShowPage> {
                         SizedBox(
                           height: 50,
                         ),
+                        if (widget.type == SectionType.pois &&
+                            _content.whatsapp != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Material(
+                                      type: MaterialType.circle,
+                                      color: Color(0xff1bd741),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          ArrancandoIcons.whatsapp,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () async {
+                                          String url =
+                                              "https://api.whatsapp.com/send?phone=${_content.whatsapp}&text=Hola%2C%20los%20vi%20en%20Arrancando%20y%20quer%C3%ADa%20comunicarme%20directamente%20con%20ustedes.";
+                                          if (await canLaunch(url)) {
+                                            await launch(
+                                              url,
+                                              forceSafariVC: false,
+                                              forceWebView: false,
+                                            );
+                                          } else {
+                                            throw 'Could not launch $url';
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    SizedBox(height: 7),
+                                    Text(
+                                      "WHATSAPP",
+                                      style: TextStyle(
+                                        fontSize: 9,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
         ),

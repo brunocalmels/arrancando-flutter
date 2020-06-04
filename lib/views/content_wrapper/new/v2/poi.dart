@@ -37,6 +37,7 @@ class _PoiFormState extends State<PoiForm> {
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _cuerpoController = TextEditingController();
   final TextEditingController _rubroController = TextEditingController();
+  final TextEditingController _whatsappController = TextEditingController();
   CategoryWrapper _categoria;
   List<File> _images = [];
   List<String> _currentImages = [];
@@ -122,6 +123,8 @@ class _PoiFormState extends State<PoiForm> {
           "lat": _latitud,
           "long": _longitud,
           "direccion": _direccion,
+          // "rubro": _rubroController.text,
+          "whatsapp": _whatsappController.text,
           "imagenes": await Future.wait(
             _images.map(
               (i) async => {
@@ -162,7 +165,7 @@ class _PoiFormState extends State<PoiForm> {
                 type: SectionType.pois,
               ),
               settings: RouteSettings(
-                name: 'Publicaciones#${json.decode(res.body)['id']}',
+                name: 'Pois#${json.decode(res.body)['id']}',
               ),
             ),
           );
@@ -219,6 +222,8 @@ class _PoiFormState extends State<PoiForm> {
       _latitud = widget.content.latitud;
       _longitud = widget.content.longitud;
       _direccion = widget.content.direccion;
+      // _rubroController.text = widget.content.rubro;
+      _whatsappController.text = "${widget.content.whatsapp}";
       _currentImages = widget.content.imagenes;
       _currentVideoThumbs = widget.content.videoThumbs;
       if (mounted) setState(() {});
@@ -261,10 +266,21 @@ class _PoiFormState extends State<PoiForm> {
               ? null
               : "Este campo no puede estar vacío",
         ),
+        // NewContentInput(
+        //   label: "Rubro",
+        //   controller: _rubroController,
+        //   hint: "Verdulería",
+        //   validator: (val) => val != null && val.isNotEmpty
+        //       ? null
+        //       : "Este campo no puede estar vacío",
+        // ),
         NewContentInput(
-          label: "Rubro",
-          controller: _rubroController,
-          hint: "Verdulería",
+          label: "Whatsapp",
+          controller: _whatsappController,
+          hint:
+              "Comenzando por código de país (549 para Argentina), después código de área, sin símbolos ni espacios (por ej. 5492994589675).",
+          keyboardType: TextInputType.number,
+          multiline: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
               : "Este campo no puede estar vacío",

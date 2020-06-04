@@ -2,9 +2,11 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TilePoi extends StatelessWidget {
@@ -43,7 +45,10 @@ class TilePoi extends StatelessWidget {
                 ? Center(
                     child: Icon(
                       Icons.photo_camera,
-                      color: Colors.white38,
+                      color: Provider.of<MainState>(context).activeTheme ==
+                              ThemeMode.dark
+                          ? Colors.white38
+                          : Colors.black38,
                     ),
                   )
                 : CachedNetworkImage(
@@ -80,7 +85,12 @@ class TilePoi extends StatelessWidget {
               ),
               Text(
                 "${poi.puntajePromedio.toStringAsFixed(1)}",
-                style: TextStyle(fontSize: 13, color: Colors.white),
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Provider.of<MainState>(context).activeTheme ==
+                            ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black),
               ),
               SizedBox(
                 width: 5,
@@ -98,7 +108,10 @@ class TilePoi extends StatelessWidget {
                   poi.localDistance != null ? poi.distanciaToH() : '',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.white,
+                    color: Provider.of<MainState>(context).activeTheme ==
+                            ThemeMode.dark
+                        ? Colors.white
+                        : Colors.black,
                   ),
                 ),
             ],

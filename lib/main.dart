@@ -99,7 +99,7 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.grey,
         ),
         primaryColor: Colors.grey,
-        accentColor: Color(0xff57b668),
+        accentColor: Colors.black,
         hintColor: Colors.black54,
         textTheme: TextTheme(
           body1: TextStyle(color: Colors.black),

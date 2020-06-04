@@ -1,7 +1,9 @@
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CommentsList extends StatelessWidget {
   final ContentWrapper content;
@@ -69,6 +71,11 @@ class CommentsList extends StatelessWidget {
                                         "@${c.user.username}",
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
+                                          color: Provider.of<MainState>(context)
+                                                      .activeTheme ==
+                                                  ThemeMode.dark
+                                              ? null
+                                              : Colors.white,
                                         ),
                                       ),
                                       SizedBox(

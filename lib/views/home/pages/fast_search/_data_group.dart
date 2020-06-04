@@ -1,9 +1,11 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/fast_search/_content_tile.dart';
 import 'package:arrancando/views/search/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DataGroup extends StatelessWidget {
   final bool fetching;
@@ -86,7 +88,11 @@ class DataGroup extends StatelessWidget {
                             child: Text(
                               "VER MÁS",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Provider.of<MainState>(context)
+                                            .activeTheme ==
+                                        ThemeMode.light
+                                    ? null
+                                    : Colors.white,
                               ),
                             ),
                           ),

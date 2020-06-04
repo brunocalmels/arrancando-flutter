@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_bottom_sheet_multimedia.dart';
 import 'package:arrancando/views/general/_permission_denied_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class NewContentMultimedia extends StatelessWidget {
   final List<File> images;
@@ -136,11 +138,17 @@ class NewContentMultimedia extends StatelessWidget {
             color: Colors.transparent,
             boxShadow: [
               BoxShadow(
-                color: Color(0xff1a1c28),
+                color: Color(Provider.of<MainState>(context).activeTheme ==
+                        ThemeMode.light
+                    ? 0xffcccccc
+                    : 0xff1a1c28),
                 offset: Offset(0.0, 0.0),
               ),
               BoxShadow(
-                color: Color(0xff2d3548),
+                color: Color(Provider.of<MainState>(context).activeTheme ==
+                        ThemeMode.light
+                    ? 0xffeeeeee
+                    : 0xff2d3548),
                 offset: Offset(0.0, 0.0),
                 spreadRadius: -12.0,
                 blurRadius: 12.0,
@@ -167,7 +175,10 @@ class NewContentMultimedia extends StatelessWidget {
                 right: 0,
                 top: 0,
                 child: Container(
-                  color: Color(0xff1a1c28),
+                  color: Color(Provider.of<MainState>(context).activeTheme ==
+                          ThemeMode.light
+                      ? 0xffcccccc
+                      : 0xff1a1c28),
                   width: 80,
                   height: 50,
                   child: Center(

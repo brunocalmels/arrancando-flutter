@@ -17,9 +17,11 @@ class FilterBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<MainState, ContentPageState>(
       builder: (context, mainState, contentState, child) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Container(
+        return 
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(vertical: 10),
+        //   child:
+           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).backgroundColor,
               borderRadius: BorderRadius.only(
@@ -199,7 +201,7 @@ class FilterBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          // ),
         );
       },
     );

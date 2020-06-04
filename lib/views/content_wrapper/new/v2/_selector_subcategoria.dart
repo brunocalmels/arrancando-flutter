@@ -1,6 +1,8 @@
 import 'package:arrancando/config/models/subcategoria_receta.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_page_subcategorias.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SelectorSubCategoria extends StatelessWidget {
   final String label;
@@ -40,7 +42,10 @@ class SelectorSubCategoria extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.all(5),
-                    color: Color(0xff262a3d),
+                    color: Color(Provider.of<MainState>(context).activeTheme ==
+                            ThemeMode.light
+                        ? 0xffcccccc
+                        : 0xff262a3d),
                     child: Text(
                       subcategorias != null && subcategorias.length > 0
                           ? subcategorias

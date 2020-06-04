@@ -1,4 +1,6 @@
+import 'package:arrancando/config/state/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DropdownSelect extends StatelessWidget {
   final String label;
@@ -40,11 +42,17 @@ class DropdownSelect extends StatelessWidget {
                 color: Colors.transparent,
                 boxShadow: [
                   BoxShadow(
-                    color: Color(0xff1a1c28),
+                    color: Color(Provider.of<MainState>(context).activeTheme ==
+                            ThemeMode.light
+                        ? 0xffcccccc
+                        : 0xff1a1c28),
                     offset: Offset(0.0, 0.0),
                   ),
                   BoxShadow(
-                    color: Color(0xff2d3548),
+                    color: Color(Provider.of<MainState>(context).activeTheme ==
+                            ThemeMode.light
+                        ? 0xffeeeeee
+                        : 0xff2d3548),
                     offset: Offset(0.0, 0.0),
                     spreadRadius: -12.0,
                     blurRadius: 12.0,
@@ -63,7 +71,11 @@ class DropdownSelect extends StatelessWidget {
                     hint: Text(
                       hint,
                       style: TextStyle(
-                        color: Theme.of(context).textTheme.body1.color.withAlpha(150),
+                        color: Theme.of(context)
+                            .textTheme
+                            .body1
+                            .color
+                            .withAlpha(150),
                       ),
                     ),
                     value: value,

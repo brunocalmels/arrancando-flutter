@@ -59,6 +59,8 @@ class ContentWrapper {
   int duracion; // De cocción
   String complejidad; // De preparación
   bool habilitado;
+  String rubro;
+  int whatsapp;
 
   ContentWrapper(
     this.id,
@@ -87,6 +89,8 @@ class ContentWrapper {
     this.duracion,
     this.complejidad,
     this.habilitado,
+    this.rubro,
+    this.whatsapp,
   );
 
   factory ContentWrapper.fromJson(Map<String, dynamic> json) =>
@@ -246,7 +250,7 @@ class ContentWrapper {
         miraEsta = "esta receta";
         break;
       case SectionType.pois:
-        miraEsta = "este Pto. de interés";
+        miraEsta = "este Punto de interés";
         break;
       default:
         miraEsta = "esta publicación";
