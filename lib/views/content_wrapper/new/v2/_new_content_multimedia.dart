@@ -22,7 +22,7 @@ class NewContentMultimedia extends StatelessWidget {
     if (Platform.isIOS) {
       File _image;
       try {
-        if (type == FileType.VIDEO) {
+        if (type == FileType.video) {
           _image = await ImagePicker.pickVideo(
             source: ImageSource.gallery,
           );
@@ -81,7 +81,7 @@ class NewContentMultimedia extends StatelessWidget {
               ? await ActiveUser.photosPermissionDenied()
               : await ActiveUser.cameraPermissionDenied();
           if (!storagePermisionDenied) {
-            _openFileExplorer(FileType.IMAGE);
+            _openFileExplorer(FileType.image);
           } else {
             showDialog(
               context: context,
@@ -97,7 +97,7 @@ class NewContentMultimedia extends StatelessWidget {
               ? await ActiveUser.photosPermissionDenied()
               : await ActiveUser.cameraPermissionDenied();
           if (!storagePermisionDenied) {
-            _openFileExplorer(FileType.VIDEO);
+            _openFileExplorer(FileType.video);
           } else {
             showDialog(
               context: context,

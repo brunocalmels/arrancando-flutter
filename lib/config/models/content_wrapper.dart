@@ -130,6 +130,30 @@ class ContentWrapper {
           ?.puntaje ??
       0;
 
+  addMyPuntaje(Puntaje myPuntaje) {
+    var oldPuntaje = puntajes?.indexWhere(
+      (p) => p.usuario.id == myPuntaje.usuario.id,
+    );
+    if (oldPuntaje >= 0) {
+      var ps = [];
+      int i = 0;
+      puntajes.forEach((p) {
+        if (i == oldPuntaje) {
+          ps.add(myPuntaje);
+        } else {
+          ps.add(p);
+        }
+        i++;
+      });
+      puntajes = [...ps];
+    } else {
+      puntajes = [
+        ...puntajes,
+        myPuntaje,
+      ];
+    }
+  }
+
   double get puntajePromedio => puntajes != null && puntajes.length > 0
       ? (puntajes.fold<double>(0, (sum, p) => sum + p.puntaje) /
           puntajes.length)
@@ -142,14 +166,16 @@ class ContentWrapper {
         Position currentPosition = await Geolocator().getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
         );
-        double mts = await Geolocator().distanceBetween(
-            currentPosition.latitude,
-            currentPosition.longitude,
-            this.latitud,
-            this.longitud);
-        if (mts != null) {
-          localDistance = mts;
-          return mts;
+        if (currentPosition != null) {
+          double mts = await Geolocator().distanceBetween(
+              currentPosition.latitude,
+              currentPosition.longitude,
+              this.latitud,
+              this.longitud);
+          if (mts != null) {
+            localDistance = mts;
+            return mts;
+          }
         }
       }
     }

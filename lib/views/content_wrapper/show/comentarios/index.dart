@@ -32,23 +32,45 @@ class _ComentariosSectionState extends State<ComentariosSection> {
           _sent = true;
         });
 
-        String url = "/comentario_publicaciones.json";
+        String url;
+        var body;
 
-        var body = {
-          "comentario_publicacion": {
-            "publicacion_id": widget.content.id,
-            "mensaje": _mensajeController.text,
-          }
-        };
-
-        if (widget.content.type == SectionType.recetas) {
-          url = "/comentario_recetas.json";
-          body = {
-            "comentario_receta": {
-              "receta_id": widget.content.id,
-              "mensaje": _mensajeController.text,
-            }
-          };
+        switch (widget.content.type) {
+          case SectionType.publicaciones:
+            url = "/comentario_publicaciones.json";
+            body = {
+              "comentario_publicacion": {
+                "publicacion_id": widget.content.id,
+                "mensaje": _mensajeController.text,
+              }
+            };
+            break;
+          case SectionType.recetas:
+            url = "/comentario_recetas.json";
+            body = {
+              "comentario_receta": {
+                "receta_id": widget.content.id,
+                "mensaje": _mensajeController.text,
+              }
+            };
+            break;
+          case SectionType.pois:
+            url = "/comentario_pois.json";
+            body = {
+              "comentario_poi": {
+                "poi_id": widget.content.id,
+                "mensaje": _mensajeController.text,
+              }
+            };
+            break;
+          default:
+            url = "/comentario_publicaciones.json";
+            body = {
+              "comentario_publicacion": {
+                "publicacion_id": widget.content.id,
+                "mensaje": _mensajeController.text,
+              }
+            };
         }
 
         if (_editCommentId != null) {
@@ -86,13 +108,65 @@ class _ComentariosSectionState extends State<ComentariosSection> {
         _sent = true;
       });
 
-      String url = "/comentario_publicaciones/$id.json";
-      if (widget.content.type == SectionType.recetas) {
-        url = "/comentario_recetas/$id.json";
+      String url;
+
+      switch (widget.content.type) {
+        case SectionType.publicaciones:
+          url = "/comentario_publicaciones/$id.json";
+          break;
+        case SectionType.recetas:
+          url = "/comentario_recetas/$id.json";
+          break;
+        case SectionType.pois:
+          url = "/comentario_pois/$id.json";
+          break;
+        default:
+          url = "/comentario_publicaciones/$id.json";
       }
 
       await Fetcher.destroy(
         url: url,
+      );
+
+      setState(() {});
+
+      await widget.fetchContent();
+    } catch (e) {
+      print(e);
+    }
+
+    setState(() {
+      _sent = false;
+    });
+  }
+
+  _toggleLikeComment(int id) async {
+    try {
+      setState(() {
+        _sent = true;
+      });
+
+      String url;
+
+      switch (widget.content.type) {
+        case SectionType.publicaciones:
+          url = "/comentario_publicaciones/$id/puntuar.json";
+          break;
+        case SectionType.recetas:
+          url = "/comentario_recetas/$id/puntuar.json";
+          break;
+        case SectionType.pois:
+          url = "/comentario_pois/$id/puntuar.json";
+          break;
+        default:
+          url = "/comentario_publicaciones/$id/puntuar.json";
+      }
+
+      await Fetcher.put(
+        url: url,
+        body: {
+          "puntaje": 1,
+        },
       );
 
       setState(() {});
@@ -118,6 +192,7 @@ class _ComentariosSectionState extends State<ComentariosSection> {
             content: widget.content,
             setEditCommentId: _setEditCommentId,
             setDeleteCommentId: _setDeleteCommentId,
+            toggleLikeComment: _toggleLikeComment,
           ),
           SizedBox(
             height: 20,

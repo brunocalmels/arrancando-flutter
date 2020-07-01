@@ -155,11 +155,10 @@ class _ShowPageState extends State<ShowPage> {
                           content: _content,
                           fetchContent: _fetchContent,
                         ),
-                        if (_content.type != SectionType.pois)
-                          ComentariosSection(
-                            content: _content,
-                            fetchContent: _fetchContent,
-                          ),
+                        ComentariosSection(
+                          content: _content,
+                          fetchContent: _fetchContent,
+                        ),
                         SizedBox(
                           height: 50,
                         ),

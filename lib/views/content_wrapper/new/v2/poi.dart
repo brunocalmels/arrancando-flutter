@@ -284,9 +284,9 @@ class _PoiFormState extends State<PoiForm> {
               "Comenzando por código de país (549 para Argentina), después código de área, sin símbolos ni espacios (por ej. 5492994589675).",
           keyboardType: TextInputType.number,
           multiline: true,
-          validator: (val) => val != null && val.isNotEmpty
-              ? null
-              : "Este campo no puede estar vacío",
+          // validator: (val) => val != null && val.isNotEmpty
+          //     ? null
+          //     : "Este campo no puede estar vacío",
         ),
         NewPoiMapa(
           setDireccion: _setDireccion,

@@ -212,7 +212,7 @@ class _MainScaffoldState extends State<MainScaffold> {
         ),
       );
       await CategoryWrapper.restoreContentHome(context);
-      await NotificacionesService.initFirebaseNotifications();
+      await NotificacionesService.initFirebaseNotifications(context);
       _fetchUnreadNotificaciones();
     }
   }

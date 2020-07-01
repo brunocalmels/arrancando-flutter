@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
@@ -41,20 +42,28 @@ class ActiveUser {
   Map<String, dynamic> toJson() => _$ActiveUserToJson(this);
 
   static Future<bool> locationPermissionDenied() async {
-    PermissionStatus permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.location);
+    var context = MyGlobals.mainNavigatorKey.currentContext;
+    var state = Provider.of<MainState>(context, listen: false);
 
-    if (permission == PermissionStatus.denied) {
-      Map<PermissionGroup, PermissionStatus> permissions =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.location]);
+    if (!state.askingLocationPermission) {
+      state.setAskingLocationPermission(true);
 
-      if (permissions.containsKey(PermissionGroup.location) &&
-          permissions[PermissionGroup.location] != PermissionStatus.granted) {
-        return true;
+      PermissionStatus permission = await PermissionHandler()
+          .checkPermissionStatus(PermissionGroup.location);
+
+      if (permission == PermissionStatus.denied) {
+        Map<PermissionGroup, PermissionStatus> permissions =
+            await PermissionHandler()
+                .requestPermissions([PermissionGroup.location]);
+
+        if (permissions.containsKey(PermissionGroup.location) &&
+            permissions[PermissionGroup.location] != PermissionStatus.granted) {
+          return true;
+        }
+      } else {
+        return false;
       }
-    } else {
-      return false;
+      state.setAskingLocationPermission(false);
     }
     return false;
   }

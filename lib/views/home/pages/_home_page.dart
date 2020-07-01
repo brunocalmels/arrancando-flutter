@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchContent({bool reset = false}) async {
     if (reset) {
-      _items = null;
+      _items = [];
       _fetching = true;
       _page = 1;
       _noMore = false;

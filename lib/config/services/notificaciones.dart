@@ -1,44 +1,14 @@
 import 'dart:io';
 
-import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/services/dynamic_links.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/views/user/profile/index.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 abstract class NotificacionesService {
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  static Future<dynamic> myBackgroundMessageHandler(
-    Map<String, dynamic> message,
-  ) {
-    print("********************************0");
-    print("********************************0");
-    print("********************************0");
-    print("********************************0");
-    print("********************************0");
-
-    print(message.toString());
-
-    if (message.containsKey('data')) {
-      // Handle data message
-      final dynamic data = message['data'];
-    }
-
-    if (message.containsKey('notification')) {
-      // Handle notification message
-      final dynamic notification = message['notification'];
-    }
-
-    Navigator.of(MyGlobals.mainNavigatorKey.currentContext)
-        .push(MaterialPageRoute(builder: (_) => ProfilePage()));
-
-    // Or do other work.
-    return null;
-  }
-
-  static initFirebaseNotifications() async {
+  static initFirebaseNotifications(context) async {
     if (Platform.isIOS) {
       await _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(
@@ -47,45 +17,99 @@ abstract class NotificacionesService {
           alert: true,
         ),
       );
-      _firebaseMessaging.onIosSettingsRegistered.listen(
-        (settings) {
-          print("Settings registered");
-        },
-      );
-
-      _firebaseMessaging.configure(
-        onMessage: (message) async {
-          print("********************************1");
-          print("********************************1");
-          print("********************************1");
-          print("********************************1");
-          print(message);
-          Navigator.of(MyGlobals.mainNavigatorKey.currentContext)
-              .push(MaterialPageRoute(builder: (_) => ProfilePage()));
-        },
-        onBackgroundMessage: myBackgroundMessageHandler,
-        onLaunch: (message) async {
-          print("********************************3");
-          print("********************************3");
-          print("********************************3");
-          print("********************************3");
-          print(message);
-          Navigator.of(MyGlobals.mainNavigatorKey.currentContext)
-              .push(MaterialPageRoute(builder: (_) => ProfilePage()));
-        },
-        onResume: (message) async {
-          print("********************************4");
-          print("********************************4");
-          print("********************************4");
-          print("********************************4");
-          print(message);
-          Navigator.of(MyGlobals.mainNavigatorKey.currentContext)
-              .push(MaterialPageRoute(builder: (_) => ProfilePage()));
-        },
-      );
     } else {
       await _firebaseMessaging.requestNotificationPermissions();
     }
+    _firebaseMessaging.onIosSettingsRegistered.listen(
+      (settings) {
+        print("Settings registered");
+      },
+    );
+
+    _firebaseMessaging.configure(
+      onMessage: (message) async {
+        if (message != null && message['data'] != null) {
+          if (message['data']['url'] != null) {
+            String texto = message['notification'] != null &&
+                    message['notification'] != null &&
+                    message['notification']['body'] != null
+                ? message['notification']['body']
+                : "Nueva notificación";
+
+            OverlayEntry entry;
+
+            entry = OverlayEntry(
+              builder: (_) => Positioned(
+                top: 0,
+                left: 0,
+                child: SafeArea(
+                  child: Material(
+                    color: Color(0xff161a25),
+                    child: InkWell(
+                      onTap: () {
+                        entry?.remove();
+                        entry = null;
+                        DynamicLinks.parseURI(
+                          Uri.parse(message['data']['url']),
+                          context,
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xff161a25),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 5,
+                              color: Colors.black12,
+                            ),
+                          ],
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(20),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(texto),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+
+            Overlay.of(context).insert(entry);
+
+            await Future.delayed(Duration(seconds: 5));
+
+            entry?.remove();
+            entry = null;
+          }
+        }
+      },
+      onLaunch: (message) async {
+        if (message != null && message['data'] != null) {
+          if (message['data']['url'] != null) {
+            DynamicLinks.parseURI(
+              Uri.parse(message['data']['url']),
+              context,
+            );
+          }
+        }
+      },
+      onResume: (message) async {
+        if (message != null && message['data'] != null) {
+          if (message['data']['url'] != null) {
+            DynamicLinks.parseURI(
+              Uri.parse(message['data']['url']),
+              context,
+            );
+          }
+        }
+      },
+    );
+
     String token = await _firebaseMessaging.getToken();
     await Fetcher.put(
       url: "/users/set_firebase_token.json",

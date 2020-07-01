@@ -1,5 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/models/puntaje.dart';
+import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:flutter/material.dart';
@@ -16,54 +18,73 @@ class RowEstrellas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [1, 2, 3, 4, 5]
-          .map(
-            (p) => IconButton(
-              icon: Icon(
-                content.puntajePromedio >= p
-                    ? Icons.star
-                    : content.puntajePromedio > p - 1
-                        ? Icons.star_half
-                        : Icons.star_border,
-              ),
-              color: Theme.of(context).accentColor,
-              onPressed: () async {
-                String _url;
+    return Consumer<UserState>(
+      builder: (context, state, child) {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [1, 2, 3, 4, 5]
+              .map(
+                (p) => IconButton(
+                  icon: Icon(
+                    content.puntajePromedio >= p
+                        ? Icons.star
+                        : content.puntajePromedio > p - 1
+                            ? Icons.star_half
+                            : Icons.star_border,
+                  ),
+                  color: Theme.of(context).accentColor,
+                  disabledColor: Theme.of(context).accentColor,
+                  onPressed: state.activeUser.id != content.user.id
+                      ? () async {
+                          var usuario = Usuario(
+                            state.activeUser.id,
+                            state.activeUser.avatar,
+                            state.activeUser.nombre,
+                            state.activeUser.apellido,
+                            state.activeUser.email,
+                            state.activeUser.username,
+                          );
 
-                switch (content.type) {
-                  case SectionType.publicaciones:
-                    _url = "/publicaciones";
-                    break;
-                  case SectionType.recetas:
-                    _url = "/recetas";
-                    break;
-                  case SectionType.pois:
-                    _url = "/pois";
-                    break;
-                  default:
-                    _url = "/publicaciones";
-                }
+                          var myPuntaje = Puntaje(usuario, p);
+                          content.addMyPuntaje(myPuntaje);
 
-                Provider.of<UserState>(context).setMyPuntuacion(
-                  "${content.type}-${content.id}",
-                  p,
-                );
+                          String _url;
 
-                await Fetcher.put(
-                  url: "$_url/${content.id}/puntuar.json",
-                  body: {
-                    "puntaje": p,
-                  },
-                );
-                fetchContent();
-              },
-            ),
-          )
-          .toList(),
+                          switch (content.type) {
+                            case SectionType.publicaciones:
+                              _url = "/publicaciones";
+                              break;
+                            case SectionType.recetas:
+                              _url = "/recetas";
+                              break;
+                            case SectionType.pois:
+                              _url = "/pois";
+                              break;
+                            default:
+                              _url = "/publicaciones";
+                          }
+
+                          state.setMyPuntuacion(
+                            "${content.type}-${content.id}",
+                            p,
+                          );
+
+                          await Fetcher.put(
+                            url: "$_url/${content.id}/puntuar.json",
+                            body: {
+                              "puntaje": p,
+                            },
+                          );
+                          fetchContent();
+                        }
+                      : null,
+                ),
+              )
+              .toList(),
+        );
+      },
     );
   }
 }

@@ -143,7 +143,7 @@ class StepImagenes extends StatelessWidget {
                           }
                           break;
                         case "galeria":
-                          _openFileExplorer(FileType.IMAGE);
+                          _openFileExplorer(FileType.image);
                           break;
                         default:
                       }
@@ -154,7 +154,7 @@ class StepImagenes extends StatelessWidget {
                   child: Text("SELECCIONAR IMÁGENES"),
                 ),
                 FlatButton(
-                  onPressed: () => _openFileExplorer(FileType.VIDEO),
+                  onPressed: () => _openFileExplorer(FileType.video),
                   child: Text("SELECCIONAR VIDEOS"),
                 ),
               ],
