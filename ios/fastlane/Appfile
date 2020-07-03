@@ -1,0 +1,8 @@
+app_identifier("com.macherit.arrancando") # The bundle identifier of your app
+apple_id("brunocalmels@gmail.com") # Your Apple email address
+
+itc_team_id("120643873") # App Store Connect Team ID
+team_id("CPD2RT3KRV") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
