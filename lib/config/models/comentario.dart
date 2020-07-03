@@ -1,3 +1,4 @@
+import 'package:arrancando/config/models/puntaje.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class Comentario {
   DateTime updatedAt;
   Usuario user;
   String mensaje;
+  List<Puntaje> puntajes;
 
   Comentario(
     this.id,
@@ -22,6 +24,7 @@ class Comentario {
     this.updatedAt,
     this.user,
     this.mensaje,
+    this.puntajes,
   );
 
   factory Comentario.fromJson(Map<String, dynamic> json) =>
@@ -34,4 +37,37 @@ class Comentario {
 
   esOwner(BuildContext context) =>
       this.user.id == Provider.of<UserState>(context).activeUser.id;
+
+  int myPuntaje(int uid) =>
+      puntajes
+          ?.firstWhere(
+            (p) => p.usuario.id == uid,
+            orElse: () => null,
+          )
+          ?.puntaje ??
+      0;
+
+  addMyPuntaje(Puntaje myPuntaje) {
+    var oldPuntaje = puntajes?.indexWhere(
+      (p) => p.usuario.id == myPuntaje.usuario.id,
+    );
+    if (oldPuntaje >= 0) {
+      var ps = [];
+      int i = 0;
+      puntajes.forEach((p) {
+        if (i == oldPuntaje) {
+          ps.add(myPuntaje);
+        } else {
+          ps.add(p);
+        }
+        i++;
+      });
+      puntajes = [...ps];
+    } else {
+      puntajes = [
+        ...puntajes,
+        myPuntaje,
+      ];
+    }
+  }
 }

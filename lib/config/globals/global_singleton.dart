@@ -12,6 +12,8 @@ class GlobalSingleton {
     SectionType.pois: [],
   };
 
+  bool askingLocationPermission = false;
+
   setCategories(SectionType type, List<CategoryWrapper> list) {
     categories[type] = list;
     UserState st = Provider.of<UserState>(
@@ -31,6 +33,10 @@ class GlobalSingleton {
       } else
         st.setPreferredCategories(type, list.first.id);
     }
+  }
+
+  setAskingLocationPermission(bool val) {
+    askingLocationPermission = val;
   }
 
   factory GlobalSingleton() {

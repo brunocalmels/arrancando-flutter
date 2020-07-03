@@ -1,6 +1,8 @@
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +11,7 @@ class CommentsList extends StatelessWidget {
   final ContentWrapper content;
   final Function(int, String) setEditCommentId;
   final Function(int) setDeleteCommentId;
-  final Function(int) toggleLikeComment;
+  final Function(Comentario) toggleLikeComment;
 
   CommentsList({
     @required this.content,
@@ -114,6 +116,26 @@ class CommentsList extends StatelessWidget {
                                       ],
                                     ),
                                   ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text("${c.puntajes.length}"),
+                                      if (c.esOwner(context))
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: Icon(
+                                            Icons.favorite,
+                                            color:
+                                                Theme.of(context).accentColor,
+                                            size: 12,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                   if (c.esOwner(context))
                                     PopupMenuButton(
                                       icon: Icon(
@@ -145,12 +167,26 @@ class CommentsList extends StatelessWidget {
                                       ],
                                     ),
                                   if (!c.esOwner(context))
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.favorite_border,
-                                        color: Theme.of(context).accentColor,
+                                    Material(
+                                      color: Colors.transparent,
+                                      type: MaterialType.circle,
+                                      child: InkWell(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: Icon(
+                                            c.myPuntaje(Provider.of<UserState>(
+                                                            context)
+                                                        .activeUser
+                                                        .id) >
+                                                    0
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color:
+                                                Theme.of(context).accentColor,
+                                          ),
+                                        ),
+                                        onTap: () => toggleLikeComment(c),
                                       ),
-                                      onPressed: () => toggleLikeComment(c.id),
                                     ),
                                 ],
                               ),

@@ -19,6 +19,10 @@ Comentario _$ComentarioFromJson(Map<String, dynamic> json) {
         ? null
         : Usuario.fromJson(json['user'] as Map<String, dynamic>),
     json['mensaje'] as String,
+    (json['puntajes'] as List)
+        ?.map((e) =>
+            e == null ? null : Puntaje.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
@@ -29,4 +33,5 @@ Map<String, dynamic> _$ComentarioToJson(Comentario instance) =>
       'updated_at': instance.updatedAt?.toIso8601String(),
       'user': instance.user,
       'mensaje': instance.mensaje,
+      'puntajes': instance.puntajes,
     };

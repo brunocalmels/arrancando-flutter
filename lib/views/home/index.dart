@@ -228,19 +228,19 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   void didUpdateWidget(MainScaffold oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _fetchUnreadNotificaciones();
+    // _fetchUnreadNotificaciones();
   }
 
   @override
   void deactivate() {
     super.deactivate();
-    _fetchUnreadNotificaciones();
+    // _fetchUnreadNotificaciones();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _fetchUnreadNotificaciones();
+    // _fetchUnreadNotificaciones();
   }
 
   @override
@@ -249,7 +249,6 @@ class _MainScaffoldState extends State<MainScaffold> {
       onWillPop: () async {
         _setSearchVisibility(false);
         if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen) return true;
-
         return false;
       },
       child: Stack(
@@ -258,10 +257,7 @@ class _MainScaffoldState extends State<MainScaffold> {
           Scaffold(
             // backgroundColor: Theme.of(context).backgroundColor,
             key: MyGlobals.mainScaffoldKey,
-            endDrawer: HomeDrawer(
-              unreadNotificaciones: _unreadNotificaciones != null &&
-                  _unreadNotificaciones.length > 0,
-            ),
+            endDrawer: HomeDrawer(),
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(55),
               child: MainAppBar(

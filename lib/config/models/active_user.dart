@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/main.dart';
@@ -42,11 +43,10 @@ class ActiveUser {
   Map<String, dynamic> toJson() => _$ActiveUserToJson(this);
 
   static Future<bool> locationPermissionDenied() async {
-    var context = MyGlobals.mainNavigatorKey.currentContext;
-    var state = Provider.of<MainState>(context, listen: false);
+    final GlobalSingleton gs = GlobalSingleton();
 
-    if (!state.askingLocationPermission) {
-      state.setAskingLocationPermission(true);
+    if (!gs.askingLocationPermission) {
+      gs.setAskingLocationPermission(true);
 
       PermissionStatus permission = await PermissionHandler()
           .checkPermissionStatus(PermissionGroup.location);
@@ -58,12 +58,13 @@ class ActiveUser {
 
         if (permissions.containsKey(PermissionGroup.location) &&
             permissions[PermissionGroup.location] != PermissionStatus.granted) {
+          gs.setAskingLocationPermission(false);
           return true;
         }
       } else {
+        gs.setAskingLocationPermission(false);
         return false;
       }
-      state.setAskingLocationPermission(false);
     }
     return false;
   }

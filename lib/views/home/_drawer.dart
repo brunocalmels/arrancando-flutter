@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/notificacion.dart';
 import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -21,12 +22,36 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomeDrawer extends StatelessWidget {
-  final bool unreadNotificaciones;
+class HomeDrawer extends StatefulWidget {
+  @override
+  _HomeDrawerState createState() => _HomeDrawerState();
+}
 
-  HomeDrawer({
-    this.unreadNotificaciones = false,
-  });
+class _HomeDrawerState extends State<HomeDrawer> {
+  List<Notificacion> _unreadNotificaciones;
+
+  _fetchUnreadNotificaciones() async {
+    _unreadNotificaciones = await Notificacion.fetchUnread();
+    if (mounted) setState(() {});
+  }
+
+  // @override
+  // void didUpdateWidget(HomeDrawer oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   _fetchUnreadNotificaciones();
+  // }
+
+  // @override
+  // void deactivate() {
+  //   super.deactivate();
+  //   _fetchUnreadNotificaciones();
+  // }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _fetchUnreadNotificaciones();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +136,8 @@ class HomeDrawer extends StatelessWidget {
                       ),
                       ListTile(
                         leading: BadgeWrapper(
-                          showBadge: unreadNotificaciones,
+                          showBadge: _unreadNotificaciones != null &&
+                              _unreadNotificaciones.length > 0,
                           child: Padding(
                             padding: const EdgeInsets.only(right: 15),
                             child: Icon(
