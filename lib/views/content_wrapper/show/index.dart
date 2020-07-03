@@ -8,6 +8,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/show/_row_iconos_fecha.dart';
 import 'package:arrancando/views/content_wrapper/show/_show_app_bar.dart';
+import 'package:arrancando/views/content_wrapper/show/cabecera/_row_estrellas.dart';
 import 'package:arrancando/views/content_wrapper/show/cabecera/index.dart';
 import 'package:arrancando/views/content_wrapper/show/comentarios/index.dart';
 import 'package:arrancando/views/content_wrapper/show/images_slider/index.dart';
@@ -150,6 +151,15 @@ class _ShowPageState extends State<ShowPage> {
                           ),
                         TextosShow(
                           content: _content,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Center(
+                            child: RowEstrellas(
+                              content: _content,
+                              fetchContent: _fetchContent,
+                            ),
+                          ),
                         ),
                         RowIconosFecha(
                           content: _content,

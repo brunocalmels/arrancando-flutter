@@ -42,6 +42,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                     try {
                       if (mounted) {
                         String opcion = await showModalBottomSheet(
+                          backgroundColor: Colors.grey,
                           builder: (BuildContext context) {
                             return Container(
                               height: 100,

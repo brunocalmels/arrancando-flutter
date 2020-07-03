@@ -7,6 +7,7 @@ import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/content_wrapper/dialog/share.dart';
 import 'package:arrancando/views/content_wrapper/show/_heart_plus5.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:arrancando/views/user_profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -162,7 +163,8 @@ class CardContent extends StatelessWidget {
                         ),
                       ),
                       Icon(
-                        Icons.person_outline,
+                        Icons.calendar_today,
+                        size: 15,
                         color: Theme.of(context).accentColor,
                       ),
                     ],
@@ -238,36 +240,48 @@ class CardContent extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      print('Tap on profile');
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 15,
-                          backgroundImage: content.user != null &&
-                                  content.user.avatar != null
-                              ? CachedNetworkImageProvider(
-                                  "${MyGlobals.SERVER_URL}${content.user.avatar}",
-                                )
-                              : null,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Text(
-                            content.user == null
-                                ? "------"
-                                : "@${content.user.username}",
-                            overflow: TextOverflow.ellipsis,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => UserProfilePage(
+                                  user: content.user,
+                                ),
+                                settings: RouteSettings(
+                                  name: "UserProfilePage",
+                                ),
+                              ),
+                            );
+                          },
+                          child: CircleAvatar(
+                            radius: 15,
+                            backgroundImage: content.user != null &&
+                                    content.user.avatar != null
+                                ? CachedNetworkImageProvider(
+                                    "${MyGlobals.SERVER_URL}${content.user.avatar}",
+                                  )
+                                : null,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: Text(
+                          content.user == null
+                              ? "------"
+                              : "@${content.user.username}",
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                   // RecetaInfo / Descripción
                   Expanded(

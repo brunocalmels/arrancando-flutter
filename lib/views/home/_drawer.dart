@@ -281,7 +281,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                   img,
                                   'image/jpg',
                                   text:
-                                      "Bajate Arrancando y compartí tu pasión por el buen asado y el buen comer.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es",
+                                      "Bajate Arrancando y compartí tu pasión por el asado y el buen comer.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es",
                                 );
                               },
                             ),

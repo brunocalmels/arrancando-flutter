@@ -104,6 +104,12 @@ flutter:
     - assets/images/content/categories/plancha.png
     - assets/images/content/categories/sarten.png
     - assets/images/content/categories/tragos.png
+    - assets/images/user_profile/masters/horno.png
+    - assets/images/user_profile/masters/olla.png
+    - assets/images/user_profile/masters/parrilla.png
+    - assets/images/user_profile/masters/plancha.png
+    - assets/images/user_profile/masters/sarten.png
+    - assets/images/user_profile/masters/wok.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

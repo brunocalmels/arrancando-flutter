@@ -47,7 +47,12 @@ class CommentsList extends StatelessWidget {
                             color: Theme.of(context).accentColor,
                           ),
                           SizedBox(width: 5),
-                          Text("${content.comentarios.length}"),
+                          Text(
+                            "${content.comentarios.length} comentarios",
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -101,6 +106,16 @@ class CommentsList extends StatelessWidget {
                                                         ThemeMode.dark
                                                     ? null
                                                     : Colors.white,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 4,
+                                        ),
+                                        Text(
+                                          c.fecha,
+                                          style: TextStyle(
+                                            fontSize: 9,
+                                            color: Colors.white.withAlpha(150),
                                           ),
                                         ),
                                         SizedBox(
