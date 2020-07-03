@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 class CabeceraUserProfile extends StatelessWidget {
   final Usuario user;
   final String master;
+  final int siguiendo;
+  final Function seguir;
+  final bool sentSeguir;
   final Map<String, String> _masterToAsset = {
     "horno": "assets/images/user_profile/masters/horno.png",
     "olla": "assets/images/user_profile/masters/olla.png",
@@ -18,6 +21,9 @@ class CabeceraUserProfile extends StatelessWidget {
   CabeceraUserProfile({
     @required this.user,
     @required this.master,
+    @required this.siguiendo,
+    @required this.seguir,
+    @required this.sentSeguir,
   });
 
   @override
@@ -57,14 +63,31 @@ class CabeceraUserProfile extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: Text(
-                    "SEGUIR",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                  onPressed: () {},
+                  child: sentSeguir
+                      ? SizedBox(
+                          width: 15,
+                          height: 15,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 1,
+                          ),
+                        )
+                      : Text(
+                          siguiendo == null ? "SEGUIR" : "DEJAR DE SEGUIR",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                  onPressed: sentSeguir
+                      ? null
+                      : () {
+                          if (siguiendo == null)
+                            seguir();
+                          else
+                            seguir(
+                              noSeguir: true,
+                            );
+                        },
                 ),
               ),
             ],

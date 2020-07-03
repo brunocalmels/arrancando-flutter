@@ -30,6 +30,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
   bool _noMore = false;
   int _limit = 6;
   String _master;
+  int _siguiendo;
+  bool _sentSeguir = false;
+
+  _setActiveSection(SectionType type) {
+    _activeSectionType = type;
+    _noMore = false;
+    _limit = 6;
+    _fetchElements();
+    if (mounted) setState(() {});
+  }
 
   _fetchCount() async {
     _sentCount = true;
@@ -44,6 +54,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       _master = data['master'] != null && data['master'] != ""
           ? data['master']
           : null;
+      _siguiendo = data['siguiendo'];
       [SectionType.publicaciones, SectionType.recetas, SectionType.pois]
           .forEach(
         (t) {
@@ -122,11 +133,34 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (mounted) setState(() {});
   }
 
-  _setActiveSection(SectionType type) {
-    _activeSectionType = type;
-    _noMore = false;
-    _limit = 6;
-    _fetchElements();
+  _seguir({
+    bool noSeguir: false,
+  }) async {
+    _sentSeguir = true;
+    if (mounted) setState(() {});
+
+    if (!noSeguir) {
+      ResponseObject resp = await Fetcher.post(
+        url: "/seguimientos.json",
+        body: {
+          "seguido_id": widget.user.id,
+        },
+      );
+      if (resp != null && resp.body != null) {
+        _siguiendo = json.decode(resp.body)['id'];
+      }
+    } else {
+      if (_siguiendo != null) {
+        ResponseObject resp = await Fetcher.destroy(
+          url: "/seguimientos/$_siguiendo.json",
+        );
+        if (resp != null && resp.status != null) {
+          _siguiendo = null;
+        }
+      }
+    }
+
+    _sentSeguir = false;
     if (mounted) setState(() {});
   }
 
@@ -154,6 +188,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
               CabeceraUserProfile(
                 user: widget.user,
                 master: _master,
+                siguiendo: _siguiendo,
+                seguir: _seguir,
+                sentSeguir: _sentSeguir,
               ),
               SizedBox(height: 5),
               _sentCount
