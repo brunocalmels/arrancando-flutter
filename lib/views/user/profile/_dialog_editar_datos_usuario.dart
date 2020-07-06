@@ -29,7 +29,8 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
       ResponseObject resp = await Fetcher.put(
         url: "/users/${Provider.of<UserState>(context).activeUser.id}.json",
         body: {
-          "${widget.campo.toLowerCase()}": "${textoController.text}",
+          "${widget.campo == 'Instagram' ? 'url_instagram' : widget.campo.toLowerCase()}":
+              "${widget.campo == 'Instagram' ? 'https://instagram.com/${textoController.text}' : textoController.text}",
         },
       );
 
@@ -66,6 +67,22 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
     }
   }
 
+  emailValidator(value) {
+    if (value.isEmpty) {
+      return "El campo es obligatorio";
+    } else {
+      Pattern pattern =
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,1}\.[0-9]{1,1}\.[0-9]{1,1}\.[0-9]{1,1}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{1,}))$';
+      // r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regex = new RegExp(pattern);
+      if (!regex.hasMatch(value)) {
+        return "Ingrese un email válido";
+      } else {
+        return null;
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -82,14 +99,25 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
           Form(
             key: formKey,
             child: TextFormField(
-              textCapitalization: TextCapitalization.sentences,
+              textCapitalization: widget.campo == 'Instagram'
+                  ? TextCapitalization.none
+                  : TextCapitalization.sentences,
+              keyboardType: widget.campo == 'Instagram'
+                  ? TextInputType.url
+                  : widget.campo == 'Email' ? TextInputType.emailAddress : null,
               decoration: InputDecoration(
-                hasFloatingPlaceholder: true,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
                 labelText: "${widget.campo}",
+                prefixText:
+                    widget.campo == 'Instagram' ? "https://in...com/ " : null,
+                prefixStyle: widget.campo == 'Instagram'
+                    ? TextStyle(fontSize: 10)
+                    : null,
               ),
               controller: textoController,
-              validator: (value) =>
-                  widget.campo == "Username" ? usernameValidator(value) : null,
+              validator: (value) => widget.campo == "Username"
+                  ? usernameValidator(value)
+                  : widget.campo == 'Email' ? emailValidator(value) : null,
             ),
           ),
           if (_errorHappended)

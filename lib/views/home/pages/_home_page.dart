@@ -29,6 +29,8 @@ class _HomePageState extends State<HomePage> {
       _noMore = false;
     }
 
+    print(Provider.of<MainState>(context).contenidosHome);
+
     int lastLength = _items != null ? _items.length : 0;
     List<String> contenidosHome = Provider.of<MainState>(context)
         .contenidosHome

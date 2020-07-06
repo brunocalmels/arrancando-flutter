@@ -118,7 +118,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
                               ],
                             );
                           if (index == widget.items.length - 1) {
-                            if (!widget.noMore)
+                            if (!widget.noMore && widget.items.length > 1)
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
@@ -151,14 +151,15 @@ class _ContentCardPageState extends State<ContentCardPage> {
                       )
                     : ListView(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              _plato,
-                            ],
-                          ),
+                          if (!widget.hideFilter)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                _plato,
+                              ],
+                            ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             child: Text(

@@ -379,7 +379,7 @@ class ContentWrapper {
     String url = "$rootURL.json?page=$page";
 
     if (search != null && search.isNotEmpty)
-      url += "&filterrific[search_query]=$search";
+      url += "&filterrific[search_query]=${Uri.encodeComponent(search)}";
     if (categoryId != null && categoryId > 0)
       url += "&filterrific[$categoryParamName]=$categoryId";
 

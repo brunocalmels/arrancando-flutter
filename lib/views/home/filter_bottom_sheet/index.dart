@@ -125,7 +125,7 @@ class FilterBottomSheet extends StatelessWidget {
                                             ? Theme.of(context).accentColor
                                             : Theme.of(context)
                                                 .textTheme
-                                                .body1
+                                                .bodyText2
                                                 .color
                                                 .withAlpha(150),
                                       ),
@@ -143,7 +143,7 @@ class FilterBottomSheet extends StatelessWidget {
                                             ? Theme.of(context).accentColor
                                             : Theme.of(context)
                                                 .textTheme
-                                                .body1
+                                                .bodyText2
                                                 .color
                                                 .withAlpha(150),
                                       ),
@@ -159,7 +159,7 @@ class FilterBottomSheet extends StatelessWidget {
                                           ? Theme.of(context).accentColor
                                           : Theme.of(context)
                                               .textTheme
-                                              .body1
+                                              .bodyText2
                                               .color
                                               .withAlpha(150),
                                     ),

@@ -10,6 +10,8 @@ class Usuario {
   String apellido;
   String email;
   String username;
+  @JsonKey(name: "url_instagram")
+  String urlInstagram;
 
   Usuario(
     this.id,
@@ -18,6 +20,7 @@ class Usuario {
     this.apellido,
     this.email,
     this.username,
+    this.urlInstagram,
   );
 
   factory Usuario.fromJson(Map<String, dynamic> json) =>

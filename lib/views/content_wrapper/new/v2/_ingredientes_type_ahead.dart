@@ -235,7 +235,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                         Divider(
                           height: 1,
                           color:
-                              Theme.of(context).textTheme.body1.color.withAlpha(
+                              Theme.of(context).textTheme.bodyText2.color.withAlpha(
                                     100,
                                   ),
                         ),
@@ -284,7 +284,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                 ),
                 Divider(
                   height: 1,
-                  color: Theme.of(context).textTheme.body1.color.withAlpha(
+                  color: Theme.of(context).textTheme.bodyText2.color.withAlpha(
                         100,
                       ),
                 ),
@@ -396,7 +396,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                                 fontSize: 10,
                                 color: Theme.of(context)
                                     .textTheme
-                                    .body1
+                                    .bodyText2
                                     .color
                                     .withAlpha(150),
                               ),

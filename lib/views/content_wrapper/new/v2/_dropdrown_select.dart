@@ -73,7 +73,7 @@ class DropdownSelect extends StatelessWidget {
                       style: TextStyle(
                         color: Theme.of(context)
                             .textTheme
-                            .body1
+                            .bodyText2
                             .color
                             .withAlpha(150),
                       ),

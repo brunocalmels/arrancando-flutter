@@ -66,7 +66,7 @@ class FormSendComment extends StatelessWidget {
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
                         hintText: "Comentario",
-                        hasFloatingPlaceholder: false,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
                         hintStyle: TextStyle(
                           color: Colors.black54,
                         ),

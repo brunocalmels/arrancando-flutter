@@ -3,6 +3,7 @@ import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/content_wrapper/show/textos/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -121,12 +122,19 @@ class CommentsList extends StatelessWidget {
                                         SizedBox(
                                           height: 4,
                                         ),
-                                        Text(
-                                          c.mensaje,
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            color: Colors.white.withAlpha(150),
-                                          ),
+                                        // Text(
+                                        //   c.mensaje,
+                                        //   style: TextStyle(
+                                        //     fontSize: 11,
+                                        //     color: Colors.white.withAlpha(150),
+                                        //   ),
+                                        // ),
+                                        TextosShow(
+                                          content: null,
+                                          fullText: c.mensaje,
+                                          textAlign: TextAlign.left,
+                                          fontSize: 11,
+                                          paddingZero: true,
                                         ),
                                       ],
                                     ),

@@ -33,7 +33,7 @@ class _SearchBarState extends State<SearchBar> {
           }
         },
         decoration: InputDecoration(
-          hasFloatingPlaceholder: false,
+          floatingLabelBehavior: FloatingLabelBehavior.never,
           hintText: "Buscar",
         ),
         controller: widget.searchController,

@@ -423,7 +423,7 @@ class _LoginPageState extends State<LoginPage> {
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress,
                             decoration: new InputDecoration(
-                              hasFloatingPlaceholder: true,
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
                               labelText: "Email",
                               hintText: 'usuario@ejemplo.com',
                             ),
@@ -436,7 +436,7 @@ class _LoginPageState extends State<LoginPage> {
                                 controller: passwordController,
                                 obscureText: _obscurePassword,
                                 decoration: new InputDecoration(
-                                  hasFloatingPlaceholder: true,
+                                  floatingLabelBehavior: FloatingLabelBehavior.always,
                                   labelText: "Contraseña",
                                   hintText: '*********',
                                 ),

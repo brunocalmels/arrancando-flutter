@@ -28,7 +28,7 @@ class _SearchFieldState extends State<SearchField> {
               textCapitalization: TextCapitalization.sentences,
               onChanged: widget.onChanged,
               decoration: InputDecoration(
-                hasFloatingPlaceholder: false,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
                 hintText: "Buscar",
               ),
               controller: widget.searchController,

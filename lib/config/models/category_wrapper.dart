@@ -190,4 +190,5 @@ final Map<String, SectionType> sectionTypeMapper = {
   "SectionType.recetas": SectionType.recetas,
   "SectionType.wiki": SectionType.wiki,
   "SectionType.pois": SectionType.pois,
+  "SectionType.followed": SectionType.followed,
 };

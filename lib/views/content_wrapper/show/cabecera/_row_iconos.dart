@@ -43,7 +43,7 @@ class RowIconos extends StatelessWidget {
                     fontSize: 9,
                     shadows: [
                       Shadow(
-                        color: Theme.of(context).textTheme.body1.color,
+                        color: Theme.of(context).textTheme.bodyText2.color,
                         blurRadius: 5,
                       ),
                     ],
@@ -77,7 +77,7 @@ class RowIconos extends StatelessWidget {
                     fontSize: 9,
                     shadows: [
                       Shadow(
-                        color: Theme.of(context).textTheme.body1.color,
+                        color: Theme.of(context).textTheme.bodyText2.color,
                         blurRadius: 5,
                       ),
                     ],
@@ -105,7 +105,7 @@ class RowIconos extends StatelessWidget {
                     fontSize: 9,
                     shadows: [
                       Shadow(
-                        color: Theme.of(context).textTheme.body1.color,
+                        color: Theme.of(context).textTheme.bodyText2.color,
                         blurRadius: 5,
                       ),
                     ],

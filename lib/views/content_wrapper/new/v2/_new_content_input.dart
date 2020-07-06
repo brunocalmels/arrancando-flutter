@@ -1,5 +1,6 @@
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_add_link_button.dart';
+import 'package:arrancando/views/content_wrapper/new/v2/_add_user_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -106,8 +107,18 @@ class NewContentInput extends StatelessWidget {
               Positioned(
                 right: 0,
                 bottom: 0,
-                child: AddLinkButton(
-                  controller: controller,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    AddUserButton(
+                      controller: controller,
+                    ),
+                    AddLinkButton(
+                      controller: controller,
+                    ),
+                  ],
                 ),
               ),
           ],

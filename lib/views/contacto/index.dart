@@ -108,7 +108,7 @@ class _ContactPageState extends State<ContactPage> {
                       maxLines: 8,
                       decoration: new InputDecoration(
                         alignLabelWithHint: true,
-                        hasFloatingPlaceholder: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         labelText: "Mensaje",
                         hintText: 'Cuerpo',
                       ),

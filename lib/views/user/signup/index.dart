@@ -235,7 +235,7 @@ class _LoginPageState extends State<SignupPage> {
                       textCapitalization: TextCapitalization.sentences,
                       controller: nombreController,
                       decoration: new InputDecoration(
-                        hasFloatingPlaceholder: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         labelText: "Nombre",
                         hintText: "Pablo",
                       ),
@@ -245,7 +245,7 @@ class _LoginPageState extends State<SignupPage> {
                       textCapitalization: TextCapitalization.sentences,
                       controller: apellidoController,
                       decoration: new InputDecoration(
-                        hasFloatingPlaceholder: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         labelText: "Apellido",
                         hintText: 'Gomez',
                       ),
@@ -254,7 +254,7 @@ class _LoginPageState extends State<SignupPage> {
                     TextFormField(
                       controller: usernameController,
                       decoration: new InputDecoration(
-                        hasFloatingPlaceholder: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         labelText: "Nombre de usuario",
                         hintText: 'pablo_gomez27',
                       ),
@@ -264,7 +264,7 @@ class _LoginPageState extends State<SignupPage> {
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: new InputDecoration(
-                        hasFloatingPlaceholder: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         labelText: "Email",
                         hintText: 'usuario@ejemplo.com',
                       ),
@@ -277,7 +277,7 @@ class _LoginPageState extends State<SignupPage> {
                           controller: passwordController,
                           obscureText: _obscurePassword,
                           decoration: new InputDecoration(
-                            hasFloatingPlaceholder: true,
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
                             labelText: "Contraseña",
                             hintText: '*********',
                           ),

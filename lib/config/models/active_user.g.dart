@@ -15,6 +15,7 @@ ActiveUser _$ActiveUserFromJson(Map<String, dynamic> json) {
     json['email'] as String,
     json['username'] as String,
     json['avatar'] as String,
+    json['url_instagram'] as String,
   );
 }
 
@@ -27,4 +28,5 @@ Map<String, dynamic> _$ActiveUserToJson(ActiveUser instance) =>
       'email': instance.email,
       'username': instance.username,
       'avatar': instance.avatar,
+      'url_instagram': instance.urlInstagram,
     };

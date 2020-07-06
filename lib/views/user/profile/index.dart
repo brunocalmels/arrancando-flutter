@@ -74,6 +74,12 @@ class _ProfilePageState extends State<ProfilePage> {
       case "Username":
         _activeUser.username = valor;
         break;
+      case "Email":
+        _activeUser.email = valor;
+        break;
+      case "Instagram":
+        _activeUser.urlInstagram = valor;
+        break;
       default:
     }
 
@@ -99,160 +105,210 @@ class _ProfilePageState extends State<ProfilePage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: ListView(
-        children: <Widget>[
-          Stack(
-            fit: StackFit.passthrough,
+      body: Consumer<UserState>(
+        builder: (context, userState, child) {
+          return ListView(
             children: <Widget>[
-              AvatarPicker(
-                currentAvatar:
-                    Provider.of<UserState>(context).activeUser?.avatar != null
+              Stack(
+                fit: StackFit.passthrough,
+                children: <Widget>[
+                  AvatarPicker(
+                    currentAvatar: userState.activeUser?.avatar != null
                         ? CachedNetworkImageProvider(
-                            "${MyGlobals.SERVER_URL}${Provider.of<UserState>(context).activeUser?.avatar}",
+                            "${MyGlobals.SERVER_URL}${userState.activeUser?.avatar}",
                           )
                         : null,
-                setAvatar: _setAvatar,
-              ),
-              if (_sent)
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: Container(
-                    color: Colors.white30,
-                    child: Center(
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                        ),
-                      ),
-                    ),
+                    setAvatar: _setAvatar,
                   ),
-                ),
-            ],
-          ),
-          ListTile(
-            title: Text('Nombre'),
-            subtitle: Text(Provider.of<UserState>(context).activeUser.nombre),
-            onTap: () async {
-              String valor = await showDialog(
-                context: context,
-                builder: (context) {
-                  return DialogEditarDatosUsuario(
-                    campo: "Nombre",
-                    valor: Provider.of<UserState>(context).activeUser.nombre,
-                  );
-                },
-              );
-              if (valor != null) _updateActiveUser(context, "Nombre", valor);
-            },
-            trailing: Icon(
-              Icons.edit,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-          ListTile(
-            title: Text('Apellido'),
-            subtitle: Text(
-                Provider.of<UserState>(context).activeUser.apellido != null
-                    ? Provider.of<UserState>(context).activeUser.apellido
-                    : ''),
-            onTap: () async {
-              String valor = await showDialog(
-                context: context,
-                builder: (context) {
-                  return DialogEditarDatosUsuario(
-                    campo: "Apellido",
-                    valor: Provider.of<UserState>(context).activeUser.apellido,
-                  );
-                },
-              );
-              if (valor != null) _updateActiveUser(context, "Apellido", valor);
-            },
-            trailing: Icon(
-              Icons.edit,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-          ListTile(
-            title: Text('Username'),
-            subtitle: Text(Provider.of<UserState>(context).activeUser.username),
-            onTap: () async {
-              String valor = await showDialog(
-                context: context,
-                builder: (context) {
-                  return DialogEditarDatosUsuario(
-                    campo: "Username",
-                    valor: Provider.of<UserState>(context).activeUser.username,
-                  );
-                },
-              );
-              if (valor != null) _updateActiveUser(context, "Username", valor);
-            },
-            trailing: Icon(
-              Icons.edit,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-          ListTile(
-            title: Text("Mi ciudad"),
-            subtitle: Text(
-              gs.categories[SectionType.publicaciones]
-                  .firstWhere((c) =>
-                      c.id ==
-                      Provider.of<UserState>(context)
-                          .preferredCategories[SectionType.publicaciones])
-                  .nombre,
-            ),
-            trailing: Icon(
-              Icons.edit,
-              color: Theme.of(context).accentColor,
-            ),
-            onTap: () async {
-              int ciudadId = await showDialog(
-                context: context,
-                builder: (_) => DialogCategorySelect(
-                  selectCity: true,
-                  titleText: "¿Cuál es tu ciudad?",
-                  insideProfile: true,
-                ),
-              );
-              if (ciudadId != null) {
-                Provider.of<UserState>(context, listen: false)
-                    .setPreferredCategories(
-                  SectionType.publicaciones,
-                  ciudadId,
-                );
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setInt("preferredCiudadId", ciudadId);
-
-                if (!(await _getCiudadPopulada(ciudadId))) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('No hay contenido'),
-                      content: Text(
-                        'Aún no hay mucho contenido de tu ciudad.\nEn unos días añadiremos publicaciones y puntos de interés cerca tuyo.\nMientras tanto, te recomendamos que veas el contenido de Neuquén.',
-                        style: TextStyle(
-                          fontSize: 14,
+                  if (_sent)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: Container(
+                        color: Colors.white30,
+                        child: Center(
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          ),
                         ),
                       ),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('Aceptar'),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      ],
+                    ),
+                ],
+              ),
+              ListTile(
+                title: Text('Nombre'),
+                subtitle: Text(userState.activeUser.nombre),
+                onTap: () async {
+                  String valor = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogEditarDatosUsuario(
+                        campo: "Nombre",
+                        valor: userState.activeUser.nombre,
+                      );
+                    },
+                  );
+                  if (valor != null)
+                    _updateActiveUser(context, "Nombre", valor);
+                },
+                trailing: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+              ListTile(
+                title: Text('Apellido'),
+                subtitle: Text(userState.activeUser.apellido != null
+                    ? userState.activeUser.apellido
+                    : ''),
+                onTap: () async {
+                  String valor = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogEditarDatosUsuario(
+                        campo: "Apellido",
+                        valor: userState.activeUser.apellido,
+                      );
+                    },
+                  );
+                  if (valor != null)
+                    _updateActiveUser(context, "Apellido", valor);
+                },
+                trailing: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+              ListTile(
+                title: Text('Username'),
+                subtitle: Text(userState.activeUser.username),
+                onTap: () async {
+                  String valor = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogEditarDatosUsuario(
+                        campo: "Username",
+                        valor: userState.activeUser.username,
+                      );
+                    },
+                  );
+                  if (valor != null)
+                    _updateActiveUser(context, "Username", valor);
+                },
+                trailing: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+              ListTile(
+                title: Text('Email'),
+                subtitle: Text(userState.activeUser.email),
+                onTap: () async {
+                  String valor = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogEditarDatosUsuario(
+                        campo: "Email",
+                        valor: userState.activeUser.email,
+                      );
+                    },
+                  );
+                  if (valor != null) _updateActiveUser(context, "Email", valor);
+                },
+                trailing: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+              ListTile(
+                title: Text('Instagram'),
+                subtitle: Text(
+                  userState.activeUser.urlInstagram != null
+                      ? "https://instagram.com/${userState.activeUser.urlInstagram}"
+                      : 'Perfil de Instagram',
+                ),
+                onTap: () async {
+                  String valor = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return DialogEditarDatosUsuario(
+                        campo: "Instagram",
+                        valor: userState.activeUser.urlInstagram,
+                      );
+                    },
+                  );
+                  if (valor != null)
+                    _updateActiveUser(context, "Instagram", valor);
+                },
+                trailing: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).accentColor,
+                ),
+              ),
+              ListTile(
+                title: Text("Mi ciudad"),
+                subtitle: Text(
+                  gs.categories[SectionType.publicaciones]
+                      .firstWhere((c) =>
+                          c.id ==
+                          userState
+                              .preferredCategories[SectionType.publicaciones])
+                      .nombre,
+                ),
+                trailing: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).accentColor,
+                ),
+                onTap: () async {
+                  int ciudadId = await showDialog(
+                    context: context,
+                    builder: (_) => DialogCategorySelect(
+                      selectCity: true,
+                      titleText: "¿Cuál es tu ciudad?",
+                      insideProfile: true,
                     ),
                   );
-                }
-              }
-            },
-          ),
-        ],
+                  if (ciudadId != null) {
+                    userState.setPreferredCategories(
+                      SectionType.publicaciones,
+                      ciudadId,
+                    );
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    prefs.setInt("preferredCiudadId", ciudadId);
+
+                    if (!(await _getCiudadPopulada(ciudadId))) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('No hay contenido'),
+                          content: Text(
+                            'Aún no hay mucho contenido de tu ciudad.\nEn unos días añadiremos publicaciones y puntos de interés cerca tuyo.\nMientras tanto, te recomendamos que veas el contenido de Neuquén.',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('Aceptar'),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  }
+                },
+              ),
+            ],
+          );
+        },
       ),
     );
   }

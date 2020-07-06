@@ -86,7 +86,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                                             fontSize: 12,
                                             color: Theme.of(context)
                                                 .textTheme
-                                                .body1
+                                                .bodyText2
                                                 .color,
                                           ),
                                         ),
@@ -101,7 +101,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                                                 bottom: BorderSide(
                                               color: Theme.of(context)
                                                   .textTheme
-                                                  .body1
+                                                  .bodyText2
                                                   .color
                                                   .withAlpha(50),
                                               width: 1,

@@ -40,6 +40,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
   List<Notificacion> _unreadNotificaciones;
+  bool _inited = false;
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
     MainState mainState = Provider.of<MainState>(
@@ -215,6 +216,8 @@ class _MainScaffoldState extends State<MainScaffold> {
       await NotificacionesService.initFirebaseNotifications(context);
       _fetchUnreadNotificaciones();
     }
+    _inited = true;
+    if (mounted) setState(() {});
   }
 
   @override
@@ -279,9 +282,13 @@ class _MainScaffoldState extends State<MainScaffold> {
                     _unreadNotificaciones.length > 0,
               ),
             ),
-            body: _getPage(
-              Provider.of<MainState>(context).activePageHome,
-            ),
+            body: _inited
+                ? _getPage(
+                    Provider.of<MainState>(context).activePageHome,
+                  )
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ),
 
             extendBody: true,
             floatingActionButton: HomeFab(),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
@@ -9,12 +10,15 @@ import 'package:arrancando/views/user_profile/_row_seguidos_seguidores.dart';
 import 'package:arrancando/views/user_profile/cabecera/index.dart';
 import 'package:arrancando/views/user_profile/grilla_content/index.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserProfilePage extends StatefulWidget {
   final Usuario user;
+  final String username;
 
   UserProfilePage({
     @required this.user,
+    this.username,
   });
 
   @override
@@ -22,6 +26,8 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
+  Usuario _user;
+  bool _loaded = false;
   SectionType _activeSectionType = SectionType.publicaciones;
   Map<SectionType, int> _count = {};
   List<ContentWrapper> _items = [];
@@ -49,7 +55,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (mounted) setState(() {});
 
     ResponseObject resp = await Fetcher.get(
-      url: "/content/count.json?user_id=${widget.user.id}",
+      url: "/content/count.json?user_id=${_user.id}",
     );
 
     if (resp != null && resp.body != null) {
@@ -99,7 +105,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     String url = _getUrl();
 
     ResponseObject resp = await Fetcher.get(
-      url: "$url.json?filterrific[user_id]=${widget.user.id}&limit=$_limit",
+      url: "$url.json?filterrific[user_id]=${_user.id}&limit=$_limit",
     );
 
     if (resp != null && resp.body != null) {
@@ -120,8 +126,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     String url = _getUrl();
 
     ResponseObject resp = await Fetcher.get(
-      url:
-          "$url.json?filterrific[user_id]=${widget.user.id}&limit=3&offset=$_limit",
+      url: "$url.json?filterrific[user_id]=${_user.id}&limit=3&offset=$_limit",
     );
 
     if (resp != null && resp.body != null) {
@@ -148,7 +153,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ResponseObject resp = await Fetcher.post(
         url: "/seguimientos.json",
         body: {
-          "seguido_id": widget.user.id,
+          "seguido_id": _user.id,
         },
       );
       if (resp != null && resp.body != null) {
@@ -171,84 +176,143 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (mounted) setState(() {});
   }
 
+  _fetchUsernAndInfo() async {
+    if (widget.username != null) {
+      ResponseObject resp = await Fetcher.get(
+        url: "/users/by_username.json?username=${widget.username}",
+      );
+
+      if (resp != null && resp.body != null) {
+        _user = Usuario.fromJson(json.decode(resp.body));
+        _fetchCount();
+        _fetchElements();
+      }
+    }
+    _loaded = true;
+    if (mounted) setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-    _fetchCount();
-    _fetchElements();
+    if (widget.user != null) {
+      _user = widget.user;
+      _loaded = true;
+      _fetchCount();
+      _fetchElements();
+      if (mounted) setState(() {});
+    } else {
+      _fetchUsernAndInfo();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("@${widget.user.username}"),
+        title: _user != null ? Text("@${_user.username}") : null,
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              CabeceraUserProfile(
-                user: widget.user,
-                master: _master,
-                siguiendo: _siguiendo,
-                seguir: _seguir,
-                sentSeguir: _sentSeguir,
-              ),
-              RowSeguidosSeguidores(
-                userId: widget.user.id,
-                seguidos: _seguidos,
-                seguidores: _seguidores,
-              ),
-              SizedBox(height: 15),
-              _sentCount
-                  ? Container(
-                      height: 100,
-                      child: Center(
-                        child: SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
+      body: _user != null && _loaded
+          ? Container(
+              width: MediaQuery.of(context).size.width,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    CabeceraUserProfile(
+                      user: _user,
+                      master: _master,
+                      siguiendo: _siguiendo,
+                      seguir: _seguir,
+                      sentSeguir: _sentSeguir,
+                    ),
+                    if (_user.urlInstagram != null)
+                      FlatButton(
+                        child: Text(
+                          "VER INSTAGRAM",
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyText2.color,
                           ),
                         ),
+                        onPressed: () async {
+                          if (await canLaunch(_user.urlInstagram)) {
+                            await launch(
+                              _user.urlInstagram,
+                              forceSafariVC: false,
+                              forceWebView: false,
+                            );
+                          } else {
+                            throw 'Could not launch ${_user.urlInstagram}';
+                          }
+                        },
                       ),
-                    )
-                  : RowBotonesUserProfile(
-                      activeSection: _activeSectionType,
-                      setActiveSection: _setActiveSection,
-                      count: _count,
+                    RowSeguidosSeguidores(
+                      userId: _user.id,
+                      seguidos: _seguidos,
+                      seguidores: _seguidores,
                     ),
-              SizedBox(height: 15),
-              _sent
-                  ? Container(
-                      height: 200,
-                      child: Center(
-                        child: SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
+                    SizedBox(height: 15),
+                    _sentCount
+                        ? Container(
+                            height: 100,
+                            child: Center(
+                              child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                          )
+                        : RowBotonesUserProfile(
+                            activeSection: _activeSectionType,
+                            setActiveSection: _setActiveSection,
+                            count: _count,
                           ),
-                        ),
-                      ),
-                    )
-                  : GrillaContentUserProfile(
-                      items: _items,
-                      type: _activeSectionType,
-                      fetchMore: _fetchMore,
-                      sentMore: _sentMore,
-                      noMore: _noMore,
+                    SizedBox(height: 15),
+                    _sent
+                        ? Container(
+                            height: 200,
+                            child: Center(
+                              child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                          )
+                        : GrillaContentUserProfile(
+                            items: _items,
+                            type: _activeSectionType,
+                            fetchMore: _fetchMore,
+                            sentMore: _sentMore,
+                            noMore: _noMore,
+                          ),
+                    SizedBox(height: 50),
+                  ],
+                ),
+              ),
+            )
+          : _user == null && _loaded
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Text(
+                      "Ocurrió un error",
+                      textAlign: TextAlign.center,
                     ),
-              SizedBox(height: 50),
-            ],
-          ),
-        ),
-      ),
+                  ),
+                )
+              : Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
     );
   }
 }

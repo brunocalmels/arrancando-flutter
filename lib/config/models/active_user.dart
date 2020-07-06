@@ -27,6 +27,8 @@ class ActiveUser {
   String email;
   String username;
   String avatar;
+  @JsonKey(name: "url_instagram")
+  String urlInstagram;
 
   ActiveUser(
     this.authToken,
@@ -36,6 +38,7 @@ class ActiveUser {
     this.email,
     this.username,
     this.avatar,
+    this.urlInstagram,
   );
 
   factory ActiveUser.fromJson(Map<String, dynamic> json) =>
@@ -50,6 +53,7 @@ class ActiveUser {
         apellido,
         email,
         username,
+        urlInstagram,
       );
 
   static Future<bool> locationPermissionDenied() async {
