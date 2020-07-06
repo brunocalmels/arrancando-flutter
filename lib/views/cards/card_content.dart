@@ -295,30 +295,30 @@ class CardContent extends StatelessWidget {
                       HeartPlus5(
                         content: content,
                       ),
-                      SizedBox(
-                        width: 7,
-                      ),
-                      GestureDetector(
-                        child: Icon(
-                          Icons.chat_bubble_outline,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        onTap: () {
-                          print('chat_bubble_outline');
-                        },
-                      ),
-                      SizedBox(
-                        width: 12,
-                      ),
-                      GestureDetector(
-                        child: Icon(
-                          Icons.camera_alt,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        onTap: () {
-                          print('camera_alt');
-                        },
-                      ),
+                      // SizedBox(
+                      //   width: 7,
+                      // ),
+                      // GestureDetector(
+                      //   child: Icon(
+                      //     Icons.chat_bubble_outline,
+                      //     color: Theme.of(context).accentColor,
+                      //   ),
+                      //   onTap: () {
+                      //     print('chat_bubble_outline');
+                      //   },
+                      // ),
+                      // SizedBox(
+                      //   width: 12,
+                      // ),
+                      // GestureDetector(
+                      //   child: Icon(
+                      //     Icons.camera_alt,
+                      //     color: Theme.of(context).accentColor,
+                      //   ),
+                      //   onTap: () {
+                      //     print('camera_alt');
+                      //   },
+                      // ),
                     ],
                   ),
                 ],

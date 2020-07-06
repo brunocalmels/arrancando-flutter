@@ -1,7 +1,9 @@
 import 'package:arrancando/config/models/usuario.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/cabecera/_avatar_bubble.dart';
 import 'package:arrancando/views/user_profile/cabecera/_imagen_cabecera.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CabeceraUserProfile extends StatelessWidget {
   final Usuario user;
@@ -30,7 +32,7 @@ class CabeceraUserProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 300,
+      height: MediaQuery.of(context).size.width * 0.75,
       child: Stack(
         children: <Widget>[
           Positioned.fill(
@@ -56,40 +58,44 @@ class CabeceraUserProfile extends StatelessWidget {
                 isLink: false,
               ),
               SizedBox(height: 7),
-              ButtonTheme(
-                minWidth: 120,
-                child: RaisedButton(
-                  color: Color(0x99161a25),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
+              if (Provider.of<UserState>(context, listen: false)
+                      .activeUser
+                      .id !=
+                  user.id)
+                ButtonTheme(
+                  minWidth: 120,
+                  child: RaisedButton(
+                    color: Color(0x99161a25),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: sentSeguir
+                        ? SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1,
+                            ),
+                          )
+                        : Text(
+                            siguiendo == null ? "SEGUIR" : "DEJAR DE SEGUIR",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                    onPressed: sentSeguir
+                        ? null
+                        : () {
+                            if (siguiendo == null)
+                              seguir();
+                            else
+                              seguir(
+                                noSeguir: true,
+                              );
+                          },
                   ),
-                  child: sentSeguir
-                      ? SizedBox(
-                          width: 15,
-                          height: 15,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 1,
-                          ),
-                        )
-                      : Text(
-                          siguiendo == null ? "SEGUIR" : "DEJAR DE SEGUIR",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                          ),
-                        ),
-                  onPressed: sentSeguir
-                      ? null
-                      : () {
-                          if (siguiendo == null)
-                            seguir();
-                          else
-                            seguir(
-                              noSeguir: true,
-                            );
-                        },
                 ),
-              ),
             ],
           ),
         ],

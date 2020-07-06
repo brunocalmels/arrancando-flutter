@@ -5,6 +5,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/user_profile/_row_botones.dart';
+import 'package:arrancando/views/user_profile/_row_seguidos_seguidores.dart';
 import 'package:arrancando/views/user_profile/cabecera/index.dart';
 import 'package:arrancando/views/user_profile/grilla_content/index.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String _master;
   int _siguiendo;
   bool _sentSeguir = false;
+  int _seguidos = 0;
+  int _seguidores = 0;
 
   _setActiveSection(SectionType type) {
     _activeSectionType = type;
@@ -55,6 +58,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ? data['master']
           : null;
       _siguiendo = data['siguiendo'];
+      _seguidos = data['seguidos'];
+      _seguidores = data['seguidores'];
       [SectionType.publicaciones, SectionType.recetas, SectionType.pois]
           .forEach(
         (t) {
@@ -160,6 +165,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
       }
     }
 
+    _fetchCount();
+
     _sentSeguir = false;
     if (mounted) setState(() {});
   }
@@ -192,7 +199,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 seguir: _seguir,
                 sentSeguir: _sentSeguir,
               ),
-              SizedBox(height: 5),
+              RowSeguidosSeguidores(
+                userId: widget.user.id,
+                seguidos: _seguidos,
+                seguidores: _seguidores,
+              ),
+              SizedBox(height: 15),
               _sentCount
                   ? Container(
                       height: 100,

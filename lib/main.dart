@@ -132,6 +132,9 @@ class _MyAppState extends State<MyApp> {
         primaryColor: Color(0xff222835),
         accentColor: Color(0xff57b668),
         hintColor: Colors.white54,
+        colorScheme: ColorScheme.light(
+          primary: Color(0xff57b668),
+        ),
         textTheme: TextTheme(
           bodyText2: TextStyle(color: Colors.white),
           bodyText1: TextStyle(color: Colors.white),
