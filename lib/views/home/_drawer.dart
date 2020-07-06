@@ -14,6 +14,7 @@ import 'package:arrancando/views/privacy-policy/index.dart';
 import 'package:arrancando/views/reglas/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:arrancando/views/user/profile/index.dart';
+import 'package:arrancando/views/user_profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
@@ -63,38 +64,73 @@ class _HomeDrawerState extends State<HomeDrawer> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              DrawerHeader(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage:
-                          Provider.of<UserState>(context, listen: false)
-                                          .activeUser !=
-                                      null &&
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Material(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => UserProfilePage(
+                                user: Provider.of<UserState>(
+                                  context,
+                                  listen: false,
+                                ).activeUser.getUsuario,
+                              ),
+                            ),
+                          );
+                        },
+                        child: DrawerHeader(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 40,
+                                backgroundImage: Provider.of<UserState>(context,
+                                                    listen: false)
+                                                .activeUser !=
+                                            null &&
+                                        Provider.of<UserState>(context,
+                                                    listen: false)
+                                                .activeUser
+                                                .avatar !=
+                                            null
+                                    ? CachedNetworkImageProvider(
+                                        "${MyGlobals.SERVER_URL}${Provider.of<UserState>(context, listen: false).activeUser.avatar}",
+                                      )
+                                    : null,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
                                   Provider.of<UserState>(context, listen: false)
+                                              .activeUser !=
+                                          null
+                                      ? Provider.of<UserState>(context,
+                                              listen: false)
                                           .activeUser
-                                          .avatar !=
-                                      null
-                              ? CachedNetworkImageProvider(
-                                  "${MyGlobals.SERVER_URL}${Provider.of<UserState>(context, listen: false).activeUser.avatar}",
-                                )
-                              : null,
+                                          .username
+                                      : ""),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Ver mi perfil",
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(Provider.of<UserState>(context, listen: false)
-                                .activeUser !=
-                            null
-                        ? Provider.of<UserState>(context, listen: false)
-                            .activeUser
-                            .username
-                        : ""),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Material(
                 color: Theme.of(context).backgroundColor,
@@ -109,7 +145,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           Icons.account_box,
                           color: Theme.of(context).accentColor,
                         ),
-                        title: Text('Perfil'),
+                        title: Text('Editar perfil'),
                         onTap: () async {
                           Navigator.of(context).push(
                             MaterialPageRoute(

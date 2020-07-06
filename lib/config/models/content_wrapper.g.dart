@@ -52,6 +52,7 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
     json['habilitado'] as bool,
     json['rubro'] as String,
     json['whatsapp'] as int,
+    json['seguido'] as int,
   )
     ..subcategoriaRecetas = (json['subcategoria_recetas'] as List)
         ?.map((e) => e == null
@@ -93,6 +94,7 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'habilitado': instance.habilitado,
       'rubro': instance.rubro,
       'whatsapp': instance.whatsapp,
+      'seguido': instance.seguido,
     };
 
 T _$enumDecode<T>(
@@ -135,4 +137,5 @@ const _$SectionTypeEnumMap = {
   SectionType.pois: 'pois',
   SectionType.pois_ciudad: 'pois_ciudad',
   SectionType.wiki: 'wiki',
+  SectionType.followed: 'followed',
 };

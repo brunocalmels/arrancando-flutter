@@ -6,6 +6,7 @@ enum SectionType {
   pois,
   pois_ciudad,
   wiki,
+  followed,
 }
 
 enum ContentSortType {

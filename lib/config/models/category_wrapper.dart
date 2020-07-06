@@ -169,6 +169,7 @@ class CategoryWrapper {
 
   static restoreContentHome(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.remove("content-home");
     String contentHome = prefs.getString("content-home");
     if (contentHome != null) {
       try {

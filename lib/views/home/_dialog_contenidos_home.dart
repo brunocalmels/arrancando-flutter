@@ -30,6 +30,11 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
       "text": "P. Interés",
       "icon": Icons.location_on,
     },
+    {
+      "type": SectionType.followed,
+      "text": "Solo seguidos",
+      "icon": Icons.supervisor_account,
+    },
     // {
     //   "type": SectionType.wiki,
     //   "text": "Wiki",

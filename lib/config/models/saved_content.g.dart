@@ -59,4 +59,5 @@ const _$SectionTypeEnumMap = {
   SectionType.pois: 'pois',
   SectionType.pois_ciudad: 'pois_ciudad',
   SectionType.wiki: 'wiki',
+  SectionType.followed: 'followed',
 };

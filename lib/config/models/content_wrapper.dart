@@ -61,6 +61,7 @@ class ContentWrapper {
   bool habilitado;
   String rubro;
   int whatsapp;
+  int seguido;
 
   ContentWrapper(
     this.id,
@@ -91,6 +92,7 @@ class ContentWrapper {
     this.habilitado,
     this.rubro,
     this.whatsapp,
+    this.seguido,
   );
 
   factory ContentWrapper.fromJson(Map<String, dynamic> json) =>

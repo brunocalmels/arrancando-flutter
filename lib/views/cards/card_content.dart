@@ -163,8 +163,10 @@ class CardContent extends StatelessWidget {
                         ),
                       ),
                       Icon(
-                        Icons.calendar_today,
-                        size: 15,
+                        content.seguido != null
+                            ? Icons.person
+                            : Icons.person_outline,
+                        size: 17,
                         color: Theme.of(context).accentColor,
                       ),
                     ],

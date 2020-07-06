@@ -38,14 +38,7 @@ class RowEstrellas extends StatelessWidget {
                   disabledColor: Theme.of(context).accentColor,
                   onPressed: state.activeUser.id != content.user.id
                       ? () async {
-                          var usuario = Usuario(
-                            state.activeUser.id,
-                            state.activeUser.avatar,
-                            state.activeUser.nombre,
-                            state.activeUser.apellido,
-                            state.activeUser.email,
-                            state.activeUser.username,
-                          );
+                          var usuario = state.activeUser.getUsuario;
 
                           var myPuntaje = Puntaje(usuario, p);
                           content.addMyPuntaje(myPuntaje);

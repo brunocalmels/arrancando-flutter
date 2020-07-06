@@ -149,9 +149,12 @@ class _HomePageState extends State<HomePage> {
                                 _plato,
                               ],
                             ),
-                            Text(
-                              "No hay elementos para mostrar",
-                              textAlign: TextAlign.center,
+                            Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: Text(
+                                "No hay elementos para mostrar",
+                                textAlign: TextAlign.center,
+                              ),
                             )
                           ],
                         )

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -41,6 +42,15 @@ class ActiveUser {
       _$ActiveUserFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActiveUserToJson(this);
+
+  Usuario get getUsuario => Usuario(
+        id,
+        avatar,
+        nombre,
+        apellido,
+        email,
+        username,
+      );
 
   static Future<bool> locationPermissionDenied() async {
     final GlobalSingleton gs = GlobalSingleton();
