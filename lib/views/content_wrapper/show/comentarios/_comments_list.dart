@@ -4,6 +4,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/textos/index.dart';
+import 'package:arrancando/views/user_profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -77,14 +78,29 @@ class CommentsList extends StatelessWidget {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage:
-                                        c.user != null && c.user.avatar != null
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => UserProfilePage(
+                                              user: c.user,
+                                            ),
+                                            settings: RouteSettings(name: 'UserProfilePage'),
+                                          ),
+                                        );
+                                      },
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: c.user != null &&
+                                                c.user.avatar != null
                                             ? CachedNetworkImageProvider(
                                                 "${MyGlobals.SERVER_URL}${c.user.avatar}",
                                               )
                                             : null,
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(
                                     width: 10,

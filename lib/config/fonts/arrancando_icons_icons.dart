@@ -27,5 +27,6 @@ class ArrancandoIcons {
 
   static const IconData dificultad = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData horno = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData instagram = IconData(0xf16d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData whatsapp = IconData(0xf232, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

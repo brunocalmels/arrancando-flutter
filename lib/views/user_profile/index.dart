@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:arrancando/config/fonts/arrancando_icons_icons.dart';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
@@ -179,7 +180,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   _fetchUsernAndInfo() async {
     if (widget.username != null) {
       ResponseObject resp = await Fetcher.get(
-        url: "/users/by_username.json?username=${widget.username}",
+        url: "/users/by_username.json?username=${widget.username.trim()}",
       );
 
       if (resp != null && resp.body != null) {
@@ -229,29 +230,50 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       sentSeguir: _sentSeguir,
                     ),
                     if (_user.urlInstagram != null)
-                      FlatButton(
-                        child: Text(
-                          "VER INSTAGRAM",
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText2.color,
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: RaisedButton(
+                          color: Color(0xffd31752),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "INSTAGRAM",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).textTheme.bodyText2.color,
+                                ),
+                              ),
+                              SizedBox(width: 3),
+                              Icon(
+                                ArrancandoIcons.instagram,
+                                color:
+                                    Theme.of(context).textTheme.bodyText2.color,
+                              ),
+                            ],
                           ),
+                          onPressed: () async {
+                            if (await canLaunch(_user.urlInstagram)) {
+                              await launch(
+                                _user.urlInstagram,
+                                forceSafariVC: false,
+                                forceWebView: false,
+                              );
+                            } else {
+                              throw 'Could not launch ${_user.urlInstagram}';
+                            }
+                          },
                         ),
-                        onPressed: () async {
-                          if (await canLaunch(_user.urlInstagram)) {
-                            await launch(
-                              _user.urlInstagram,
-                              forceSafariVC: false,
-                              forceWebView: false,
-                            );
-                          } else {
-                            throw 'Could not launch ${_user.urlInstagram}';
-                          }
-                        },
                       ),
-                    RowSeguidosSeguidores(
-                      userId: _user.id,
-                      seguidos: _seguidos,
-                      seguidores: _seguidores,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: RowSeguidosSeguidores(
+                        userId: _user.id,
+                        seguidos: _seguidos,
+                        seguidores: _seguidores,
+                      ),
                     ),
                     SizedBox(height: 15),
                     _sentCount
@@ -303,7 +325,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(15),
                     child: Text(
-                      "Ocurrió un error",
+                      "Este usuario no existe",
                       textAlign: TextAlign.center,
                     ),
                   ),

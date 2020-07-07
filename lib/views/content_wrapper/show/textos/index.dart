@@ -35,13 +35,7 @@ class TextosShow extends StatelessWidget {
 
     cuerpo.split(' ').forEach((piece) {
       if (piece != null && piece.isNotEmpty) {
-        if (piece.contains('http') || piece.split('.').length >= 2) {
-          _saveAndClear();
-          chunks2.add({
-            "tipo": "link",
-            "texto": "$piece ",
-          });
-        } else if (piece[0] == "@") {
+        if (piece[0] == "@") {
           _saveAndClear();
           chunks2.add({
             "tipo": "username",
@@ -51,6 +45,12 @@ class TextosShow extends StatelessWidget {
           _saveAndClear();
           chunks2.add({
             "tipo": "hashtag",
+            "texto": "$piece ",
+          });
+        } else if (piece.contains('http') || piece.split('.').length >= 2) {
+          _saveAndClear();
+          chunks2.add({
+            "tipo": "link",
             "texto": "$piece ",
           });
         } else {
@@ -144,6 +144,7 @@ class TextosShow extends StatelessWidget {
                                           username: chunk["texto"]
                                               .replaceAll('@', ''),
                                         ),
+                                        settings: RouteSettings(name: 'UserProfilePage'),
                                       ),
                                     );
                                   })

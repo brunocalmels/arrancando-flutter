@@ -32,39 +32,41 @@ class HeartPlus5 extends StatelessWidget {
             ),
           ),
           onTap: () async {
-            String _url;
+            if (userState.activeUser.id != content.user.id) {
+              String _url;
 
-            switch (content.type) {
-              case SectionType.publicaciones:
-                _url = "/publicaciones";
-                break;
-              case SectionType.recetas:
-                _url = "/recetas";
-                break;
-              case SectionType.pois:
-                _url = "/pois";
-                break;
-              default:
-                _url = "/publicaciones";
+              switch (content.type) {
+                case SectionType.publicaciones:
+                  _url = "/publicaciones";
+                  break;
+                case SectionType.recetas:
+                  _url = "/recetas";
+                  break;
+                case SectionType.pois:
+                  _url = "/pois";
+                  break;
+                default:
+                  _url = "/publicaciones";
+              }
+
+              String key = "${content.type}-${content.id}";
+
+              int newPuntaje = (userState.myPuntuaciones[key] ??
+                          content.myPuntaje(userState.activeUser.id)) >
+                      0
+                  ? 0
+                  : 5;
+
+              userState.setMyPuntuacion(key, newPuntaje);
+
+              await Fetcher.put(
+                url: "$_url/${content.id}/puntuar.json",
+                body: {
+                  "puntaje": newPuntaje,
+                },
+              );
+              if (fetchContent != null) fetchContent();
             }
-
-            String key = "${content.type}-${content.id}";
-
-            int newPuntaje = (userState.myPuntuaciones[key] ??
-                        content.myPuntaje(userState.activeUser.id)) >
-                    0
-                ? 0
-                : 5;
-
-            userState.setMyPuntuacion(key, newPuntaje);
-
-            await Fetcher.put(
-              url: "$_url/${content.id}/puntuar.json",
-              body: {
-                "puntaje": newPuntaje,
-              },
-            );
-            if (fetchContent != null) fetchContent();
           },
         );
       },

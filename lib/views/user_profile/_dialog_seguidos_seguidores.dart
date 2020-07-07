@@ -54,6 +54,8 @@ class DialogSeguidosSeguidores extends StatelessWidget {
                                 builder: (_) => UserProfilePage(
                                   user: u,
                                 ),
+                                settings:
+                                    RouteSettings(name: 'UserProfilePage'),
                               ),
                             );
                           },

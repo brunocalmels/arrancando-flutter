@@ -335,12 +335,53 @@ class _LoginPageState extends State<LoginPage> {
           result.accessToken != null &&
           result.accessToken.token != null &&
           result.status == FacebookLoginStatus.loggedIn) {
+        var graphResponse;
+        try {
+          graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,picture&access_token=${result.accessToken.token}',
+            // 'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture&access_token=${result.accessToken.token}',
+          );
+        } catch (e) {
+          print(e);
+        }
+        // var email;
+        var username;
+        var nombre;
+        var apellido;
+        var imageBytes;
+        if (graphResponse != null && graphResponse.body != null) {
+          var data = json.decode(graphResponse.body);
+          // email = data['email'];
+          username = data['name'];
+          nombre = data['first_name'];
+          apellido = data['last_name'];
+
+          var avatar = data['picture'] != null &&
+                  data['picture']['data'] != null &&
+                  data['picture']['data']['url'] != null
+              ? data['picture']['data']['url']
+              : null;
+          if (avatar != null) {
+            try {
+              http.Response response = await http.get(avatar);
+              imageBytes = base64Encode(response.bodyBytes);
+            } catch (e) {
+              print(e);
+            }
+          }
+        }
+
         ResponseObject resp = await Fetcher.post(
           unauthenticated: true,
           url: "/new-facebook-login.json",
           body: {
             "credentials": {
               "id": result.accessToken.userId,
+              // "email": email,
+              "username": username,
+              "nombre": nombre,
+              "apellido": apellido,
+              "avatar": imageBytes,
             }
           },
         );
@@ -423,7 +464,8 @@ class _LoginPageState extends State<LoginPage> {
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress,
                             decoration: new InputDecoration(
-                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
                               labelText: "Email",
                               hintText: 'usuario@ejemplo.com',
                             ),
@@ -436,7 +478,8 @@ class _LoginPageState extends State<LoginPage> {
                                 controller: passwordController,
                                 obscureText: _obscurePassword,
                                 decoration: new InputDecoration(
-                                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
                                   labelText: "Contraseña",
                                   hintText: '*********',
                                 ),

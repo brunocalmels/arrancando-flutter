@@ -29,7 +29,7 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
       ResponseObject resp = await Fetcher.put(
         url: "/users/${Provider.of<UserState>(context).activeUser.id}.json",
         body: {
-          "${widget.campo == 'Instagram' ? 'url_instagram' : widget.campo.toLowerCase()}":
+          "${widget.campo == 'Instagram' ? 'url_instagram' : widget.campo == 'Nombre de usuario' ? 'username' : widget.campo.toLowerCase()}":
               "${widget.campo == 'Instagram' ? 'https://instagram.com/${textoController.text}' : textoController.text}",
         },
       );
@@ -60,7 +60,7 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
           r'^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$';
       RegExp regex = new RegExp(pattern);
       if (!regex.hasMatch(value) || value.contains(".")) {
-        return "Ingrese un username válido";
+        return "Ingrese un nombre de usuario válido";
       } else {
         return null;
       }
@@ -108,18 +108,29 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
               decoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 labelText: "${widget.campo}",
-                prefixText:
-                    widget.campo == 'Instagram' ? "https://in...com/ " : null,
-                prefixStyle: widget.campo == 'Instagram'
-                    ? TextStyle(fontSize: 10)
-                    : null,
+                // prefixText:
+                //     widget.campo == 'Instagram' ? "https://in...com/ " : null,
+                // prefixStyle: widget.campo == 'Instagram'
+                //     ? TextStyle(fontSize: 10)
+                //     : null,
               ),
               controller: textoController,
-              validator: (value) => widget.campo == "Username"
+              validator: (value) => widget.campo == "Nombre de usuario"
                   ? usernameValidator(value)
                   : widget.campo == 'Email' ? emailValidator(value) : null,
             ),
           ),
+          if (widget.campo == 'Instagram')
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                "(Ingresá tu nombre de usuario de Instagram sin arroba)",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 9,
+                ),
+              ),
+            ),
           if (_errorHappended)
             Padding(
               padding: const EdgeInsets.only(top: 10),

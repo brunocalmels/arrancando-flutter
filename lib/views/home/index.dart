@@ -278,8 +278,8 @@ class _MainScaffoldState extends State<MainScaffold> {
                     keepPage: true,
                   );
                 },
-                unreadNotificaciones: _unreadNotificaciones != null &&
-                    _unreadNotificaciones.length > 0,
+                // unreadNotificaciones: _unreadNotificaciones != null &&
+                //     _unreadNotificaciones.length > 0,
               ),
             ),
             body: _inited

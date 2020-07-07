@@ -10,6 +10,7 @@ import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/index.dart';
+import 'package:arrancando/views/user_profile/index.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -94,11 +95,10 @@ abstract class DynamicLinks {
 
         if (path.length >= 1) {
           if (path.length >= 2) {
-            int id = int.parse(path[1]);
-
             switch (path[0]) {
               case 'publicaciones':
                 if (context != null && !_invalidUser) {
+                  int id = int.parse(path[1]);
                   MyGlobals.mainNavigatorKey.currentState.push(
                     MaterialPageRoute(
                       builder: (_) => ShowPage(
@@ -112,6 +112,7 @@ abstract class DynamicLinks {
                 break;
               case 'recetas':
                 if (context != null && !_invalidUser) {
+                  int id = int.parse(path[1]);
                   MyGlobals.mainNavigatorKey.currentState.push(
                     MaterialPageRoute(
                       builder: (_) => ShowPage(
@@ -125,6 +126,7 @@ abstract class DynamicLinks {
                 break;
               case 'pois':
                 if (context != null && !_invalidUser) {
+                  int id = int.parse(path[1]);
                   MyGlobals.mainNavigatorKey.currentState.push(
                     MaterialPageRoute(
                       builder: (_) => ShowPage(
@@ -132,6 +134,20 @@ abstract class DynamicLinks {
                         type: SectionType.pois,
                       ),
                       settings: RouteSettings(name: 'Pois#$id'),
+                    ),
+                  );
+                }
+                break;
+              case 'usuarios':
+                if (context != null && !_invalidUser) {
+                  String username = path[1];
+                  MyGlobals.mainNavigatorKey.currentState.push(
+                    MaterialPageRoute(
+                      builder: (_) => UserProfilePage(
+                        user: null,
+                        username: username,
+                      ),
+                      settings: RouteSettings(name: 'UserProfilePage'),
                     ),
                   );
                 }

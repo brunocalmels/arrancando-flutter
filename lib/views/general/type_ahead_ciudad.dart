@@ -100,6 +100,17 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                 ),
               ),
             if (_items != null && _items.length > 0)
+              Padding(
+                padding: const EdgeInsets.all(7),
+                child: Text(
+                  "(${_items.length} items)",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+            if (_items != null && _items.length > 0)
               Container(
                 color: Colors.black12.withAlpha(9),
                 height: 220,

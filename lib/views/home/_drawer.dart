@@ -78,6 +78,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                   listen: false,
                                 ).activeUser.getUsuario,
                               ),
+                              settings: RouteSettings(name: 'UserProfilePage'),
                             ),
                           );
                         },

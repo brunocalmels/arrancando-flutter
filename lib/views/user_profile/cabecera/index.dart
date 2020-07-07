@@ -43,7 +43,7 @@ class CabeceraUserProfile extends StatelessWidget {
                     : "assets/images/user_profile/masters/wok.png",
               ),
               label:
-                  "Master${master != null && _masterToAsset[master] != null ? _masterToAsset[master] : ''}",
+                  "Master${master != null && _masterToAsset[master] != null ? " $master" : ''}",
             ),
           ),
           Column(

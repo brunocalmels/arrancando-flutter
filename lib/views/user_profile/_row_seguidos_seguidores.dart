@@ -18,7 +18,7 @@ class RowSeguidosSeguidores extends StatelessWidget {
     BuildContext context,
   ) =>
       Expanded(
-        child: FlatButton(
+        child: RaisedButton(
           onPressed: numero > 0
               ? () {
                   showDialog(
@@ -41,7 +41,9 @@ class RowSeguidosSeguidores extends StatelessWidget {
                   "$numero",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: numero > 0
+                        ? Theme.of(context).primaryColor
+                        : Colors.white30,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
@@ -52,7 +54,9 @@ class RowSeguidosSeguidores extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: numero > 0
+                        ? Theme.of(context).primaryColor
+                        : Colors.white30,
                     fontWeight: FontWeight.bold,
                     fontSize: 10,
                   ),
@@ -73,12 +77,13 @@ class RowSeguidosSeguidores extends StatelessWidget {
         children: <Widget>[
           _buildButton(
             seguidos,
-            "SEGUIDOS",
+            seguidos == 1 ? "SEGUIDO" : "SEGUIDOS",
             context,
           ),
+          SizedBox(width: 3),
           _buildButton(
             seguidores,
-            "SEGUIDORES",
+            seguidores == 1 ? "SEGUIDOR" : "SEGUIDORES",
             context,
           ),
         ],

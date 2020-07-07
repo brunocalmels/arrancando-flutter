@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
       case "Apellido":
         _activeUser.apellido = valor;
         break;
-      case "Username":
+      case "Nombre de usuario":
         _activeUser.username = valor;
         break;
       case "Email":
@@ -186,20 +186,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               ListTile(
-                title: Text('Username'),
+                title: Text('Nombre de usuario'),
                 subtitle: Text(userState.activeUser.username),
                 onTap: () async {
                   String valor = await showDialog(
                     context: context,
                     builder: (context) {
                       return DialogEditarDatosUsuario(
-                        campo: "Username",
+                        campo: "Nombre de usuario",
                         valor: userState.activeUser.username,
                       );
                     },
                   );
                   if (valor != null)
-                    _updateActiveUser(context, "Username", valor);
+                    _updateActiveUser(context, "Nombre de usuario", valor);
                 },
                 trailing: Icon(
                   Icons.edit,
