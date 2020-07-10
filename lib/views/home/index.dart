@@ -251,6 +251,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return WillPopScope(
       onWillPop: () async {
         _setSearchVisibility(false);
+        FocusScope.of(context).unfocus();
         if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen) return true;
         return false;
       },

@@ -21,6 +21,8 @@ class FastSearchPage extends StatefulWidget {
 }
 
 class _FastSearchPageState extends State<FastSearchPage> {
+  String _lastSearchValue;
+
   Map<String, List<ContentWrapper>> _items = {
     "publicaciones": [],
     "recetas": [],
@@ -86,15 +88,19 @@ class _FastSearchPageState extends State<FastSearchPage> {
   }
 
   _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
-    _debounce = Timer(const Duration(milliseconds: 1000), () {
-      if (widget.searchController.text.isNotEmpty) {
-        _fetchContent("publicaciones");
-        _fetchContent("recetas");
-        _fetchContent("pois");
-        _fetchUsuarios();
-      }
-    });
+    if (_lastSearchValue != widget.searchController.text) {
+      if (_debounce?.isActive ?? false) _debounce.cancel();
+      _debounce = Timer(const Duration(milliseconds: 1000), () {
+        if (widget.searchController.text.isNotEmpty) {
+          _fetchContent("publicaciones");
+          _fetchContent("recetas");
+          _fetchContent("pois");
+          _fetchUsuarios();
+          _lastSearchValue = widget.searchController.text;
+          if (mounted) setState(() {});
+        }
+      });
+    }
   }
 
   @override

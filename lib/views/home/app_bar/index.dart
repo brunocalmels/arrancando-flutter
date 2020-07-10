@@ -172,6 +172,7 @@ class MainAppBar extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   setSearchVisibility(false);
+                  FocusScope.of(context).unfocus();
                 },
                 icon: Icon(Icons.close),
               ),
