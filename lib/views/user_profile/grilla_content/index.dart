@@ -49,7 +49,11 @@ class GrillaContentUserProfile extends StatelessWidget {
                         ),
                       ),
                     ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.photo_camera,
+                      size: 50,
+                      color: Color(0x33000000),
+                    ),
                   ),
           ),
           Positioned.fill(

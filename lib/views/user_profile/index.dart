@@ -229,7 +229,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       seguir: _seguir,
                       sentSeguir: _sentSeguir,
                     ),
-                    if (_user.urlInstagram != null)
+                    if (_user.urlInstagram != null &&
+                        _user.urlInstagram.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: RaisedButton(
@@ -242,8 +243,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               Text(
                                 "INSTAGRAM",
                                 style: TextStyle(
-                                  color:
-                                      Theme.of(context).textTheme.bodyText2.color,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .color,
                                 ),
                               ),
                               SizedBox(width: 3),
