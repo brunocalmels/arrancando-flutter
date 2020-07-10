@@ -64,6 +64,12 @@ class _ContentCardPageState extends State<ContentCardPage> {
       );
 
   @override
+  void dispose() {
+    _scrollController?.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {

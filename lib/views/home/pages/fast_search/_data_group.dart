@@ -5,6 +5,7 @@ import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/fast_search/_content_tile.dart';
+import 'package:arrancando/views/search/_search_users.dart';
 import 'package:arrancando/views/search/index.dart';
 import 'package:arrancando/views/user_profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -140,15 +141,26 @@ class DataGroup extends StatelessWidget {
                                 .toList(),
                           FlatButton(
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => SearchPage(
-                                    originalType: type,
-                                    originalSearch: searchController.text,
+                              if (isUsers)
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => SearchPageUsers(
+                                      originalSearch: searchController.text,
+                                    ),
+                                    settings:
+                                        RouteSettings(name: 'SearchPageUsers'),
                                   ),
-                                  settings: RouteSettings(name: 'Search'),
-                                ),
-                              );
+                                );
+                              else
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => SearchPage(
+                                      originalType: type,
+                                      originalSearch: searchController.text,
+                                    ),
+                                    settings: RouteSettings(name: 'Search'),
+                                  ),
+                                );
                             },
                             child: Text(
                               "VER MÁS",

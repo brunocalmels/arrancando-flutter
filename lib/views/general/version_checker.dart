@@ -19,7 +19,8 @@ class _VersionCheckerState extends State<VersionChecker> {
       url: '/app-version.json',
     );
     if (resp != null && resp.body != null) {
-      if (json.decode(resp.body)['version'] != MyGlobals.APP_VERSION) {
+      if (int.tryParse(json.decode(resp.body)['version'].split('+').last) >
+          int.tryParse(MyGlobals.APP_VERSION.split('+').last)) {
         showNewVersionBanner = true;
         if (mounted) setState(() {});
       }
