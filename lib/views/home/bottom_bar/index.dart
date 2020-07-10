@@ -12,7 +12,7 @@ class MainBottomBar extends StatelessWidget {
       "icono": Icons.home,
     },
     SectionType.publicaciones: {
-      "texto": "Publicaciones",
+      "texto": "Pubs",
       "icono": Icons.public,
     },
     SectionType.recetas: {
