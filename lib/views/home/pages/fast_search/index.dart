@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/home/pages/fast_search/_data_group.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,13 @@ class _FastSearchPageState extends State<FastSearchPage> {
     "pois": [],
   };
   Timer _debounce;
+  List<Usuario> _usuarios = [];
 
   Map<String, bool> _fetching = {
     "publicaciones": false,
     "recetas": false,
     "pois": false,
+    "usuarios": false,
   };
 
   _fetchContent(String type) async {
@@ -42,7 +45,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/$type/search.json?term=${Uri.encodeComponent(widget.searchController.text)}&limit=3"
+          ? "/$type/search.json?term=${Uri.encodeComponent(widget.searchController.text.replaceAll('@', ''))}&limit=3"
           : "/$type.json",
     );
 
@@ -58,6 +61,30 @@ class _FastSearchPageState extends State<FastSearchPage> {
     if (mounted) setState(() {});
   }
 
+  _fetchUsuarios() async {
+    if (mounted)
+      setState(() {
+        _fetching["usuarios"] = true;
+      });
+
+    ResponseObject resp = await Fetcher.get(
+      url: widget.searchController.text != null &&
+              widget.searchController.text.isNotEmpty
+          ? "/users/usernames.json?search=${Uri.encodeComponent(widget.searchController.text.replaceAll('@', ''))}&limit=3"
+          : "/users/usernames.json?search=&limit=3",
+    );
+
+    if (resp != null)
+      _usuarios = (json.decode(resp.body) as List)
+          .map(
+            (c) => Usuario.fromJson(c),
+          )
+          .toList();
+
+    _fetching["usuarios"] = false;
+    if (mounted) setState(() {});
+  }
+
   _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 1000), () {
@@ -65,6 +92,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
         _fetchContent("publicaciones");
         _fetchContent("recetas");
         _fetchContent("pois");
+        _fetchUsuarios();
       }
     });
   }
@@ -88,6 +116,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
         await _fetchContent("publicaciones");
         await _fetchContent("recetas");
         await _fetchContent("pois");
+        await _fetchUsuarios();
       },
       child: widget.searchController == null ||
               widget.searchController.text == null ||
@@ -102,6 +131,14 @@ class _FastSearchPageState extends State<FastSearchPage> {
             )
           : ListView(
               children: <Widget>[
+                DataGroup(
+                  fetching: _fetching["usuarios"],
+                  icon: Icons.account_circle,
+                  title: "Usuarios",
+                  itemsUsuarios: _usuarios,
+                  searchController: widget.searchController,
+                  isUsers: true,
+                ),
                 DataGroup(
                   fetching: _fetching["publicaciones"],
                   icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.publicaciones],
