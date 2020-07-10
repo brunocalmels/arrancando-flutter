@@ -61,8 +61,9 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
         ),
         textAlign: TextAlign.center,
       ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
       content: Container(
-        height: 150,
+        height: 180,
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -113,56 +114,52 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
               if (_items != null && _items.length > 0)
                 Container(
                   color: Colors.black12.withAlpha(9),
-                  height: 220,
-                  child: Builder(
-                    builder: (context) => SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: _items
-                            .map(
-                              (item) => Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).pop(item);
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        CircleAvatar(
-                                          radius: 20,
-                                          backgroundImage: item != null &&
-                                                  item.avatar != null
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: _items
+                        .map(
+                          (item) => Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop(item);
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      radius: 20,
+                                      backgroundImage:
+                                          item != null && item.avatar != null
                                               ? CachedNetworkImageProvider(
                                                   "${MyGlobals.SERVER_URL}${item.avatar}",
                                                 )
                                               : null,
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "@${item.username}",
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
                                     ),
-                                  ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        "@${item.username}",
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            )
-                            .toList(),
-                      ),
-                    ),
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
               if (_items != null && _items.length == 0)
