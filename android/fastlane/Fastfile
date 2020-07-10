@@ -24,6 +24,17 @@ platform :android do
     # crashlytics
     # gradle(task: 'assemble', build_type: 'Release')
     upload_to_play_store(
+      track: 'beta',
+      aab: '../build/app/outputs/bundle/release/app.aab'
+    )
+  end
+
+	desc 'Deployar bundle como alpha'
+  lane :alpha do
+    # gradle(task: 'clean assembleRelease')
+    # crashlytics
+    # gradle(task: 'assemble', build_type: 'Release')
+    upload_to_play_store(
       track: 'alpha',
       aab: '../build/app/outputs/bundle/release/app.aab'
     )
