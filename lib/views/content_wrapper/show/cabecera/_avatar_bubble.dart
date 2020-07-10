@@ -9,10 +9,12 @@ import 'package:latlong/latlong.dart';
 class AvatarBubble extends StatelessWidget {
   final Usuario user;
   final bool isLink;
+  final bool showAvatar;
 
   AvatarBubble({
     @required this.user,
     this.isLink = true,
+    this.showAvatar = false,
   });
 
   double _calculateCurveAngle() {
@@ -56,7 +58,26 @@ class AvatarBubble extends StatelessWidget {
                         ),
                       );
                     }
-                  : null,
+                  : (showAvatar && user != null && user.avatar != null)
+                      ? () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => Dialog(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                height: MediaQuery.of(context).size.width * 0.8,
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl:
+                                      "${MyGlobals.SERVER_URL}${user.avatar}",
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
               child: CircleAvatar(
                 radius: 40,
                 backgroundImage: user != null && user.avatar != null

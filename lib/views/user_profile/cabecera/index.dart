@@ -55,6 +55,7 @@ class CabeceraUserProfile extends StatelessWidget {
               AvatarBubble(
                 user: user,
                 isLink: false,
+                showAvatar: true,
               ),
               SizedBox(height: 7),
               if (Provider.of<UserState>(context, listen: false)
