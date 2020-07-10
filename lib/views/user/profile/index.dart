@@ -187,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ListTile(
                 title: Text('Nombre de usuario'),
-                subtitle: Text(userState.activeUser.username),
+                subtitle: Text("@${userState.activeUser.username}"),
                 onTap: () async {
                   String valor = await showDialog(
                     context: context,

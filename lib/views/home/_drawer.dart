@@ -106,15 +106,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Text(
-                                  Provider.of<UserState>(context, listen: false)
-                                              .activeUser !=
-                                          null
-                                      ? Provider.of<UserState>(context,
+                              Text(Provider.of<UserState>(context,
                                               listen: false)
-                                          .activeUser
-                                          .username
-                                      : ""),
+                                          .activeUser !=
+                                      null
+                                  ? "@${Provider.of<UserState>(context, listen: false).activeUser.username}"
+                                  : ""),
                               SizedBox(
                                 height: 10,
                               ),
