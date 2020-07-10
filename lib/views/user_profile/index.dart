@@ -6,6 +6,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/user_profile/_row_botones.dart';
 import 'package:arrancando/views/user_profile/_row_seguidos_seguidores.dart';
 import 'package:arrancando/views/user_profile/cabecera/index.dart';
@@ -42,6 +43,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   bool _sentSeguir = false;
   int _seguidos = 0;
   int _seguidores = 0;
+  bool _initialLoad = true;
 
   _setActiveSection(SectionType type) {
     _activeSectionType = type;
@@ -196,148 +198,157 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   void initState() {
     super.initState();
-    if (widget.user != null) {
-      _user = widget.user;
-      _loaded = true;
-      _fetchCount();
-      _fetchElements();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.user != null) {
+        _user = widget.user;
+        _loaded = true;
+        await _fetchCount();
+        await _fetchElements();
+      } else {
+        await _fetchUsernAndInfo();
+      }
+      _initialLoad = false;
       if (mounted) setState(() {});
-    } else {
-      _fetchUsernAndInfo();
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _user != null ? Text("@${_user.username}") : null,
-      ),
-      body: _user != null && _loaded
-          ? Container(
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    CabeceraUserProfile(
-                      user: _user,
-                      master: _master,
-                      siguiendo: _siguiendo,
-                      seguir: _seguir,
-                      sentSeguir: _sentSeguir,
-                    ),
-                    if (_user.urlInstagram != null &&
-                        _user.urlInstagram.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: RaisedButton(
-                          color: Color(0xffd31752),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "INSTAGRAM",
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .color,
-                                ),
-                              ),
-                              SizedBox(width: 3),
-                              Icon(
-                                ArrancandoIcons.instagram,
-                                color:
-                                    Theme.of(context).textTheme.bodyText2.color,
-                              ),
-                            ],
-                          ),
-                          onPressed: () async {
-                            if (await canLaunch(_user.urlInstagram)) {
-                              await launch(
-                                _user.urlInstagram,
-                                forceSafariVC: false,
-                                forceWebView: false,
-                              );
-                            } else {
-                              throw 'Could not launch ${_user.urlInstagram}';
-                            }
-                          },
+      appBar: _initialLoad
+          ? null
+          : AppBar(
+              title: _user != null ? Text("@${_user.username}") : null,
+            ),
+      body: _initialLoad
+          ? SafeArea(child: LoadingWidget())
+          : _user != null && _loaded
+              ? Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CabeceraUserProfile(
+                          user: _user,
+                          master: _master,
+                          siguiendo: _siguiendo,
+                          seguir: _seguir,
+                          sentSeguir: _sentSeguir,
                         ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: RowSeguidosSeguidores(
-                        userId: _user.id,
-                        seguidos: _seguidos,
-                        seguidores: _seguidores,
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    _sentCount
-                        ? Container(
-                            height: 100,
-                            child: Center(
-                              child: SizedBox(
-                                width: 25,
-                                height: 25,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
+                        if (_user.urlInstagram != null &&
+                            _user.urlInstagram.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: RaisedButton(
+                              color: Color(0xffd31752),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    "INSTAGRAM",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .color,
+                                    ),
+                                  ),
+                                  SizedBox(width: 3),
+                                  Icon(
+                                    ArrancandoIcons.instagram,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2
+                                        .color,
+                                  ),
+                                ],
                               ),
+                              onPressed: () async {
+                                if (await canLaunch(_user.urlInstagram)) {
+                                  await launch(
+                                    _user.urlInstagram,
+                                    forceSafariVC: false,
+                                    forceWebView: false,
+                                  );
+                                } else {
+                                  throw 'Could not launch ${_user.urlInstagram}';
+                                }
+                              },
                             ),
-                          )
-                        : RowBotonesUserProfile(
-                            activeSection: _activeSectionType,
-                            setActiveSection: _setActiveSection,
-                            count: _count,
                           ),
-                    SizedBox(height: 15),
-                    _sent
-                        ? Container(
-                            height: 200,
-                            child: Center(
-                              child: SizedBox(
-                                width: 25,
-                                height: 25,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: RowSeguidosSeguidores(
+                            userId: _user.id,
+                            seguidos: _seguidos,
+                            seguidores: _seguidores,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        _sentCount
+                            ? Container(
+                                height: 100,
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 25,
+                                    height: 25,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
                                 ),
+                              )
+                            : RowBotonesUserProfile(
+                                activeSection: _activeSectionType,
+                                setActiveSection: _setActiveSection,
+                                count: _count,
                               ),
-                            ),
-                          )
-                        : GrillaContentUserProfile(
-                            items: _items,
-                            type: _activeSectionType,
-                            fetchMore: _fetchMore,
-                            sentMore: _sentMore,
-                            noMore: _noMore,
-                          ),
-                    SizedBox(height: 50),
-                  ],
-                ),
-              ),
-            )
-          : _user == null && _loaded
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Text(
-                      "Este usuario no existe",
-                      textAlign: TextAlign.center,
+                        SizedBox(height: 15),
+                        _sent
+                            ? Container(
+                                height: 200,
+                                child: Center(
+                                  child: SizedBox(
+                                    width: 25,
+                                    height: 25,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : GrillaContentUserProfile(
+                                items: _items,
+                                type: _activeSectionType,
+                                fetchMore: _fetchMore,
+                                sentMore: _sentMore,
+                                noMore: _noMore,
+                              ),
+                        SizedBox(height: 50),
+                      ],
                     ),
                   ),
                 )
-              : Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                  ),
-                ),
+              : _user == null && _loaded
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Text(
+                          "Este usuario no existe",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    ),
     );
   }
 }
