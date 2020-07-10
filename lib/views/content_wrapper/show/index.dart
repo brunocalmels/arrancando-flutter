@@ -173,7 +173,9 @@ class _ShowPageState extends State<ShowPage> {
                           height: 50,
                         ),
                         if (widget.type == SectionType.pois &&
-                            _content.whatsapp != null)
+                            _content.whatsapp != null &&
+                            _content.whatsapp.toString().isNotEmpty &&
+                            _content.whatsapp.toString().length > 4)
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: Row(
