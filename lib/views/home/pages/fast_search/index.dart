@@ -42,7 +42,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
     ResponseObject resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/$type/search.json?term=${widget.searchController.text}&limit=3"
+          ? "/$type/search.json?term=${Uri.encodeComponent(widget.searchController.text)}&limit=3"
           : "/$type.json",
     );
 

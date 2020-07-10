@@ -22,6 +22,9 @@ class TextosShow extends StatelessWidget {
   });
 
   List<dynamic> _parseTexto(String cuerpo) {
+    var urlPattern =
+        r"(https://?|http://?)([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+
     List<dynamic> chunks2 = [];
 
     var outTexto = "";
@@ -47,7 +50,10 @@ class TextosShow extends StatelessWidget {
             "tipo": "hashtag",
             "texto": "$piece ",
           });
-        } else if (piece.contains('http') || piece.split('.').length >= 2) {
+        } else if (RegExp(urlPattern, caseSensitive: false)
+                .allMatches(piece)
+                .length >
+            0) {
           _saveAndClear();
           chunks2.add({
             "tipo": "link",
@@ -56,7 +62,6 @@ class TextosShow extends StatelessWidget {
         } else {
           outTexto += "$piece ";
         }
-        print(piece);
       }
     });
 
@@ -144,7 +149,8 @@ class TextosShow extends StatelessWidget {
                                           username: chunk["texto"]
                                               .replaceAll('@', ''),
                                         ),
-                                        settings: RouteSettings(name: 'UserProfilePage'),
+                                        settings: RouteSettings(
+                                            name: 'UserProfilePage'),
                                       ),
                                     );
                                   })
