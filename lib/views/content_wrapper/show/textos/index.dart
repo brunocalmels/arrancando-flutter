@@ -160,14 +160,16 @@ class TextosShow extends StatelessWidget {
                                   })
                             : (TapGestureRecognizer()
                               ..onTap = () async {
-                                if (await canLaunch(chunk['texto'])) {
+                                var link = chunk['texto'].trim();
+                                print(link);
+                                if (await canLaunch(link)) {
                                   await launch(
-                                    chunk['texto'],
+                                    link,
                                     forceSafariVC: false,
                                     forceWebView: false,
                                   );
                                 } else {
-                                  throw 'Could not launch ${chunk['texto']}';
+                                  throw 'Could not launch $link';
                                 }
                               }),
                       ),

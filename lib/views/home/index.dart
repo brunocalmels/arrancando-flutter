@@ -18,6 +18,7 @@ import 'package:arrancando/views/home/app_bar/index.dart';
 import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class MainScaffold extends StatefulWidget {
@@ -252,6 +253,8 @@ class _MainScaffoldState extends State<MainScaffold> {
       onWillPop: () async {
         _setSearchVisibility(false);
         FocusScope.of(context).unfocus();
+        SystemChannels.textInput.invokeMethod('TextInput.hide');
+        FocusManager.instance.primaryFocus.unfocus();
         if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen) return true;
         return false;
       },

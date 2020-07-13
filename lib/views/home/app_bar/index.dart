@@ -8,6 +8,7 @@ import 'package:arrancando/views/home/app_bar/_search_bar.dart';
 import 'package:arrancando/views/home/filter_bottom_sheet/index.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class MainAppBar extends StatelessWidget {
@@ -173,6 +174,8 @@ class MainAppBar extends StatelessWidget {
                 onPressed: () {
                   setSearchVisibility(false);
                   FocusScope.of(context).unfocus();
+                  SystemChannels.textInput.invokeMethod('TextInput.hide');
+                  FocusManager.instance.primaryFocus.unfocus();
                 },
                 icon: Icon(Icons.close),
               ),
