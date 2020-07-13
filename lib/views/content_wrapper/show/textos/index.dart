@@ -36,7 +36,11 @@ class TextosShow extends StatelessWidget {
       outTexto = '';
     }
 
-    cuerpo.split(' ').forEach((piece) {
+    cuerpo
+        .replaceAll('\r', '')
+        .replaceAll('\n', ' \n ')
+        .split(' ')
+        .forEach((piece) {
       if (piece != null && piece.isNotEmpty) {
         if (piece[0] == "@") {
           _saveAndClear();
