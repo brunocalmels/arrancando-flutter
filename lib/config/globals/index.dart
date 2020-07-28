@@ -9,11 +9,11 @@ abstract class MyGlobals {
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
 
-  // static const String SERVER_URL = "http://192.168.0.4:5000";
+  static const String SERVER_URL = "http://192.168.0.4:5000";
   // static const String SERVER_URL = "http://192.168.0.11:5000";
   // static const String SERVER_URL = "http://192.168.43.138:5000";
   // static const String SERVER_URL = "http://192.168.1.3:5000";
-  static const String SERVER_URL = "https://arrancando.herokuapp.com";
+  // static const String SERVER_URL = "https://arrancando.herokuapp.com";
   // static const String SERVER_URL = "https://arrancando-staging.herokuapp.com";
 
   static const GOOGLE_CLIENT_ID =
@@ -104,4 +104,12 @@ abstract class MyGlobals {
     "cucharada",
     "cucharadita",
   ];
+
+  static const Map<String, Color> LIKES_COLOR = {
+    "verde": Color(0xff57b668),
+    "cobre": Color(0xff9a3b10),
+    "bronce": Color(0xff6b5001),
+    "plata": Color(0xffb3b3b3),
+    "oro": Color(0xffe79f04),
+  };
 }

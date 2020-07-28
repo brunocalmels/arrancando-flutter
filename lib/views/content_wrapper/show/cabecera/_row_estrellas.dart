@@ -1,7 +1,7 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/puntaje.dart';
-import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +20,12 @@ class RowEstrellas extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserState>(
       builder: (context, state, child) {
+        var color = Theme.of(context).accentColor;
+        if (content.color != null &&
+            MyGlobals.LIKES_COLOR[content.color] != null) {
+          color = MyGlobals.LIKES_COLOR[content.color];
+        }
+
         return Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -34,8 +40,8 @@ class RowEstrellas extends StatelessWidget {
                             ? Icons.star_half
                             : Icons.star_border,
                   ),
-                  color: Theme.of(context).accentColor,
-                  disabledColor: Theme.of(context).accentColor,
+                  color: color,
+                  disabledColor: color,
                   onPressed: state.activeUser.id != content.user.id
                       ? () async {
                           var usuario = state.activeUser.getUsuario;

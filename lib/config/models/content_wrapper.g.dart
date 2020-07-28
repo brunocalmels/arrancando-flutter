@@ -53,6 +53,7 @@ ContentWrapper _$ContentWrapperFromJson(Map<String, dynamic> json) {
     json['rubro'] as String,
     json['whatsapp'] as int,
     json['seguido'] as int,
+    json['color'] as String,
   )
     ..subcategoriaRecetas = (json['subcategoria_recetas'] as List)
         ?.map((e) => e == null
@@ -95,6 +96,7 @@ Map<String, dynamic> _$ContentWrapperToJson(ContentWrapper instance) =>
       'rubro': instance.rubro,
       'whatsapp': instance.whatsapp,
       'seguido': instance.seguido,
+      'color': instance.color,
     };
 
 T _$enumDecode<T>(

@@ -1,4 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -13,22 +14,35 @@ class HeartPlus5 extends StatelessWidget {
     @required this.content,
     this.fetchContent,
   });
+
   @override
   Widget build(BuildContext context) {
     return Consumer<UserState>(
       builder: (context, userState, child) {
+        var isFilled = false;
+        if (userState.activeUser != null) {
+          if (userState.activeUser.id == content.user.id) {
+            isFilled = content.puntajes.any((element) => element.puntaje == 5);
+          } else {
+            isFilled = userState.activeUser != null &&
+                (userState.myPuntuaciones["${content.type}-${content.id}"] ??
+                        content.myPuntaje(userState.activeUser.id)) ==
+                    5;
+          }
+        }
+        
+        var color = Theme.of(context).accentColor;
+        if (content.color != null &&
+            MyGlobals.LIKES_COLOR[content.color] != null) {
+          color = MyGlobals.LIKES_COLOR[content.color];
+        }
+
         return GestureDetector(
           child: Padding(
             padding: const EdgeInsets.all(5),
             child: Icon(
-              userState.activeUser != null &&
-                      (userState.myPuntuaciones[
-                                  "${content.type}-${content.id}"] ??
-                              content.myPuntaje(userState.activeUser.id)) >
-                          0
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: Theme.of(context).accentColor,
+              isFilled ? Icons.favorite : Icons.favorite_border,
+              color: color,
             ),
           ),
           onTap: () async {
@@ -51,11 +65,7 @@ class HeartPlus5 extends StatelessWidget {
 
               String key = "${content.type}-${content.id}";
 
-              int newPuntaje = (userState.myPuntuaciones[key] ??
-                          content.myPuntaje(userState.activeUser.id)) >
-                      0
-                  ? 0
-                  : 5;
+              int newPuntaje = isFilled ? 0 : 5;
 
               userState.setMyPuntuacion(key, newPuntaje);
 

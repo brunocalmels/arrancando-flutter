@@ -110,6 +110,9 @@ flutter:
     - assets/images/user_profile/masters/plancha.png
     - assets/images/user_profile/masters/sarten.png
     - assets/images/user_profile/masters/wok.png
+    - assets/images/user_profile/masters/asador.png
+    - assets/images/user_profile/masters/disco.png
+    - assets/images/user_profile/masters/tragos.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -163,7 +166,6 @@ flutter:
     - family: ArrancandoIcons
       fonts:
         - asset: assets/fonts/ArrancandoIcons.ttf
-          
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

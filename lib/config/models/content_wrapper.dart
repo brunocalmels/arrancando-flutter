@@ -62,6 +62,7 @@ class ContentWrapper {
   String rubro;
   int whatsapp;
   int seguido;
+  String color;
 
   ContentWrapper(
     this.id,
@@ -93,6 +94,7 @@ class ContentWrapper {
     this.rubro,
     this.whatsapp,
     this.seguido,
+    this.color,
   );
 
   factory ContentWrapper.fromJson(Map<String, dynamic> json) =>
