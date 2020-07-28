@@ -53,6 +53,7 @@ dependencies:
   icon_shadow: ^1.0.1
   flutter_facebook_login: ^3.0.0
   firebase_messaging: ^6.0.3
+  sentry: ^3.0.1
 
 dev_dependencies:
   flutter_test:

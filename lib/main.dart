@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
@@ -13,26 +14,64 @@ import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: <SingleChildCloneableWidget>[
-        ChangeNotifierProvider(
-          create: (BuildContext context) => MainState(),
-        ),
-        ChangeNotifierProvider(
-          create: (BuildContext context) => UserState(),
-        ),
-        ChangeNotifierProvider(
-          create: (BuildContext context) => ContentPageState(),
-        ),
-      ],
-      child: MyApp(),
+  var sentry = SentryClient(
+    dsn:
+        "https://8dbd1723a9904b72a9919205e496ff8b@o417730.ingest.sentry.io/5370020",
+  );
+
+  FlutterError.onError = (details, {bool forceReport = false}) {
+    try {
+      if (kReleaseMode) {
+        sentry.captureException(
+          exception: details.exception,
+          stackTrace: details.stack,
+        );
+      }
+    } catch (e) {
+      print('Sending report to sentry.io failed: $e');
+    } finally {
+      // Also use Flutter's pretty error logging to the device's console.
+      FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
+    }
+  };
+
+  runZoned(
+    () => runApp(
+      MultiProvider(
+        providers: <SingleChildCloneableWidget>[
+          ChangeNotifierProvider(
+            create: (BuildContext context) => MainState(),
+          ),
+          ChangeNotifierProvider(
+            create: (BuildContext context) => UserState(),
+          ),
+          ChangeNotifierProvider(
+            create: (BuildContext context) => ContentPageState(),
+          ),
+        ],
+        child: MyApp(),
+      ),
     ),
+    onError: (error, stackTrace) {
+      try {
+        if (kReleaseMode) {
+          sentry.captureException(
+            exception: error,
+            stackTrace: stackTrace,
+          );
+        }
+      } catch (e) {
+        print('Sending report to sentry.io failed: $e');
+        print('Original error: $error');
+      }
+    },
   );
 }
 
