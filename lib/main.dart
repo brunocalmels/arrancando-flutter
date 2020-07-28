@@ -23,7 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   var sentry = SentryClient(
     dsn:
-        "https://8dbd1723a9904b72a9919205e496ff8b@o417730.ingest.sentry.io/5370020",
+        "https://b6b7f8734d044fe4b3f424207df9462f@o418745.ingest.sentry.io/5370030",
   );
 
   FlutterError.onError = (details, {bool forceReport = false}) {
