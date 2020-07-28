@@ -3,8 +3,9 @@ import 'dart:convert';
 import 'package:arrancando/config/models/notificacion.dart';
 import 'package:arrancando/config/services/dynamic_links.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NotificacionesPage extends StatefulWidget {
   @override
@@ -26,6 +27,13 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
               (n) => Notificacion.fromJson(n),
             )
             .toList();
+
+        Provider.of<MainState>(
+          context,
+          listen: false,
+        ).setUnreadNotifications(
+          _notificaciones.where((element) => !element.leido).length,
+        );
       }
     } catch (e) {
       print(e);
@@ -40,13 +48,44 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
             (n) => n.markAsRead(),
           ),
     );
+    Provider.of<MainState>(
+      context,
+      listen: false,
+    ).setUnreadNotifications(0);
     if (mounted) setState(() {});
+  }
+
+  _goToNotificationRef(Notificacion n) async {
+    try {
+      if (!n.leido) {
+        await n.markAsRead();
+        Provider.of<MainState>(
+          context,
+          listen: false,
+        ).setUnreadNotifications(
+          Provider.of<MainState>(
+                context,
+                listen: false,
+              ).unreadNotifications -
+              1,
+        );
+        if (mounted) setState(() {});
+      }
+      DynamicLinks.parseURI(
+        Uri.tryParse(n.url),
+        context,
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchNotificaciones();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchNotificaciones();
+    });
   }
 
   @override
@@ -141,17 +180,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                                               ],
                                             ),
                                             onTap: n.url != null
-                                                ? () {
-                                                    try {
-                                                      n.markAsRead();
-                                                      DynamicLinks.parseURI(
-                                                        Uri.tryParse(n.url),
-                                                        context,
-                                                      );
-                                                    } catch (e) {
-                                                      print(e);
-                                                    }
-                                                  }
+                                                ? () => _goToNotificationRef(n)
                                                 : null,
                                           ),
                                         ),

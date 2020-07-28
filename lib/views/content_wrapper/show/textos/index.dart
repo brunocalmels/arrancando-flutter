@@ -64,7 +64,10 @@ class TextosShow extends StatelessWidget {
             "texto": "$piece ",
           });
         } else {
-          outTexto += "$piece ";
+          if (piece == "\n")
+            outTexto += "$piece";
+          else
+            outTexto += "$piece ";
         }
       }
     });

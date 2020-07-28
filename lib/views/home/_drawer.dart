@@ -29,350 +29,330 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
-  List<Notificacion> _unreadNotificaciones;
-
   _fetchUnreadNotificaciones() async {
-    _unreadNotificaciones = await Notificacion.fetchUnread();
-    if (mounted) setState(() {});
+    var unreadNotificaciones = await Notificacion.fetchUnread();
+    Provider.of<MainState>(
+      context,
+      listen: false,
+    ).setUnreadNotifications(unreadNotificaciones.length);
   }
 
-  // @override
-  // void didUpdateWidget(HomeDrawer oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
-  //   _fetchUnreadNotificaciones();
-  // }
-
-  // @override
-  // void deactivate() {
-  //   super.deactivate();
-  //   _fetchUnreadNotificaciones();
-  // }
-
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _fetchUnreadNotificaciones();
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchUnreadNotificaciones();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        canvasColor: Color(0xff59606e),
-      ),
-      child: Drawer(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Material(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => UserProfilePage(
-                                user: Provider.of<UserState>(
-                                  context,
-                                  listen: false,
-                                ).activeUser.getUsuario,
-                              ),
-                              settings: RouteSettings(name: 'UserProfilePage'),
-                            ),
-                          );
-                        },
-                        child: DrawerHeader(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundImage: Provider.of<UserState>(context,
-                                                    listen: false)
-                                                .activeUser !=
-                                            null &&
-                                        Provider.of<UserState>(context,
-                                                    listen: false)
-                                                .activeUser
-                                                .avatar !=
-                                            null
-                                    ? CachedNetworkImageProvider(
-                                        "${MyGlobals.SERVER_URL}${Provider.of<UserState>(context, listen: false).activeUser.avatar}",
-                                      )
-                                    : null,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(Provider.of<UserState>(context,
-                                              listen: false)
-                                          .activeUser !=
-                                      null
-                                  ? "@${Provider.of<UserState>(context, listen: false).activeUser.username}"
-                                  : ""),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                "Ver mi perfil",
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontStyle: FontStyle.italic,
+    return Consumer2<MainState, UserState>(
+      builder: (context, mainState, userState, child) => Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Color(0xff59606e),
+        ),
+        child: Drawer(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Material(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => UserProfilePage(
+                                  user: userState?.activeUser?.getUsuario,
                                 ),
+                                settings:
+                                    RouteSettings(name: 'UserProfilePage'),
                               ),
-                            ],
+                            );
+                          },
+                          child: DrawerHeader(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 40,
+                                  backgroundImage: userState.activeUser !=
+                                              null &&
+                                          userState.activeUser.avatar != null
+                                      ? CachedNetworkImageProvider(
+                                          "${MyGlobals.SERVER_URL}${userState.activeUser.avatar}",
+                                        )
+                                      : null,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(userState.activeUser != null
+                                    ? "@${userState.activeUser.username}"
+                                    : ""),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "Ver mi perfil",
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Material(
-                color: Theme.of(context).backgroundColor,
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(
-                          Icons.account_box,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text('Editar perfil'),
-                        onTap: () async {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ProfilePage(),
-                              settings: RouteSettings(name: 'Profile'),
-                            ),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.bookmark,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text('Guardadas'),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => SavedContentPage(),
-                              settings: RouteSettings(name: 'Saved'),
-                            ),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: BadgeWrapper(
-                          showBadge: _unreadNotificaciones != null &&
-                              _unreadNotificaciones.length > 0,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: Icon(
-                              Icons.notifications,
-                              color: Theme.of(context).accentColor,
-                            ),
+                  ],
+                ),
+                Material(
+                  color: Theme.of(context).backgroundColor,
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(
+                            Icons.account_box,
+                            color: Theme.of(context).accentColor,
                           ),
+                          title: Text('Editar perfil'),
+                          onTap: () async {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ProfilePage(),
+                                settings: RouteSettings(name: 'Profile'),
+                              ),
+                            );
+                          },
                         ),
-                        title: Text('Notificaciones'),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => NotificacionesPage(),
-                              settings:
-                                  RouteSettings(name: 'NotificacionesPage'),
-                            ),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        // leading: Icon(Icons.share, color: Theme.of(context).accentColor,),
-                        leading: Icon(
-                          Icons.update,
-                          color: Theme.of(context).accentColor,
+                        ListTile(
+                          leading: Icon(
+                            Icons.bookmark,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Guardadas'),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => SavedContentPage(),
+                                settings: RouteSettings(name: 'Saved'),
+                              ),
+                            );
+                          },
                         ),
-                        title: Text('Buscar actualizaciones'),
-                        // subtitle: Text('Enviá el link para que la descarguen.'),
-                        onTap: () async {
-                          String url =
-                              'https://play.google.com/store/apps/details?id=com.macherit.arrancando';
-                          if (Platform.isIOS)
-                            url =
-                                'https://apps.apple.com/us/app/arrancando/id1490590335?l=es';
-                          if (await canLaunch(url)) {
-                            await launch(url);
-                          } else {
-                            throw 'Could not launch $url';
-                          }
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.security,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text('Política de privacidad'),
-                        onTap: () async {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => PrivacyPolicyPage(),
-                              settings: RouteSettings(name: 'Privacy policy'),
-                            ),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.people,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text('Comunidad Arrancando'),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ComunidadPage(),
-                              settings: RouteSettings(name: 'Comunidad'),
-                            ),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.security,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text('Reglas'),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ReglasPage(),
-                              settings: RouteSettings(name: 'Reglas'),
-                            ),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.live_help,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text('Contacto'),
-                        subtitle: Text(
-                            "Contactate con nosotros por dudas o consultas."),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ContactPage(),
-                              settings: RouteSettings(name: 'Contacto'),
-                            ),
-                          );
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.send,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text('Compartí la aplicación'),
-                        // subtitle: Text('Enviá el link para que la descarguen.'),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Image.asset(
-                                  'assets/images/logo-facebook.png'),
-                              onPressed: () {
-                                Share.text(
-                                  'Compartir contenido',
-                                  'https://arrancando.com.ar/',
-                                  'text/plain',
-                                );
-                              },
-                            ),
-                            IconButton(
-                              color: Colors.black45,
-                              icon: Icon(
-                                Icons.share,
+                        ListTile(
+                          leading: BadgeWrapper(
+                            showBadge: mainState.unreadNotifications > 0,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 15),
+                              child: Icon(
+                                Icons.notifications,
                                 color: Theme.of(context).accentColor,
                               ),
-                              onPressed: () async {
-                                var img = (await rootBundle
-                                        .load('assets/images/icon.png'))
-                                    .buffer
-                                    .asUint8List();
+                            ),
+                          ),
+                          title: Text('Notificaciones'),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => NotificacionesPage(),
+                                settings:
+                                    RouteSettings(name: 'NotificacionesPage'),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          // leading: Icon(Icons.share, color: Theme.of(context).accentColor,),
+                          leading: Icon(
+                            Icons.update,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Buscar actualizaciones'),
+                          // subtitle: Text('Enviá el link para que la descarguen.'),
+                          onTap: () async {
+                            String url =
+                                'https://play.google.com/store/apps/details?id=com.macherit.arrancando';
+                            if (Platform.isIOS)
+                              url =
+                                  'https://apps.apple.com/us/app/arrancando/id1490590335?l=es';
+                            if (await canLaunch(url)) {
+                              await launch(url);
+                            } else {
+                              throw 'Could not launch $url';
+                            }
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.security,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Política de privacidad'),
+                          onTap: () async {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => PrivacyPolicyPage(),
+                                settings: RouteSettings(name: 'Privacy policy'),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.people,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Comunidad Arrancando'),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ComunidadPage(),
+                                settings: RouteSettings(name: 'Comunidad'),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.security,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Reglas'),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ReglasPage(),
+                                settings: RouteSettings(name: 'Reglas'),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.live_help,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Contacto'),
+                          subtitle: Text(
+                              "Contactate con nosotros por dudas o consultas."),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ContactPage(),
+                                settings: RouteSettings(name: 'Contacto'),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.send,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Compartí la aplicación'),
+                          // subtitle: Text('Enviá el link para que la descarguen.'),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Image.asset(
+                                    'assets/images/logo-facebook.png'),
+                                onPressed: () {
+                                  Share.text(
+                                    'Compartir contenido',
+                                    'https://arrancando.com.ar/',
+                                    'text/plain',
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                color: Colors.black45,
+                                icon: Icon(
+                                  Icons.share,
+                                  color: Theme.of(context).accentColor,
+                                ),
+                                onPressed: () async {
+                                  var img = (await rootBundle
+                                          .load('assets/images/icon.png'))
+                                      .buffer
+                                      .asUint8List();
 
-                                Share.file(
-                                  'Compartir imagen',
-                                  'imagen.jpg',
-                                  img,
-                                  'image/jpg',
-                                  text:
-                                      "Bajate Arrancando y compartí tu pasión por el asado y el buen comer.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es",
-                                );
-                              },
+                                  Share.file(
+                                    'Compartir imagen',
+                                    'imagen.jpg',
+                                    img,
+                                    'image/jpg',
+                                    text:
+                                        "Bajate Arrancando y compartí tu pasión por el asado y el buen comer.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es",
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.lightbulb_outline,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text(
+                            'Tema ${mainState.activeTheme == ThemeMode.dark ? 'claro' : 'oscuro'}',
+                          ),
+                          onTap: () => Utils.toggleThemeMode(context),
+                        ),
+                        ListTile(
+                          leading: Icon(
+                            Icons.exit_to_app,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Cerrar sesión'),
+                          onTap: () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.remove('activeUser');
+                            userState.setActiveUser(null);
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (_) => LoginPage(),
+                                settings: RouteSettings(name: 'Login'),
+                              ),
+                              (_) => false,
+                            );
+                          },
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                "Versión: ${MyGlobals.APP_VERSION}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.lightbulb_outline,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text(
-                          'Tema ${Provider.of<MainState>(context).activeTheme == ThemeMode.dark ? 'claro' : 'oscuro'}',
-                        ),
-                        onTap: () => Utils.toggleThemeMode(context),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.exit_to_app,
-                          color: Theme.of(context).accentColor,
-                        ),
-                        title: Text('Cerrar sesión'),
-                        onTap: () async {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          prefs.remove('activeUser');
-                          Provider.of<UserState>(context, listen: false)
-                              .setActiveUser(null);
-                          Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                              builder: (_) => LoginPage(),
-                              settings: RouteSettings(name: 'Login'),
-                            ),
-                            (_) => false,
-                          );
-                        },
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Text(
-                              "Versión: ${MyGlobals.APP_VERSION}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

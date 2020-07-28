@@ -7,6 +7,7 @@ class MainState extends ChangeNotifier {
   SectionType activePageHome = SectionType.home;
   Map<SectionType, int> selectedCategoryHome = {};
   List<SectionType> contenidosHome = [];
+  int unreadNotifications = 0;
 
   setActivePageHome(SectionType val) {
     if (val != null) {
@@ -27,6 +28,11 @@ class MainState extends ChangeNotifier {
 
   setActiveTheme(ThemeMode theme) {
     activeTheme = theme;
+    notifyListeners();
+  }
+
+  setUnreadNotifications(int val) {
+    unreadNotifications = val;
     notifyListeners();
   }
 }

@@ -187,8 +187,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
       if (resp != null && resp.body != null) {
         _user = Usuario.fromJson(json.decode(resp.body));
-        _fetchCount();
-        _fetchElements();
+        await _fetchCount();
+        await _fetchElements();
       }
     }
     _loaded = true;
@@ -269,14 +269,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 ],
                               ),
                               onPressed: () async {
-                                if (await canLaunch(_user.urlInstagram)) {
+                                var profile = _user.urlInstagram;
+                                if (!profile.contains('http') ||
+                                    !profile.contains('instagram')) {
+                                  profile =
+                                      "https://instagram.com/${profile.split('/').last}";
+                                }
+                                if (await canLaunch(profile)) {
                                   await launch(
-                                    _user.urlInstagram,
+                                    profile,
                                     forceSafariVC: false,
                                     forceWebView: false,
                                   );
                                 } else {
-                                  throw 'Could not launch ${_user.urlInstagram}';
+                                  throw 'Could not launch $profile';
                                 }
                               },
                             ),

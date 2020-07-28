@@ -40,7 +40,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _loadingMore = false;
   bool _locationDenied = false;
   Map<int, double> _calculatedDistance = {};
-  List<Notificacion> _unreadNotificaciones;
+  // List<Notificacion> _unreadNotificaciones;
   bool _inited = false;
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
@@ -197,8 +197,11 @@ class _MainScaffoldState extends State<MainScaffold> {
   }
 
   _fetchUnreadNotificaciones() async {
-    _unreadNotificaciones = await Notificacion.fetchUnread();
-    if (mounted) setState(() {});
+    var unreadNotificaciones = await Notificacion.fetchUnread();
+    Provider.of<MainState>(
+      context,
+      listen: false,
+    ).setUnreadNotifications(unreadNotificaciones.length);
   }
 
   _initUserInfo() async {
@@ -227,24 +230,6 @@ class _MainScaffoldState extends State<MainScaffold> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initUserInfo();
     });
-  }
-
-  @override
-  void didUpdateWidget(MainScaffold oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // _fetchUnreadNotificaciones();
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-    // _fetchUnreadNotificaciones();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // _fetchUnreadNotificaciones();
   }
 
   @override

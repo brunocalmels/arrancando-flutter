@@ -16,33 +16,13 @@ class MainAppBar extends StatelessWidget {
   final Function fetchContent;
   final TextEditingController searchController;
   final Function(PersistentBottomSheetController) setBottomSheetController;
-  final bool unreadNotificaciones;
 
   MainAppBar({
     this.setSearchVisibility,
     this.fetchContent,
     this.searchController,
     this.setBottomSheetController,
-    this.unreadNotificaciones = false,
   });
-
-  _anyFilterActive(MainState mainState, ContentPageState contentPageState) {
-    if (mainState.activePageHome != SectionType.publicaciones) {
-      if (mainState.activePageHome == SectionType.pois) return true;
-      if (mainState.selectedCategoryHome[mainState.activePageHome] != -1 &&
-          mainState.selectedCategoryHome[mainState.activePageHome] != null)
-        return true;
-    } else {
-      if (mainState.selectedCategoryHome[mainState.activePageHome] != -1 ||
-          (mainState.selectedCategoryHome[
-                      SectionType.publicaciones_categoria] !=
-                  -1 &&
-              mainState.selectedCategoryHome[
-                      SectionType.publicaciones_categoria] !=
-                  null)) return true;
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,26 +41,6 @@ class MainAppBar extends StatelessWidget {
             setSearchVisibility: setSearchVisibility,
           ),
           actions: <Widget>[
-            // if (!contentState.showSearchPage &&
-            //     mainState.activePageHome != SectionType.home)
-            //   IconButton(
-            //     onPressed: () {
-            //       showModalBottomSheet(
-            //         context: MyGlobals.mainScaffoldKey.currentContext,
-            //         builder: (_) => FilterBottomSheet(
-            //           fetchContent: fetchContent,
-            //         ),
-            //         shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.only(
-            //             topLeft: Radius.circular(15),
-            //             topRight: Radius.circular(15),
-            //           ),
-            //         ),
-            //         backgroundColor: Colors.white,
-            //       );
-            //     },
-            //     icon: Icon(Icons.filter_list),
-            //   ),
             if (!contentState.showSearchPage &&
                 mainState.activePageHome != SectionType.home)
               IconButton(
@@ -180,7 +140,7 @@ class MainAppBar extends StatelessWidget {
                 icon: Icon(Icons.close),
               ),
             BadgeWrapper(
-              showBadge: unreadNotificaciones,
+              showBadge: mainState.unreadNotifications > 0,
               child: IconButton(
                 onPressed: () {
                   MyGlobals.mainScaffoldKey.currentState.openEndDrawer();

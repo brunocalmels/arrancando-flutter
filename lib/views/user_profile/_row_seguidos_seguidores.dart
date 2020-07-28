@@ -25,7 +25,7 @@ class RowSeguidosSeguidores extends StatelessWidget {
                     context: context,
                     builder: (_) => DialogSeguidosSeguidores(
                       userId: userId,
-                      isSeguidores: texto == "SEGUIDORES",
+                      isSeguidores: texto.toLowerCase().contains("seguidor"),
                     ),
                   );
                 }
