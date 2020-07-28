@@ -1,7 +1,4 @@
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/models/content_wrapper.dart';
-import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

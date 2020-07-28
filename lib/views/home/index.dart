@@ -5,6 +5,7 @@ import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/notificacion.dart';
 import 'package:arrancando/config/services/notificaciones.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -237,9 +238,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     return WillPopScope(
       onWillPop: () async {
         _setSearchVisibility(false);
-        FocusScope.of(context).unfocus();
-        SystemChannels.textInput.invokeMethod('TextInput.hide');
-        FocusManager.instance.primaryFocus.unfocus();
+        Utils.unfocus(context);
         if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen) return true;
         return false;
       },

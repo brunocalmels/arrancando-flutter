@@ -1,5 +1,6 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -133,9 +134,7 @@ class MainAppBar extends StatelessWidget {
               IconButton(
                 onPressed: () {
                   setSearchVisibility(false);
-                  FocusScope.of(context).unfocus();
-                  SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  FocusManager.instance.primaryFocus.unfocus();
+                  Utils.unfocus(context);
                 },
                 icon: Icon(Icons.close),
               ),

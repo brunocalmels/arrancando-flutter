@@ -108,74 +108,72 @@ class TextosShow extends StatelessWidget {
                 children: _parseTexto(texto)
                     .map(
                       (chunk) => TextSpan(
-                        text: chunk['texto'],
-                        style: chunk['tipo'] != 'link' &&
-                                chunk['tipo'] != 'username' &&
-                                chunk['tipo'] != 'hashtag'
-                            ? TextStyle(
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText2
-                                    .color
-                                    .withAlpha(150),
-                                fontFamily: 'Monserrat',
-                                fontSize: fontSize,
-                              )
-                            : TextStyle(
-                                color: Colors.blue,
-                                fontFamily: 'Monserrat',
-                                fontSize: fontSize,
-                              ),
-                        recognizer: chunk['tipo'] != 'link'
-                            ? chunk['tipo'] != 'username'
-                                ? chunk['tipo'] != 'hashtag'
-                                    ? null
-                                    : (TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (_) => SearchPage(
-                                              originalType:
-                                                  SectionType.publicaciones,
-                                              originalSearch:
-                                                  (chunk['texto'] as String)
-                                                      .trim(),
+                          text: chunk['texto'],
+                          style: chunk['tipo'] != 'link' &&
+                                  chunk['tipo'] != 'username' &&
+                                  chunk['tipo'] != 'hashtag'
+                              ? TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .color
+                                      .withAlpha(150),
+                                  fontFamily: 'Monserrat',
+                                  fontSize: fontSize,
+                                )
+                              : TextStyle(
+                                  color: Colors.blue,
+                                  fontFamily: 'Monserrat',
+                                  fontSize: fontSize,
+                                ),
+                          recognizer: chunk['tipo'] != 'link'
+                              ? chunk['tipo'] != 'username'
+                                  ? chunk['tipo'] != 'hashtag'
+                                      ? null
+                                      : (TapGestureRecognizer()
+                                        ..onTap = () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) => SearchPage(
+                                                originalType: content?.type ??
+                                                    SectionType.publicaciones,
+                                                originalSearch:
+                                                    (chunk['texto'] as String)
+                                                        .trim(),
+                                              ),
+                                              settings: RouteSettings(
+                                                name: 'Search',
+                                              ),
                                             ),
-                                            settings: RouteSettings(
-                                              name: 'Search',
-                                            ),
+                                          );
+                                        })
+                                  : (TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => UserProfilePage(
+                                            user: null,
+                                            username: chunk["texto"]
+                                                .replaceAll('@', ''),
                                           ),
-                                        );
-                                      })
-                                : (TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => UserProfilePage(
-                                          user: null,
-                                          username: chunk["texto"]
-                                              .replaceAll('@', ''),
+                                          settings: RouteSettings(
+                                              name: 'UserProfilePage'),
                                         ),
-                                        settings: RouteSettings(
-                                            name: 'UserProfilePage'),
-                                      ),
+                                      );
+                                    })
+                              : (TapGestureRecognizer()
+                                ..onTap = () async {
+                                  var link = chunk['texto'].trim();
+                                  if (await canLaunch(link)) {
+                                    await launch(
+                                      link,
+                                      forceSafariVC: false,
+                                      forceWebView: false,
                                     );
-                                  })
-                            : (TapGestureRecognizer()
-                              ..onTap = () async {
-                                var link = chunk['texto'].trim();
-                                print(link);
-                                if (await canLaunch(link)) {
-                                  await launch(
-                                    link,
-                                    forceSafariVC: false,
-                                    forceWebView: false,
-                                  );
-                                } else {
-                                  throw 'Could not launch $link';
-                                }
-                              }),
-                      ),
+                                  } else {
+                                    throw 'Could not launch $link';
+                                  }
+                                })),
                     )
                     .toList(),
               ),

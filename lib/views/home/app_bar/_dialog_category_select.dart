@@ -87,7 +87,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                       insideEdit: widget.poiCity,
                     )
                   : Container(
-                      height: 220,
+                      // height: 220,
                       child: Builder(
                         builder: (context) {
                           List<CategoryWrapper> _lista = widget.pubCateg
@@ -114,17 +114,29 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                           return SingleChildScrollView(
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: _lista
-                                  .map(
-                                    (item) => ListTile(
-                                      onTap: () {
-                                        _onItemTap(item);
-                                      },
-                                      // leading: Icon(Icons.location_on),
-                                      title: Text(item.nombre),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Text(
+                                    "(${_lista.length} items)",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 10,
                                     ),
-                                  )
-                                  .toList(),
+                                  ),
+                                ),
+                                ..._lista
+                                    .map(
+                                      (item) => ListTile(
+                                        onTap: () {
+                                          _onItemTap(item);
+                                        },
+                                        // leading: Icon(Icons.location_on),
+                                        title: Text(item.nombre),
+                                      ),
+                                    )
+                                    .toList(),
+                              ],
                             ),
                           );
                         },

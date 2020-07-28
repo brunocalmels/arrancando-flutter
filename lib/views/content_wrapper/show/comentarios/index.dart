@@ -4,6 +4,7 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/puntaje.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/comentarios/_comments_list.dart';
 import 'package:arrancando/views/content_wrapper/show/comentarios/_from_send_comment.dart';
@@ -33,6 +34,8 @@ class _ComentariosSectionState extends State<ComentariosSection> {
         _mensajeController.text != null &&
         _mensajeController.text.isNotEmpty) {
       try {
+        Utils.unfocus(context);
+
         if (mounted)
           setState(() {
             _sent = true;

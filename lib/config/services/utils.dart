@@ -1,5 +1,6 @@
 import 'package:arrancando/config/state/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,5 +22,11 @@ abstract class Utils {
     mainState.setActiveTheme(newTheme);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("theme-dark", newTheme == ThemeMode.dark);
+  }
+
+  static unfocus(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    FocusManager.instance.primaryFocus.unfocus();
   }
 }

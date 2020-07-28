@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/subcategoria_receta.dart';
@@ -271,6 +272,9 @@ class ContentWrapper {
     bool esFbk = false,
   }) async {
     String miraEsta = "esta publicación";
+    String categ;
+
+    final GlobalSingleton gs = GlobalSingleton();
 
     switch (type) {
       case SectionType.publicaciones:
@@ -281,6 +285,12 @@ class ContentWrapper {
         break;
       case SectionType.pois:
         miraEsta = "este Punto de interés";
+        categ = gs.categories[SectionType.pois]
+            .firstWhere(
+              (c) => c.id == categoriaPoiId,
+              orElse: () => null,
+            )
+            ?.nombre;
         break;
       default:
         miraEsta = "esta publicación";
@@ -312,9 +322,11 @@ class ContentWrapper {
 
     String titulo = esWpp ? "*${this.titulo}*" : this.titulo;
 
+    String categoria = categ != null ? "Categoría: $categ\n\n" : "";
+
     String texto = esFull
-        ? "$cabecera\n\n$piecera\n\n$titulo$cuerpo$introduccion$ingredientes$instrucciones"
-        : "$cabecera\n\n$titulo\n\n$piecera";
+        ? "$cabecera\n\n$piecera\n\n$categoria$titulo$cuerpo$introduccion$ingredientes$instrucciones"
+        : "$cabecera\n\n$categoria$titulo\n\n$piecera";
 
     if (esFbk) {
       Share.text(
@@ -478,5 +490,29 @@ class ContentWrapper {
       print(e);
     }
     return [];
+  }
+
+  Future<void> setSaved(bool val) async {
+    var url;
+    switch (type) {
+      case SectionType.publicaciones:
+        url = "/publicaciones";
+        break;
+      case SectionType.recetas:
+        url = "/recetas";
+        break;
+      case SectionType.pois:
+        url = "/pois";
+        break;
+      default:
+        url = "/publicaciones";
+    }
+
+    await Fetcher.put(
+      url: "$url/$id/saved.json",
+      body: {
+        "saved": val,
+      },
+    );
   }
 }

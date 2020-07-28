@@ -56,5 +56,6 @@ class SavedContent {
       "savedContent",
       json.encode(Provider.of<UserState>(context).savedContent),
     );
+    content.setSaved(isSaved(content, context));
   }
 }
