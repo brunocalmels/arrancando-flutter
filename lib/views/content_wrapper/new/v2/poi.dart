@@ -226,7 +226,8 @@ class _PoiFormState extends State<PoiForm> {
       _longitud = widget.content.longitud;
       _direccion = widget.content.direccion;
       // _rubroController.text = widget.content.rubro;
-      _whatsappController.text = "${widget.content.whatsapp}";
+      _whatsappController.text =
+          widget.content.whatsapp != null ? "${widget.content.whatsapp}" : '';
       _currentImages = widget.content.imagenes;
       _currentVideoThumbs = widget.content.videoThumbs;
       if (mounted) setState(() {});

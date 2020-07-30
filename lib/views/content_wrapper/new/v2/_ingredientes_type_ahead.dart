@@ -64,6 +64,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
     }
   }
 
+  ------------
   _agregarNuevoIngrediente({bool cantNecesaria = false}) {
     _errorIngred = null;
     if (_selected != null &&

@@ -62,6 +62,9 @@ class _ShowPageState extends State<ShowPage> {
       _content.type = widget.type;
     }
 
+    _content.comentarios
+        .sort((c1, c2) => c1.createdAt.isBefore(c2.createdAt) ? -1 : 1);
+
     _fetching = false;
 
     if (mounted) setState(() {});

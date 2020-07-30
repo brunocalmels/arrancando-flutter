@@ -394,7 +394,7 @@ class ContentWrapper {
 
     if (search != null && search.isNotEmpty)
       url +=
-          "&filterrific[search_query]=${Uri.encodeComponent(search).replaceAll('@', '')}";
+          "&filterrific[search_query]=${Uri.encodeComponent(search.replaceAll('@', ''))}";
     if (categoryId != null && categoryId > 0)
       url += "&filterrific[$categoryParamName]=$categoryId";
 

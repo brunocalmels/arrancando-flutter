@@ -2,6 +2,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/fast_search/_content_tile.dart';
@@ -141,6 +142,8 @@ class DataGroup extends StatelessWidget {
                                 .toList(),
                           FlatButton(
                             onPressed: () {
+                              Utils.unfocus(context);
+
                               if (isUsers)
                                 Navigator.of(context).push(
                                   MaterialPageRoute(

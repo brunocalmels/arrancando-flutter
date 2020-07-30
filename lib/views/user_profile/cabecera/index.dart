@@ -20,7 +20,9 @@ class CabeceraUserProfile extends StatelessWidget {
     "wok": "assets/images/user_profile/masters/wok.png",
     "asador": "assets/images/user_profile/masters/asador.png",
     "disco": "assets/images/user_profile/masters/disco.png",
-    "tragos y bebidas": "assets/images/user_profile/masters/tragos.png"
+    "tragos y bebidas": "assets/images/user_profile/masters/tragos.png",
+    "bowl": "assets/images/user_profile/masters/bowl.png",
+    "wiki": "assets/images/user_profile/masters/wiki.png",
   };
 
   CabeceraUserProfile({

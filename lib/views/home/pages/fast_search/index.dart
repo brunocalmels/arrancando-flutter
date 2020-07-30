@@ -3,11 +3,14 @@ import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/home/pages/fast_search/_data_group.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FastSearchPage extends StatefulWidget {
   final TextEditingController searchController;
@@ -56,7 +59,16 @@ class _FastSearchPageState extends State<FastSearchPage> {
           .map(
             (c) => ContentWrapper.fromJson(c),
           )
-          .where((p) => p.habilitado == null || p.habilitado)
+          .where(
+            (p) =>
+                (p.habilitado == null || p.habilitado) &&
+                (widget.searchController.text[0] == "@"
+                    ? p.user.username.toLowerCase() ==
+                        widget.searchController.text
+                            .replaceAll('@', '')
+                            .toLowerCase()
+                    : true),
+          )
           .toList();
 
     _fetching[type] = false;

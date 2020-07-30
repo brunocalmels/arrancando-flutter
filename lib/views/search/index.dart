@@ -73,6 +73,11 @@ class _SearchPageState extends State<SearchPage> {
     if (type == SectionType.pois && !_locationDenied)
       _items.map((i) => _calculatedDistance[i.id] = i.localDistance);
 
+    if (_searchController.text[0] == "@")
+      _items.where((i) =>
+          i.user.username.toLowerCase() ==
+          _searchController.text.replaceAll('@', '').toLowerCase());
+
     if (!keepLimit) _page += 1;
 
     _noMore = lastLength == _items.length ? true : false;
@@ -99,6 +104,11 @@ class _SearchPageState extends State<SearchPage> {
     if (mounted) setState(() {});
   }
 
+  _increasePage() {
+    _page += 1;
+    if (mounted) setState(() {});
+  }
+
   Widget _getPage(SectionType type) {
     switch (type) {
       case SectionType.publicaciones:
@@ -111,7 +121,7 @@ class _SearchPageState extends State<SearchPage> {
             resetLimit: _resetLimit,
             fetchContent: _fetchContent,
             items: _items,
-            increasePage: null,
+            increasePage: _increasePage,
             hideFilter: true,
           ),
         );
@@ -125,7 +135,7 @@ class _SearchPageState extends State<SearchPage> {
             resetLimit: _resetLimit,
             fetchContent: _fetchContent,
             items: _items,
-            increasePage: null,
+            increasePage: _increasePage,
             hideFilter: true,
           ),
         );
@@ -140,7 +150,7 @@ class _SearchPageState extends State<SearchPage> {
           setLoadingMore: _setLoadingMore,
           setLocationDenied: _setLocationDenied,
           locationDenied: _locationDenied,
-          increasePage: null,
+          increasePage: _increasePage,
           hideFilter: true,
         );
       default:
@@ -153,7 +163,7 @@ class _SearchPageState extends State<SearchPage> {
             resetLimit: _resetLimit,
             fetchContent: _fetchContent,
             items: _items,
-            increasePage: null,
+            increasePage: _increasePage,
             hideFilter: true,
           ),
         );
