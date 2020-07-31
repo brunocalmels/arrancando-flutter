@@ -74,9 +74,9 @@ class _SearchPageState extends State<SearchPage> {
       _items.map((i) => _calculatedDistance[i.id] = i.localDistance);
 
     if (_searchController.text[0] == "@")
-      _items.where((i) =>
-          i.user.username.toLowerCase() ==
-          _searchController.text.replaceAll('@', '').toLowerCase());
+      _items.where((i) => i.user.username
+          .toLowerCase()
+          .contains(_searchController.text.replaceAll('@', '').toLowerCase()));
 
     if (!keepLimit) _page += 1;
 

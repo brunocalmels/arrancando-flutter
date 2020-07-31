@@ -63,10 +63,10 @@ class _FastSearchPageState extends State<FastSearchPage> {
             (p) =>
                 (p.habilitado == null || p.habilitado) &&
                 (widget.searchController.text[0] == "@"
-                    ? p.user.username.toLowerCase() ==
-                        widget.searchController.text
-                            .replaceAll('@', '')
-                            .toLowerCase()
+                    ? p.user.username.toLowerCase().contains(widget
+                        .searchController.text
+                        .replaceAll('@', '')
+                        .toLowerCase())
                     : true),
           )
           .toList();

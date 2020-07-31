@@ -64,7 +64,6 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
     }
   }
 
-  ------------
   _agregarNuevoIngrediente({bool cantNecesaria = false}) {
     _errorIngred = null;
     if (_selected != null &&
@@ -81,8 +80,9 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
           ...widget.ingredientes,
           {
             "ingrediente": _selected.nombre,
-            "cantidad": cantNecesaria ? "" : _quantityController.text,
-            "unidad": cantNecesaria ? "Cant. necesaria" : _unidad,
+            "cantidad":
+                cantNecesaria ? "Cant. necesaria" : _quantityController.text,
+            "unidad": cantNecesaria ? "" : _unidad,
           },
         ],
       );
@@ -235,10 +235,13 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                         ),
                         Divider(
                           height: 1,
-                          color:
-                              Theme.of(context).textTheme.bodyText2.color.withAlpha(
-                                    100,
-                                  ),
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .color
+                              .withAlpha(
+                                100,
+                              ),
                         ),
                       ],
                     ),
