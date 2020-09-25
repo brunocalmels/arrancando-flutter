@@ -191,11 +191,15 @@ abstract class DynamicLinks {
                 if (context != null && !_invalidUser) {
                   mainState.setSelectedCategoryHome(
                     SectionType.publicaciones,
-                    int.tryParse(q['ciudad_id']),
+                    q['ciudad_id'] != null
+                        ? int.tryParse(q['ciudad_id'])
+                        : null,
                   );
                   mainState.setSelectedCategoryHome(
                     SectionType.publicaciones_categoria,
-                    int.tryParse(q['categoria_publicacion_id']),
+                    q['categoria_publicacion_id'] != null
+                        ? int.tryParse(q['categoria_publicacion_id'])
+                        : null,
                   );
                   mainState.setActivePageHome(SectionType.publicaciones);
                   Navigator.of(context).push(
@@ -213,7 +217,9 @@ abstract class DynamicLinks {
                 if (context != null && !_invalidUser) {
                   mainState.setSelectedCategoryHome(
                     SectionType.recetas,
-                    int.tryParse(q['categoria_receta_id']),
+                    q['categoria_receta_id'] != null
+                        ? int.tryParse(q['categoria_receta_id'])
+                        : null,
                   );
                   mainState.setActivePageHome(SectionType.recetas);
                   Navigator.of(context).push(
@@ -231,11 +237,15 @@ abstract class DynamicLinks {
                 if (context != null && !_invalidUser) {
                   mainState.setSelectedCategoryHome(
                     SectionType.pois,
-                    int.tryParse(q['categoria_poi_id']),
+                    q['categoria_poi_id'] != null
+                        ? int.tryParse(q['categoria_poi_id'])
+                        : null,
                   );
                   mainState.setSelectedCategoryHome(
                     SectionType.pois_ciudad,
-                    int.tryParse(q['ciudad_id']),
+                    q['ciudad_id'] != null
+                        ? int.tryParse(q['ciudad_id'])
+                        : null,
                   );
                   mainState.setActivePageHome(SectionType.pois);
                   Navigator.of(context).push(
