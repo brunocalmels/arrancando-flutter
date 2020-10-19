@@ -133,7 +133,23 @@ class CategoryWrapper {
     int val = prefs.getInt(type.toString());
     if (val != null)
       Provider.of<ContentPageState>(context).setSavedFilter(type, val);
-    Provider.of<MainState>(context).setSelectedCategoryHome(type, -1);
+    if (type == SectionType.pois &&
+        val == null &&
+        GlobalSingleton().categories.isNotEmpty &&
+        GlobalSingleton().categories[SectionType.pois].isNotEmpty) {
+      final id = GlobalSingleton()
+          .categories[SectionType.pois]
+          .firstWhere((c) => c.nombre.toLowerCase() == 'arrancando market',
+              orElse: () => null)
+          ?.id;
+
+      if (id != null)
+        Provider.of<MainState>(context).setSelectedCategoryHome(type, id);
+      else
+        Provider.of<MainState>(context).setSelectedCategoryHome(type, -1);
+    } else {
+      Provider.of<MainState>(context).setSelectedCategoryHome(type, val ?? -1);
+    }
   }
 
   static saveFilter(BuildContext context, SectionType type, int val) async {

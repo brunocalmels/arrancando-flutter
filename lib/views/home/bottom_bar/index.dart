@@ -20,7 +20,7 @@ class MainBottomBar extends StatelessWidget {
       "icono": Icons.fastfood,
     },
     SectionType.pois: {
-      "texto": "P. Interés",
+      "texto": "Market",
       "icono": Icons.location_on,
     },
     SectionType.wiki: {

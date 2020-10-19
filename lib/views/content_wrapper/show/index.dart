@@ -155,32 +155,12 @@ class _ShowPageState extends State<ShowPage> {
                         TextosShow(
                           content: _content,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Center(
-                            child: RowEstrellas(
-                              content: _content,
-                              fetchContent: _fetchContent,
-                            ),
-                          ),
-                        ),
-                        RowIconosFecha(
-                          content: _content,
-                          fetchContent: _fetchContent,
-                        ),
-                        ComentariosSection(
-                          content: _content,
-                          fetchContent: _fetchContent,
-                        ),
-                        SizedBox(
-                          height: 50,
-                        ),
                         if (widget.type == SectionType.pois &&
                             _content.whatsapp != null &&
                             _content.whatsapp.toString().isNotEmpty &&
                             _content.whatsapp.toString().length > 4)
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -225,6 +205,26 @@ class _ShowPageState extends State<ShowPage> {
                               ],
                             ),
                           ),
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Center(
+                            child: RowEstrellas(
+                              content: _content,
+                              fetchContent: _fetchContent,
+                            ),
+                          ),
+                        ),
+                        RowIconosFecha(
+                          content: _content,
+                          fetchContent: _fetchContent,
+                        ),
+                        ComentariosSection(
+                          content: _content,
+                          fetchContent: _fetchContent,
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
                       ],
                     ),
         ),

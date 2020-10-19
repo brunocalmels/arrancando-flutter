@@ -291,6 +291,12 @@ class _LoginPageState extends State<LoginPage> {
       GoogleSignInAccount account = await _googleSignIn.signIn();
 
       if (account != null) {
+        var avatar;
+        if (account.photoUrl != null) {
+          final response = await http.get(account.photoUrl);
+          avatar = base64Encode(response.bodyBytes);
+        }
+
         ResponseObject resp = await Fetcher.post(
           unauthenticated: true,
           url: "/new-google-login.json",
@@ -299,6 +305,7 @@ class _LoginPageState extends State<LoginPage> {
               "email": account.email,
               "name": account.displayName,
               "id": account.id,
+              if (avatar != null) "avatar": avatar,
             }
           },
         );

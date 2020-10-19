@@ -239,8 +239,9 @@ class _MainScaffoldState extends State<MainScaffold> {
       onWillPop: () async {
         _setSearchVisibility(false);
         Utils.unfocus(context);
-        if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen) return true;
-        return false;
+        // if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen)
+        return true;
+        // return false;
       },
       child: Stack(
         fit: StackFit.passthrough,

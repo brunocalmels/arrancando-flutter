@@ -176,7 +176,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
                 DataGroup(
                   fetching: _fetching["pois"],
                   icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.pois],
-                  title: "Ptos. Interés",
+                  title: "Market",
                   items: _items["pois"],
                   type: SectionType.pois,
                   searchController: widget.searchController,
