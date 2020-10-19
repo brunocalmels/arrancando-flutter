@@ -55,12 +55,12 @@ class _PoisMapState extends State<PoisMap> {
           //   urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
           // ),
           TileLayerOptions(
-            urlTemplate: "https://api.mapbox.com/v4/"
-                "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+            urlTemplate:
+                "https://api.mapbox.com/styles/v1/ivaneidel/ckggw2wfg00ok19p8wgabmjlg/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
             additionalOptions: {
               'accessToken':
                   'pk.eyJ1IjoiaXZhbmVpZGVsIiwiYSI6ImNqdGxxaTJoZzBnZjQzeXBobG84Mms5OTAifQ.HCfGRyJQCTuIW_vFr1eqiQ',
-              'id': 'mapbox.streets',
+              'id': 'mapbox.mapbox-streets-v8',
             },
           ),
           MarkerLayerOptions(
