@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 class ContentPageState extends ChangeNotifier {
   bool showSearchPage = false;
   bool showSearchResults = false;
-  ContentSortType sortContentBy = ContentSortType.fecha;
+  ContentSortType sortContentBy = ContentSortType.fecha_creacion;
   Map<SectionType, int> savedFilters = {
     SectionType.publicaciones: -1,
     SectionType.publicaciones_categoria: -1,

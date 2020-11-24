@@ -1,4 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/views/content_wrapper/show/cabecera/_avatar_bubble.dart';
@@ -70,8 +71,8 @@ class CabeceraShow extends StatelessWidget {
               ),
               content.type == SectionType.recetas
                   ? RowIconos(
-                    content: content,
-                  )
+                      content: content,
+                    )
                   : SizedBox(height: 30),
               SizedBox(
                 height: 5,
@@ -88,6 +89,28 @@ class CabeceraShow extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
+              if (content.type == SectionType.pois)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      GlobalSingleton()
+                          .categories[content.type][content.categoriaPoiId]
+                          .nombre,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                  ],
+                ),
               RowEstrellas(
                 content: content,
                 fetchContent: fetchContent,

@@ -174,8 +174,13 @@ abstract class DynamicLinks {
             var q = uri.queryParameters;
 
             switch (q['sorted_by']) {
-              case 'fecha':
-                contentPageState.setContentSortType(ContentSortType.fecha);
+              case 'fecha_creacion':
+                contentPageState
+                    .setContentSortType(ContentSortType.fecha_creacion);
+                break;
+              case 'fecha_actualizacion':
+                contentPageState
+                    .setContentSortType(ContentSortType.fecha_actualizacion);
                 break;
               case 'proximidad':
                 contentPageState.setContentSortType(ContentSortType.proximidad);

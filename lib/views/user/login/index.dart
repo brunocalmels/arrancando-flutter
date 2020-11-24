@@ -463,7 +463,7 @@ class _LoginPageState extends State<LoginPage> {
                     // SizedBox(
                     //   height: 20,
                     // ),
-                    if (Platform.isIOS)
+                    if (Platform.isIOS || Platform.isLinux)
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
@@ -512,11 +512,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                    if (Platform.isIOS)
+                    if (Platform.isIOS || Platform.isLinux)
                       SizedBox(
                         height: 25,
                       ),
-                    if (Platform.isIOS)
+                    if (Platform.isIOS || Platform.isLinux)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Builder(
@@ -564,7 +564,6 @@ class _LoginPageState extends State<LoginPage> {
                                 //   context: context,
                                 //   builder: (_) => _redirectDialog(url),
                                 // );
-
                                 _newSignInGoogle();
                               },
                         child: Row(
@@ -641,7 +640,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: 250,
                         padding: const EdgeInsets.all(7),
                         child: AppleSignInButton(
-                          style: ButtonStyle.whiteOutline,
+                          // style: ButtonStyle.whiteOutline,
                           type: ButtonType.signIn,
                           onPressed: sent ? null : _signInApple,
                         ),

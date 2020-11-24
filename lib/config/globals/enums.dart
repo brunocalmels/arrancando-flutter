@@ -10,7 +10,8 @@ enum SectionType {
 }
 
 enum ContentSortType {
-  fecha,
+  fecha_creacion,
+  fecha_actualizacion,
   puntuacion,
   proximidad,
 }

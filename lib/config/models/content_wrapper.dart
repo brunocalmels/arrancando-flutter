@@ -64,6 +64,7 @@ class ContentWrapper {
   int whatsapp;
   int seguido;
   String color;
+  int vistas;
 
   ContentWrapper(
     this.id,
@@ -96,6 +97,7 @@ class ContentWrapper {
     this.whatsapp,
     this.seguido,
     this.color,
+    this.vistas,
   );
 
   factory ContentWrapper.fromJson(Map<String, dynamic> json) =>
@@ -189,7 +191,9 @@ class ContentWrapper {
 
   get categID => type == SectionType.publicaciones
       ? ciudadId
-      : type == SectionType.recetas ? categoriaRecetaId : categoriaPoiId;
+      : type == SectionType.recetas
+          ? categoriaRecetaId
+          : categoriaPoiId;
 
   esOwner(BuildContext context) =>
       this.user.id == Provider.of<UserState>(context).activeUser.id;
@@ -284,7 +288,7 @@ class ContentWrapper {
         miraEsta = "esta receta";
         break;
       case SectionType.pois:
-        miraEsta = "este Punto de interés";
+        miraEsta = "esta tienda";
         categ = gs.categories[SectionType.pois]
             .firstWhere(
               (c) => c.id == categoriaPoiId,
@@ -420,8 +424,11 @@ class ContentWrapper {
 
     if (sortBy != null)
       switch (sortBy) {
-        case ContentSortType.fecha:
-          url += '&filterrific[sorted_by]=fecha';
+        case ContentSortType.fecha_creacion:
+          url += '&filterrific[sorted_by]=fecha_creacion';
+          break;
+        case ContentSortType.fecha_actualizacion:
+          url += '&filterrific[sorted_by]=fecha_actualizacion';
           break;
         case ContentSortType.puntuacion:
           url += '&filterrific[sorted_by]=puntuacion';

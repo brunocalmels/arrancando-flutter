@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
@@ -10,6 +12,7 @@ import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/general/version_checker.dart';
+import 'package:arrancando/views/home/_dialog_confirm_leave.dart';
 import 'package:arrancando/views/home/_drawer.dart';
 import 'package:arrancando/views/home/_home_fab.dart';
 import 'package:arrancando/views/home/pages/_content_card_page.dart';
@@ -218,7 +221,9 @@ class _MainScaffoldState extends State<MainScaffold> {
         ),
       );
       await CategoryWrapper.restoreContentHome(context);
-      await NotificacionesService.initFirebaseNotifications(context);
+      if (!Platform.isLinux) {
+        await NotificacionesService.initFirebaseNotifications(context);
+      }
       _fetchUnreadNotificaciones();
     }
     _inited = true;
@@ -239,9 +244,18 @@ class _MainScaffoldState extends State<MainScaffold> {
       onWillPop: () async {
         _setSearchVisibility(false);
         Utils.unfocus(context);
-        // if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen)
-        return true;
-        // return false;
+        if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen) {
+          return true;
+        } else {
+          final leave = await showDialog(
+            context: context,
+            builder: (_) => DialogConfirmLeave(),
+          );
+          if (leave != null && leave) {
+            return true;
+          }
+          return false;
+        }
       },
       child: Stack(
         fit: StackFit.passthrough,

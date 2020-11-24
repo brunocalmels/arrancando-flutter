@@ -289,7 +289,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         builder: (context) => AlertDialog(
                           title: Text('No hay contenido'),
                           content: Text(
-                            'Aún no hay mucho contenido de tu ciudad.\nEn unos días añadiremos publicaciones y puntos de interés cerca tuyo.\nMientras tanto, te recomendamos que veas el contenido de Neuquén.',
+                            'Aún no hay mucho contenido de tu ciudad.\nEn unos días añadiremos publicaciones y tiendas cerca tuyo.\nMientras tanto, te recomendamos que veas el contenido de Neuquén.',
                             style: TextStyle(
                               fontSize: 14,
                             ),

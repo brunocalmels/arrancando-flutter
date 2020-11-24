@@ -13,8 +13,8 @@ abstract class MyGlobals {
   // static const String SERVER_URL = "http://192.168.0.11:5000";
   // static const String SERVER_URL = "http://192.168.43.138:5000";
   // static const String SERVER_URL = "http://192.168.1.3:5000";
-  static const String SERVER_URL = "https://arrancando.herokuapp.com";
-  // static const String SERVER_URL = "https://arrancando-staging.herokuapp.com";
+  // static const String SERVER_URL = "https://arrancando.herokuapp.com";
+  static const String SERVER_URL = "https://arrancando-staging.herokuapp.com";
 
   static const GOOGLE_CLIENT_ID =
       "585563708448-5n5f3dg0ptbbm4p3eoh1l0c4u7fhrbrl.apps.googleusercontent.com";
@@ -77,6 +77,7 @@ abstract class MyGlobals {
     "Bowl": "assets/images/content/categories/bowl.png",
     "Wok": "assets/images/content/categories/wok.png",
     "Tragos y Bebidas": "assets/images/content/categories/tragos.png",
+    "Wiki": "assets/images/user_profile/masters/wiki.png",
   };
 
   static const List<Map<String, String>> COMPLEJIDAD = [

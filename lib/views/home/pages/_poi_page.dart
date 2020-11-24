@@ -245,7 +245,7 @@ class _PoiPageState extends State<PoiPage> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 15),
                                 child: Text(
-                                  "No hay puntos para mostrar",
+                                  "No hay tiendas para mostrar",
                                   textAlign: TextAlign.center,
                                 ),
                               )

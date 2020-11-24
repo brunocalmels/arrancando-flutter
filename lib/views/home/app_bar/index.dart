@@ -111,8 +111,11 @@ class MainAppBar extends StatelessWidget {
 
                   if (sortBy != null)
                     switch (sortBy) {
-                      case ContentSortType.fecha:
-                        url += '&sorted_by=fecha';
+                      case ContentSortType.fecha_creacion:
+                        url += '&sorted_by=fecha_creacion';
+                        break;
+                      case ContentSortType.fecha_actualizacion:
+                        url += '&sorted_by=fecha_actualizacion';
                         break;
                       case ContentSortType.puntuacion:
                         url += '&sorted_by=puntuacion';

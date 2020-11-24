@@ -78,7 +78,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
       _resetLimit();
       _fetchContent();
       Provider.of<ContentPageState>(context)
-          .setContentSortType(ContentSortType.fecha);
+          .setContentSortType(ContentSortType.fecha_creacion);
       _scrollController.addListener(
         () {
           if (_scrollController.offset >=

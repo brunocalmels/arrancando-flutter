@@ -172,7 +172,33 @@ class CardContent extends StatelessWidget {
                     ],
                   ),
                   Expanded(
-                    child: Container(),
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${content.vistas}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).accentColor,
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Icon(
+                                Icons.remove_red_eye,
+                                size: 20,
+                                color: Theme.of(context).accentColor,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   SizedBox(
                     width: 150,
@@ -219,11 +245,8 @@ class CardContent extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(),
-                  ),
                   SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   // Row iconos
                 ],
@@ -410,7 +433,7 @@ class CardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.37,
+      height: MediaQuery.of(context).size.height * 0.4,
       child: Card(
         color: Theme.of(context).backgroundColor,
         elevation: 10,

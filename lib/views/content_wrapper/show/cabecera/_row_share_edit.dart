@@ -25,103 +25,130 @@ class RowShareEdit extends StatelessWidget {
       color: Colors.transparent,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          if (content != null && content.esOwner(context))
-            IconButton(
-              onPressed: () async {
-                Widget page;
-
-                switch (content.type) {
-                  case SectionType.publicaciones:
-                    page = PublicacionForm(
-                      content: content,
-                    );
-                    break;
-                  case SectionType.recetas:
-                    page = RecetaForm(
-                      content: content,
-                    );
-                    break;
-                  case SectionType.pois:
-                    page = PoiForm(
-                      content: content,
-                    );
-                    break;
-                  default:
-                    page = EditPage(
-                      contentId: content.id,
-                      type: content.type,
-                    );
-                }
-
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => page,
-                    settings: RouteSettings(
-                      name:
-                          '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}#Edit',
-                    ),
-                  ),
-                );
-                await Future.delayed(Duration(seconds: 1));
-                fetchContent();
-              },
-              icon: IconShadowWidget(
-                Icon(
-                  Icons.edit,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(width: 10),
+              Text(
+                '${content.vistas}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                   color: Theme.of(context).accentColor,
                 ),
               ),
-            ),
-          if (content != null && content.type == SectionType.pois)
-            SizedBox(
-              width: 35,
-              child: GestureDetector(
-                onTap: () async {
-                  String url =
-                      "http://maps.google.com/maps?z=15&t=m&q=loc:${content.latitud}+${content.longitud}";
-                  if (await canLaunch(url)) {
-                    await launch(
-                      url,
-                      forceSafariVC: false,
-                      forceWebView: false,
-                    );
-                  } else {
-                    throw 'Could not launch $url';
-                  }
-                },
-                // child: Image.asset(
-                //   "assets/images/logo-google.png",
-                //   width: 20,
-                //   height: 20,
-                // ),
-                child: ImageIcon(
-                  AssetImage(
-                    "assets/images/logo-google.png",
-                  ),
-                  size: 20,
-                  color: Theme.of(context).accentColor,
-                ),
-              ),
-            ),
-          IconButton(
-            onPressed: content == null
-                ? null
-                : () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => ShareContentWrapper(
-                        content: content,
-                      ),
-                    );
-                  },
-            icon: IconShadowWidget(
+              SizedBox(width: 5),
               Icon(
-                Icons.share,
+                Icons.remove_red_eye,
+                size: 20,
                 color: Theme.of(context).accentColor,
               ),
-            ),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (content != null && content.esOwner(context))
+                IconButton(
+                  onPressed: () async {
+                    Widget page;
+
+                    switch (content.type) {
+                      case SectionType.publicaciones:
+                        page = PublicacionForm(
+                          content: content,
+                        );
+                        break;
+                      case SectionType.recetas:
+                        page = RecetaForm(
+                          content: content,
+                        );
+                        break;
+                      case SectionType.pois:
+                        page = PoiForm(
+                          content: content,
+                        );
+                        break;
+                      default:
+                        page = EditPage(
+                          contentId: content.id,
+                          type: content.type,
+                        );
+                    }
+
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => page,
+                        settings: RouteSettings(
+                          name:
+                              '${content.type.toString().split('.').last[0].toLowerCase()}${content.type.toString().split('.').last.substring(1)}#${content.id}#Edit',
+                        ),
+                      ),
+                    );
+                    await Future.delayed(Duration(seconds: 1));
+                    fetchContent();
+                  },
+                  icon: IconShadowWidget(
+                    Icon(
+                      Icons.edit,
+                      color: Theme.of(context).accentColor,
+                    ),
+                  ),
+                ),
+              if (content != null && content.type == SectionType.pois)
+                SizedBox(
+                  width: 35,
+                  child: GestureDetector(
+                    onTap: () async {
+                      String url =
+                          "http://maps.google.com/maps?z=15&t=m&q=loc:${content.latitud}+${content.longitud}";
+                      if (await canLaunch(url)) {
+                        await launch(
+                          url,
+                          forceSafariVC: false,
+                          forceWebView: false,
+                        );
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },
+                    // child: Image.asset(
+                    //   "assets/images/logo-google.png",
+                    //   width: 20,
+                    //   height: 20,
+                    // ),
+                    child: ImageIcon(
+                      AssetImage(
+                        "assets/images/logo-google.png",
+                      ),
+                      size: 20,
+                      color: Theme.of(context).accentColor,
+                    ),
+                  ),
+                ),
+              IconButton(
+                onPressed: content == null
+                    ? null
+                    : () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => ShareContentWrapper(
+                            content: content,
+                          ),
+                        );
+                      },
+                icon: IconShadowWidget(
+                  Icon(
+                    Icons.share,
+                    color: Theme.of(context).accentColor,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

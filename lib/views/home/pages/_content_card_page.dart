@@ -74,7 +74,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<ContentPageState>(context)
-          .setContentSortType(ContentSortType.fecha);
+          .setContentSortType(ContentSortType.fecha_creacion);
       widget.resetLimit();
       widget.fetchContent(widget.type);
       _scrollController.addListener(
@@ -131,7 +131,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
                                   item,
                                   Container(
                                     height: MediaQuery.of(context).size.height *
-                                        0.37,
+                                        0.4,
                                     child: Center(
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,

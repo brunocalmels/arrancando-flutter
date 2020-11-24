@@ -16,7 +16,7 @@ class CabeceraUserProfile extends StatelessWidget {
     "olla": "assets/images/user_profile/masters/olla.png",
     "parrilla": "assets/images/user_profile/masters/parrilla.png",
     "plancha": "assets/images/user_profile/masters/plancha.png",
-    "sarten": "assets/images/user_profile/masters/sarten.png",
+    "sartén": "assets/images/user_profile/masters/sarten.png",
     "wok": "assets/images/user_profile/masters/wok.png",
     "asador": "assets/images/user_profile/masters/asador.png",
     "disco": "assets/images/user_profile/masters/disco.png",
