@@ -188,6 +188,9 @@ abstract class DynamicLinks {
               case 'puntuacion':
                 contentPageState.setContentSortType(ContentSortType.puntuacion);
                 break;
+              case 'vistas':
+                contentPageState.setContentSortType(ContentSortType.vistas);
+                break;
               default:
             }
 

@@ -1,9 +1,11 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/search/index.dart';
 import 'package:arrancando/views/user_profile/index.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TextosShow extends StatelessWidget {
@@ -113,11 +115,15 @@ class TextosShow extends StatelessWidget {
                                   chunk['tipo'] != 'username' &&
                                   chunk['tipo'] != 'hashtag'
                               ? TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .color
-                                      .withAlpha(150),
+                                  color: Provider.of<MainState>(context)
+                                              .activeTheme ==
+                                          ThemeMode.dark
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .color
+                                          .withAlpha(150)
+                                      : Colors.white,
                                   fontFamily: 'Monserrat',
                                   fontSize: fontSize,
                                 )

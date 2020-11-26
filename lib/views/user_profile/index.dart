@@ -6,12 +6,14 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/user_profile/_row_botones.dart';
 import 'package:arrancando/views/user_profile/_row_seguidos_seguidores.dart';
 import 'package:arrancando/views/user_profile/cabecera/index.dart';
 import 'package:arrancando/views/user_profile/grilla_content/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -43,6 +45,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   bool _sentSeguir = false;
   int _seguidos = 0;
   int _seguidores = 0;
+  int _likes = 0;
+  int _experiencia = 0;
   bool _initialLoad = true;
 
   _setActiveSection(SectionType type) {
@@ -69,6 +73,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
       _siguiendo = data['siguiendo'];
       _seguidos = data['seguidos'];
       _seguidores = data['seguidores'];
+      _likes = data['likes'];
+      _experiencia = data['experiencia'];
       [SectionType.publicaciones, SectionType.recetas, SectionType.pois]
           .forEach(
         (t) {
@@ -179,7 +185,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (mounted) setState(() {});
   }
 
-  _fetchUsernAndInfo() async {
+  _fetchUserAndInfo() async {
     if (widget.username != null) {
       ResponseObject resp = await Fetcher.get(
         url: "/users/by_username.json?username=${widget.username.trim()}",
@@ -205,7 +211,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         await _fetchCount();
         await _fetchElements();
       } else {
-        await _fetchUsernAndInfo();
+        await _fetchUserAndInfo();
       }
       _initialLoad = false;
       if (mounted) setState(() {});
@@ -237,6 +243,58 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           siguiendo: _siguiendo,
                           seguir: _seguir,
                           sentSeguir: _sentSeguir,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Me Gusta: ',
+                                  ),
+                                  Text(
+                                    '$_likes',
+                                    style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Container(
+                                  width: 1.5,
+                                  height: 20,
+                                  color: Provider.of<MainState>(context)
+                                              .activeTheme ==
+                                          ThemeMode.dark
+                                      ? Colors.white
+                                      : Colors.black54,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Experiencia: ',
+                                  ),
+                                  Text(
+                                    '$_experiencia',
+                                    style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                         if (_user.urlInstagram != null &&
                             _user.urlInstagram.isNotEmpty)

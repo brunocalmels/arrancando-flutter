@@ -466,72 +466,78 @@ class _LoginPageState extends State<LoginPage> {
                     if (Platform.isIOS || Platform.isLinux)
                       Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          TextFormField(
-                            controller: emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: new InputDecoration(
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              labelText: "Email",
-                              hintText: 'usuario@ejemplo.com',
-                            ),
-                            validator: (value) => emailValidator(value),
-                          ),
-                          Stack(
-                            fit: StackFit.passthrough,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               TextFormField(
-                                controller: passwordController,
-                                obscureText: _obscurePassword,
+                                controller: emailController,
+                                keyboardType: TextInputType.emailAddress,
                                 decoration: new InputDecoration(
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
-                                  labelText: "Contraseña",
-                                  hintText: '*********',
+                                  labelText: "Email",
+                                  hintText: 'usuario@ejemplo.com',
                                 ),
-                                validator: (value) => requiredValidator(value),
+                                validator: (value) => emailValidator(value),
                               ),
-                              Positioned(
-                                top: 10,
-                                right: 0,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.remove_red_eye,
-                                    color: _obscurePassword
-                                        ? Colors.black26
-                                        : Colors.black54,
+                              Stack(
+                                fit: StackFit.passthrough,
+                                children: <Widget>[
+                                  TextFormField(
+                                    controller: passwordController,
+                                    obscureText: _obscurePassword,
+                                    decoration: new InputDecoration(
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
+                                      labelText: "Contraseña",
+                                      hintText: '*********',
+                                    ),
+                                    validator: (value) =>
+                                        requiredValidator(value),
                                   ),
-                                  onPressed: () {
-                                    _obscurePassword = !_obscurePassword;
-                                    setState(() {});
-                                  },
-                                ),
-                              )
+                                  Positioned(
+                                    top: 10,
+                                    right: 0,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.remove_red_eye,
+                                        color: _obscurePassword
+                                            ? Colors.black26
+                                            : Colors.black54,
+                                      ),
+                                      onPressed: () {
+                                        _obscurePassword = !_obscurePassword;
+                                        setState(() {});
+                                      },
+                                    ),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
-                        ],
-                      ),
-                    if (Platform.isIOS || Platform.isLinux)
-                      SizedBox(
-                        height: 25,
-                      ),
-                    if (Platform.isIOS || Platform.isLinux)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Builder(
-                          // NECESITA EL CONTEXT PARA EL SNACKBAR
-                          builder: (context) => RaisedButton(
-                            onPressed: sent
-                                ? null
-                                : () {
-                                    _login(context);
-                                  },
-                            child: Text(
-                              'Login',
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Builder(
+                              // NECESITA EL CONTEXT PARA EL SNACKBAR
+                              builder: (context) => RaisedButton(
+                                onPressed: sent
+                                    ? null
+                                    : () {
+                                        _login(context);
+                                      },
+                                child: Text(
+                                  'Login',
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
 
                     if (MyGlobals.SHOW_DEV_LOGIN)
@@ -544,106 +550,115 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(
                         height: 25,
                       ),
-                    ButtonTheme(
-                      minWidth: Platform.isIOS ? 230 : 150,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 10,
-                      ),
-                      child: RaisedButton(
-                        color: Theme.of(context).accentColor,
-                        onPressed: sent
-                            ? null
-                            : () {
-                                // sent = true;
-                                // if (mounted) setState(() {});
-                                // const url =
-                                //     "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
 
-                                // showDialog(
-                                //   context: context,
-                                //   builder: (_) => _redirectDialog(url),
-                                // );
-                                _newSignInGoogle();
-                              },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              'INICIAR CON',
-                              style: TextStyle(
-                                color: Colors.white,
+                    if (!Platform.isLinux)
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ButtonTheme(
+                            minWidth: Platform.isIOS ? 230 : 150,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 10,
+                            ),
+                            child: RaisedButton(
+                              color: Theme.of(context).accentColor,
+                              onPressed: sent
+                                  ? null
+                                  : () {
+                                      // sent = true;
+                                      // if (mounted) setState(() {});
+                                      // const url =
+                                      //     "https://accounts.google.com/o/oauth2/auth?client_id=${MyGlobals.GOOGLE_CLIENT_ID}&redirect_uri=${MyGlobals.GOOGLE_REDIRECT_URI}&scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&access_type=offline";
+
+                                      // showDialog(
+                                      //   context: context,
+                                      //   builder: (_) => _redirectDialog(url),
+                                      // );
+                                      _newSignInGoogle();
+                                    },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    'INICIAR CON',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/logo-google.png",
+                                    width: 27,
+                                    height: 27,
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Image.asset(
-                              "assets/images/logo-google.png",
-                              width: 27,
-                              height: 27,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
 
-                    // Comento hasta que se solucione login con Facebook
-                    // if (!Platform.isIOS)
-                    ButtonTheme(
-                      minWidth: Platform.isIOS ? 230 : 150,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 10,
-                      ),
-                      child: RaisedButton(
-                        color: Theme.of(context).accentColor,
-                        onPressed: sent
-                            ? null
-                            : () {
-                                // sent = true;
-                                // if (mounted) setState(() {});
-                                // const url =
-                                //     "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
+                          // Comento hasta que se solucione login con Facebook
+                          // if (!Platform.isIOS)
+                          ButtonTheme(
+                            minWidth: Platform.isIOS ? 230 : 150,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 10,
+                            ),
+                            child: RaisedButton(
+                              color: Theme.of(context).accentColor,
+                              onPressed: sent
+                                  ? null
+                                  : () {
+                                      // sent = true;
+                                      // if (mounted) setState(() {});
+                                      // const url =
+                                      //     "https://www.facebook.com/v5.0/dialog/oauth?client_id=${MyGlobals.FACEBOOK_CLIENT_ID}&redirect_uri=${MyGlobals.FACEBOOK_REDIRECT_URI}&scope=email";
 
-                                // showDialog(
-                                //   context: context,
-                                //   builder: (_) => _redirectDialog(url),
-                                // );
-                                _newSignInFacebook();
-                              },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                              'INICIAR CON',
-                              style: TextStyle(color: Colors.white),
+                                      // showDialog(
+                                      //   context: context,
+                                      //   builder: (_) => _redirectDialog(url),
+                                      // );
+                                      _newSignInFacebook();
+                                    },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    'INICIAR CON',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/logo-facebook.png",
+                                    width: 27,
+                                    height: 27,
+                                  ),
+                                ],
+                              ),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Image.asset(
-                              "assets/images/logo-facebook.png",
-                              width: 27,
-                              height: 27,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
 
-                    if (Platform.isIOS)
-                      Container(
-                        width: 250,
-                        padding: const EdgeInsets.all(7),
-                        child: AppleSignInButton(
-                          // style: ButtonStyle.whiteOutline,
-                          type: ButtonType.signIn,
-                          onPressed: sent ? null : _signInApple,
-                        ),
+                          if (Platform.isIOS)
+                            Container(
+                              width: 250,
+                              padding: const EdgeInsets.all(7),
+                              child: AppleSignInButton(
+                                // style: ButtonStyle.whiteOutline,
+                                type: ButtonType.signIn,
+                                onPressed: sent ? null : _signInApple,
+                              ),
+                            ),
+                        ],
                       ),
 
                     // if (!Platform.isIOS)
@@ -745,7 +760,6 @@ class _LoginPageState extends State<LoginPage> {
                     //       'Crear cuenta',
                     //     ),
                     //   ),
-
                     Padding(
                       padding: const EdgeInsets.only(top: 15),
                       child: SizedBox(

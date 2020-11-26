@@ -1,12 +1,10 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 class ShareContentWrapper extends StatefulWidget {
@@ -24,6 +22,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
   bool _esFull = false;
   int _imagenNro = 0;
   List _imagenes;
+  bool _enlaceCopiado = false;
 
   _shareGeneric({bool esFbk = false, bool esWpp = false}) async {
     Uint8List imageBytes;
@@ -57,13 +56,34 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
     );
   }
 
+  _shareLink() async {
+    _enlaceCopiado = true;
+    if (mounted) setState(() {});
+
+    final url =
+        "https://arrancando.com.ar/${widget.content.type.toString().split('.').last}/${widget.content.id}";
+
+    await Clipboard.setData(
+      ClipboardData(
+        text: url,
+      ),
+    );
+
+    await Future.delayed(Duration(seconds: 2));
+
+    _enlaceCopiado = false;
+    if (mounted) setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-    _imagenes = widget.content.imagenes != null &&
-            widget.content.imagenes.length > 0
-        ? widget.content.imagenes
-        : widget.content.thumbnail != null ? [widget.content.thumbnail] : [];
+    _imagenes =
+        widget.content.imagenes != null && widget.content.imagenes.length > 0
+            ? widget.content.imagenes
+            : widget.content.thumbnail != null
+                ? [widget.content.thumbnail]
+                : [];
   }
 
   @override
@@ -275,8 +295,27 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                     icon: Icon(Icons.add_box),
                     onPressed: _shareGeneric,
                   ),
+                  IconButton(
+                    color: Colors.black45,
+                    icon: Icon(
+                      Icons.link,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    onPressed: _shareLink,
+                  ),
                 ],
               ),
+              if (_enlaceCopiado)
+                Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Text(
+                    'Enlace copiado!',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

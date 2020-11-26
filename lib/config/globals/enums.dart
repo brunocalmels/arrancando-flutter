@@ -14,4 +14,12 @@ enum ContentSortType {
   fecha_actualizacion,
   puntuacion,
   proximidad,
+  vistas,
+}
+
+enum DeferredExecutorStatus {
+  none,
+  executing,
+  success,
+  failed,
 }

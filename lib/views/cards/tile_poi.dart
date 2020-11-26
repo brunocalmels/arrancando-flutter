@@ -20,6 +20,11 @@ class TilePoi extends StatelessWidget {
     this.locationDenied,
   });
 
+  Color get _poiColor =>
+      poi.color != null && MyGlobals.LIKES_COLOR[poi.color] != null
+          ? MyGlobals.LIKES_COLOR[poi.color]
+          : null;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -77,7 +82,7 @@ class TilePoi extends StatelessWidget {
             children: <Widget>[
               Icon(
                 Icons.star,
-                color: Theme.of(context).accentColor,
+                color: _poiColor ?? Theme.of(context).accentColor,
                 size: 14,
               ),
               SizedBox(
@@ -114,6 +119,27 @@ class TilePoi extends StatelessWidget {
                         : Colors.black,
                   ),
                 ),
+              SizedBox(
+                width: 5,
+              ),
+              Icon(
+                Icons.remove_red_eye,
+                color: Theme.of(context).accentColor,
+                size: 14,
+              ),
+              SizedBox(
+                width: 3,
+              ),
+              Text(
+                '${poi.vistas}',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Provider.of<MainState>(context).activeTheme ==
+                          ThemeMode.dark
+                      ? Colors.white
+                      : Colors.black,
+                ),
+              ),
             ],
           ),
           trailing: Row(

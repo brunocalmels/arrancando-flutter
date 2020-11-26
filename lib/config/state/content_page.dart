@@ -17,6 +17,7 @@ class ContentPageState extends ChangeNotifier {
     SectionType.recetas: false,
     SectionType.pois: false,
   };
+  DeferredExecutorStatus deferredExecutorStatus = DeferredExecutorStatus.none;
 
   setSearchPageVisible(bool val) {
     showSearchPage = val;
@@ -40,6 +41,11 @@ class ContentPageState extends ChangeNotifier {
 
   setShowMine(SectionType type, bool val) {
     showMine[type] = val;
+    notifyListeners();
+  }
+
+  setDeferredExecutorStatus(DeferredExecutorStatus val) {
+    deferredExecutorStatus = val;
     notifyListeners();
   }
 }

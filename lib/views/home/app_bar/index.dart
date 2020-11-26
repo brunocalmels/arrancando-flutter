@@ -123,6 +123,9 @@ class MainAppBar extends StatelessWidget {
                       case ContentSortType.proximidad:
                         url += '&sorted_by=proximidad';
                         break;
+                      case ContentSortType.vistas:
+                        url += '&sorted_by=vistas';
+                        break;
                       default:
                     }
 

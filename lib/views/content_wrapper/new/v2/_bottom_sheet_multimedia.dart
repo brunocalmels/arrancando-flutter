@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class BottomSheetMultimedia extends StatelessWidget {
@@ -7,29 +9,30 @@ class BottomSheetMultimedia extends StatelessWidget {
       height: 100,
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop("camara");
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Foto",
-                    style: TextStyle(
+          if (!Platform.isLinux)
+            Expanded(
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop("camara");
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.camera_alt,
                       color: Colors.white,
                     ),
-                  ),
-                ],
+                    Text(
+                      "Foto",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
           Expanded(
             child: FlatButton(
               onPressed: () {
@@ -53,30 +56,30 @@ class BottomSheetMultimedia extends StatelessWidget {
               ),
             ),
           ),
-          // if (!Platform.isIOS)
-          Expanded(
-            child: FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop("video");
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    Icons.filter,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    "Video",
-                    style: TextStyle(
+          if (!Platform.isLinux)
+            Expanded(
+              child: FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop("video");
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.filter,
                       color: Colors.white,
                     ),
-                  ),
-                ],
+                    Text(
+                      "Video",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

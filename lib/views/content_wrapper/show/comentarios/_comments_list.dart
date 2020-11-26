@@ -71,12 +71,16 @@ class CommentsList extends StatelessWidget {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: Color(0x99161a25),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 7,
-                                      color: Color(0xff161a25),
-                                    ),
-                                  ],
+                                  boxShadow: Provider.of<MainState>(context)
+                                              .activeTheme ==
+                                          ThemeMode.dark
+                                      ? [
+                                          BoxShadow(
+                                            blurRadius: 7,
+                                            color: Color(0xff161a25),
+                                          ),
+                                        ]
+                                      : null,
                                 ),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,

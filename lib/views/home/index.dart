@@ -286,15 +286,29 @@ class _MainScaffoldState extends State<MainScaffold> {
               ),
             ),
             body: _inited
-                ? _getPage(
-                    Provider.of<MainState>(context).activePageHome,
+                ? Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      _getPage(
+                        Provider.of<MainState>(context).activePageHome,
+                      ),
+                      Positioned(
+                        left: 0,
+                        bottom: kBottomNavigationBarHeight * 1.25,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: kToolbarHeight * 1.5,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
                   )
                 : Center(
                     child: CircularProgressIndicator(),
                   ),
 
             extendBody: true,
-            floatingActionButton: HomeFab(),
+            floatingActionButton: false ? HomeFab() : null,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: MainBottomBar(

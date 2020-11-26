@@ -46,11 +46,16 @@ class DataGroup extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               children: <Widget>[
-                Icon(icon),
+                Icon(
+                  icon,
+                  color: Theme.of(context).accentColor,
+                ),
                 SizedBox(
                   width: 5,
                 ),
-                Text(title),
+                Text(
+                  title,
+                ),
               ],
             ),
           ),
@@ -172,7 +177,7 @@ class DataGroup extends StatelessWidget {
                                             .activeTheme ==
                                         ThemeMode.light
                                     ? null
-                                    : Colors.white,
+                                    : Theme.of(context).accentColor,
                               ),
                             ),
                           ),

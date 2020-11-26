@@ -436,6 +436,9 @@ class ContentWrapper {
         case ContentSortType.proximidad:
           url += '&filterrific[sorted_by]=proximidad';
           break;
+        case ContentSortType.vistas:
+          url += '&filterrific[sorted_by]=vistas';
+          break;
         default:
       }
 

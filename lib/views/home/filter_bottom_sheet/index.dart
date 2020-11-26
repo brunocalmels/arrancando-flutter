@@ -179,6 +179,22 @@ class FilterBottomSheet extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              DropdownMenuItem(
+                                value: ContentSortType.vistas,
+                                child: Text(
+                                  "Vistas",
+                                  style: TextStyle(
+                                    color: contentState.sortContentBy ==
+                                            ContentSortType.vistas
+                                        ? Theme.of(context).accentColor
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .bodyText2
+                                            .color
+                                            .withAlpha(150),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),

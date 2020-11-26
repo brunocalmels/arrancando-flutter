@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker_cross/file_picker_cross.dart';
 
 class NewContentMultimedia extends StatelessWidget {
   final List<File> images;
@@ -77,19 +78,30 @@ class NewContentMultimedia extends StatelessWidget {
           }
           break;
         case "galeria":
-          bool storagePermisionDenied = Platform.isIOS
-              ? await ActiveUser.photosPermissionDenied()
-              : await ActiveUser.cameraPermissionDenied();
-          if (!storagePermisionDenied) {
-            _openFileExplorer(FileType.image);
-          } else {
-            showDialog(
-              context: context,
-              builder: (context) => PermissionDeniedDialog(
-                mensaje:
-                    "El permiso para acceder a los archivos fue denegado, para acceder a los archivos cambie los permisos desde la configuración de su dispositivo.",
-              ),
+          if (Platform.isLinux) {
+            final result = await FilePickerCross.importMultipleFromStorage(
+              type: FileTypeCross.any,
+              fileExtension: 'png, jpg, jpeg, mp4',
             );
+            if (result != null && result.isNotEmpty) {
+              final paths = result.map((file) => File(file.path)).toList();
+              setImages([...images, ...paths]);
+            }
+          } else {
+            bool storagePermisionDenied = Platform.isIOS
+                ? await ActiveUser.photosPermissionDenied()
+                : await ActiveUser.cameraPermissionDenied();
+            if (!storagePermisionDenied) {
+              _openFileExplorer(FileType.image);
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) => PermissionDeniedDialog(
+                  mensaje:
+                      "El permiso para acceder a los archivos fue denegado, para acceder a los archivos cambie los permisos desde la configuración de su dispositivo.",
+                ),
+              );
+            }
           }
           break;
         case "video":
