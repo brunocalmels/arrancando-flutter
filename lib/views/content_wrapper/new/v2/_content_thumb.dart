@@ -22,7 +22,9 @@ class ContentThumb extends StatelessWidget {
               future: VideoThumbnail.thumbnailData(
                 video: asset.path,
                 imageFormat: ImageFormat.JPEG,
-                maxHeightOrWidth:
+                maxHeight:
+                    ((MediaQuery.of(context).size.width - 32) / 3.5).floor(),
+                maxWidth:
                     ((MediaQuery.of(context).size.width - 32) / 3.5).floor(),
                 quality: 70,
               ),

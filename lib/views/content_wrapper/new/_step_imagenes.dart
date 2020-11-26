@@ -19,9 +19,9 @@ class StepImagenes extends StatelessWidget {
   });
   void _openFileExplorer(FileType type) async {
     if (Platform.isIOS) {
-      File _image;
+      PickedFile _image;
       try {
-        _image = await ImagePicker.pickImage(
+        _image = await ImagePicker().getImage(
           source: ImageSource.gallery,
         );
       } catch (e) {
@@ -29,15 +29,16 @@ class StepImagenes extends StatelessWidget {
       }
       if (_image != null) setImages([...images, _image]);
     } else {
-      Map<String, String> _paths;
+      List<String> _paths;
 
       try {
-        _paths = await FilePicker.getMultiFilePath(type: type);
+        final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+        _paths = result.paths;
       } catch (e) {
         print('Unsupported operation' + e.toString());
       }
       if (_paths != null && _paths.isNotEmpty) {
-        setImages([...images, ..._paths.values.map((p) => File(p)).toList()]);
+        setImages([...images, ..._paths.map((p) => File(p)).toList()]);
       }
     }
   }
@@ -117,7 +118,7 @@ class StepImagenes extends StatelessWidget {
                           final camaraPermisionDenied = !(await PermissionUtils
                               .requestCameraPermission());
                           if (!camaraPermisionDenied) {
-                            final image = await ImagePicker.pickImage(
+                            final image = await ImagePicker().getImage(
                               source: ImageSource.camera,
                               imageQuality: 70,
                               maxWidth: 1000,
@@ -188,13 +189,18 @@ class StepImagenes extends StatelessWidget {
                                         future: VideoThumbnail.thumbnailData(
                                           video: asset.path,
                                           imageFormat: ImageFormat.JPEG,
-                                          maxHeightOrWidth:
-                                              ((MediaQuery.of(context)
-                                                              .size
-                                                              .width -
-                                                          32) /
-                                                      3.5)
-                                                  .floor(),
+                                          maxHeight: ((MediaQuery.of(context)
+                                                          .size
+                                                          .width -
+                                                      32) /
+                                                  3.5)
+                                              .floor(),
+                                          maxWidth: ((MediaQuery.of(context)
+                                                          .size
+                                                          .width -
+                                                      32) /
+                                                  3.5)
+                                              .floor(),
                                           quality: 70,
                                         ),
                                         builder: (context, snapshot) {

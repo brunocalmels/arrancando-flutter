@@ -23,7 +23,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: 0.1.2
-  http: 0.12.0+4
+  http: 0.12.2
   shared_preferences: 0.5.12+4
   json_annotation: 3.1.1
   flutter_map: 0.10.1+1
@@ -32,35 +32,33 @@ dependencies:
   geolocator: 6.1.8
   geocoding: 1.0.5
   permission_handler: 5.0.1+1
-  flare_flutter: ^1.7.1
-  image_picker: any
-  share: ^0.6.3+1
-  uni_links: ^0.2.0
-  esys_flutter_share: ^1.0.2
-  url_launcher: any
-  path_provider: any
-  file_picker: ^1.4.3+1
-  thumbnails: ^1.0.1
-  video_thumbnail: ^0.1.6
-  video_player: ^0.10.2+5
-  cached_network_image: ^2.2.0+1
-  apple_sign_in: ^0.1.0
-  google_sign_in: ^4.0.14
-  firebase_analytics: ^5.0.6
-  flutter_html: ^0.11.1
-  snaplist: ^0.1.8
-  icon_shadow: ^1.0.1
-  flutter_facebook_login: ^3.0.0
-  firebase_messaging: ^6.0.3
-  sentry: ^3.0.1
+  flare_flutter: 2.0.6
+  image_picker: 0.6.7+14
+  uni_links: 0.4.0
+  esys_flutter_share: 1.0.2
+  url_launcher: 5.7.10
+  file_picker: 2.1.0
+  video_thumbnail: 0.2.4
+  video_player: 1.0.1
+  cached_network_image: 2.3.3
+  apple_sign_in: 0.1.0
+  google_sign_in: 4.5.6
+  flutter_html: 0.11.1
+  snaplist: 0.1.8
+  icon_shadow: 1.0.1
+  flutter_facebook_login: 3.0.0
+  sentry: 3.0.1
+  firebase_core: 0.5.2+1
+  firebase_messaging: 8.0.0-dev.9
+  firebase_analytics: 6.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^1.7.1
-  json_serializable: ^3.2.3
-  flutter_launcher_icons: any
-  file_picker_cross: any
+  build_runner: 1.7.1
+  json_serializable: 3.5.0
+  flutter_launcher_icons: 0.8.1
+  file_picker_cross: 4.2.6
   pedantic: 1.9.2
 
 flutter_icons:

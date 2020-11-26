@@ -1,39 +1,38 @@
-import 'dart:io';
-
 import 'package:arrancando/config/services/dynamic_links.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 abstract class NotificacionesService {
-  static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  static final FirebaseMessaging _firebaseMessaging =
+      FirebaseMessaging.instance;
 
   static Future<void> initFirebaseNotifications(BuildContext context) async {
-    if (Platform.isIOS) {
-      await _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(
-          sound: true,
-          badge: true,
-          alert: true,
-        ),
-      );
-    } else {
-      await _firebaseMessaging.requestNotificationPermissions();
-    }
-    _firebaseMessaging.onIosSettingsRegistered.listen(
-      (settings) {
-        print('Settings registered');
-      },
-    );
+    await _firebaseMessaging.requestPermission();
 
-    _firebaseMessaging.configure(
-      onMessage: (message) async {
-        if (message != null && message['data'] != null) {
-          if (message['data']['url'] != null) {
-            String texto = message['notification'] != null &&
-                    message['notification'] != null &&
-                    message['notification']['body'] != null
-                ? message['notification']['body']
+    void redirectToURI(RemoteMessage message) {
+      if (message != null && message.data != null) {
+        if (message.data['url'] != null) {
+          DynamicLinks.parseURI(
+            message.data['url'],
+            context,
+          );
+        }
+      }
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      redirectToURI(message);
+    });
+
+    FirebaseMessaging.onMessage.listen(
+      (message) async {
+        if (message != null && message.data != null) {
+          if (message.data['url'] != null) {
+            final texto = message.notification != null &&
+                    message.notification != null &&
+                    message.notification.body != null
+                ? message.notification.body
                 : 'Nueva notificación';
 
             OverlayEntry entry;
@@ -50,7 +49,7 @@ abstract class NotificacionesService {
                         entry?.remove();
                         entry = null;
                         DynamicLinks.parseURI(
-                          Uri.parse(message['data']['url']),
+                          Uri.parse(message.data['url']),
                           context,
                         );
                       },
@@ -88,26 +87,6 @@ abstract class NotificacionesService {
           }
         }
       },
-      onLaunch: (message) async {
-        if (message != null && message['data'] != null) {
-          if (message['data']['url'] != null) {
-            await DynamicLinks.parseURI(
-              Uri.parse(message['data']['url']),
-              context,
-            );
-          }
-        }
-      },
-      onResume: (message) async {
-        if (message != null && message['data'] != null) {
-          if (message['data']['url'] != null) {
-            await DynamicLinks.parseURI(
-              Uri.parse(message['data']['url']),
-              context,
-            );
-          }
-        }
-      },
     );
 
     final token = await _firebaseMessaging.getToken();
@@ -117,5 +96,8 @@ abstract class NotificacionesService {
         'token': token,
       },
     );
+
+    final message = await FirebaseMessaging.instance.getInitialMessage();
+    redirectToURI(message);
   }
 }

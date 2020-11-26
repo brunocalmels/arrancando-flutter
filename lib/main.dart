@@ -15,6 +15,7 @@ import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -117,6 +118,16 @@ class _MyAppState extends State<MyApp> {
       await CategoryWrapper.loadCategories();
       await SavedContent.initSaved(context);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (kReleaseMode) {
+        await Firebase.initializeApp();
+      }
+    });
   }
 
   @override

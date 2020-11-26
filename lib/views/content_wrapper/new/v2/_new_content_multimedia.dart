@@ -20,14 +20,14 @@ class NewContentMultimedia extends StatelessWidget {
 
   void _openFileExplorer(FileType type) async {
     if (Platform.isIOS) {
-      File _image;
+      PickedFile _image;
       try {
         if (type == FileType.video) {
-          _image = await ImagePicker.pickVideo(
+          _image = await ImagePicker().getVideo(
             source: ImageSource.gallery,
           );
         } else {
-          _image = await ImagePicker.pickImage(
+          _image = await ImagePicker().getImage(
             source: ImageSource.gallery,
           );
         }
@@ -36,15 +36,16 @@ class NewContentMultimedia extends StatelessWidget {
       }
       if (_image != null) setImages([...images, File(_image.path)]);
     } else {
-      Map<String, String> _paths;
+      List<String> _paths;
 
       try {
-        _paths = await FilePicker.getMultiFilePath(type: type);
+        final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+        _paths = result.paths;
       } catch (e) {
         print('Unsupported operation' + e.toString());
       }
       if (_paths != null && _paths.isNotEmpty) {
-        setImages([...images, ..._paths.values.map((p) => File(p)).toList()]);
+        setImages([...images, ..._paths.map((p) => File(p)).toList()]);
       }
     }
   }
@@ -61,7 +62,7 @@ class NewContentMultimedia extends StatelessWidget {
           final camaraPermisionDenied =
               !(await PermissionUtils.requestCameraPermission());
           if (!camaraPermisionDenied) {
-            final image = await ImagePicker.pickImage(
+            final image = await ImagePicker().getImage(
               source: ImageSource.camera,
               imageQuality: 70,
               maxWidth: 1000,
