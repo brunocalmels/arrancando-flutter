@@ -76,4 +76,27 @@ abstract class PermissionUtils {
     }
     return true;
   }
+
+  static Future<bool> requestPhotosPermission() async {
+    if (!Platform.isLinux) {
+      try {
+        final status = await Permission.photos.status;
+        if (status.isUndetermined) {
+          final granted = await Permission.photos.request();
+          return granted.isGranted;
+        } else if (status.isDenied) {
+          final granted = await Permission.photos.request();
+          return granted.isGranted;
+        } else if (status.isPermanentlyDenied) {
+          return false;
+        } else if (status.isGranted) {
+          return true;
+        }
+      } catch (e) {
+        print(e);
+      }
+      return false;
+    }
+    return true;
+  }
 }

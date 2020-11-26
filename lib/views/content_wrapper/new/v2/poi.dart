@@ -17,7 +17,7 @@ import 'package:arrancando/views/content_wrapper/new/v2/_scaffold.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_selector_categoria_poi.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class PoiForm extends StatefulWidget {
   final ContentWrapper content;
@@ -100,7 +100,7 @@ class _PoiFormState extends State<PoiForm> {
       try {
         String nombreProvincia;
         String nombreCiudad;
-        final places = await Geolocator().placemarkFromCoordinates(
+        final places = await placemarkFromCoordinates(
           _latitud,
           _longitud,
         );

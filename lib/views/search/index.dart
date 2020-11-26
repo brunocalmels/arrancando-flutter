@@ -1,6 +1,6 @@
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/services/permissions.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -92,7 +92,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _setLocationDenied() async {
-    _locationDenied = await ActiveUser.locationPermissionDenied();
+    _locationDenied = !(await PermissionUtils.requestLocationPermission());
     if (mounted) setState(() {});
   }
 

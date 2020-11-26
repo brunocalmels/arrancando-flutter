@@ -14,7 +14,7 @@ import 'package:arrancando/views/content_wrapper/new/_step_mapa.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/app_bar/_dialog_category_select.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -131,7 +131,7 @@ class _NewContentState extends State<NewContent> {
         case SectionType.pois:
           String nombreProvincia;
           String nombreCiudad;
-          final places = await Geolocator().placemarkFromCoordinates(
+          final places = await placemarkFromCoordinates(
             _selectedLatitud,
             _selectedLongitud,
           );

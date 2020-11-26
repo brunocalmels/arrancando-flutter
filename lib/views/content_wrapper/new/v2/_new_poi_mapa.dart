@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/services/permissions.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_new_content_input.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 
@@ -42,23 +43,22 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
         _locating = true;
       });
       try {
-        final placemarks =
-            await Geolocator().placemarkFromAddress(_direccionController.text);
+        final placemarks = await locationFromAddress(_direccionController.text);
 
-        _latitud = placemarks.first.position.latitude;
-        _longitud = placemarks.first.position.longitude;
+        _latitud = placemarks.first.latitude;
+        _longitud = placemarks.first.longitude;
         _mapController.move(
           LatLng(
-            placemarks.first.position.latitude,
-            placemarks.first.position.longitude,
+            placemarks.first.latitude,
+            placemarks.first.longitude,
           ),
           15,
         );
 
         widget.setDireccion(_direccionController.text);
         widget.setLatLng(
-          placemarks.first.position.latitude,
-          placemarks.first.position.longitude,
+          placemarks.first.latitude,
+          placemarks.first.longitude,
         );
       } catch (e) {
         print(e);
@@ -83,9 +83,9 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
   Future<void> _setMyLocation() async {
     _locating = true;
     if (mounted) setState(() {});
-    final locationDenied = await ActiveUser.locationPermissionDenied();
+    final locationDenied = !(await PermissionUtils.requestLocationPermission());
     if (!locationDenied) {
-      final currentPosition = await Geolocator().getCurrentPosition(
+      final currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
       _latitud = currentPosition.latitude;

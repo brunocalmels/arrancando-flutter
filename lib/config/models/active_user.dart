@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -9,7 +8,6 @@ import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
@@ -54,85 +52,85 @@ class ActiveUser {
         urlInstagram,
       );
 
-  static Future<bool> locationPermissionDenied() async {
-    final gs = GlobalSingleton();
+  // static Future<bool> locationPermissionDenied() async {
+  //   final gs = GlobalSingleton();
 
-    if (!gs.askingLocationPermission) {
-      gs.setAskingLocationPermission(true);
+  //   if (!gs.askingLocationPermission) {
+  //     gs.setAskingLocationPermission(true);
 
-      final permission = await PermissionHandler()
-          .checkPermissionStatus(PermissionGroup.location);
+  //     final permission = await PermissionHandler()
+  //         .checkPermissionStatus(PermissionGroup.location);
 
-      if (permission == PermissionStatus.denied) {
-        final permissions = await PermissionHandler()
-            .requestPermissions([PermissionGroup.location]);
+  //     if (permission == PermissionStatus.denied) {
+  //       final permissions = await PermissionHandler()
+  //           .requestPermissions([PermissionGroup.location]);
 
-        if (permissions.containsKey(PermissionGroup.location) &&
-            permissions[PermissionGroup.location] != PermissionStatus.granted) {
-          gs.setAskingLocationPermission(false);
-          return true;
-        }
-      } else {
-        gs.setAskingLocationPermission(false);
-        return false;
-      }
-    }
-    return false;
-  }
+  //       if (permissions.containsKey(PermissionGroup.location) &&
+  //           permissions[PermissionGroup.location] != PermissionStatus.granted) {
+  //         gs.setAskingLocationPermission(false);
+  //         return true;
+  //       }
+  //     } else {
+  //       gs.setAskingLocationPermission(false);
+  //       return false;
+  //     }
+  //   }
+  //   return false;
+  // }
 
-  static Future<bool> cameraPermissionDenied() async {
-    final permission =
-        await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
+  // static Future<bool> cameraPermissionDenied() async {
+  //   final permission =
+  //       await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
 
-    if (permission == PermissionStatus.denied) {
-      final permissions = await PermissionHandler()
-          .requestPermissions([PermissionGroup.camera]);
+  //   if (permission == PermissionStatus.denied) {
+  //     final permissions = await PermissionHandler()
+  //         .requestPermissions([PermissionGroup.camera]);
 
-      if (permissions.containsKey(PermissionGroup.camera) &&
-          permissions[PermissionGroup.camera] != PermissionStatus.granted) {
-        return true;
-      }
-    } else {
-      return false;
-    }
-    return false;
-  }
+  //     if (permissions.containsKey(PermissionGroup.camera) &&
+  //         permissions[PermissionGroup.camera] != PermissionStatus.granted) {
+  //       return true;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  //   return false;
+  // }
 
-  static Future<bool> storagePermissionDenied() async {
-    final permission = await PermissionHandler()
-        .checkPermissionStatus(PermissionGroup.storage);
+  // static Future<bool> storagePermissionDenied() async {
+  //   final permission = await PermissionHandler()
+  //       .checkPermissionStatus(PermissionGroup.storage);
 
-    if (permission == PermissionStatus.denied) {
-      final permissions = await PermissionHandler()
-          .requestPermissions([PermissionGroup.storage]);
+  //   if (permission == PermissionStatus.denied) {
+  //     final permissions = await PermissionHandler()
+  //         .requestPermissions([PermissionGroup.storage]);
 
-      if (permissions.containsKey(PermissionGroup.storage) &&
-          permissions[PermissionGroup.storage] != PermissionStatus.granted) {
-        return true;
-      }
-    } else {
-      return false;
-    }
-    return false;
-  }
+  //     if (permissions.containsKey(PermissionGroup.storage) &&
+  //         permissions[PermissionGroup.storage] != PermissionStatus.granted) {
+  //       return true;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  //   return false;
+  // }
 
-  static Future<bool> photosPermissionDenied() async {
-    final permission =
-        await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
+  // static Future<bool> photosPermissionDenied() async {
+  //   final permission =
+  //       await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
 
-    if (permission == PermissionStatus.denied) {
-      final permissions = await PermissionHandler()
-          .requestPermissions([PermissionGroup.photos]);
+  //   if (permission == PermissionStatus.denied) {
+  //     final permissions = await PermissionHandler()
+  //         .requestPermissions([PermissionGroup.photos]);
 
-      if (permissions.containsKey(PermissionGroup.photos) &&
-          permissions[PermissionGroup.photos] != PermissionStatus.granted) {
-        return true;
-      }
-    } else {
-      return false;
-    }
-    return false;
-  }
+  //     if (permissions.containsKey(PermissionGroup.photos) &&
+  //         permissions[PermissionGroup.photos] != PermissionStatus.granted) {
+  //       return true;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  //   return false;
+  // }
 
   static Future<void> logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();

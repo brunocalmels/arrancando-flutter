@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/services/permissions.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -114,8 +114,8 @@ class StepImagenes extends StatelessWidget {
 
                       switch (opcion) {
                         case 'camara':
-                          final camaraPermisionDenied =
-                              await ActiveUser.cameraPermissionDenied();
+                          final camaraPermisionDenied = !(await PermissionUtils
+                              .requestCameraPermission());
                           if (!camaraPermisionDenied) {
                             final image = await ImagePicker.pickImage(
                               source: ImageSource.camera,

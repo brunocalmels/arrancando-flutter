@@ -7,6 +7,7 @@ import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/notificacion.dart';
 import 'package:arrancando/config/services/notificaciones.dart';
+import 'package:arrancando/config/services/permissions.dart';
 import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
@@ -126,7 +127,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   }
 
   Future<void> _setLocationDenied() async {
-    _locationDenied = await ActiveUser.locationPermissionDenied();
+    _locationDenied = !(await PermissionUtils.requestLocationPermission());
     if (mounted) setState(() {});
   }
 

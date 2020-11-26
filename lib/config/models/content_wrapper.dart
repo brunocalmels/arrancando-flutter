@@ -7,6 +7,7 @@ import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/subcategoria_receta.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
+import 'package:arrancando/config/services/permissions.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -168,13 +169,13 @@ class ContentWrapper {
 
   Future<double> get distancia async {
     if (type != null && type == SectionType.pois) {
-      final denied = await ActiveUser.locationPermissionDenied();
+      final denied = !(await PermissionUtils.requestLocationPermission());
       if (!denied) {
-        final currentPosition = await Geolocator().getCurrentPosition(
+        final currentPosition = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
         );
         if (currentPosition != null) {
-          final mts = await Geolocator().distanceBetween(
+          final mts = await Geolocator.distanceBetween(
             currentPosition.latitude,
             currentPosition.longitude,
             latitud,
@@ -486,7 +487,7 @@ class ContentWrapper {
       switch (type) {
         case ContentSortType.proximidad:
           if (calculatedDistance != null &&
-              !(await ActiveUser.locationPermissionDenied())) {
+              (await PermissionUtils.requestLocationPermission())) {
             await Future.wait(
               items.map(
                 (i) async {

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:arrancando/config/models/active_user.dart';
+import 'package:arrancando/config/services/permissions.dart';
 import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_bottom_sheet_multimedia.dart';
 import 'package:arrancando/views/general/_permission_denied_dialog.dart';
@@ -59,7 +59,7 @@ class NewContentMultimedia extends StatelessWidget {
       switch (opcion) {
         case 'camara':
           final camaraPermisionDenied =
-              await ActiveUser.cameraPermissionDenied();
+              !(await PermissionUtils.requestCameraPermission());
           if (!camaraPermisionDenied) {
             final image = await ImagePicker.pickImage(
               source: ImageSource.camera,
@@ -89,8 +89,8 @@ class NewContentMultimedia extends StatelessWidget {
             }
           } else {
             final storagePermisionDenied = Platform.isIOS
-                ? await ActiveUser.photosPermissionDenied()
-                : await ActiveUser.cameraPermissionDenied();
+                ? !(await PermissionUtils.requestPhotosPermission())
+                : !(await PermissionUtils.requestCameraPermission());
             if (!storagePermisionDenied) {
               _openFileExplorer(FileType.image);
             } else {
@@ -106,8 +106,8 @@ class NewContentMultimedia extends StatelessWidget {
           break;
         case 'video':
           final storagePermisionDenied = Platform.isIOS
-              ? await ActiveUser.photosPermissionDenied()
-              : await ActiveUser.cameraPermissionDenied();
+              ? !(await PermissionUtils.requestPhotosPermission())
+              : !(await PermissionUtils.requestCameraPermission());
           if (!storagePermisionDenied) {
             _openFileExplorer(FileType.video);
           } else {
