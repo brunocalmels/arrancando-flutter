@@ -5,26 +5,27 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Utils {
-  static restoreThemeMode(BuildContext context) async {
-    MainState mainState = Provider.of<MainState>(context);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool themeDark = prefs.getBool("theme-dark");
-    if (themeDark != null)
+  static Future<void> restoreThemeMode(BuildContext context) async {
+    final mainState = Provider.of<MainState>(context);
+    final prefs = await SharedPreferences.getInstance();
+    final themeDark = prefs.getBool('theme-dark');
+    if (themeDark != null) {
       mainState.setActiveTheme(themeDark ? ThemeMode.dark : ThemeMode.light);
-    else
+    } else {
       mainState.setActiveTheme(ThemeMode.dark);
+    }
   }
 
-  static toggleThemeMode(BuildContext context) async {
-    MainState mainState = Provider.of<MainState>(context);
-    ThemeMode newTheme = ThemeMode.dark;
+  static Future<void> toggleThemeMode(BuildContext context) async {
+    final mainState = Provider.of<MainState>(context);
+    var newTheme = ThemeMode.dark;
     if (mainState.activeTheme == ThemeMode.dark) newTheme = ThemeMode.light;
     mainState.setActiveTheme(newTheme);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("theme-dark", newTheme == ThemeMode.dark);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('theme-dark', newTheme == ThemeMode.dark);
   }
 
-  static unfocus(BuildContext context) {
+  static void unfocus(BuildContext context) {
     FocusScope.of(context).unfocus();
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     FocusManager.instance.primaryFocus.unfocus();

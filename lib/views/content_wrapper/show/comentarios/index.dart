@@ -2,7 +2,6 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/puntaje.dart';
-import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -29,62 +28,60 @@ class _ComentariosSectionState extends State<ComentariosSection> {
   bool _sent = false;
   int _editCommentId;
 
-  _sendComentario() async {
+  Future<void> _sendComentario() async {
     if (_mensajeController != null &&
         _mensajeController.text != null &&
         _mensajeController.text.isNotEmpty) {
       try {
         Utils.unfocus(context);
 
-        if (mounted)
-          setState(() {
-            _sent = true;
-          });
+        _sent = true;
+        if (mounted) setState(() {});
 
         String url;
         var body;
 
         switch (widget.content.type) {
           case SectionType.publicaciones:
-            url = "/comentario_publicaciones.json";
+            url = '/comentario_publicaciones.json';
             body = {
-              "comentario_publicacion": {
-                "publicacion_id": widget.content.id,
-                "mensaje": _mensajeController.text,
+              'comentario_publicacion': {
+                'publicacion_id': widget.content.id,
+                'mensaje': _mensajeController.text,
               }
             };
             break;
           case SectionType.recetas:
-            url = "/comentario_recetas.json";
+            url = '/comentario_recetas.json';
             body = {
-              "comentario_receta": {
-                "receta_id": widget.content.id,
-                "mensaje": _mensajeController.text,
+              'comentario_receta': {
+                'receta_id': widget.content.id,
+                'mensaje': _mensajeController.text,
               }
             };
             break;
           case SectionType.pois:
-            url = "/comentario_pois.json";
+            url = '/comentario_pois.json';
             body = {
-              "comentario_poi": {
-                "poi_id": widget.content.id,
-                "mensaje": _mensajeController.text,
+              'comentario_poi': {
+                'poi_id': widget.content.id,
+                'mensaje': _mensajeController.text,
               }
             };
             break;
           default:
-            url = "/comentario_publicaciones.json";
+            url = '/comentario_publicaciones.json';
             body = {
-              "comentario_publicacion": {
-                "publicacion_id": widget.content.id,
-                "mensaje": _mensajeController.text,
+              'comentario_publicacion': {
+                'publicacion_id': widget.content.id,
+                'mensaje': _mensajeController.text,
               }
             };
         }
 
         if (_editCommentId != null) {
           await Fetcher.put(
-            url: "${url.split('.').first}/$_editCommentId.json",
+            url: '${url.split('.').first}/$_editCommentId.json',
             body: body,
           );
         } else {
@@ -100,39 +97,35 @@ class _ComentariosSectionState extends State<ComentariosSection> {
         print(e);
       }
     }
-    if (mounted)
-      setState(() {
-        _sent = false;
-      });
+    _sent = false;
+    if (mounted) setState(() {});
   }
 
-  _setEditCommentId(int id, String text) {
+  void _setEditCommentId(int id, String text) {
     _editCommentId = id;
     _mensajeController.text = text;
     if (mounted) setState(() {});
   }
 
-  _setDeleteCommentId(int id) async {
+  Future<void> _setDeleteCommentId(int id) async {
     try {
-      if (mounted)
-        setState(() {
-          _sent = true;
-        });
+      _sent = true;
+      if (mounted) setState(() {});
 
       String url;
 
       switch (widget.content.type) {
         case SectionType.publicaciones:
-          url = "/comentario_publicaciones/$id.json";
+          url = '/comentario_publicaciones/$id.json';
           break;
         case SectionType.recetas:
-          url = "/comentario_recetas/$id.json";
+          url = '/comentario_recetas/$id.json';
           break;
         case SectionType.pois:
-          url = "/comentario_pois/$id.json";
+          url = '/comentario_pois/$id.json';
           break;
         default:
-          url = "/comentario_publicaciones/$id.json";
+          url = '/comentario_publicaciones/$id.json';
       }
 
       await Fetcher.destroy(
@@ -146,33 +139,29 @@ class _ComentariosSectionState extends State<ComentariosSection> {
       print(e);
     }
 
-    if (mounted)
-      setState(() {
-        _sent = false;
-      });
+    _sent = false;
+    if (mounted) setState(() {});
   }
 
-  _toggleLikeComment(Comentario comentario) async {
+  Future<void> _toggleLikeComment(Comentario comentario) async {
     try {
-      if (mounted)
-        setState(() {
-          _sent = true;
-        });
+      _sent = true;
+      if (mounted) setState(() {});
 
       String url;
 
       switch (widget.content.type) {
         case SectionType.publicaciones:
-          url = "/comentario_publicaciones/${comentario.id}/puntuar.json";
+          url = '/comentario_publicaciones/${comentario.id}/puntuar.json';
           break;
         case SectionType.recetas:
-          url = "/comentario_recetas/${comentario.id}/puntuar.json";
+          url = '/comentario_recetas/${comentario.id}/puntuar.json';
           break;
         case SectionType.pois:
-          url = "/comentario_pois/${comentario.id}/puntuar.json";
+          url = '/comentario_pois/${comentario.id}/puntuar.json';
           break;
         default:
-          url = "/comentario_publicaciones/${comentario.id}/puntuar.json";
+          url = '/comentario_publicaciones/${comentario.id}/puntuar.json';
       }
 
       var usuario = Provider.of<UserState>(
@@ -185,7 +174,7 @@ class _ComentariosSectionState extends State<ComentariosSection> {
         orElse: () => null,
       );
 
-      if (puntaje == null) puntaje = Puntaje(usuario, 0);
+      puntaje ??= Puntaje(usuario, 0);
 
       puntaje.puntaje = puntaje.puntaje == 0 ? 1 : 0;
 
@@ -203,10 +192,8 @@ class _ComentariosSectionState extends State<ComentariosSection> {
       print(e);
     }
 
-    if (mounted)
-      setState(() {
-        _sent = false;
-      });
+    _sent = false;
+    if (mounted) setState(() {});
   }
 
   @override

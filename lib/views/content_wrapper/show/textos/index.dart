@@ -25,15 +25,15 @@ class TextosShow extends StatelessWidget {
 
   List<dynamic> _parseTexto(String cuerpo) {
     var urlPattern =
-        r"(https://?|http://?)([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?";
+        r'(https://?|http://?)([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?';
 
-    List<dynamic> chunks2 = [];
+    final chunks2 = <dynamic>[];
 
-    var outTexto = "";
-    _saveAndClear() {
+    var outTexto = '';
+    void _saveAndClear() {
       chunks2.add({
-        "tipo": "texto",
-        "texto": outTexto,
+        'tipo': 'texto',
+        'texto': outTexto,
       });
       outTexto = '';
     }
@@ -44,37 +44,38 @@ class TextosShow extends StatelessWidget {
         .split(' ')
         .forEach((piece) {
       if (piece != null && piece.isNotEmpty) {
-        if (piece[0] == "@") {
+        if (piece[0] == '@') {
           _saveAndClear();
           chunks2.add({
-            "tipo": "username",
-            "texto": "$piece ",
+            'tipo': 'username',
+            'texto': '$piece ',
           });
-        } else if (piece[0] == "#") {
+        } else if (piece[0] == '#') {
           _saveAndClear();
           chunks2.add({
-            "tipo": "hashtag",
-            "texto": "$piece ",
+            'tipo': 'hashtag',
+            'texto': '$piece ',
           });
-        } else if (RegExp(urlPattern, caseSensitive: false)
-                .allMatches(piece)
-                .length >
-            0) {
+        } else if (RegExp(
+          urlPattern,
+          caseSensitive: false,
+        ).allMatches(piece).isNotEmpty) {
           _saveAndClear();
           chunks2.add({
-            "tipo": "link",
-            "texto": "$piece ",
+            'tipo': 'link',
+            'texto': '$piece ',
           });
         } else {
-          if (piece == "\n")
-            outTexto += "$piece";
-          else
-            outTexto += "$piece ";
+          if (piece == '\n') {
+            outTexto += '$piece';
+          } else {
+            outTexto += '$piece ';
+          }
         }
       }
     });
 
-    if (outTexto != "") _saveAndClear();
+    if (outTexto != '') _saveAndClear();
 
     return chunks2;
   }
@@ -155,11 +156,11 @@ class TextosShow extends StatelessWidget {
                                         })
                                   : (TapGestureRecognizer()
                                     ..onTap = () async {
-                                      Navigator.of(context).push(
+                                      await Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (_) => UserProfilePage(
                                             user: null,
-                                            username: chunk["texto"]
+                                            username: chunk['texto']
                                                 .replaceAll('@', ''),
                                           ),
                                           settings: RouteSettings(
@@ -222,7 +223,7 @@ class TextosShow extends StatelessWidget {
             ...ingredientes
                 .map(
                   (i) => Text(
-                      "${i['cantidad']} ${i['unidad']} de ${i['ingrediente']}"),
+                      '${i['cantidad']} ${i['unidad']} de ${i['ingrediente']}'),
                 )
                 .toList(),
           ],
@@ -244,21 +245,21 @@ class TextosShow extends StatelessWidget {
                 _buildTexto(
                   context,
                   content.introduccion,
-                  label: "Introducción",
+                  label: 'Introducción',
                 ),
               content.ingredientesItems != null &&
                       content.ingredientesItems.isNotEmpty
                   ? _buildIngredientesItems(
                       context,
                       content.ingredientesItems,
-                      label: "Ingredientes",
+                      label: 'Ingredientes',
                     )
                   : content.ingredientes != null &&
                           content.ingredientes.isNotEmpty
                       ? _buildTexto(
                           context,
                           content.ingredientes,
-                          label: "Ingredientes",
+                          label: 'Ingredientes',
                         )
                       : Container(),
               if (content.instrucciones != null &&
@@ -266,7 +267,7 @@ class TextosShow extends StatelessWidget {
                 _buildTexto(
                   context,
                   content.instrucciones,
-                  label: "Instrucciones",
+                  label: 'Instrucciones',
                 ),
             ],
           )

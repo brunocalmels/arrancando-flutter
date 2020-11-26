@@ -16,10 +16,10 @@ class RowPuntuaciones extends StatelessWidget {
       builder: (context, userState, child) {
         var tuVoto = userState.activeUser != null &&
                 userState.activeUser.id != content.user.id &&
-                (userState.myPuntuaciones["${content.type}-${content.id}"] ??
+                (userState.myPuntuaciones['${content.type}-${content.id}'] ??
                         content.myPuntaje(userState.activeUser.id)) >
                     0
-            ? userState.myPuntuaciones["${content.type}-${content.id}"] ??
+            ? userState.myPuntuaciones['${content.type}-${content.id}'] ??
                 content.myPuntaje(userState.activeUser.id)
             : 0;
 
@@ -29,13 +29,13 @@ class RowPuntuaciones extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
-              "${content.puntajePromedio.toStringAsFixed(1)}",
+              '${content.puntajePromedio.toStringAsFixed(1)}',
             ),
             SizedBox(
               width: 5,
             ),
             Text(
-              "${content.puntajes != null ? content.puntajes.length : ''}",
+              '${content.puntajes != null ? content.puntajes.length : ''}',
             ),
             Icon(
               Icons.person,
@@ -46,7 +46,7 @@ class RowPuntuaciones extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 5),
                 child: Text(
-                  "(tu voto: $tuVoto)",
+                  '(tu voto: $tuVoto)',
                   style: TextStyle(
                     fontSize: 12,
                   ),

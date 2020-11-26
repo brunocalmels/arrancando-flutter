@@ -30,7 +30,7 @@ class SelectorSubCategoria extends StatelessWidget {
                 runSpacing: 3,
                 children: <Widget>[
                   Text(
-                    "$label:",
+                    '$label:',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -47,12 +47,12 @@ class SelectorSubCategoria extends StatelessWidget {
                         ? 0xffcccccc
                         : 0xff262a3d),
                     child: Text(
-                      subcategorias != null && subcategorias.length > 0
+                      subcategorias != null && subcategorias.isNotEmpty
                           ? subcategorias
                               .map((s) => s.nombre)
                               .toList()
-                              .join(", ")
-                          : "SELECCIONAR",
+                              .join(', ')
+                          : 'SELECCIONAR',
                     ),
                   ),
                 ],
@@ -64,17 +64,18 @@ class SelectorSubCategoria extends StatelessWidget {
                 type: MaterialType.card,
                 child: InkWell(
                   onTap: () async {
-                    List<SubcategoriaReceta> selectedSubCategorias =
+                    final selectedSubCategorias =
                         await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => PageSubCategorias(
                           selectedCategorias: subcategorias,
                         ),
                       ),
-                    );
+                    ) as List<SubcategoriaReceta>;
                     if (selectedSubCategorias != null &&
-                        selectedSubCategorias.length > 0)
+                        selectedSubCategorias.isNotEmpty) {
                       setSubCategorias(selectedSubCategorias);
+                    }
                   },
                 ),
               ),

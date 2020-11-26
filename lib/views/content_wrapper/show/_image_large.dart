@@ -26,7 +26,7 @@ class _ImageLargeState extends State<ImageLarge> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (MyGlobals.VIDEO_FORMATS
-          .contains(widget.url.split('.').last.toLowerCase()))
+          .contains(widget.url.split('.').last.toLowerCase())) {
         _controller = VideoPlayerController.network(widget.url)
           ..initialize().then((_) {
             // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
@@ -35,6 +35,7 @@ class _ImageLargeState extends State<ImageLarge> {
             _controller.setLooping(true);
             _isPlaying = true;
           });
+      }
     });
   }
 

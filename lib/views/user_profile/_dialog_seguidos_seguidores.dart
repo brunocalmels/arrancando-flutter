@@ -17,9 +17,9 @@ class DialogSeguidosSeguidores extends StatelessWidget {
   });
 
   Future<List<Usuario>> _fetchItems() async {
-    ResponseObject resp = await Fetcher.get(
+    final resp = await Fetcher.get(
       url:
-          "/seguimientos/$userId/${isSeguidores ? 'seguidores.json' : 'seguidos.json'}",
+          '/seguimientos/$userId/${isSeguidores ? 'seguidores.json' : 'seguidos.json'}',
     );
 
     if (resp != null && resp.body != null) {
@@ -33,7 +33,7 @@ class DialogSeguidosSeguidores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(isSeguidores ? "Seguidores" : "Seguidos"),
+      title: Text(isSeguidores ? 'Seguidores' : 'Seguidos'),
       content: FutureBuilder<List<Usuario>>(
         future: _fetchItems(),
         builder: (context, snapshot) {
@@ -70,7 +70,7 @@ class DialogSeguidosSeguidores extends StatelessWidget {
                                     backgroundImage:
                                         u != null && u.avatar != null
                                             ? CachedNetworkImageProvider(
-                                                "${MyGlobals.SERVER_URL}${u.avatar}",
+                                                '${MyGlobals.SERVER_URL}${u.avatar}',
                                               )
                                             : null,
                                   ),
@@ -79,7 +79,7 @@ class DialogSeguidosSeguidores extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      "@${u.username}",
+                                      '@${u.username}',
                                       style: TextStyle(
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold,
@@ -96,7 +96,7 @@ class DialogSeguidosSeguidores extends StatelessWidget {
                 ),
               );
             }
-            return Text("No hay elementos.");
+            return Text('No hay elementos.');
           }
           return Container(
             height: 50,
@@ -117,7 +117,7 @@ class DialogSeguidosSeguidores extends StatelessWidget {
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text("Volver"),
+          child: Text('Volver'),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ],

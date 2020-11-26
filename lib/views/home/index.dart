@@ -23,7 +23,6 @@ import 'package:arrancando/views/home/app_bar/index.dart';
 import 'package:arrancando/views/home/bottom_bar/index.dart';
 import 'package:arrancando/views/home/pages/fast_search/index.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class MainScaffold extends StatefulWidget {
@@ -34,7 +33,7 @@ class MainScaffold extends StatefulWidget {
 class _MainScaffoldState extends State<MainScaffold> {
   final TextEditingController _searchController = TextEditingController();
   // PersistentBottomSheetController _bottomSheetController;
-  Map<SectionType, List<ContentWrapper>> _itemsMap = {
+  final _itemsMap = <SectionType, List<ContentWrapper>>{
     SectionType.publicaciones: null,
     SectionType.recetas: null,
     SectionType.pois: null,
@@ -44,34 +43,34 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _noMore = false;
   bool _loadingMore = false;
   bool _locationDenied = false;
-  Map<int, double> _calculatedDistance = {};
+  final _calculatedDistance = <int, double>{};
   // List<Notificacion> _unreadNotificaciones;
   bool _inited = false;
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
-    MainState mainState = Provider.of<MainState>(
+    final mainState = Provider.of<MainState>(
       context,
       listen: false,
     );
-    UserState userState = Provider.of<UserState>(
+    final userState = Provider.of<UserState>(
       context,
       listen: false,
     );
-    ContentPageState contentPageState = Provider.of<ContentPageState>(
+    final contentPageState = Provider.of<ContentPageState>(
       context,
       listen: false,
     );
 
-    int lastLength = _itemsMap[mainState.activePageHome] != null
+    final lastLength = _itemsMap[mainState.activePageHome] != null
         ? _itemsMap[mainState.activePageHome].length
         : 0;
 
-    int selectedCategory = mainState.selectedCategoryHome[type] != null
-        ? mainState.selectedCategoryHome[type]
-        : userState.preferredCategories[type];
+    final selectedCategory = mainState.selectedCategoryHome[type] ??
+        userState.preferredCategories[type];
 
-    if (_itemsMap[mainState.activePageHome] == null)
+    if (_itemsMap[mainState.activePageHome] == null) {
       _itemsMap[mainState.activePageHome] = [];
+    }
 
     _itemsMap[mainState.activePageHome] += await ContentWrapper.fetchItems(
       type,
@@ -93,9 +92,10 @@ class _MainScaffoldState extends State<MainScaffold> {
 
     if (type == SectionType.pois &&
         !_locationDenied &&
-        _itemsMap[mainState.activePageHome] != null)
+        _itemsMap[mainState.activePageHome] != null) {
       _itemsMap[mainState.activePageHome]
           .map((i) => _calculatedDistance[i.id] = i.localDistance);
+    }
 
     // if (!keepPage) _page += 1;
 
@@ -117,7 +117,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     }
   }
 
-  _resetLimit({bool keepNumber = false}) {
+  void _resetLimit({bool keepNumber = false}) {
     _itemsMap[Provider.of<MainState>(context).activePageHome] = null;
     _fetching = true;
     _noMore = false;
@@ -125,22 +125,22 @@ class _MainScaffoldState extends State<MainScaffold> {
     if (mounted) setState(() {});
   }
 
-  _increasePage() {
+  void _increasePage() {
     _page += 1;
   }
 
-  _setLoadingMore(bool val) {
+  void _setLoadingMore(bool val) {
     _loadingMore = val;
     if (mounted) setState(() {});
   }
 
-  _setLocationDenied() async {
+  Future<void> _setLocationDenied() async {
     _locationDenied = await ActiveUser.locationPermissionDenied();
     if (mounted) setState(() {});
   }
 
-  _setSearchVisibility(bool val) {
-    ContentPageState cps = Provider.of<ContentPageState>(context);
+  void _setSearchVisibility(bool val) {
+    final cps = Provider.of<ContentPageState>(context);
     cps.setSearchPageVisible(val);
     cps.setSearchResultsVisible(val);
     if (!val) _searchController.clear();
@@ -201,7 +201,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     }
   }
 
-  _fetchUnreadNotificaciones() async {
+  Future<void> _fetchUnreadNotificaciones() async {
     var unreadNotificaciones = await Notificacion.fetchUnread();
     Provider.of<MainState>(
       context,
@@ -209,7 +209,7 @@ class _MainScaffoldState extends State<MainScaffold> {
     ).setUnreadNotifications(unreadNotificaciones.length);
   }
 
-  _initUserInfo() async {
+  Future<void> _initUserInfo() async {
     await ActiveUser.verifyCorrectLogin(context);
     if (Provider.of<UserState>(context).activeUser != null) {
       await ActiveUser.updateUserMetadata(context);
@@ -225,7 +225,7 @@ class _MainScaffoldState extends State<MainScaffold> {
       if (!Platform.isLinux) {
         await NotificacionesService.initFirebaseNotifications(context);
       }
-      _fetchUnreadNotificaciones();
+      await _fetchUnreadNotificaciones();
     }
     _inited = true;
     if (mounted) setState(() {});

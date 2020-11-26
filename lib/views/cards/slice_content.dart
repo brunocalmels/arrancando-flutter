@@ -50,7 +50,7 @@ class SliceContent extends StatelessWidget {
                           ),
                         )
                       : CachedNetworkImage(
-                          imageUrl: "${content.thumbnail}",
+                          imageUrl: '${content.thumbnail}',
                           fit: BoxFit.cover,
                           placeholder: (context, url) => Center(
                             child: SizedBox(
@@ -87,7 +87,8 @@ class SliceContent extends StatelessWidget {
                                   child: Text(
                                     content.titulo,
                                     maxLines: 2,
-                                    style: Theme.of(context).textTheme.subhead,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                 ),
                                 Icon(
@@ -125,7 +126,7 @@ class SliceContent extends StatelessWidget {
                             //   backgroundImage: content.user != null &&
                             //           content.user.avatar != null
                             //       ? CachedNetworkImageProvider(
-                            //           "${MyGlobals.SERVER_URL}${content.user.avatar}",
+                            //           '${MyGlobals.SERVER_URL}${content.user.avatar}',
                             //         )
                             //       : null,
                             // ),

@@ -4,7 +4,6 @@ import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/views/cards/tile_poi.dart';
 import 'package:arrancando/views/home/filter_bottom_sheet/index.dart';
-import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -99,7 +98,7 @@ class _PoiPageState extends State<PoiPage> {
                       );
                     },
                     child: Image.asset(
-                      "assets/images/content/index/plato-filtrar.png",
+                      'assets/images/content/index/plato-filtrar.png',
                       width: MediaQuery.of(context).size.width * 0.6,
                     ),
                   ),
@@ -139,12 +138,12 @@ class _PoiPageState extends State<PoiPage> {
                     height: MediaQuery.of(context).size.height *
                         (_showMap ? 0.66 : 1),
                     child: widget.items != null
-                        ? widget.items.length > 0
+                        ? widget.items.isNotEmpty
                             ? ListView.builder(
                                 padding: const EdgeInsets.all(0),
                                 itemCount: widget.items.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  ContentWrapper p = widget.items[index];
+                                  final p = widget.items[index];
                                   Widget item = TilePoi(
                                     poi: p,
                                     locationDenied: widget.locationDenied,
@@ -167,7 +166,7 @@ class _PoiPageState extends State<PoiPage> {
                                     },
                                   );
                                   if (index == widget.items.length - 1) {
-                                    if (!widget.noMore)
+                                    if (!widget.noMore) {
                                       return Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
@@ -200,7 +199,7 @@ class _PoiPageState extends State<PoiPage> {
                                                               false,
                                                             );
                                                           },
-                                                    child: Text("Cargar más"),
+                                                    child: Text('Cargar más'),
                                                   ),
                                                 if (widget.loadingMore)
                                                   Padding(
@@ -227,7 +226,7 @@ class _PoiPageState extends State<PoiPage> {
                                           ),
                                         ],
                                       );
-                                    else
+                                    } else {
                                       return Column(
                                         children: <Widget>[
                                           item,
@@ -237,15 +236,17 @@ class _PoiPageState extends State<PoiPage> {
                                           ),
                                         ],
                                       );
-                                  } else
+                                    }
+                                  } else {
                                     return item;
+                                  }
                                 },
                               )
                             : Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 15),
                                 child: Text(
-                                  "No hay tiendas para mostrar",
+                                  'No hay tiendas para mostrar',
                                   textAlign: TextAlign.center,
                                 ),
                               )
@@ -256,12 +257,12 @@ class _PoiPageState extends State<PoiPage> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 15),
                                 child: Text(
-                                  "Ocurrió un error",
+                                  'Ocurrió un error',
                                   textAlign: TextAlign.center,
                                 ),
                               ),
                               Text(
-                                "(Si el problema persiste, cerrá sesión y volvé a iniciar)",
+                                '(Si el problema persiste, cerrá sesión y volvé a iniciar)',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 10,

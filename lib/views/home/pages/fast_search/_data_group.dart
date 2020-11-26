@@ -71,12 +71,12 @@ class DataGroup extends StatelessWidget {
                       child: Text('Ocurrió un error'),
                     ),
                   )
-                : ((items == null || items.length == 0) &&
-                        (itemsUsuarios == null || itemsUsuarios.length == 0))
+                : ((items == null || items.isEmpty) &&
+                        (itemsUsuarios == null || itemsUsuarios.isEmpty))
                     ? Container(
                         height: 100,
                         child: Center(
-                          child: Text("No se encontraron resultados"),
+                          child: Text('No se encontraron resultados'),
                         ),
                       )
                     : Column(
@@ -94,7 +94,7 @@ class DataGroup extends StatelessWidget {
                                               user: i,
                                             ),
                                             settings: RouteSettings(
-                                              name: "UserProfilePage",
+                                              name: 'UserProfilePage',
                                             ),
                                           ),
                                         );
@@ -113,7 +113,7 @@ class DataGroup extends StatelessWidget {
                                               backgroundImage: i != null &&
                                                       i.avatar != null
                                                   ? CachedNetworkImageProvider(
-                                                      "${MyGlobals.SERVER_URL}${i.avatar}",
+                                                      '${MyGlobals.SERVER_URL}${i.avatar}',
                                                     )
                                                   : null,
                                             ),
@@ -122,7 +122,7 @@ class DataGroup extends StatelessWidget {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                "@${i.username}",
+                                                '@${i.username}',
                                                 style: TextStyle(
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.bold,
@@ -149,7 +149,7 @@ class DataGroup extends StatelessWidget {
                             onPressed: () {
                               Utils.unfocus(context);
 
-                              if (isUsers)
+                              if (isUsers) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => SearchPageUsers(
@@ -159,7 +159,7 @@ class DataGroup extends StatelessWidget {
                                         RouteSettings(name: 'SearchPageUsers'),
                                   ),
                                 );
-                              else
+                              } else {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (_) => SearchPage(
@@ -169,9 +169,10 @@ class DataGroup extends StatelessWidget {
                                     settings: RouteSettings(name: 'Search'),
                                   ),
                                 );
+                              }
                             },
                             child: Text(
-                              "VER MÁS",
+                              'VER MÁS',
                               style: TextStyle(
                                 color: Provider.of<MainState>(context)
                                             .activeTheme ==

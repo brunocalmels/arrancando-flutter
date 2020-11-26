@@ -34,7 +34,7 @@ class _SearchBarState extends State<SearchBar> {
         },
         decoration: InputDecoration(
           floatingLabelBehavior: FloatingLabelBehavior.never,
-          hintText: "Buscar",
+          hintText: 'Buscar',
         ),
         controller: widget.searchController,
       ),

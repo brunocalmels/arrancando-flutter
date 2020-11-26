@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/views/content_wrapper/show/_image_large.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class ImageSlider extends StatefulWidget {
   final List<String> images;
@@ -22,46 +18,46 @@ class ImageSlider extends StatefulWidget {
 
 class _ImageSliderState extends State<ImageSlider> {
   int _activeImage = 0;
-  Map<String, File> _videoThumbs = {};
+  // Map<String, File> _videoThumbs = {};
 
-  _getVideosThumbs() async {
-    _videoThumbs = {};
-    String thumbPath = (await getTemporaryDirectory()).path;
-    List<String> vids = widget.images
-        .where((i) =>
-            MyGlobals.VIDEO_FORMATS.contains(i.split('.').last.toLowerCase()))
-        .toList();
+  // Future<void> _getVideosThumbs() async {
+  //   _videoThumbs = {};
+  //   String thumbPath = (await getTemporaryDirectory()).path;
+  //   List<String> vids = widget.images
+  //       .where((i) =>
+  //           MyGlobals.VIDEO_FORMATS.contains(i.split('.').last.toLowerCase()))
+  //       .toList();
 
-    await Future.wait(
-      vids.map(
-        (v) async {
-          String filename = v.split('/').last;
-          filename = filename.replaceRange(
-            filename[filename.length - 4] == '.'
-                ? filename.length - 3
-                : filename.length - 4,
-            filename.length,
-            'jpg',
-          );
-          File thumb = File("$thumbPath/$filename");
-          if (thumb.existsSync()) {
-            _videoThumbs[v] = thumb;
-          } else {
-            _videoThumbs[v] = File(
-              await VideoThumbnail.thumbnailFile(
-                video: "${MyGlobals.SERVER_URL}$v",
-                thumbnailPath: thumbPath,
-                imageFormat: ImageFormat.JPEG,
-                maxHeightOrWidth: 350,
-                quality: 70,
-              ),
-            );
-          }
-        },
-      ),
-    );
-    if (mounted) setState(() {});
-  }
+  //   await Future.wait(
+  //     vids.map(
+  //       (v) async {
+  //         String filename = v.split('/').last;
+  //         filename = filename.replaceRange(
+  //           filename[filename.length - 4] == '.'
+  //               ? filename.length - 3
+  //               : filename.length - 4,
+  //           filename.length,
+  //           'jpg',
+  //         );
+  //         File thumb = File('$thumbPath/$filename');
+  //         if (thumb.existsSync()) {
+  //           _videoThumbs[v] = thumb;
+  //         } else {
+  //           _videoThumbs[v] = File(
+  //             await VideoThumbnail.thumbnailFile(
+  //               video: '${MyGlobals.SERVER_URL}$v',
+  //               thumbnailPath: thumbPath,
+  //               imageFormat: ImageFormat.JPEG,
+  //               maxHeightOrWidth: 350,
+  //               quality: 70,
+  //             ),
+  //           );
+  //         }
+  //       },
+  //     ),
+  //   );
+  //   if (mounted) setState(() {});
+  // }
 
   @override
   void didUpdateWidget(ImageSlider oldWidget) {
@@ -89,8 +85,8 @@ class _ImageSliderState extends State<ImageSlider> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ImageLarge(
-              tag: "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
-              url: "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
+              tag: '${MyGlobals.SERVER_URL}${widget.images[_activeImage]}',
+              url: '${MyGlobals.SERVER_URL}${widget.images[_activeImage]}',
             ),
             settings: RouteSettings(name: 'ImageViewer'),
           ),
@@ -123,7 +119,7 @@ class _ImageSliderState extends State<ImageSlider> {
                           //   strokeWidth: 2,
                           // ),
                           child: Text(
-                            ". . .",
+                            '. . .',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -135,7 +131,7 @@ class _ImageSliderState extends State<ImageSlider> {
                           CachedNetworkImage(
                             fit: BoxFit.contain,
                             imageUrl:
-                                "${MyGlobals.SERVER_URL}${widget.videoThumbs[widget.images[_activeImage]]}",
+                                '${MyGlobals.SERVER_URL}${widget.videoThumbs[widget.images[_activeImage]]}',
                             placeholder: (context, url) => Center(
                               child: SizedBox(
                                 width: 25,
@@ -161,12 +157,12 @@ class _ImageSliderState extends State<ImageSlider> {
                         ],
                       )
                 // : Image.network(
-                //     "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
+                //     '${MyGlobals.SERVER_URL}${widget.images[_activeImage]}',
                 //   ),
                 : CachedNetworkImage(
                     fit: BoxFit.contain,
                     imageUrl:
-                        "${MyGlobals.SERVER_URL}${widget.images[_activeImage]}",
+                        '${MyGlobals.SERVER_URL}${widget.images[_activeImage]}',
                     placeholder: (context, url) => Center(
                       child: SizedBox(
                         width: 25,
@@ -187,7 +183,7 @@ class _ImageSliderState extends State<ImageSlider> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "${_activeImage + 1}/${widget.images.length}",
+                  '${_activeImage + 1}/${widget.images.length}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

@@ -34,27 +34,26 @@ class _SearchPageState extends State<SearchPage> {
   bool _noMore = false;
   bool _loadingMore = false;
   bool _locationDenied = false;
-  Map<int, double> _calculatedDistance = {};
+  final _calculatedDistance = <int, double>{};
 
   Future<void> _fetchContent(type, {bool keepLimit = false}) async {
-    MainState mainState = Provider.of<MainState>(
+    final mainState = Provider.of<MainState>(
       context,
       listen: false,
     );
-    UserState userState = Provider.of<UserState>(
+    final userState = Provider.of<UserState>(
       context,
       listen: false,
     );
-    ContentPageState contentPageState = Provider.of<ContentPageState>(
+    final contentPageState = Provider.of<ContentPageState>(
       context,
       listen: false,
     );
 
-    int lastLength = _items != null ? _items.length : 0;
+    final lastLength = _items != null ? _items.length : 0;
 
-    int selectedCategory = mainState.selectedCategoryHome[type] != null
-        ? mainState.selectedCategoryHome[type]
-        : userState.preferredCategories[type];
+    final selectedCategory = mainState.selectedCategoryHome[type] ??
+        userState.preferredCategories[type];
 
     _items += await ContentWrapper.fetchItems(
       type,
@@ -70,13 +69,15 @@ class _SearchPageState extends State<SearchPage> {
       calculatedDistance: _calculatedDistance,
     );
 
-    if (type == SectionType.pois && !_locationDenied)
+    if (type == SectionType.pois && !_locationDenied) {
       _items.map((i) => _calculatedDistance[i.id] = i.localDistance);
+    }
 
-    if (_searchController.text[0] == "@")
+    if (_searchController.text[0] == '@') {
       _items.where((i) => i.user.username
           .toLowerCase()
           .contains(_searchController.text.replaceAll('@', '').toLowerCase()));
+    }
 
     if (!keepLimit) _page += 1;
 
@@ -86,7 +87,7 @@ class _SearchPageState extends State<SearchPage> {
     if (mounted) setState(() {});
   }
 
-  _resetLimit({bool keepNumber = false}) {
+  void _resetLimit({bool keepNumber = false}) {
     _items = [];
     _fetching = true;
     _noMore = false;
@@ -94,17 +95,17 @@ class _SearchPageState extends State<SearchPage> {
     if (mounted) setState(() {});
   }
 
-  _setLoadingMore(bool val) {
+  void _setLoadingMore(bool val) {
     _loadingMore = val;
     if (mounted) setState(() {});
   }
 
-  _setLocationDenied() async {
+  Future<void> _setLocationDenied() async {
     _locationDenied = await ActiveUser.locationPermissionDenied();
     if (mounted) setState(() {});
   }
 
-  _increasePage() {
+  void _increasePage() {
     _page += 1;
     if (mounted) setState(() {});
   }

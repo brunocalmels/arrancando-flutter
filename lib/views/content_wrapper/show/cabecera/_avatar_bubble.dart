@@ -37,7 +37,7 @@ class AvatarBubble extends StatelessWidget {
             Positioned.fill(
               child: CurvedText(
                 radius: 40,
-                text: "@${user.username}",
+                text: '@${user.username}',
                 textStyle: TextStyle(),
                 startAngle: _calculateCurveAngle(),
               ),
@@ -53,7 +53,7 @@ class AvatarBubble extends StatelessWidget {
                             user: user,
                           ),
                           settings: RouteSettings(
-                            name: "UserProfilePage",
+                            name: 'UserProfilePage',
                           ),
                         ),
                       );
@@ -69,7 +69,7 @@ class AvatarBubble extends StatelessWidget {
                                 child: CachedNetworkImage(
                                   fit: BoxFit.cover,
                                   imageUrl:
-                                      "${MyGlobals.SERVER_URL}${user.avatar}",
+                                      '${MyGlobals.SERVER_URL}${user.avatar}',
                                   errorWidget: (context, url, error) =>
                                       Icon(Icons.error),
                                 ),
@@ -82,7 +82,7 @@ class AvatarBubble extends StatelessWidget {
                 radius: 40,
                 backgroundImage: user != null && user.avatar != null
                     ? CachedNetworkImageProvider(
-                        "${MyGlobals.SERVER_URL}${user.avatar}",
+                        '${MyGlobals.SERVER_URL}${user.avatar}',
                       )
                     : null,
               ),

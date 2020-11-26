@@ -10,7 +10,7 @@ class Usuario {
   String apellido;
   String email;
   String username;
-  @JsonKey(name: "url_instagram")
+  @JsonKey(name: 'url_instagram')
   String urlInstagram;
 
   Usuario(

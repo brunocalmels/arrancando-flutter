@@ -61,7 +61,7 @@ class FilterBottomSheet extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                            "Seleccionar ${mainState.activePageHome == SectionType.publicaciones ? 'ciudad' : 'categoría'}: "),
+                            'Seleccionar ${mainState.activePageHome == SectionType.publicaciones ? 'ciudad' : 'categoría'}: '),
                       ),
                       CategoriesChip(
                         fetchContent: fetchContent,
@@ -72,7 +72,7 @@ class FilterBottomSheet extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 15),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Seleccionar categoría: "),
+                            child: Text('Seleccionar categoría: '),
                           ),
                         ),
                       if (mainState.activePageHome == SectionType.publicaciones)
@@ -87,7 +87,7 @@ class FilterBottomSheet extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 15),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Seleccionar ciudad: "),
+                            child: Text('Seleccionar ciudad: '),
                           ),
                         ),
                       if (mainState.activePageHome == SectionType.pois)
@@ -115,7 +115,7 @@ class FilterBottomSheet extends StatelessWidget {
                                 DropdownMenuItem(
                                   value: ContentSortType.fecha_creacion,
                                   child: Text(
-                                    "Fecha de creación",
+                                    'Fecha de creación',
                                     style: TextStyle(
                                       color: contentState.sortContentBy ==
                                               ContentSortType.fecha_creacion
@@ -132,7 +132,7 @@ class FilterBottomSheet extends StatelessWidget {
                                 DropdownMenuItem(
                                   value: ContentSortType.fecha_actualizacion,
                                   child: Text(
-                                    "Fecha de actualización",
+                                    'Fecha de actualización',
                                     style: TextStyle(
                                       color: contentState.sortContentBy ==
                                               ContentSortType
@@ -150,7 +150,7 @@ class FilterBottomSheet extends StatelessWidget {
                                 DropdownMenuItem(
                                   value: ContentSortType.proximidad,
                                   child: Text(
-                                    "Proximidad",
+                                    'Proximidad',
                                     style: TextStyle(
                                       color: contentState.sortContentBy ==
                                               ContentSortType.proximidad
@@ -166,7 +166,7 @@ class FilterBottomSheet extends StatelessWidget {
                               DropdownMenuItem(
                                 value: ContentSortType.puntuacion,
                                 child: Text(
-                                  "Puntuación",
+                                  'Puntuación',
                                   style: TextStyle(
                                     color: contentState.sortContentBy ==
                                             ContentSortType.puntuacion
@@ -182,7 +182,7 @@ class FilterBottomSheet extends StatelessWidget {
                               DropdownMenuItem(
                                 value: ContentSortType.vistas,
                                 child: Text(
-                                  "Vistas",
+                                  'Vistas',
                                   style: TextStyle(
                                     color: contentState.sortContentBy ==
                                             ContentSortType.vistas
@@ -205,7 +205,7 @@ class FilterBottomSheet extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text("Mostrar solo míos"),
+                            Text('Mostrar solo míos'),
                             SizedBox(
                               width: 5,
                             ),

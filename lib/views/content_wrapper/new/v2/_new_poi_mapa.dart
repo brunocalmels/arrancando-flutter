@@ -36,13 +36,13 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
   bool _locating = false;
   Timer _debounce;
 
-  _fetchPlaceByName() async {
+  Future<void> _fetchPlaceByName() async {
     if (mounted) {
       setState(() {
         _locating = true;
       });
       try {
-        List<Placemark> placemarks =
+        final placemarks =
             await Geolocator().placemarkFromAddress(_direccionController.text);
 
         _latitud = placemarks.first.position.latitude;
@@ -70,7 +70,7 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
     }
   }
 
-  _searchLocation(String text) {
+  void _searchLocation(String text) {
     if (text != null && text.isNotEmpty) {
       setState(() {
         _searching = true;
@@ -80,14 +80,12 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
     }
   }
 
-  _setMyLocation() async {
-    if (mounted)
-      setState(() {
-        _locating = true;
-      });
-    bool locationDenied = await ActiveUser.locationPermissionDenied();
+  Future<void> _setMyLocation() async {
+    _locating = true;
+    if (mounted) setState(() {});
+    final locationDenied = await ActiveUser.locationPermissionDenied();
     if (!locationDenied) {
-      Position currentPosition = await Geolocator().getCurrentPosition(
+      final currentPosition = await Geolocator().getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
       _latitud = currentPosition.latitude;
@@ -102,8 +100,8 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
   @override
   void initState() {
     super.initState();
-    _latitud = widget.latitud != null ? widget.latitud : _latitud;
-    _longitud = widget.longitud != null ? widget.longitud : _longitud;
+    _latitud = widget.latitud ?? _latitud;
+    _longitud = widget.longitud ?? _longitud;
     if (widget.direccion != null) _direccionController.text = widget.direccion;
   }
 
@@ -128,12 +126,11 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
                 longitud: _longitud,
                 zoom: 15,
                 buildCallback: (MapController controller) {
-                  if (mounted)
-                    setState(() {
-                      _mapController = controller;
-                    });
-                  if (widget.latitud == null || widget.longitud == null)
+                  _mapController = controller;
+                  if (mounted) setState(() {});
+                  if (widget.latitud == null || widget.longitud == null) {
                     _setMyLocation();
+                  }
                 },
                 onPositionChanged: (MapPosition position, bool changed) {
                   if (changed && _mapController != null) {
@@ -164,7 +161,7 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
           height: 5,
         ),
         Text(
-          "Arrastrá con 2 dedos el mapa para ajustar el marcador.",
+          'Arrastrá con 2 dedos el mapa para ajustar el marcador.',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 11,
@@ -176,8 +173,8 @@ class _NewPoiMapaState extends State<NewPoiMapa> {
             NewContentInput(
               controller: _direccionController,
               onChanged: _searchLocation,
-              hint: "Dirección, Ciudad, Provincia",
-              label: "",
+              hint: 'Dirección, Ciudad, Provincia',
+              label: '',
             ),
             if (_searching)
               Positioned(

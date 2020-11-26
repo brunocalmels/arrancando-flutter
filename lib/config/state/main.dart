@@ -9,29 +9,29 @@ class MainState extends ChangeNotifier {
   List<SectionType> contenidosHome = [];
   int unreadNotifications = 0;
 
-  setActivePageHome(SectionType val) {
+  void setActivePageHome(SectionType val) {
     if (val != null) {
       activePageHome = val;
       notifyListeners();
     }
   }
 
-  setSelectedCategoryHome(SectionType type, int val) {
+  void setSelectedCategoryHome(SectionType type, int val) {
     selectedCategoryHome[type] = val;
     notifyListeners();
   }
 
-  setContenidosHome(List<SectionType> list) {
+  void setContenidosHome(List<SectionType> list) {
     contenidosHome = list;
     notifyListeners();
   }
 
-  setActiveTheme(ThemeMode theme) {
+  void setActiveTheme(ThemeMode theme) {
     activeTheme = theme;
     notifyListeners();
   }
 
-  setUnreadNotifications(int val) {
+  void setUnreadNotifications(int val) {
     unreadNotifications = val;
     notifyListeners();
   }

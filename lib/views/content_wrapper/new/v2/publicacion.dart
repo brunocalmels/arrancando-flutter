@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/deferred_executor.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -13,8 +12,6 @@ import 'package:arrancando/views/content_wrapper/new/v2/_new_content_input.dart'
 import 'package:arrancando/views/content_wrapper/new/v2/_new_content_multimedia.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_scaffold.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
-import 'package:arrancando/views/content_wrapper/show/index.dart';
-import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 
 class PublicacionForm extends StatefulWidget {
@@ -36,32 +33,33 @@ class _PublicacionFormState extends State<PublicacionForm> {
   List<File> _images = [];
   List<String> _currentImages = [];
   Map<String, String> _currentVideoThumbs = {};
-  List<String> _imagesToRemove = [];
+  final _imagesToRemove = <String>[];
   int _id;
   bool _isEdit = false;
   bool _sent = false;
-  bool _hideButtonVeryBadError = false;
+  final _hideButtonVeryBadError = false;
   String _errorMsg;
 
-  _setImages(List<File> images) {
+  void _setImages(List<File> images) {
     _images = images;
     if (mounted) setState(() {});
   }
 
-  _removeImage(File asset) {
+  void _removeImage(File asset) {
     _images.remove(asset);
     if (mounted) setState(() {});
   }
 
-  _removeCurrentImage(String asset) {
-    if (_imagesToRemove.contains(asset))
+  void _removeCurrentImage(String asset) {
+    if (_imagesToRemove.contains(asset)) {
       _imagesToRemove.remove(asset);
-    else
+    } else {
       _imagesToRemove.add(asset);
+    }
     if (mounted) setState(() {});
   }
 
-  _crearPublicacion() async {
+  Future<void> _crearPublicacion() async {
     _errorMsg = null;
 
     if (_formKey.currentState.validate() &&
@@ -72,22 +70,22 @@ class _PublicacionFormState extends State<PublicacionForm> {
       if (mounted) setState(() {});
 
       try {
-        Map<String, dynamic> body = {
-          "titulo": _tituloController.text,
-          "cuerpo": _cuerpoController.text,
-          "imagenes": await Future.wait(
+        final body = <String, dynamic>{
+          'titulo': _tituloController.text,
+          'cuerpo': _cuerpoController.text,
+          'imagenes': await Future.wait(
             _images.map(
               (i) async => {
-                "file": i != null ? i.path.split('/').last : 'file',
-                "data": base64Encode(
+                'file': i != null ? i.path.split('/').last : 'file',
+                'data': base64Encode(
                   (await i.readAsBytes()).buffer.asUint8List(),
                 )
               },
             ),
           ),
-          "remove_imagenes": _imagesToRemove,
+          'remove_imagenes': _imagesToRemove,
           // TODO: Remove next line
-          "ciudad_id": 1,
+          'ciudad_id': 1,
         };
 
         Navigator.of(context).popUntil((route) => route.isFirst);
@@ -96,7 +94,7 @@ class _PublicacionFormState extends State<PublicacionForm> {
           DeferredExecutor.execute(
             SectionType.publicaciones,
             Fetcher.put(
-              url: "/publicaciones/$_id.json",
+              url: '/publicaciones/$_id.json',
               throwError: true,
               body: {
                 ...body,
@@ -107,7 +105,7 @@ class _PublicacionFormState extends State<PublicacionForm> {
           DeferredExecutor.execute(
             SectionType.publicaciones,
             Fetcher.post(
-              url: "/publicaciones.json",
+              url: '/publicaciones.json',
               throwError: true,
               body: {
                 ...body,
@@ -118,27 +116,27 @@ class _PublicacionFormState extends State<PublicacionForm> {
       } catch (e) {
         print(e);
         _errorMsg =
-            "Ocurrió un error, por favor intentalo nuevamente más tarde.";
+            'Ocurrió un error, por favor intentalo nuevamente más tarde.';
       }
       _sent = false;
     } else if (!_formKey.currentState.validate()) {
       if (_tituloController.text == null || _tituloController.text.isEmpty) {
-        _errorMsg = "El título no puede estar vacio";
+        _errorMsg = 'El título no puede estar vacio';
       } else if (_cuerpoController.text == null ||
           _cuerpoController.text.isEmpty) {
-        _errorMsg = "El cuerpo no puede estar vacio";
+        _errorMsg = 'El cuerpo no puede estar vacio';
       }
     } else if (!((_images != null && _images.isNotEmpty) ||
         (_currentImages != null && _currentImages.isNotEmpty))) {
-      _errorMsg = "Debes añadir al menos 1 imagen/video";
+      _errorMsg = 'Debes añadir al menos 1 imagen/video';
     } else if (!([...(_images ?? []), ...(_currentImages ?? [])].length <= 6)) {
-      _errorMsg = "Podés subir como máximo 6 imágenes y/o videos";
+      _errorMsg = 'Podés subir como máximo 6 imágenes y/o videos';
     }
 
     if (mounted) setState(() {});
   }
 
-  _loadForEdit() {
+  void _loadForEdit() {
     if (widget.content != null && widget.content.id != null) {
       _isEdit = true;
       _id = widget.content.id;
@@ -161,25 +159,25 @@ class _PublicacionFormState extends State<PublicacionForm> {
     return NewContentScaffold(
       scaffoldKey: _scaffoldKey,
       formKey: _formKey,
-      title: _isEdit ? "EDITAR PUBLICACIÓN" : "NUEVA PUBLICACIÓN",
+      title: _isEdit ? 'EDITAR PUBLICACIÓN' : 'NUEVA PUBLICACIÓN',
       children: [
         NewContentInput(
-          label: "Título",
+          label: 'Título',
           controller: _tituloController,
-          hint: "Vacío con papas",
+          hint: 'Vacío con papas',
           validator: (val) => val != null && val.isNotEmpty
               ? null
-              : "Este campo no puede estar vacío",
+              : 'Este campo no puede estar vacío',
         ),
         NewContentInput(
-          label: "Cuerpo",
+          label: 'Cuerpo',
           controller: _cuerpoController,
-          hint: "Pasamos un domingo espectacular. No nos queríamos ir...",
+          hint: 'Pasamos un domingo espectacular. No nos queríamos ir...',
           multiline: true,
           addLinkButton: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
-              : "Este campo no puede estar vacío",
+              : 'Este campo no puede estar vacío',
         ),
         NewContentMultimedia(
           images: _images,

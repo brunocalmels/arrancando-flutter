@@ -18,17 +18,17 @@ class NewContentScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        bool salir = await showDialog(
+        final salir = await showDialog(
           context: context,
           builder: (_) => AlertDialog(
-            title: Text("Volver atrás"),
+            title: Text('Volver atrás'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Si salís ahora vas a perder el contenido que estabas creando.\n\n¿Realmente querés salir?",
+                  'Si salís ahora vas a perder el contenido que estabas creando.\n\n¿Realmente querés salir?',
                   style: TextStyle(fontSize: 13),
                 ),
               ],
@@ -38,13 +38,13 @@ class NewContentScaffold extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text("Cancelar"),
+                child: Text('Cancelar'),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
-                child: Text("Volver"),
+                child: Text('Volver'),
               ),
             ],
           ),
@@ -83,7 +83,7 @@ class NewContentScaffold extends StatelessWidget {
                 child: Opacity(
                   opacity: _opacity,
                   child: Image.asset(
-                    "assets/images/content/new/wok.png",
+                    'assets/images/content/new/wok.png',
                     width: MediaQuery.of(context).size.width * 0.2,
                   ),
                 ),
@@ -94,7 +94,7 @@ class NewContentScaffold extends StatelessWidget {
                 child: Opacity(
                   opacity: _opacity,
                   child: Image.asset(
-                    "assets/images/content/new/tomates.png",
+                    'assets/images/content/new/tomates.png',
                     width: MediaQuery.of(context).size.width * 0.2,
                   ),
                 ),
@@ -105,7 +105,7 @@ class NewContentScaffold extends StatelessWidget {
                 child: Opacity(
                   opacity: _opacity,
                   child: Image.asset(
-                    "assets/images/content/new/cubiertos.png",
+                    'assets/images/content/new/cubiertos.png',
                     width: MediaQuery.of(context).size.width * 0.2,
                   ),
                 ),
@@ -116,7 +116,7 @@ class NewContentScaffold extends StatelessWidget {
                 child: Opacity(
                   opacity: _opacity,
                   child: Image.asset(
-                    "assets/images/content/new/fideos.png",
+                    'assets/images/content/new/fideos.png',
                     width: MediaQuery.of(context).size.width * 0.2,
                   ),
                 ),

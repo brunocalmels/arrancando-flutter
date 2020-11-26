@@ -43,7 +43,7 @@ class ContentTile extends StatelessWidget {
                 ),
               )
             : CachedNetworkImage(
-                imageUrl: "${MyGlobals.SERVER_URL}${content.thumbnail}",
+                imageUrl: '${MyGlobals.SERVER_URL}${content.thumbnail}',
                 placeholder: (context, url) => Center(
                   child: SizedBox(
                     width: 25,

@@ -24,28 +24,27 @@ class _ProfilePageState extends State<ProfilePage> {
 
   bool _sent = false;
 
-  _setAvatar(String base64) async {
-    setState(() {
-      _sent = true;
-    });
+  Future<void> _setAvatar(String base64) async {
+    _sent = true;
+    if (mounted) setState(() {});
 
-    ResponseObject resp = await Fetcher.post(
-      url: "/avatar.json",
+    final resp = await Fetcher.post(
+      url: '/avatar.json',
       body: {
-        "avatar": base64,
+        'avatar': base64,
       },
     );
 
     if (resp?.status == 200 && resp?.body != null) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
 
-      ActiveUser au = Provider.of<UserState>(context, listen: false).activeUser;
+      final au = Provider.of<UserState>(context, listen: false).activeUser;
 
       au.avatar = json.decode(resp.body)['avatar'];
 
-      prefs.setString(
+      await prefs.setString(
         'activeUser',
-        "${json.encode(au.toJson())}",
+        '${json.encode(au.toJson())}',
       );
 
       Provider.of<UserState>(context, listen: false).setActiveUser(
@@ -53,31 +52,30 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
 
-    setState(() {
-      _sent = false;
-    });
+    _sent = false;
+    if (mounted) setState(() {});
   }
 
-  _updateActiveUser(context, campo, valor) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> _updateActiveUser(context, campo, valor) async {
+    final prefs = await SharedPreferences.getInstance();
 
-    ActiveUser _activeUser =
+    final _activeUser =
         Provider.of<UserState>(context, listen: false).activeUser;
 
     switch (campo) {
-      case "Nombre":
+      case 'Nombre':
         _activeUser.nombre = valor;
         break;
-      case "Apellido":
+      case 'Apellido':
         _activeUser.apellido = valor;
         break;
-      case "Nombre de usuario":
+      case 'Nombre de usuario':
         _activeUser.username = valor;
         break;
-      case "Email":
+      case 'Email':
         _activeUser.email = valor;
         break;
-      case "Instagram":
+      case 'Instagram':
         _activeUser.urlInstagram = valor;
         break;
       default:
@@ -85,11 +83,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
     Provider.of<UserState>(context, listen: false).setActiveUser(_activeUser);
 
-    prefs.setString("activeUser", json.encode(_activeUser));
+    await prefs.setString('activeUser', json.encode(_activeUser));
   }
 
   Future<bool> _getCiudadPopulada(id) async {
-    ResponseObject resp = await Fetcher.get(url: "/ciudades/$id.json");
+    final resp = await Fetcher.get(url: '/ciudades/$id.json');
     if (resp != null) {
       return json.decode(resp.body)['populada'] != null
           ? (json.decode(resp.body)['populada'] as bool)
@@ -115,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   AvatarPicker(
                     currentAvatar: userState.activeUser?.avatar != null
                         ? CachedNetworkImageProvider(
-                            "${MyGlobals.SERVER_URL}${userState.activeUser?.avatar}",
+                            '${MyGlobals.SERVER_URL}${userState.activeUser?.avatar}',
                           )
                         : null,
                     setAvatar: _setAvatar,
@@ -145,17 +143,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: Text('Nombre'),
                 subtitle: Text(userState.activeUser.nombre),
                 onTap: () async {
-                  String valor = await showDialog(
+                  final valor = await showDialog(
                     context: context,
                     builder: (context) {
                       return DialogEditarDatosUsuario(
-                        campo: "Nombre",
+                        campo: 'Nombre',
                         valor: userState.activeUser.nombre,
                       );
                     },
                   );
-                  if (valor != null)
-                    _updateActiveUser(context, "Nombre", valor);
+                  if (valor != null) {
+                    await _updateActiveUser(context, 'Nombre', valor);
+                  }
                 },
                 trailing: Icon(
                   Icons.edit,
@@ -164,21 +163,20 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ListTile(
                 title: Text('Apellido'),
-                subtitle: Text(userState.activeUser.apellido != null
-                    ? userState.activeUser.apellido
-                    : ''),
+                subtitle: Text(userState.activeUser.apellido ?? ''),
                 onTap: () async {
-                  String valor = await showDialog(
+                  final valor = await showDialog(
                     context: context,
                     builder: (context) {
                       return DialogEditarDatosUsuario(
-                        campo: "Apellido",
+                        campo: 'Apellido',
                         valor: userState.activeUser.apellido,
                       );
                     },
                   );
-                  if (valor != null)
-                    _updateActiveUser(context, "Apellido", valor);
+                  if (valor != null) {
+                    await _updateActiveUser(context, 'Apellido', valor);
+                  }
                 },
                 trailing: Icon(
                   Icons.edit,
@@ -187,19 +185,21 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               ListTile(
                 title: Text('Nombre de usuario'),
-                subtitle: Text("@${userState.activeUser.username}"),
+                subtitle: Text('@${userState.activeUser.username}'),
                 onTap: () async {
-                  String valor = await showDialog(
+                  final valor = await showDialog(
                     context: context,
                     builder: (context) {
                       return DialogEditarDatosUsuario(
-                        campo: "Nombre de usuario",
+                        campo: 'Nombre de usuario',
                         valor: userState.activeUser.username,
                       );
                     },
                   );
-                  if (valor != null)
-                    _updateActiveUser(context, "Nombre de usuario", valor);
+                  if (valor != null) {
+                    await _updateActiveUser(
+                        context, 'Nombre de usuario', valor);
+                  }
                 },
                 trailing: Icon(
                   Icons.edit,
@@ -210,16 +210,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: Text('Email'),
                 subtitle: Text(userState.activeUser.email),
                 onTap: () async {
-                  String valor = await showDialog(
+                  final valor = await showDialog(
                     context: context,
                     builder: (context) {
                       return DialogEditarDatosUsuario(
-                        campo: "Email",
+                        campo: 'Email',
                         valor: userState.activeUser.email,
                       );
                     },
                   );
-                  if (valor != null) _updateActiveUser(context, "Email", valor);
+                  if (valor != null) {
+                    await _updateActiveUser(context, 'Email', valor);
+                  }
                 },
                 trailing: Icon(
                   Icons.edit,
@@ -230,21 +232,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 title: Text('Instagram'),
                 subtitle: Text(
                   userState.activeUser.urlInstagram != null
-                      ? "https://instagram.com/${userState.activeUser.urlInstagram}"
+                      ? 'https://instagram.com/${userState.activeUser.urlInstagram}'
                       : 'Perfil de Instagram',
                 ),
                 onTap: () async {
-                  String valor = await showDialog(
+                  final valor = await showDialog(
                     context: context,
                     builder: (context) {
                       return DialogEditarDatosUsuario(
-                        campo: "Instagram",
+                        campo: 'Instagram',
                         valor: userState.activeUser.urlInstagram,
                       );
                     },
                   );
-                  if (valor != null)
-                    _updateActiveUser(context, "Instagram", valor);
+                  if (valor != null) {
+                    await _updateActiveUser(context, 'Instagram', valor);
+                  }
                 },
                 trailing: Icon(
                   Icons.edit,
@@ -252,7 +255,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               ListTile(
-                title: Text("Mi ciudad"),
+                title: Text('Mi ciudad'),
                 subtitle: Text(
                   gs.categories[SectionType.publicaciones]
                       .firstWhere((c) =>
@@ -266,11 +269,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: Theme.of(context).accentColor,
                 ),
                 onTap: () async {
-                  int ciudadId = await showDialog(
+                  final ciudadId = await showDialog(
                     context: context,
                     builder: (_) => DialogCategorySelect(
                       selectCity: true,
-                      titleText: "¿Cuál es tu ciudad?",
+                      titleText: '¿Cuál es tu ciudad?',
                       insideProfile: true,
                     ),
                   );
@@ -279,12 +282,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       SectionType.publicaciones,
                       ciudadId,
                     );
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setInt("preferredCiudadId", ciudadId);
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setInt('preferredCiudadId', ciudadId);
 
                     if (!(await _getCiudadPopulada(ciudadId))) {
-                      showDialog(
+                      await showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
                           title: Text('No hay contenido'),

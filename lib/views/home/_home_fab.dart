@@ -24,7 +24,7 @@ class HomeFab extends StatelessWidget {
         Positioned.fill(
           child: CurvedText(
             radius: 30,
-            text: "NUEVO",
+            text: 'NUEVO',
             textStyle: TextStyle(),
             startAngle: 5.5,
           ),

@@ -13,7 +13,7 @@ class BottomSheetMultimedia extends StatelessWidget {
             Expanded(
               child: FlatButton(
                 onPressed: () {
-                  Navigator.of(context).pop("camara");
+                  Navigator.of(context).pop('camara');
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -24,7 +24,7 @@ class BottomSheetMultimedia extends StatelessWidget {
                       color: Colors.white,
                     ),
                     Text(
-                      "Foto",
+                      'Foto',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -36,7 +36,7 @@ class BottomSheetMultimedia extends StatelessWidget {
           Expanded(
             child: FlatButton(
               onPressed: () {
-                Navigator.of(context).pop("galeria");
+                Navigator.of(context).pop('galeria');
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,7 +47,7 @@ class BottomSheetMultimedia extends StatelessWidget {
                     color: Colors.white,
                   ),
                   Text(
-                    "Foto",
+                    'Foto',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -60,7 +60,7 @@ class BottomSheetMultimedia extends StatelessWidget {
             Expanded(
               child: FlatButton(
                 onPressed: () {
-                  Navigator.of(context).pop("video");
+                  Navigator.of(context).pop('video');
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,7 +71,7 @@ class BottomSheetMultimedia extends StatelessWidget {
                       color: Colors.white,
                     ),
                     Text(
-                      "Video",
+                      'Video',
                       style: TextStyle(
                         color: Colors.white,
                       ),

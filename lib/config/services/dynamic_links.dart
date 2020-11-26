@@ -17,33 +17,33 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
 abstract class DynamicLinks {
-  static buildUserOAuth(context, path) async {
+  static Future<void> buildUserOAuth(context, path) async {
     if (context != null) {
       String base64Data = path[1];
-      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
       dynamic body = utf8.decode(base64.decode(base64Data));
-      prefs.setString(
+      await prefs.setString(
         'activeUser',
-        "$body",
+        '$body',
       );
       Provider.of<UserState>(context, listen: false)
           .setActiveUser(ActiveUser.fromJson(json.decode(body)));
 
       await CategoryWrapper.loadCategories();
 
-      if (prefs.getInt("preferredCiudadId") == null) {
+      if (prefs.getInt('preferredCiudadId') == null) {
         // int ciudadId = await showDialog(
         //   context: MyGlobals.mainNavigatorKey.currentState.overlay.context,
         //   builder: (_) => DialogCategorySelect(
         //     selectCity: true,
-        //     titleText: "¿Cuál es tu ciudad?",
+        //     titleText: '¿Cuál es tu ciudad?',
         //     allowDismiss: false,
         //   ),
         // );
 
-        final GlobalSingleton singleton = GlobalSingleton();
+        final singleton = GlobalSingleton();
 
-        int ciudadId = singleton.categories[SectionType.publicaciones]
+        final ciudadId = singleton.categories[SectionType.publicaciones]
             .where((c) => c.id > 0)
             .first
             .id;
@@ -52,14 +52,14 @@ abstract class DynamicLinks {
             SectionType.publicaciones,
             ciudadId,
           );
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setInt("preferredCiudadId", ciudadId);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setInt('preferredCiudadId', ciudadId);
         }
       }
 
-      ActiveUser.updateUserMetadata(context);
+      await ActiveUser.updateUserMetadata(context);
 
-      MyGlobals.mainNavigatorKey.currentState.pushAndRemoveUntil(
+      await MyGlobals.mainNavigatorKey.currentState.pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (_) => MainScaffold(),
           settings: RouteSettings(name: 'Home'),
@@ -69,21 +69,21 @@ abstract class DynamicLinks {
     }
   }
 
-  static parseURI(Uri uri, context) async {
+  static Future<void> parseURI(Uri uri, context) async {
     if (uri != null) {
       try {
-        List<String> path = uri.path.split('/');
+        final path = uri.path.split('/');
         path.retainWhere((p) => p != null && p.isNotEmpty);
 
-        print("Adentro");
+        print('Adentro');
         if (uri != null) print(uri.path);
 
-        bool _invalidUser = false;
+        var _invalidUser = false;
 
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        String activeUser = prefs.getString("activeUser");
+        final prefs = await SharedPreferences.getInstance();
+        final activeUser = prefs.getString('activeUser');
         if (activeUser != null) {
-          ActiveUser au = ActiveUser.fromJson(
+          final au = ActiveUser.fromJson(
             json.decode(activeUser),
           );
           if (au.id == null || au.email == null || au.authToken == null) {
@@ -93,13 +93,13 @@ abstract class DynamicLinks {
           _invalidUser = true;
         }
 
-        if (path.length >= 1) {
+        if (path.isNotEmpty) {
           if (path.length >= 2) {
             switch (path[0]) {
               case 'publicaciones':
                 if (context != null && !_invalidUser) {
-                  int id = int.parse(path[1]);
-                  MyGlobals.mainNavigatorKey.currentState.push(
+                  final id = int.parse(path[1]);
+                  await MyGlobals.mainNavigatorKey.currentState.push(
                     MaterialPageRoute(
                       builder: (_) => ShowPage(
                         contentId: id,
@@ -112,8 +112,8 @@ abstract class DynamicLinks {
                 break;
               case 'recetas':
                 if (context != null && !_invalidUser) {
-                  int id = int.parse(path[1]);
-                  MyGlobals.mainNavigatorKey.currentState.push(
+                  final id = int.parse(path[1]);
+                  await MyGlobals.mainNavigatorKey.currentState.push(
                     MaterialPageRoute(
                       builder: (_) => ShowPage(
                         contentId: id,
@@ -126,8 +126,8 @@ abstract class DynamicLinks {
                 break;
               case 'pois':
                 if (context != null && !_invalidUser) {
-                  int id = int.parse(path[1]);
-                  MyGlobals.mainNavigatorKey.currentState.push(
+                  final id = int.parse(path[1]);
+                  await MyGlobals.mainNavigatorKey.currentState.push(
                     MaterialPageRoute(
                       builder: (_) => ShowPage(
                         contentId: id,
@@ -140,8 +140,8 @@ abstract class DynamicLinks {
                 break;
               case 'usuarios':
                 if (context != null && !_invalidUser) {
-                  String username = path[1];
-                  MyGlobals.mainNavigatorKey.currentState.push(
+                  final username = path[1];
+                  await MyGlobals.mainNavigatorKey.currentState.push(
                     MaterialPageRoute(
                       builder: (_) => UserProfilePage(
                         user: null,
@@ -153,21 +153,21 @@ abstract class DynamicLinks {
                 }
                 break;
               case 'google-signin':
-                buildUserOAuth(context, path);
+                await buildUserOAuth(context, path);
                 break;
               case 'facebook-signin':
-                buildUserOAuth(context, path);
+                await buildUserOAuth(context, path);
                 break;
               default:
             }
           } else if (context != null) {
             // TODO: SHOULDN'T USE DELAY
             await Future.delayed(Duration(seconds: 1));
-            MainState mainState = Provider.of<MainState>(
+            final mainState = Provider.of<MainState>(
               context,
               listen: false,
             );
-            ContentPageState contentPageState = Provider.of<ContentPageState>(
+            final contentPageState = Provider.of<ContentPageState>(
               context,
               listen: false,
             );
@@ -210,12 +210,12 @@ abstract class DynamicLinks {
                         : null,
                   );
                   mainState.setActivePageHome(SectionType.publicaciones);
-                  Navigator.of(context).push(
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => MainScaffold(),
                     ),
                   );
-                  MyGlobals.firebaseAnalyticsObserver.analytics
+                  await MyGlobals.firebaseAnalyticsObserver.analytics
                       .setCurrentScreen(
                     screenName: 'Home/Publicaciones',
                   );
@@ -230,12 +230,12 @@ abstract class DynamicLinks {
                         : null,
                   );
                   mainState.setActivePageHome(SectionType.recetas);
-                  Navigator.of(context).push(
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => MainScaffold(),
                     ),
                   );
-                  MyGlobals.firebaseAnalyticsObserver.analytics
+                  await MyGlobals.firebaseAnalyticsObserver.analytics
                       .setCurrentScreen(
                     screenName: 'Home/Recetas',
                   );
@@ -256,12 +256,12 @@ abstract class DynamicLinks {
                         : null,
                   );
                   mainState.setActivePageHome(SectionType.pois);
-                  Navigator.of(context).push(
+                  await Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => MainScaffold(),
                     ),
                   );
-                  MyGlobals.firebaseAnalyticsObserver.analytics
+                  await MyGlobals.firebaseAnalyticsObserver.analytics
                       .setCurrentScreen(
                     screenName: 'Home/Pois',
                   );
@@ -276,13 +276,12 @@ abstract class DynamicLinks {
     }
   }
 
-  static initUniLinks({BuildContext context}) async {
+  static Future<void> initUniLinks({BuildContext context}) async {
     //Parse the uri that started the app
-    Uri uri = await getInitialUri();
-    print("Afuera");
+    final uri = await getInitialUri();
     if (uri != null) print(uri.path);
-    DynamicLinks.parseURI(uri, context);
-    Stream<Uri> streamURI = getUriLinksStream();
+    await DynamicLinks.parseURI(uri, context);
+    final streamURI = getUriLinksStream();
     //Parse the uri when the app is started but the user leaves it and comes back
     streamURI.listen(
       (Uri uri) => DynamicLinks.parseURI(uri, context),

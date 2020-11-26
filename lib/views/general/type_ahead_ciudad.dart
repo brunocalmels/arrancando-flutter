@@ -31,10 +31,10 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
   Timer _debounce;
   bool _searching = false;
 
-  _fetchResults() async {
+  Future<void> _fetchResults() async {
     if (_searchController.text != null && _searchController.text.length >= 3) {
-      ResponseObject resp = await Fetcher.get(
-        url: "/ciudades/search.json?term=${_searchController.text}",
+      final resp = await Fetcher.get(
+        url: '/ciudades/search.json?term=${_searchController.text}',
       );
 
       if (resp != null && resp.body != null) {
@@ -51,7 +51,7 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
     if (mounted) setState(() {});
   }
 
-  _searchTerm(text) {
+  void _searchTerm(text) {
     if (text != null && text.isNotEmpty && text.length >= 3) {
       _searching = true;
       if (mounted) setState(() {});
@@ -70,7 +70,7 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
               children: <Widget>[
                 TextField(
                   decoration: InputDecoration(
-                    hintText: "Buscar",
+                    hintText: 'Buscar',
                   ),
                   controller: _searchController,
                   onChanged: _searchTerm,
@@ -99,18 +99,18 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                   ),
                 ),
               ),
-            if (_items != null && _items.length > 0)
+            if (_items != null && _items.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(7),
                 child: Text(
-                  "(${_items.length} items)",
+                  '(${_items.length} items)',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 10,
                   ),
                 ),
               ),
-            if (_items != null && _items.length > 0)
+            if (_items != null && _items.isNotEmpty)
               Container(
                 color: Colors.black12.withAlpha(9),
                 height: 220,
@@ -134,10 +134,10 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                                       !widget.insideEdit) {
                                     await Fetcher.put(
                                       url:
-                                          "/users/${Provider.of<UserState>(context).activeUser.id}.json",
+                                          '/users/${Provider.of<UserState>(context).activeUser.id}.json',
                                       body: {
-                                        "user": {
-                                          "ciudad_id": "${item.id}",
+                                        'user': {
+                                          'ciudad_id': '${item.id}',
                                         }
                                       },
                                     );
@@ -151,7 +151,7 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                   ),
                 ),
               ),
-            if (_items != null && _items.length == 0)
+            if (_items != null && _items.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Text(
@@ -183,7 +183,7 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                 ],
               ),
             Text(
-              "(Si tu ciudad es Capital Federal, podés buscar por barrios)",
+              '(Si tu ciudad es Capital Federal, podés buscar por barrios)',
               style: TextStyle(
                 fontStyle: FontStyle.italic,
                 fontSize: 9,

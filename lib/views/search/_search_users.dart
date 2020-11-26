@@ -32,20 +32,21 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
   bool _noMore = false;
 
   Future<void> _fetchContent({bool keepLimit = false}) async {
-    int lastLength = _items != null ? _items.length : 0;
+    final lastLength = _items != null ? _items.length : 0;
 
-    ResponseObject resp = await Fetcher.get(
+    final resp = await Fetcher.get(
       url: _searchController.text != null && _searchController.text.isNotEmpty
-          ? "/users/usernames.json?search=${Uri.encodeComponent(_searchController.text.replaceAll('@', ''))}&page=$_page"
-          : "/users/usernames.json?search=&page=$_page",
+          ? '/users/usernames.json?search=${Uri.encodeComponent(_searchController.text.replaceAll('@', ''))}&page=$_page'
+          : '/users/usernames.json?search=&page=$_page',
     );
 
-    if (resp != null)
+    if (resp != null) {
       _items += (json.decode(resp.body) as List)
           .map(
             (c) => Usuario.fromJson(c),
           )
           .toList();
+    }
 
     if (!keepLimit) _page += 1;
 
@@ -55,7 +56,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
     if (mounted) setState(() {});
   }
 
-  _resetLimit({bool keepNumber = false}) {
+  void _resetLimit({bool keepNumber = false}) {
     _items = [];
     _fetching = true;
     _noMore = false;
@@ -112,7 +113,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                 return _fetchContent();
               },
               child: _items != null
-                  ? _items.length > 0
+                  ? _items.isNotEmpty
                       ? ListView.builder(
                           controller: _scrollController,
                           itemCount: _items.length,
@@ -129,7 +130,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                                           user: _items[index],
                                         ),
                                         settings: RouteSettings(
-                                          name: "UserProfilePage",
+                                          name: 'UserProfilePage',
                                         ),
                                       ),
                                     );
@@ -149,7 +150,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                                                       null &&
                                                   _items[index].avatar != null
                                               ? CachedNetworkImageProvider(
-                                                  "${MyGlobals.SERVER_URL}${_items[index].avatar}",
+                                                  '${MyGlobals.SERVER_URL}${_items[index].avatar}',
                                                 )
                                               : null,
                                         ),
@@ -158,7 +159,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            "@${_items[index].username}",
+                                            '@${_items[index].username}',
                                             style: TextStyle(
                                               fontSize: 13,
                                               fontWeight: FontWeight.bold,
@@ -173,7 +174,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                             );
 
                             if (index == _items.length - 1) {
-                              if (!_noMore && _items.length > 1)
+                              if (!_noMore && _items.length > 1) {
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
@@ -190,7 +191,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                                     ),
                                   ],
                                 );
-                              else
+                              } else {
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
@@ -201,8 +202,10 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                                     ),
                                   ],
                                 );
-                            } else
+                              }
+                            } else {
                               return item;
+                            }
                           },
                         )
                       : ListView(
@@ -210,7 +213,7 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 15),
                               child: Text(
-                                "No hay elementos para mostrar",
+                                'No hay elementos para mostrar',
                                 textAlign: TextAlign.center,
                               ),
                             )
@@ -221,12 +224,12 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 15),
                           child: Text(
-                            "Ocurrió un error",
+                            'Ocurrió un error',
                             textAlign: TextAlign.center,
                           ),
                         ),
                         Text(
-                          "(Si el problema persiste, cerrá sesión y volvé a iniciar)",
+                          '(Si el problema persiste, cerrá sesión y volvé a iniciar)',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 10,

@@ -22,8 +22,8 @@ class MultimediaThumbs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (images != null && images.length > 0) ||
-            (currentImages != null && currentImages.length > 0)
+    return (images != null && images.isNotEmpty) ||
+            (currentImages != null && currentImages.isNotEmpty)
         ? Padding(
             padding: const EdgeInsets.all(10),
             child: Wrap(

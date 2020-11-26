@@ -13,7 +13,7 @@ class _RecordCameraPageState extends State<RecordCameraPage> {
     try {
       _paths = await FilePicker.getMultiFilePath();
     } catch (e) {
-      print("Unsupported operation" + e.toString());
+      print('Unsupported operation' + e.toString());
     }
     print(_paths);
   }

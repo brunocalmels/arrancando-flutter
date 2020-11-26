@@ -9,23 +9,23 @@ class UserState extends ChangeNotifier {
   List<SavedContent> savedContent = [];
   Map<String, int> myPuntuaciones = {};
 
-  setActiveUser(ActiveUser val) {
+  void setActiveUser(ActiveUser val) {
     activeUser = val;
     notifyListeners();
   }
 
-  setPreferredCategories(SectionType type, int val) {
+  void setPreferredCategories(SectionType type, int val) {
     preferredCategories[type] = val;
     notifyListeners();
   }
 
-  toggleSavedContent(SavedContent sc) {
+  void toggleSavedContent(SavedContent sc) {
     List all = savedContent
         .where(
           (s) => s.id == sc.id && s.type == sc.type,
         )
         .toList();
-    if (all.length == 0) {
+    if (all.isEmpty) {
       savedContent.add(sc);
     } else {
       savedContent.remove(all.first);
@@ -33,7 +33,7 @@ class UserState extends ChangeNotifier {
     notifyListeners();
   }
 
-  setMyPuntuacion(String key, int val) {
+  void setMyPuntuacion(String key, int val) {
     myPuntuaciones[key] = val;
     notifyListeners();
   }

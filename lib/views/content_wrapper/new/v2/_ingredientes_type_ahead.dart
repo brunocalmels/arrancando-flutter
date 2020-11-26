@@ -33,11 +33,11 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
   bool _searching = false;
   List _unidadesIngredientes = [];
 
-  _fetchResults() async {
-    if (_searchController.text != null && _searchController.text.length >= 1) {
-      ResponseObject resp = await Fetcher.get(
+  Future<void> _fetchResults() async {
+    if (_searchController.text != null && _searchController.text.isNotEmpty) {
+      final resp = await Fetcher.get(
         url:
-            "/ingredientes/search.json?filterrific[search_query]=${_searchController.text}",
+            '/ingredientes/search.json?filterrific[search_query]=${_searchController.text}',
       );
 
       if (resp != null && resp.body != null && resp.body.isNotEmpty) {
@@ -55,7 +55,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
     if (mounted) setState(() {});
   }
 
-  _searchTerm(text) {
+  void _searchTerm(text) {
     if (text != null && text.isNotEmpty && text.length >= 1) {
       _searching = true;
       if (mounted) setState(() {});
@@ -64,7 +64,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
     }
   }
 
-  _agregarNuevoIngrediente({bool cantNecesaria = false}) {
+  void _agregarNuevoIngrediente({bool cantNecesaria = false}) {
     _errorIngred = null;
     if (_selected != null &&
         _selected.nombre != null &&
@@ -79,10 +79,10 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
         [
           ...widget.ingredientes,
           {
-            "ingrediente": _selected.nombre,
-            "cantidad":
-                cantNecesaria ? "Cant. necesaria" : _quantityController.text,
-            "unidad": cantNecesaria ? "" : _unidad,
+            'ingrediente': _selected.nombre,
+            'cantidad':
+                cantNecesaria ? 'Cant. necesaria' : _quantityController.text,
+            'unidad': cantNecesaria ? '' : _unidad,
           },
         ],
       );
@@ -92,15 +92,15 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
       _items = null;
       _selected = null;
     } else {
-      _errorIngred = "Todos los campos deben estar completos";
+      _errorIngred = 'Todos los campos deben estar completos';
     }
     if (mounted) setState(() {});
   }
 
-  _fetchUnidadesIngredientes() async {
+  void _fetchUnidadesIngredientes() async {
     try {
-      ResponseObject resp = await Fetcher.get(
-        url: "/unidades_ingredientes.json",
+      final resp = await Fetcher.get(
+        url: '/unidades_ingredientes.json',
       );
       if (resp != null && resp.body != null) {
         _unidadesIngredientes = (json.decode(resp.body) as List);
@@ -125,7 +125,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text(
-          "Ingredientes",
+          'Ingredientes',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -162,7 +162,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
               TextFormField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: "Papas, Batatas, ...",
+                  hintText: 'Papas, Batatas, ...',
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 12,
@@ -199,7 +199,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
               ),
             ),
           ),
-        if (_items != null && _items.length > 0)
+        if (_items != null && _items.isNotEmpty)
           Material(
             color: Color(
                 Provider.of<MainState>(context).activeTheme == ThemeMode.light
@@ -250,7 +250,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
             ),
           ),
         if (_items != null &&
-            _items.length == 0 &&
+            _items.isEmpty &&
             _searchController.text != null &&
             _searchController.text.isNotEmpty)
           Material(
@@ -269,13 +269,13 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                     horizontal: 10,
                   ),
                   title: Text(
-                    "No se encontró el ingrediente",
+                    'No se encontró el ingrediente',
                     style: TextStyle(
                       fontSize: 14,
                     ),
                   ),
                   subtitle: Text(
-                    "Tocá acá para añadirlo como 'nuevo'",
+                    'Tocá acá para añadirlo como "nuevo"',
                     style: TextStyle(
                       fontSize: 10,
                     ),
@@ -345,7 +345,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                       child: TextFormField(
                         controller: _quantityController,
                         decoration: InputDecoration(
-                          hintText: "Cant.",
+                          hintText: 'Cant.',
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 15,
@@ -395,7 +395,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                           child: DropdownButton(
                             isExpanded: true,
                             hint: Text(
-                              "Unid",
+                              'Unid',
                               style: TextStyle(
                                 fontSize: 10,
                                 color: Theme.of(context)
@@ -407,14 +407,14 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                             ),
                             value: _unidad,
                             onChanged: _unidadesIngredientes != null &&
-                                    _unidadesIngredientes.length > 0
+                                    _unidadesIngredientes.isNotEmpty
                                 ? (val) {
                                     _unidad = val;
                                     if (mounted) setState(() {});
                                   }
                                 : null,
                             items: _unidadesIngredientes != null &&
-                                    _unidadesIngredientes.length > 0
+                                    _unidadesIngredientes.isNotEmpty
                                 ? _unidadesIngredientes
                                     .map(
                                       (i) => DropdownMenuItem(
@@ -440,7 +440,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                     minWidth: 30,
                     child: FlatButton(
                       child: Text(
-                        "C/N",
+                        'C/N',
                         style: TextStyle(
                           color: Theme.of(context).accentColor,
                         ),
@@ -477,7 +477,7 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
               ),
             ),
           ),
-        if (widget.ingredientes != null && widget.ingredientes.length > 0)
+        if (widget.ingredientes != null && widget.ingredientes.isNotEmpty)
           Wrap(
             runSpacing: 5,
             spacing: 5,

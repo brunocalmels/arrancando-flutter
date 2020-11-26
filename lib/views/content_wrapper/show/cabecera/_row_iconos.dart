@@ -36,8 +36,8 @@ class RowIconos extends StatelessWidget {
                 ),
                 Text(
                   content.duracion != null
-                      ? "${content.duracion} minutos"
-                      : "Desconocida",
+                      ? '${content.duracion} minutos'
+                      : 'Desconocida',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 9,
@@ -99,7 +99,7 @@ class RowIconos extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  content.complejidad ?? "Desconocida",
+                  content.complejidad ?? 'Desconocida',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 9,

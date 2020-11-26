@@ -66,8 +66,8 @@ class CardContent extends StatelessWidget {
                                 ),
                                 Text(
                                   content.duracion != null
-                                      ? "${content.duracion} minutos"
-                                      : "Desconocido",
+                                      ? '${content.duracion} minutos'
+                                      : 'Desconocido',
                                   style: TextStyle(
                                     fontSize: 10,
                                   ),
@@ -123,7 +123,7 @@ class CardContent extends StatelessWidget {
                                   width: 5,
                                 ),
                                 Text(
-                                  content.complejidad ?? "Desconocida",
+                                  content.complejidad ?? 'Desconocida',
                                   style: TextStyle(
                                     fontSize: 10,
                                   ),
@@ -227,8 +227,8 @@ class CardContent extends StatelessWidget {
                               )
                             : CachedNetworkImage(
                                 imageUrl: content.thumbnail.contains('http')
-                                    ? "${content.thumbnail}"
-                                    : "${MyGlobals.SERVER_URL}${content.thumbnail}",
+                                    ? '${content.thumbnail}'
+                                    : '${MyGlobals.SERVER_URL}${content.thumbnail}',
                                 fit: BoxFit.cover,
                                 placeholder: (context, url) => Center(
                                   child: SizedBox(
@@ -279,7 +279,7 @@ class CardContent extends StatelessWidget {
                                   user: content.user,
                                 ),
                                 settings: RouteSettings(
-                                  name: "UserProfilePage",
+                                  name: 'UserProfilePage',
                                 ),
                               ),
                             );
@@ -289,7 +289,7 @@ class CardContent extends StatelessWidget {
                             backgroundImage: content.user != null &&
                                     content.user.avatar != null
                                 ? CachedNetworkImageProvider(
-                                    "${MyGlobals.SERVER_URL}${content.user.avatar}",
+                                    '${MyGlobals.SERVER_URL}${content.user.avatar}',
                                   )
                                 : null,
                           ),
@@ -301,8 +301,8 @@ class CardContent extends StatelessWidget {
                       Expanded(
                         child: Text(
                           content.user == null
-                              ? "------"
-                              : "@${content.user.username}",
+                              ? '------'
+                              : '@${content.user.username}',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),

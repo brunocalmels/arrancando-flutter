@@ -105,28 +105,28 @@ class ContentWrapper {
 
   Map<String, dynamic> toJson() => _$ContentWrapperToJson(this);
 
-  get fecha =>
-      "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' : '/' + createdAt.toLocal().year.toString()}";
+  String get fecha =>
+      '${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' : '/' + createdAt.toLocal().year.toString()}';
 
   String get fechaTexto {
-    final List<String> meses = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
+    final meses = <String>[
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre',
     ];
-    return "${createdAt.toLocal().day.toString().padLeft(2, '0')} de ${meses[createdAt.toLocal().month - 1]} ${createdAt.toLocal().year == DateTime.now().year ? '' : createdAt.toLocal().year}";
+    return '${createdAt.toLocal().day.toString().padLeft(2, '0')} de ${meses[createdAt.toLocal().month - 1]} ${createdAt.toLocal().year == DateTime.now().year ? '' : createdAt.toLocal().year}';
   }
 
-  // "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
+  // '${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}';
 
   int myPuntaje(int uid) =>
       puntajes
@@ -137,13 +137,13 @@ class ContentWrapper {
           ?.puntaje ??
       0;
 
-  addMyPuntaje(Puntaje myPuntaje) {
+  void addMyPuntaje(Puntaje myPuntaje) {
     var oldPuntaje = puntajes?.indexWhere(
       (p) => p.usuario.id == myPuntaje.usuario.id,
     );
     if (oldPuntaje >= 0) {
       var ps = [];
-      int i = 0;
+      var i = 0;
       puntajes.forEach((p) {
         if (i == oldPuntaje) {
           ps.add(myPuntaje);
@@ -161,24 +161,25 @@ class ContentWrapper {
     }
   }
 
-  double get puntajePromedio => puntajes != null && puntajes.length > 0
+  double get puntajePromedio => puntajes != null && puntajes.isNotEmpty
       ? (puntajes.fold<double>(0, (sum, p) => sum + p.puntaje) /
           puntajes.length)
       : 0.0;
 
   Future<double> get distancia async {
     if (type != null && type == SectionType.pois) {
-      bool denied = await ActiveUser.locationPermissionDenied();
+      final denied = await ActiveUser.locationPermissionDenied();
       if (!denied) {
-        Position currentPosition = await Geolocator().getCurrentPosition(
+        final currentPosition = await Geolocator().getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
         );
         if (currentPosition != null) {
-          double mts = await Geolocator().distanceBetween(
-              currentPosition.latitude,
-              currentPosition.longitude,
-              this.latitud,
-              this.longitud);
+          final mts = await Geolocator().distanceBetween(
+            currentPosition.latitude,
+            currentPosition.longitude,
+            latitud,
+            longitud,
+          );
           if (mts != null) {
             localDistance = mts;
             return mts;
@@ -189,22 +190,23 @@ class ContentWrapper {
     return null;
   }
 
-  get categID => type == SectionType.publicaciones
+  int get categID => type == SectionType.publicaciones
       ? ciudadId
       : type == SectionType.recetas
           ? categoriaRecetaId
           : categoriaPoiId;
 
-  esOwner(BuildContext context) =>
-      this.user.id == Provider.of<UserState>(context).activeUser.id;
+  bool esOwner(BuildContext context) =>
+      user.id == Provider.of<UserState>(context).activeUser.id;
 
-  distanciaToH() {
+  String distanciaToH() {
     if (localDistance != null) {
-      double kms = localDistance / 1000;
-      if (kms < 1)
-        return "${localDistance.round()}m";
-      else
-        return "${kms.toStringAsFixed(2)}km";
+      final kms = localDistance / 1000;
+      if (kms < 1) {
+        return '${localDistance.round()}m';
+      } else {
+        return '${kms.toStringAsFixed(2)}km';
+      }
     }
     return null;
   }
@@ -214,19 +216,19 @@ class ContentWrapper {
 
   //   switch (type) {
   //     case SectionType.publicaciones:
-  //       _url = "/publicaciones";
+  //       _url = '/publicaciones';
   //       break;
   //     case SectionType.recetas:
-  //       _url = "/recetas";
+  //       _url = '/recetas';
   //       break;
   //     case SectionType.pois:
-  //       _url = "/pois";
+  //       _url = '/pois';
   //       break;
   //     default:
-  //       _url = "/publicaciones";
+  //       _url = '/publicaciones';
   //   }
 
-  //   ResponseObject res = await Fetcher.get(url: "$_url/$id.json");
+  //   ResponseObject res = await Fetcher.get(url: '$_url/$id.json');
 
   //   if (res != null && res.body != null) {
   //     ContentWrapper newContent =
@@ -255,13 +257,13 @@ class ContentWrapper {
   //   }
   // }
 
-  sharedThisContent() async {
+  Future<void> sharedThisContent() async {
     try {
       await Fetcher.post(
-        url: "/content/shared_this.json",
+        url: '/content/shared_this.json',
         body: {
-          "id": id,
-          "type": type.toString().split('.').last,
+          'id': id,
+          'type': type.toString().split('.').last,
         },
       );
     } catch (e) {
@@ -269,26 +271,26 @@ class ContentWrapper {
     }
   }
 
-  shareSelf({
+  Future<void> shareSelf({
     bool esFull = false,
     Uint8List imageBytes,
     bool esWpp = false,
     bool esFbk = false,
   }) async {
-    String miraEsta = "esta publicación";
+    var miraEsta = 'esta publicación';
     String categ;
 
-    final GlobalSingleton gs = GlobalSingleton();
+    final gs = GlobalSingleton();
 
     switch (type) {
       case SectionType.publicaciones:
-        miraEsta = "esta publicación";
+        miraEsta = 'esta publicación';
         break;
       case SectionType.recetas:
-        miraEsta = "esta receta";
+        miraEsta = 'esta receta';
         break;
       case SectionType.pois:
-        miraEsta = "esta tienda";
+        miraEsta = 'esta tienda';
         categ = gs.categories[SectionType.pois]
             .firstWhere(
               (c) => c.id == categoriaPoiId,
@@ -297,50 +299,50 @@ class ContentWrapper {
             ?.nombre;
         break;
       default:
-        miraEsta = "esta publicación";
+        miraEsta = 'esta publicación';
     }
 
-    String piecera =
-        "Mirá $miraEsta: https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}";
+    final piecera =
+        'Mirá $miraEsta: https://arrancando.com.ar/${type.toString().split('.').last}/${id}';
     // String cabecera =
-    //     "Si todavía no te descargaste Arrancando podés hacerlo desde\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es";
-    String cabecera = "";
+    //     'Si todavía no te descargaste Arrancando podés hacerlo desde\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es';
+    final cabecera = '';
 
-    String cuerpo = this.cuerpo != null && this.cuerpo.isNotEmpty
-        ? "\n\n${this.cuerpo}"
-        : "";
-    String introduccion = this.introduccion != null &&
+    final cuerpo = this.cuerpo != null && this.cuerpo.isNotEmpty
+        ? '\n\n${this.cuerpo}'
+        : '';
+    final introduccion = this.introduccion != null &&
             this.introduccion.isNotEmpty
-        ? "\n\n${esWpp ? '*INTRODUCCIÓN*:\n' : 'INTRODUCCIÓN:\n'}${this.introduccion}"
-        : "";
-    String ingredientes = this.ingredientesItems != null &&
-            this.ingredientesItems.isNotEmpty
-        ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientesItems.map((i) => "${i['cantidad']} ${i['unidad']} de ${i['ingrediente']}").join('\n')}"
+        ? '\n\n${esWpp ? '*INTRODUCCIÓN*:\n' : 'INTRODUCCIÓN:\n'}${this.introduccion}'
+        : '';
+    final ingredientes = ingredientesItems != null &&
+            ingredientesItems.isNotEmpty
+        ? '\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${ingredientesItems.map((i) => '${i['cantidad']} ${i['unidad']} de ${i['ingrediente']}').join('\n')}'
         : this.ingredientes != null && this.ingredientes.isNotEmpty
-            ? "\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientes}"
-            : "";
-    String instrucciones = this.instrucciones != null &&
+            ? '\n\n${esWpp ? '*INGREDIENTES*:\n' : 'INGREDIENTES:\n'}${this.ingredientes}'
+            : '';
+    final instrucciones = this.instrucciones != null &&
             this.instrucciones.isNotEmpty
-        ? "\n\n${esWpp ? '*INSTRUCCIONES*:\n' : 'INSTRUCCIONES:\n'}${this.instrucciones}"
-        : "";
+        ? '\n\n${esWpp ? '*INSTRUCCIONES*:\n' : 'INSTRUCCIONES:\n'}${this.instrucciones}'
+        : '';
 
-    String titulo = esWpp ? "*${this.titulo}*" : this.titulo;
+    final titulo = esWpp ? '*${this.titulo}*' : this.titulo;
 
-    String categoria = categ != null ? "Categoría: $categ\n\n" : "";
+    final categoria = categ != null ? 'Categoría: $categ\n\n' : '';
 
-    String texto = esFull
-        ? "$cabecera\n\n$piecera\n\n$categoria$titulo$cuerpo$introduccion$ingredientes$instrucciones"
-        : "$cabecera\n\n$categoria$titulo\n\n$piecera";
+    final texto = esFull
+        ? '$cabecera\n\n$piecera\n\n$categoria$titulo$cuerpo$introduccion$ingredientes$instrucciones'
+        : '$cabecera\n\n$categoria$titulo\n\n$piecera';
 
     if (esFbk) {
       Share.text(
-        "Compartir contenido",
-        "https://arrancando.com.ar/${this.type.toString().split('.').last}/${this.id}",
-        "text/plain",
+        'Compartir contenido',
+        'https://arrancando.com.ar/${type.toString().split('.').last}/${id}',
+        'text/plain',
       );
     } else {
       if (imageBytes != null) {
-        Share.file(
+        await Share.file(
           'Compartir imagen',
           'imagen.jpg',
           imageBytes,
@@ -352,7 +354,7 @@ class ContentWrapper {
             .buffer
             .asUint8List();
 
-        Share.file(
+        await Share.file(
           'Compartir imagen',
           'imagen.jpg',
           img,
@@ -371,58 +373,64 @@ class ContentWrapper {
     BuildContext context,
     ContentSortType sortBy,
   }) async {
-    MainState mainState = Provider.of<MainState>(context);
-    UserState userState = Provider.of<UserState>(context);
-    ContentPageState contentPageState = Provider.of<ContentPageState>(context);
+    final mainState = Provider.of<MainState>(context);
+    final userState = Provider.of<UserState>(context);
+    final contentPageState = Provider.of<ContentPageState>(context);
 
-    String rootURL = '/publicaciones';
-    String categoryParamName = "ciudad_id";
+    var rootURL = '/publicaciones';
+    var categoryParamName = 'ciudad_id';
 
     switch (type) {
       case SectionType.publicaciones:
         rootURL = '/publicaciones';
-        categoryParamName = "ciudad_id";
+        categoryParamName = 'ciudad_id';
         break;
       case SectionType.recetas:
         rootURL = '/recetas';
-        categoryParamName = "categoria_receta_id";
+        categoryParamName = 'categoria_receta_id';
         break;
       case SectionType.pois:
         rootURL = '/pois';
-        categoryParamName = "categoria_poi_id";
+        categoryParamName = 'categoria_poi_id';
         break;
       default:
     }
 
-    String url = "$rootURL.json?page=$page";
+    var url = '$rootURL.json?page=$page';
 
-    if (search != null && search.isNotEmpty)
+    if (search != null && search.isNotEmpty) {
       url +=
-          "&filterrific[search_query]=${Uri.encodeComponent(search.replaceAll('@', ''))}";
-    if (categoryId != null && categoryId > 0)
-      url += "&filterrific[$categoryParamName]=$categoryId";
+          '&filterrific[search_query]=${Uri.encodeComponent(search.replaceAll('@', ''))}';
+    }
+    if (categoryId != null && categoryId > 0) {
+      url += '&filterrific[$categoryParamName]=$categoryId';
+    }
 
     if (type == SectionType.publicaciones &&
         context != null &&
         mainState.selectedCategoryHome[SectionType.publicaciones_categoria] !=
             null &&
-        mainState.selectedCategoryHome[SectionType.publicaciones_categoria] > 0)
+        mainState.selectedCategoryHome[SectionType.publicaciones_categoria] >
+            0) {
       url +=
           '&filterrific[categoria_publicacion_id]=${mainState.selectedCategoryHome[SectionType.publicaciones_categoria]}';
+    }
 
     if (type == SectionType.pois &&
         context != null &&
         mainState.selectedCategoryHome[SectionType.pois_ciudad] != null &&
-        mainState.selectedCategoryHome[SectionType.pois_ciudad] > 0)
+        mainState.selectedCategoryHome[SectionType.pois_ciudad] > 0) {
       url +=
           '&filterrific[ciudad_id]=${mainState.selectedCategoryHome[SectionType.pois_ciudad]}';
+    }
 
     if (context != null &&
         contentPageState.showMine[type] != null &&
-        contentPageState.showMine[type])
+        contentPageState.showMine[type]) {
       url += '&filterrific[user_id]=${userState.activeUser.id}';
+    }
 
-    if (sortBy != null)
+    if (sortBy != null) {
       switch (sortBy) {
         case ContentSortType.fecha_creacion:
           url += '&filterrific[sorted_by]=fecha_creacion';
@@ -441,8 +449,9 @@ class ContentWrapper {
           break;
         default:
       }
+    }
 
-    ResponseObject resp = await Fetcher.get(
+    final resp = await Fetcher.get(
       url: url,
     );
 
@@ -469,7 +478,7 @@ class ContentWrapper {
     ContentSortType type, {
     Map<int, double> calculatedDistance,
   }) async {
-    List<ContentWrapper> items = elements;
+    final items = elements;
     try {
       switch (type) {
         case ContentSortType.proximidad:
@@ -478,10 +487,11 @@ class ContentWrapper {
             await Future.wait(
               items.map(
                 (i) async {
-                  if (calculatedDistance[i.id] == null)
+                  if (calculatedDistance[i.id] == null) {
                     await i.distancia;
-                  else
+                  } else {
                     i.localDistance = calculatedDistance[i.id];
+                  }
                   return null;
                 },
               ),
@@ -506,22 +516,22 @@ class ContentWrapper {
     var url;
     switch (type) {
       case SectionType.publicaciones:
-        url = "/publicaciones";
+        url = '/publicaciones';
         break;
       case SectionType.recetas:
-        url = "/recetas";
+        url = '/recetas';
         break;
       case SectionType.pois:
-        url = "/pois";
+        url = '/pois';
         break;
       default:
-        url = "/publicaciones";
+        url = '/publicaciones';
     }
 
     await Fetcher.put(
-      url: "$url/$id/saved.json",
+      url: '$url/$id/saved.json',
       body: {
-        "saved": val,
+        'saved': val,
       },
     );
   }

@@ -19,18 +19,18 @@ class _TypeAheadPublicacionesRecetasPoisState
   Timer _debounce;
   bool _searching = false;
 
-  _fetchResults() async {
+  Future<void> _fetchResults() async {
     if (_searchController.text != null && _searchController.text.length >= 3) {
-      ResponseObject resp = await Fetcher.get(
+      final resp = await Fetcher.get(
         url:
-            "/publicaciones.json?filterrific[search_query]=${_searchController.text}",
+            '/publicaciones.json?filterrific[search_query]=${_searchController.text}',
       );
-      ResponseObject resp2 = await Fetcher.get(
+      final resp2 = await Fetcher.get(
         url:
-            "/recetas.json?filterrific[search_query]=${_searchController.text}",
+            '/recetas.json?filterrific[search_query]=${_searchController.text}',
       );
-      ResponseObject resp3 = await Fetcher.get(
-        url: "/pois.json?filterrific[search_query]=${_searchController.text}",
+      final resp3 = await Fetcher.get(
+        url: '/pois.json?filterrific[search_query]=${_searchController.text}',
       );
 
       _items = [];
@@ -40,7 +40,7 @@ class _TypeAheadPublicacionesRecetasPoisState
           ..._items,
           ...(json.decode(resp.body) as List).map(
             (c) {
-              ContentWrapper wrapper = ContentWrapper.fromJson(c);
+              final wrapper = ContentWrapper.fromJson(c);
               wrapper.type = SectionType.publicaciones;
               return wrapper;
             },
@@ -52,7 +52,7 @@ class _TypeAheadPublicacionesRecetasPoisState
           ..._items,
           ...(json.decode(resp2.body) as List).map(
             (c) {
-              ContentWrapper wrapper = ContentWrapper.fromJson(c);
+              final wrapper = ContentWrapper.fromJson(c);
               wrapper.type = SectionType.recetas;
               return wrapper;
             },
@@ -64,7 +64,7 @@ class _TypeAheadPublicacionesRecetasPoisState
           ..._items,
           ...(json.decode(resp3.body) as List).map(
             (c) {
-              ContentWrapper wrapper = ContentWrapper.fromJson(c);
+              final wrapper = ContentWrapper.fromJson(c);
               wrapper.type = SectionType.pois;
               return wrapper;
             },
@@ -78,7 +78,7 @@ class _TypeAheadPublicacionesRecetasPoisState
     if (mounted) setState(() {});
   }
 
-  _searchTerm(text) {
+  void _searchTerm(text) {
     if (text != null && text.isNotEmpty && text.length >= 3) {
       _searching = true;
       if (mounted) setState(() {});
@@ -91,7 +91,7 @@ class _TypeAheadPublicacionesRecetasPoisState
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        "Buscar publicación/receta/p. interés para añadir link",
+        'Buscar publicación/receta/p. interés para añadir link',
         style: TextStyle(
           fontSize: 13,
         ),
@@ -106,7 +106,7 @@ class _TypeAheadPublicacionesRecetasPoisState
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(
-                      hintText: "Buscar",
+                      hintText: 'Buscar',
                     ),
                     controller: _searchController,
                     onChanged: _searchTerm,
@@ -135,18 +135,18 @@ class _TypeAheadPublicacionesRecetasPoisState
                     ),
                   ),
                 ),
-              if (_items != null && _items.length > 0)
+              if (_items != null && _items.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(7),
                   child: Text(
-                    "(${_items.length} items)",
+                    '(${_items.length} items)',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 10,
                     ),
                   ),
                 ),
-              if (_items != null && _items.length > 0)
+              if (_items != null && _items.isNotEmpty)
                 Container(
                   color: Colors.black12.withAlpha(9),
                   height: 220,
@@ -173,7 +173,7 @@ class _TypeAheadPublicacionesRecetasPoisState
                     ),
                   ),
                 ),
-              if (_items != null && _items.length == 0)
+              if (_items != null && _items.isEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
@@ -189,7 +189,7 @@ class _TypeAheadPublicacionesRecetasPoisState
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text("Cancelar"),
+          child: Text('Cancelar'),
           onPressed: () {
             Navigator.of(context).pop();
           },

@@ -1,6 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
-import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +30,7 @@ class _PageCategoriasStatePoi extends State<PageCategoriasPoi> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "SELECCIONAR CATEGORÍA",
+          'SELECCIONAR CATEGORÍA',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
@@ -66,7 +65,7 @@ class _PageCategoriasStatePoi extends State<PageCategoriasPoi> {
                     color: Theme.of(context).backgroundColor,
                     elevation: 10,
                     child: Text(
-                      "LISTO",
+                      'LISTO',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,

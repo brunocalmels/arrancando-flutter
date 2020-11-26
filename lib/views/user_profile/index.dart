@@ -33,7 +33,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Usuario _user;
   bool _loaded = false;
   SectionType _activeSectionType = SectionType.publicaciones;
-  Map<SectionType, int> _count = {};
+  final _count = <SectionType, int>{};
   List<ContentWrapper> _items = [];
   bool _sentCount = false;
   bool _sent = false;
@@ -49,7 +49,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   int _experiencia = 0;
   bool _initialLoad = true;
 
-  _setActiveSection(SectionType type) {
+  void _setActiveSection(SectionType type) {
     _activeSectionType = type;
     _noMore = false;
     _limit = 6;
@@ -57,17 +57,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (mounted) setState(() {});
   }
 
-  _fetchCount() async {
+  Future<void> _fetchCount() async {
     _sentCount = true;
     if (mounted) setState(() {});
 
-    ResponseObject resp = await Fetcher.get(
-      url: "/content/count.json?user_id=${_user.id}",
+    final resp = await Fetcher.get(
+      url: '/content/count.json?user_id=${_user.id}',
     );
 
     if (resp != null && resp.body != null) {
       var data = json.decode(resp.body);
-      _master = data['master'] != null && data['master'] != ""
+      _master = data['master'] != null && data['master'] != ''
           ? data['master']
           : null;
       _siguiendo = data['siguiendo'];
@@ -86,35 +86,35 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (mounted) setState(() {});
   }
 
-  _getUrl() {
-    String url;
+  String _getUrl() {
+    var url;
     switch (_activeSectionType) {
       case SectionType.publicaciones:
-        url = "/publicaciones";
+        url = '/publicaciones';
         break;
       case SectionType.recetas:
-        url = "/recetas";
+        url = '/recetas';
         break;
       case SectionType.pois:
-        url = "/pois";
+        url = '/pois';
         break;
       // case SectionType.wiki:
-      //   url = "/wiki";
+      //   url = '/wiki';
       //   break;
       default:
-        url = "/publicaciones";
+        url = '/publicaciones';
         break;
     }
     return url;
   }
 
-  _fetchElements() async {
+  Future<void> _fetchElements() async {
     _sent = true;
     if (mounted) setState(() {});
-    String url = _getUrl();
+    final url = _getUrl();
 
-    ResponseObject resp = await Fetcher.get(
-      url: "$url.json?filterrific[user_id]=${_user.id}&limit=$_limit",
+    final resp = await Fetcher.get(
+      url: '$url.json?filterrific[user_id]=${_user.id}&limit=$_limit',
     );
 
     if (resp != null && resp.body != null) {
@@ -129,13 +129,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (mounted) setState(() {});
   }
 
-  _fetchMore() async {
+  Future<void> _fetchMore() async {
     _sentMore = true;
     if (mounted) setState(() {});
-    String url = _getUrl();
+    final url = _getUrl();
 
-    ResponseObject resp = await Fetcher.get(
-      url: "$url.json?filterrific[user_id]=${_user.id}&limit=3&offset=$_limit",
+    final resp = await Fetcher.get(
+      url: '$url.json?filterrific[user_id]=${_user.id}&limit=3&offset=$_limit',
     );
 
     if (resp != null && resp.body != null) {
@@ -152,17 +152,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (mounted) setState(() {});
   }
 
-  _seguir({
-    bool noSeguir: false,
-  }) async {
+  Future<void> _seguir({bool noSeguir = false}) async {
     _sentSeguir = true;
     if (mounted) setState(() {});
 
     if (!noSeguir) {
-      ResponseObject resp = await Fetcher.post(
-        url: "/seguimientos.json",
+      final resp = await Fetcher.post(
+        url: '/seguimientos.json',
         body: {
-          "seguido_id": _user.id,
+          'seguido_id': _user.id,
         },
       );
       if (resp != null && resp.body != null) {
@@ -170,8 +168,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
       }
     } else {
       if (_siguiendo != null) {
-        ResponseObject resp = await Fetcher.destroy(
-          url: "/seguimientos/$_siguiendo.json",
+        final resp = await Fetcher.destroy(
+          url: '/seguimientos/$_siguiendo.json',
         );
         if (resp != null && resp.status != null) {
           _siguiendo = null;
@@ -179,16 +177,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
       }
     }
 
-    _fetchCount();
+    await _fetchCount();
 
     _sentSeguir = false;
     if (mounted) setState(() {});
   }
 
-  _fetchUserAndInfo() async {
+  Future<void> _fetchUserAndInfo() async {
     if (widget.username != null) {
-      ResponseObject resp = await Fetcher.get(
-        url: "/users/by_username.json?username=${widget.username.trim()}",
+      final resp = await Fetcher.get(
+        url: '/users/by_username.json?username=${widget.username.trim()}',
       );
 
       if (resp != null && resp.body != null) {
@@ -224,7 +222,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       appBar: _initialLoad
           ? null
           : AppBar(
-              title: _user != null ? Text("@${_user.username}") : null,
+              title: _user != null ? Text('@${_user.username}') : null,
             ),
       body: _initialLoad
           ? SafeArea(child: LoadingWidget())
@@ -308,7 +306,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
-                                    "INSTAGRAM",
+                                    'INSTAGRAM',
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
@@ -331,7 +329,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 if (!profile.contains('http') ||
                                     !profile.contains('instagram')) {
                                   profile =
-                                      "https://instagram.com/${profile.split('/').last}";
+                                      'https://instagram.com/${profile.split('/').last}';
                                 }
                                 if (await canLaunch(profile)) {
                                   await launch(
@@ -403,7 +401,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       child: Padding(
                         padding: const EdgeInsets.all(15),
                         child: Text(
-                          "Este usuario no existe",
+                          'Este usuario no existe',
                           textAlign: TextAlign.center,
                         ),
                       ),

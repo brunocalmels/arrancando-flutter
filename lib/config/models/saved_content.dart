@@ -25,10 +25,9 @@ class SavedContent {
 
   Map<String, dynamic> toJson() => _$SavedContentToJson(this);
 
-  static initSaved(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.remove('savedContent');
-    String scsString = prefs.getString("savedContent");
+  static Future<void> initSaved(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final scsString = prefs.getString('savedContent');
     if (scsString != null) {
       (json.decode(scsString) as List)
           .map(
@@ -47,15 +46,18 @@ class SavedContent {
           .savedContent
           .any((sc) => sc.id == content.id && sc.type == content.type);
 
-  static toggleSave(ContentWrapper content, BuildContext context) async {
+  static Future<void> toggleSave(
+    ContentWrapper content,
+    BuildContext context,
+  ) async {
     Provider.of<UserState>(context).toggleSavedContent(
       SavedContent(content.id, content.type),
     );
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-      "savedContent",
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'savedContent',
       json.encode(Provider.of<UserState>(context).savedContent),
     );
-    content.setSaved(isSaved(content, context));
+    await content.setSaved(isSaved(content, context));
   }
 }

@@ -12,17 +12,17 @@ class CabeceraUserProfile extends StatelessWidget {
   final Function seguir;
   final bool sentSeguir;
   final Map<String, String> _masterToAsset = {
-    "horno": "assets/images/user_profile/masters/horno.png",
-    "olla": "assets/images/user_profile/masters/olla.png",
-    "parrilla": "assets/images/user_profile/masters/parrilla.png",
-    "plancha": "assets/images/user_profile/masters/plancha.png",
-    "sartén": "assets/images/user_profile/masters/sarten.png",
-    "wok": "assets/images/user_profile/masters/wok.png",
-    "asador": "assets/images/user_profile/masters/asador.png",
-    "disco": "assets/images/user_profile/masters/disco.png",
-    "tragos y bebidas": "assets/images/user_profile/masters/tragos.png",
-    "bowl": "assets/images/user_profile/masters/bowl.png",
-    "wiki": "assets/images/user_profile/masters/wiki.png",
+    'horno': 'assets/images/user_profile/masters/horno.png',
+    'olla': 'assets/images/user_profile/masters/olla.png',
+    'parrilla': 'assets/images/user_profile/masters/parrilla.png',
+    'plancha': 'assets/images/user_profile/masters/plancha.png',
+    'sartén': 'assets/images/user_profile/masters/sarten.png',
+    'wok': 'assets/images/user_profile/masters/wok.png',
+    'asador': 'assets/images/user_profile/masters/asador.png',
+    'disco': 'assets/images/user_profile/masters/disco.png',
+    'tragos y bebidas': 'assets/images/user_profile/masters/tragos.png',
+    'bowl': 'assets/images/user_profile/masters/bowl.png',
+    'wiki': 'assets/images/user_profile/masters/wiki.png',
   };
 
   CabeceraUserProfile({
@@ -45,9 +45,9 @@ class CabeceraUserProfile extends StatelessWidget {
               src: AssetImage(
                 master != null && _masterToAsset[master] != null
                     ? _masterToAsset[master]
-                    : "assets/images/user_profile/masters/wok.png",
+                    : 'assets/images/user_profile/masters/wok.png',
               ),
-              label: "Master${master != null ? " $master" : ''}",
+              label: 'Master${master != null ? ' $master' : ''}',
             ),
           ),
           Column(
@@ -83,7 +83,7 @@ class CabeceraUserProfile extends StatelessWidget {
                             ),
                           )
                         : Text(
-                            siguiendo == null ? "SEGUIR" : "DEJAR DE SEGUIR",
+                            siguiendo == null ? 'SEGUIR' : 'DEJAR DE SEGUIR',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -92,12 +92,13 @@ class CabeceraUserProfile extends StatelessWidget {
                     onPressed: sentSeguir
                         ? null
                         : () {
-                            if (siguiendo == null)
+                            if (siguiendo == null) {
                               seguir();
-                            else
+                            } else {
                               seguir(
                                 noSeguir: true,
                               );
+                            }
                           },
                   ),
                 ),

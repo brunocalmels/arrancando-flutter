@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 abstract class NotificacionesService {
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  static initFirebaseNotifications(context) async {
+  static Future<void> initFirebaseNotifications(context) async {
     if (Platform.isIOS) {
       await _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(
@@ -22,7 +22,7 @@ abstract class NotificacionesService {
     }
     _firebaseMessaging.onIosSettingsRegistered.listen(
       (settings) {
-        print("Settings registered");
+        print('Settings registered');
       },
     );
 
@@ -34,7 +34,7 @@ abstract class NotificacionesService {
                     message['notification'] != null &&
                     message['notification']['body'] != null
                 ? message['notification']['body']
-                : "Nueva notificación";
+                : 'Nueva notificación';
 
             OverlayEntry entry;
 
@@ -91,7 +91,7 @@ abstract class NotificacionesService {
       onLaunch: (message) async {
         if (message != null && message['data'] != null) {
           if (message['data']['url'] != null) {
-            DynamicLinks.parseURI(
+            await DynamicLinks.parseURI(
               Uri.parse(message['data']['url']),
               context,
             );
@@ -101,7 +101,7 @@ abstract class NotificacionesService {
       onResume: (message) async {
         if (message != null && message['data'] != null) {
           if (message['data']['url'] != null) {
-            DynamicLinks.parseURI(
+            await DynamicLinks.parseURI(
               Uri.parse(message['data']['url']),
               context,
             );
@@ -110,11 +110,11 @@ abstract class NotificacionesService {
       },
     );
 
-    String token = await _firebaseMessaging.getToken();
+    final token = await _firebaseMessaging.getToken();
     await Fetcher.put(
-      url: "/users/set_firebase_token.json",
+      url: '/users/set_firebase_token.json',
       body: {
-        "token": token,
+        'token': token,
       },
     );
   }

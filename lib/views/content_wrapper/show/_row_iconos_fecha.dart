@@ -1,4 +1,3 @@
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/views/content_wrapper/show/_heart_plus5.dart';

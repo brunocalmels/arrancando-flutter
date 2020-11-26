@@ -21,7 +21,7 @@ class PageCategorias extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "SELECCIONAR CATEGORÍA",
+          'SELECCIONAR CATEGORÍA',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
@@ -29,9 +29,8 @@ class PageCategorias extends StatelessWidget {
         ),
       ),
       body: gs.categories[SectionType.recetas]
-                  .where((c) => c.version == 2)
-                  .length >
-              0
+              .where((c) => c.version == 2)
+              .isNotEmpty
           ? SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -39,7 +38,7 @@ class PageCategorias extends StatelessWidget {
                         ? [
                             CategoryWrapper(
                               id: -1,
-                              nombre: "Todos",
+                              nombre: 'Todos',
                             ),
                             ...gs.categories[SectionType.recetas]
                                 .where((c) => c.version == 2),
@@ -104,10 +103,11 @@ class PageCategorias extends StatelessWidget {
                               type: MaterialType.card,
                               child: InkWell(
                                 onTap: () {
-                                  if (returnOnlyId)
+                                  if (returnOnlyId) {
                                     Navigator.of(context).pop(c.id);
-                                  else
+                                  } else {
                                     Navigator.of(context).pop(c);
+                                  }
                                 },
                               ),
                             ),
@@ -125,7 +125,7 @@ class PageCategorias extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    "Ocurrió un error",
+                    'Ocurrió un error',
                     textAlign: TextAlign.center,
                   ),
                 ),

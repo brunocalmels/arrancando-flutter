@@ -6,7 +6,7 @@ class ComunidadPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "COMUNIDAD",
+          'COMUNIDAD',
         ),
       ),
       body: Container(

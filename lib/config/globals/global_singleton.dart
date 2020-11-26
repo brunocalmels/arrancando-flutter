@@ -14,28 +14,30 @@ class GlobalSingleton {
 
   bool askingLocationPermission = false;
 
-  setCategories(SectionType type, List<CategoryWrapper> list) {
+  void setCategories(SectionType type, List<CategoryWrapper> list) {
     categories[type] = list;
-    UserState st = Provider.of<UserState>(
+    final st = Provider.of<UserState>(
       MyGlobals.mainNavigatorKey.currentContext,
       listen: false,
     );
     if (st.preferredCategories[type] == null) {
       if (type == SectionType.pois) {
-        CategoryWrapper verdulerias = list.firstWhere(
-          (i) => i.nombre == "Verdulerías",
+        final verdulerias = list.firstWhere(
+          (i) => i.nombre == 'Verdulerías',
           orElse: () => null,
         );
-        if (verdulerias != null)
+        if (verdulerias != null) {
           st.setPreferredCategories(type, verdulerias.id);
-        else
+        } else {
           st.setPreferredCategories(type, list.first.id);
-      } else
+        }
+      } else {
         st.setPreferredCategories(type, list.first.id);
+      }
     }
   }
 
-  setAskingLocationPermission(bool val) {
+  void setAskingLocationPermission(bool val) {
     askingLocationPermission = val;
   }
 

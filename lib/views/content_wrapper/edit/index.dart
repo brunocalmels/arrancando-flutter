@@ -15,8 +15,6 @@ import 'package:arrancando/views/general/type_ahead_ciudad.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class EditPage extends StatefulWidget {
   final int contentId;
@@ -49,28 +47,28 @@ class _EditPageState extends State<EditPage> {
   double _selectedLatitud;
   double _selectedLongitud;
   bool _sent = false;
-  bool _enableImagenes = false;
-  List<String> _removeImagenes = [];
+  final _enableImagenes = false;
+  final _removeImagenes = <String>[];
   Function _loadAssets;
-  Map<String, File> _videoThumbs = {};
+  // Map<String, File> _videoThumbs = {};
 
-  _fetchContent() async {
+  Future<void> _fetchContent() async {
     switch (widget.type) {
       case SectionType.publicaciones:
-        _url = "/publicaciones";
+        _url = '/publicaciones';
         break;
       case SectionType.recetas:
-        _url = "/recetas";
+        _url = '/recetas';
         break;
       case SectionType.pois:
-        _url = "/pois";
+        _url = '/pois';
         break;
       default:
-        _url = "/publicaciones";
+        _url = '/publicaciones';
     }
 
-    ResponseObject resp = await Fetcher.get(
-      url: "$_url/${widget.contentId}.json",
+    final resp = await Fetcher.get(
+      url: '$_url/${widget.contentId}.json',
     );
 
     if (resp != null) {
@@ -82,11 +80,11 @@ class _EditPageState extends State<EditPage> {
       _ingredientesController.text = _content.ingredientes;
       _instruccionesController.text = _content.instrucciones;
       _selectedCategory = CategoryWrapper.fromJson({
-        "id": _content.categID,
-        "nombre": gs.categories[_content.type]
+        'id': _content.categID,
+        'nombre': gs.categories[_content.type]
             .firstWhere((c) => c.id == _content.categID)
             .nombre,
-        "type": _content.type.toString().split(".")[1],
+        'type': _content.type.toString().split('.')[1],
       });
       _selectedLatitud = _content.latitud;
       _selectedLongitud = _content.longitud;
@@ -99,57 +97,51 @@ class _EditPageState extends State<EditPage> {
     if (mounted) setState(() {});
   }
 
-  _setCategory(CategoryWrapper val) {
-    setState(() {
-      _selectedCategory = val;
-    });
+  void _setCategory(CategoryWrapper val) {
+    _selectedCategory = val;
+    if (mounted) setState(() {});
   }
 
-  _setImages(List<File> val) {
-    setState(() {
-      _images = val;
-    });
+  void _setImages(List<File> val) {
+    _images = val;
+    if (mounted) setState(() {});
   }
 
-  _removeImage(File asset) {
-    setState(() {
-      _images.remove(asset);
-    });
+  void _removeImage(File asset) {
+    _images.remove(asset);
+    if (mounted) setState(() {});
   }
 
-  _setDireccion(String val) {
-    setState(() {
-      _selectedDireccion = val;
-    });
+  void _setDireccion(String val) {
+    _selectedDireccion = val;
+    if (mounted) setState(() {});
   }
 
-  _setLatLng(double l1, double l2) {
-    setState(() {
-      _selectedLatitud = l1;
-      _selectedLongitud = l2;
-    });
+  void _setLatLng(double l1, double l2) {
+    _selectedLatitud = l1;
+    _selectedLongitud = l2;
+    if (mounted) setState(() {});
   }
 
-  _actualizar() async {
-    setState(() {
-      _sent = true;
-    });
+  void _actualizar() async {
+    _sent = true;
+    if (mounted) setState(() {});
 
     try {
-      Map<String, dynamic> body = {
-        "titulo": _tituloController.text,
-        "cuerpo": _cuerpoController.text,
-        "imagenes": await Future.wait(
+      final body = <String, dynamic>{
+        'titulo': _tituloController.text,
+        'cuerpo': _cuerpoController.text,
+        'imagenes': await Future.wait(
           _images.map(
             (i) async => {
-              "file": i != null ? i.path.split('/').last : 'file',
-              "data": base64Encode(
+              'file': i != null ? i.path.split('/').last : 'file',
+              'data': base64Encode(
                 (await i.readAsBytes()).buffer.asUint8List(),
               )
             },
           ),
         ),
-        "remove_imagenes": _removeImagenes,
+        'remove_imagenes': _removeImagenes,
       };
 
       ResponseObject res;
@@ -157,34 +149,34 @@ class _EditPageState extends State<EditPage> {
       switch (widget.type) {
         case SectionType.publicaciones:
           res = await Fetcher.put(
-            url: "/publicaciones/${_content.id}.json",
+            url: '/publicaciones/${_content.id}.json',
             body: {
               ...body,
-              "ciudad_id": _selectedCategory.id,
+              'ciudad_id': _selectedCategory.id,
             },
           );
           break;
         case SectionType.recetas:
           res = await Fetcher.put(
-            url: "/recetas/${_content.id}.json",
+            url: '/recetas/${_content.id}.json',
             body: {
               ...body,
-              "categoria_receta_id": _selectedCategory.id,
-              "introduccion": _introduccionController.text,
-              "ingredientes": _ingredientesController.text,
-              "instrucciones": _instruccionesController.text,
+              'categoria_receta_id': _selectedCategory.id,
+              'introduccion': _introduccionController.text,
+              'ingredientes': _ingredientesController.text,
+              'instrucciones': _instruccionesController.text,
             },
           );
           break;
         case SectionType.pois:
           res = await Fetcher.put(
-            url: "/pois/${_content.id}.json",
+            url: '/pois/${_content.id}.json',
             body: {
               ...body,
-              "categoria_poi_id": _selectedCategory.id,
-              "lat": _selectedLatitud,
-              "long": _selectedLongitud,
-              "direccion": _selectedDireccion,
+              'categoria_poi_id': _selectedCategory.id,
+              'lat': _selectedLatitud,
+              'long': _selectedLongitud,
+              'direccion': _selectedDireccion,
             },
           );
           break;
@@ -198,35 +190,33 @@ class _EditPageState extends State<EditPage> {
       print(e);
     }
 
-    if (mounted)
-      setState(() {
-        _sent = false;
-      });
-  }
-
-  _getVideosThumbs() async {
-    _videoThumbs = {};
-    String thumbPath = (await getTemporaryDirectory()).path;
-    await Future.wait(
-      _content.imagenes.map(
-        (i) async {
-          if (MyGlobals.VIDEO_FORMATS
-              .contains(i.split('.').last.toLowerCase())) {
-            _videoThumbs[i] = File(
-              await VideoThumbnail.thumbnailFile(
-                video: "${MyGlobals.SERVER_URL}$i",
-                thumbnailPath: thumbPath,
-                imageFormat: ImageFormat.WEBP,
-                maxHeightOrWidth: 250,
-                quality: 70,
-              ),
-            );
-          }
-        },
-      ),
-    );
+    _sent = false;
     if (mounted) setState(() {});
   }
+
+  // Future<void> _getVideosThumbs() async {
+  //   _videoThumbs = {};
+  //   final thumbPath = (await getTemporaryDirectory()).path;
+  //   await Future.wait(
+  //     _content.imagenes.map(
+  //       (i) async {
+  //         if (MyGlobals.VIDEO_FORMATS
+  //             .contains(i.split('.').last.toLowerCase())) {
+  //           _videoThumbs[i] = File(
+  //             await VideoThumbnail.thumbnailFile(
+  //               video: '${MyGlobals.SERVER_URL}$i',
+  //               thumbnailPath: thumbPath,
+  //               imageFormat: ImageFormat.WEBP,
+  //               maxHeightOrWidth: 250,
+  //               quality: 70,
+  //             ),
+  //           );
+  //         }
+  //       },
+  //     ),
+  //   );
+  //   if (mounted) setState(() {});
+  // }
 
   @override
   void initState() {
@@ -251,7 +241,7 @@ class _EditPageState extends State<EditPage> {
                 ? Padding(
                     padding: const EdgeInsets.all(20),
                     child: Container(
-                      child: Text("Ocurrió un error"),
+                      child: Text('Ocurrió un error'),
                     ),
                   )
                 : Padding(
@@ -274,8 +264,8 @@ class _EditPageState extends State<EditPage> {
                           height: 10,
                         ),
                         Text(_content.type == SectionType.publicaciones
-                            ? "Ciudad"
-                            : "Categoría"),
+                            ? 'Ciudad'
+                            : 'Categoría'),
                         _content.type == SectionType.publicaciones
                             ? Container(
                                 height: 150,
@@ -292,12 +282,12 @@ class _EditPageState extends State<EditPage> {
                                 type: _content.type,
                               ),
                         if (_content.type == SectionType.publicaciones)
-                          Text("Ciudad: ${_selectedCategory.nombre}"),
+                          Text('Ciudad: ${_selectedCategory.nombre}'),
                         Divider(),
-                        Text("Imágenes"),
+                        Text('Imágenes'),
                         Text(
-                          _removeImagenes.length > 0
-                              ? "Se ${_removeImagenes.length == 1 ? 'eliminará' : 'eliminarán'} ${_removeImagenes.length} ${_removeImagenes.length == 1 ? 'imagen' : 'imágenes'}"
+                          _removeImagenes.isNotEmpty
+                              ? 'Se ${_removeImagenes.length == 1 ? 'eliminará' : 'eliminarán'} ${_removeImagenes.length} ${_removeImagenes.length == 1 ? 'imagen' : 'imágenes'}'
                               : '',
                           style: TextStyle(
                             fontSize: 12,
@@ -351,7 +341,7 @@ class _EditPageState extends State<EditPage> {
                                                             // ),
                                                             CachedNetworkImage(
                                                           imageUrl:
-                                                              "${MyGlobals.SERVER_URL}${_content.videoThumbs[i]}",
+                                                              '${MyGlobals.SERVER_URL}${_content.videoThumbs[i]}',
                                                           placeholder:
                                                               (context, url) =>
                                                                   Center(
@@ -378,11 +368,11 @@ class _EditPageState extends State<EditPage> {
                                                     ],
                                                   )
                                             // : Image.network(
-                                            //     "${MyGlobals.SERVER_URL}$i",
+                                            //     '${MyGlobals.SERVER_URL}$i',
                                             //   ),
                                             : CachedNetworkImage(
                                                 imageUrl:
-                                                    "${MyGlobals.SERVER_URL}$i",
+                                                    '${MyGlobals.SERVER_URL}$i',
                                                 placeholder: (context, url) =>
                                                     Center(
                                                   child: SizedBox(
@@ -452,13 +442,13 @@ class _EditPageState extends State<EditPage> {
                         //             _enableImagenes = true;
                         //           });
                         //         },
-                        //         child: Text("AÑADIR IMÁGENES"),
+                        //         child: Text('AÑADIR IMÁGENES'),
                         //       ),
                         //     ),
                         //   ),
                         if (_enableImagenes &&
                             _loadAssets != null &&
-                            _images.length > 0)
+                            _images.isNotEmpty)
                           Padding(
                             padding: const EdgeInsets.only(top: 15),
                             child: Center(
@@ -472,20 +462,19 @@ class _EditPageState extends State<EditPage> {
                                       _images = [];
                                       setState(() {});
                                     },
-                                    child: Text("ELIMINAR NUEVAS"),
+                                    child: Text('ELIMINAR NUEVAS'),
                                   ),
                                   FlatButton(
                                     onPressed: () {
                                       _loadAssets();
                                     },
-                                    child: Text("MODIFICAR"),
+                                    child: Text('MODIFICAR'),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        if (_content.type == SectionType.pois)
-                          Divider(),
+                        if (_content.type == SectionType.pois) Divider(),
                         if (_content.type == SectionType.pois)
                           StepMapa(
                             setDireccion: _setDireccion,
@@ -511,7 +500,7 @@ class _EditPageState extends State<EditPage> {
                                         strokeWidth: 1,
                                       ),
                                     )
-                                  : Text("ACTUALIZAR"),
+                                  : Text('ACTUALIZAR'),
                             ),
                           ],
                         )

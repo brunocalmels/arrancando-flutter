@@ -27,11 +27,11 @@ class CabeceraShow extends StatelessWidget {
       )) {
         return content.videoThumbs[content.imagenes.first].contains('http')
             ? content.videoThumbs[content.imagenes.first]
-            : "${MyGlobals.SERVER_URL}${content.videoThumbs[content.imagenes.first]}";
+            : '${MyGlobals.SERVER_URL}${content.videoThumbs[content.imagenes.first]}';
       } else {
         return content.imagenes.first.contains('http')
             ? content.imagenes.first
-            : "${MyGlobals.SERVER_URL}${content.imagenes.first}";
+            : '${MyGlobals.SERVER_URL}${content.imagenes.first}';
       }
     }
     return null;

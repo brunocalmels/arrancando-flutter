@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +17,7 @@ part 'active_user.g.dart';
 
 @JsonSerializable()
 class ActiveUser {
-  @JsonKey(name: "auth_token")
+  @JsonKey(name: 'auth_token')
   String authToken;
   int id;
   String nombre;
@@ -27,7 +25,7 @@ class ActiveUser {
   String email;
   String username;
   String avatar;
-  @JsonKey(name: "url_instagram")
+  @JsonKey(name: 'url_instagram')
   String urlInstagram;
 
   ActiveUser(
@@ -57,18 +55,17 @@ class ActiveUser {
       );
 
   static Future<bool> locationPermissionDenied() async {
-    final GlobalSingleton gs = GlobalSingleton();
+    final gs = GlobalSingleton();
 
     if (!gs.askingLocationPermission) {
       gs.setAskingLocationPermission(true);
 
-      PermissionStatus permission = await PermissionHandler()
+      final permission = await PermissionHandler()
           .checkPermissionStatus(PermissionGroup.location);
 
       if (permission == PermissionStatus.denied) {
-        Map<PermissionGroup, PermissionStatus> permissions =
-            await PermissionHandler()
-                .requestPermissions([PermissionGroup.location]);
+        final permissions = await PermissionHandler()
+            .requestPermissions([PermissionGroup.location]);
 
         if (permissions.containsKey(PermissionGroup.location) &&
             permissions[PermissionGroup.location] != PermissionStatus.granted) {
@@ -84,13 +81,12 @@ class ActiveUser {
   }
 
   static Future<bool> cameraPermissionDenied() async {
-    PermissionStatus permission =
+    final permission =
         await PermissionHandler().checkPermissionStatus(PermissionGroup.camera);
 
     if (permission == PermissionStatus.denied) {
-      Map<PermissionGroup, PermissionStatus> permissions =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.camera]);
+      final permissions = await PermissionHandler()
+          .requestPermissions([PermissionGroup.camera]);
 
       if (permissions.containsKey(PermissionGroup.camera) &&
           permissions[PermissionGroup.camera] != PermissionStatus.granted) {
@@ -103,13 +99,12 @@ class ActiveUser {
   }
 
   static Future<bool> storagePermissionDenied() async {
-    PermissionStatus permission = await PermissionHandler()
+    final permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.storage);
 
     if (permission == PermissionStatus.denied) {
-      Map<PermissionGroup, PermissionStatus> permissions =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.storage]);
+      final permissions = await PermissionHandler()
+          .requestPermissions([PermissionGroup.storage]);
 
       if (permissions.containsKey(PermissionGroup.storage) &&
           permissions[PermissionGroup.storage] != PermissionStatus.granted) {
@@ -122,13 +117,12 @@ class ActiveUser {
   }
 
   static Future<bool> photosPermissionDenied() async {
-    PermissionStatus permission =
+    final permission =
         await PermissionHandler().checkPermissionStatus(PermissionGroup.photos);
 
     if (permission == PermissionStatus.denied) {
-      Map<PermissionGroup, PermissionStatus> permissions =
-          await PermissionHandler()
-              .requestPermissions([PermissionGroup.photos]);
+      final permissions = await PermissionHandler()
+          .requestPermissions([PermissionGroup.photos]);
 
       if (permissions.containsKey(PermissionGroup.photos) &&
           permissions[PermissionGroup.photos] != PermissionStatus.granted) {
@@ -140,11 +134,11 @@ class ActiveUser {
     return false;
   }
 
-  static logout(context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('activeUser');
+  static Future<void> logout(context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('activeUser');
     Provider.of<UserState>(context, listen: false).setActiveUser(null);
-    Navigator.of(context).pushAndRemoveUntil(
+    await Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => LoginPage(),
         settings: RouteSettings(name: 'Login'),
@@ -153,57 +147,57 @@ class ActiveUser {
     );
   }
 
-  static verifyCorrectLogin(context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String activeUser = prefs.getString("activeUser");
-    print('Verify active user defined');
+  static Future<void> verifyCorrectLogin(context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final activeUser = prefs.getString('activeUser');
+    // Verify active user defined
     if (activeUser != null) {
-      print('Active user is set');
-      ActiveUser au = ActiveUser.fromJson(
+      // Active user is set
+      final au = ActiveUser.fromJson(
         json.decode(activeUser),
       );
       if (au.id == null || au.email == null || au.authToken == null) {
-        print('Active user lacks either id or email or token');
-        ActiveUser.logout(context);
+        // Active user lacks either id or email or token
+        await ActiveUser.logout(context);
       } else if (au.authToken != null && au.authToken.split('.').length > 1) {
         try {
-          String s1 = au.authToken.split('.')[1];
-          Uint8List b64 = base64.decode(base64.normalize(s1));
-          String decoded = utf8.decode(b64);
-          dynamic jeison = json.decode(decoded);
+          final s1 = au.authToken.split('.')[1];
+          final b64 = base64.decode(base64.normalize(s1));
+          final decoded = utf8.decode(b64);
+          final jeison = json.decode(decoded);
           int exp = jeison['exp'] * 1000;
-          DateTime date = DateTime.fromMillisecondsSinceEpoch(exp);
+          final date = DateTime.fromMillisecondsSinceEpoch(exp);
           if (date.isBefore(DateTime.now())) {
-            ActiveUser.logout(context);
+            await ActiveUser.logout(context);
           } else {
-            ResponseObject resp = await Fetcher.get(
-              url: "/ciudades/1.json",
+            final resp = await Fetcher.get(
+              url: '/ciudades/1.json',
             );
             if (resp == null ||
                 resp.body == null ||
                 resp.status == null ||
                 resp.status > 300) {
-              ActiveUser.logout(context);
+              await ActiveUser.logout(context);
             }
           }
         } catch (e) {
           print(e);
-          ActiveUser.logout(context);
+          await ActiveUser.logout(context);
         }
       }
     } else {
-      print('Active user was null but the app landed on /home somehow');
-      ActiveUser.logout(context);
+      // Active user was null but the app landed on /home somehow
+      await ActiveUser.logout(context);
     }
   }
 
-  static updateUserMetadata(context) async {
+  static Future<void> updateUserMetadata(context) async {
     await Fetcher.put(
-      url: "/users/${Provider.of<UserState>(context).activeUser.id}.json",
+      url: '/users/${Provider.of<UserState>(context).activeUser.id}.json',
       body: {
-        "user": {
-          "app_version": "${MyGlobals.APP_VERSION}",
-          "platform": "${Platform.operatingSystem}",
+        'user': {
+          'app_version': '${MyGlobals.APP_VERSION}',
+          'platform': '${Platform.operatingSystem}',
         }
       },
     );

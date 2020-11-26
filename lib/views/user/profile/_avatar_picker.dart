@@ -18,7 +18,7 @@ class AvatarPicker extends StatefulWidget {
 }
 
 class _AvatarPickerState extends State<AvatarPicker> {
-  File _image;
+  PickedFile _image;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   onPressed: () async {
                     try {
                       if (mounted) {
-                        String opcion = await showModalBottomSheet(
+                        final opcion = await showModalBottomSheet(
                           backgroundColor: Colors.white,
                           builder: (BuildContext context) {
                             return Container(
@@ -51,7 +51,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                                   Expanded(
                                     child: FlatButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop("camara");
+                                        Navigator.of(context).pop('camara');
                                       },
                                       child: Column(
                                         crossAxisAlignment:
@@ -60,7 +60,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                                             MainAxisAlignment.center,
                                         children: <Widget>[
                                           Icon(Icons.camera_alt),
-                                          Text("Cámara"),
+                                          Text('Cámara'),
                                         ],
                                       ),
                                     ),
@@ -68,7 +68,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                                   Expanded(
                                     child: FlatButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop("galeria");
+                                        Navigator.of(context).pop('galeria');
                                       },
                                       child: Column(
                                         crossAxisAlignment:
@@ -77,7 +77,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
                                             MainAxisAlignment.center,
                                         children: <Widget>[
                                           Icon(Icons.filter),
-                                          Text("Galería"),
+                                          Text('Galería'),
                                         ],
                                       ),
                                     ),
@@ -90,15 +90,15 @@ class _AvatarPickerState extends State<AvatarPicker> {
                         );
 
                         switch (opcion) {
-                          case "camara":
-                            _image = await ImagePicker.pickImage(
+                          case 'camara':
+                            _image = await ImagePicker().getImage(
                               source: ImageSource.camera,
                               imageQuality: 70,
                               maxWidth: 1000,
                             );
                             break;
-                          case "galeria":
-                            _image = await ImagePicker.pickImage(
+                          case 'galeria':
+                            _image = await ImagePicker().getImage(
                               source: ImageSource.gallery,
                             );
                             break;
@@ -106,8 +106,8 @@ class _AvatarPickerState extends State<AvatarPicker> {
                         }
 
                         if (_image != null) {
-                          String base64Image = base64Encode(
-                            _image.readAsBytesSync(),
+                          final base64Image = base64Encode(
+                            File(_image.path).readAsBytesSync(),
                           );
 
                           widget.setAvatar(base64Image);
@@ -120,10 +120,8 @@ class _AvatarPickerState extends State<AvatarPicker> {
                   child: CircleAvatar(
                     radius: 60,
                     backgroundImage: _image != null
-                        ? FileImage(_image)
-                        : widget.currentAvatar != null
-                            ? widget.currentAvatar
-                            : null,
+                        ? FileImage(File(_image.path))
+                        : widget.currentAvatar,
                   ),
                 ),
               ],
@@ -134,7 +132,7 @@ class _AvatarPickerState extends State<AvatarPicker> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: Text(
-                "Cambiar avatar",
+                'Cambiar avatar',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontStyle: FontStyle.italic,

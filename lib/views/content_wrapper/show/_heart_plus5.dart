@@ -25,12 +25,12 @@ class HeartPlus5 extends StatelessWidget {
             isFilled = content.puntajes.any((element) => element.puntaje == 5);
           } else {
             isFilled = userState.activeUser != null &&
-                (userState.myPuntuaciones["${content.type}-${content.id}"] ??
+                (userState.myPuntuaciones['${content.type}-${content.id}'] ??
                         content.myPuntaje(userState.activeUser.id)) ==
                     5;
           }
         }
-        
+
         var color = Theme.of(context).accentColor;
         if (content.color != null &&
             MyGlobals.LIKES_COLOR[content.color] != null) {
@@ -51,28 +51,28 @@ class HeartPlus5 extends StatelessWidget {
 
               switch (content.type) {
                 case SectionType.publicaciones:
-                  _url = "/publicaciones";
+                  _url = '/publicaciones';
                   break;
                 case SectionType.recetas:
-                  _url = "/recetas";
+                  _url = '/recetas';
                   break;
                 case SectionType.pois:
-                  _url = "/pois";
+                  _url = '/pois';
                   break;
                 default:
-                  _url = "/publicaciones";
+                  _url = '/publicaciones';
               }
 
-              String key = "${content.type}-${content.id}";
+              final key = '${content.type}-${content.id}';
 
-              int newPuntaje = isFilled ? 0 : 5;
+              final newPuntaje = isFilled ? 0 : 5;
 
               userState.setMyPuntuacion(key, newPuntaje);
 
               await Fetcher.put(
-                url: "$_url/${content.id}/puntuar.json",
+                url: '$_url/${content.id}/puntuar.json',
                 body: {
-                  "puntaje": newPuntaje,
+                  'puntaje': newPuntaje,
                 },
               );
               if (fetchContent != null) fetchContent();

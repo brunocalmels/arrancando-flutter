@@ -30,8 +30,7 @@ class NewContent extends StatefulWidget {
 }
 
 class _NewContentState extends State<NewContent> {
-  int _currentStep = 0;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   final TextEditingController _tituloController = TextEditingController();
   final TextEditingController _cuerpoController = TextEditingController();
   final TextEditingController _introduccionController = TextEditingController();
@@ -39,10 +38,11 @@ class _NewContentState extends State<NewContent> {
   final TextEditingController _instruccionesController =
       TextEditingController();
   final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
+  int _currentStep = 0;
   CategoryWrapper _selectedCategory;
-  CategoryWrapper _selectedCiudadPoi;
+  // CategoryWrapper _selectedCiudadPoi;
   // List<Asset> _images = List<Asset>();
-  List<File> _images = List<File>();
+  var _images = <File>[];
   String _selectedDireccion;
   double _selectedLatitud;
   double _selectedLongitud;
@@ -51,21 +51,21 @@ class _NewContentState extends State<NewContent> {
   String _errorMsg;
   final GlobalSingleton gs = GlobalSingleton();
 
-  _createContent() async {
+  Future<void> _createContent() async {
     _errorMsg = null;
     setState(() {
       _sent = true;
     });
 
     try {
-      Map<String, dynamic> body = {
-        "titulo": _tituloController.text,
-        "cuerpo": _cuerpoController.text,
-        "imagenes": await Future.wait(
+      final body = <String, dynamic>{
+        'titulo': _tituloController.text,
+        'cuerpo': _cuerpoController.text,
+        'imagenes': await Future.wait(
           _images.map(
             (i) async => {
-              "file": i != null ? i.path.split('/').last : 'file',
-              "data": base64Encode(
+              'file': i != null ? i.path.split('/').last : 'file',
+              'data': base64Encode(
                 (await i.readAsBytes()).buffer.asUint8List(),
               )
             },
@@ -77,20 +77,20 @@ class _NewContentState extends State<NewContent> {
 
       switch (widget.type) {
         case SectionType.publicaciones:
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          int preferredCiudadId = prefs.getInt("preferredCiudadId");
+          final prefs = await SharedPreferences.getInstance();
+          var preferredCiudadId = prefs.getInt('preferredCiudadId');
 
           if (preferredCiudadId == null) {
-            int ciudadId = await showDialog(
+            final ciudadId = await showDialog(
               context: context,
               builder: (_) => DialogCategorySelect(
                 selectCity: true,
-                titleText: "¿Cuál es tu ciudad?",
+                titleText: '¿Cuál es tu ciudad?',
                 allowDismiss: false,
               ),
             );
 
-            if (gs.categories[SectionType.publicaciones].length <= 0) {
+            if (gs.categories[SectionType.publicaciones].isEmpty) {
               await CategoryWrapper.loadCategories();
             }
 
@@ -100,65 +100,67 @@ class _NewContentState extends State<NewContent> {
                 SectionType.publicaciones,
                 ciudadId,
               );
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.setInt("preferredCiudadId", ciudadId);
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.setInt('preferredCiudadId', ciudadId);
               preferredCiudadId = ciudadId;
             }
           }
 
           res = await Fetcher.post(
-            url: "/publicaciones.json",
+            url: '/publicaciones.json',
             throwError: true,
             body: {
               ...body,
-              // "ciudad_id": _selectedCategory.id,
-              "ciudad_id": preferredCiudadId,
+              // 'ciudad_id': _selectedCategory.id,
+              'ciudad_id': preferredCiudadId,
             },
           );
           break;
         case SectionType.recetas:
           res = await Fetcher.post(
-            url: "/recetas.json",
+            url: '/recetas.json',
             throwError: true,
             body: {
               ...body,
-              "categoria_receta_id": _selectedCategory.id,
-              "introduccion": _introduccionController.text,
-              "ingredientes": _ingredientesController.text,
-              "instrucciones": _instruccionesController.text,
+              'categoria_receta_id': _selectedCategory.id,
+              'introduccion': _introduccionController.text,
+              'ingredientes': _ingredientesController.text,
+              'instrucciones': _instruccionesController.text,
             },
           );
           break;
         case SectionType.pois:
           String nombreProvincia;
           String nombreCiudad;
-          List<Placemark> places = await Geolocator().placemarkFromCoordinates(
+          final places = await Geolocator().placemarkFromCoordinates(
             _selectedLatitud,
             _selectedLongitud,
           );
-          if (places != null && places.length > 0) {
+          if (places != null && places.isNotEmpty) {
             if (places.first.administrativeArea != null &&
-                places.first.administrativeArea.isNotEmpty)
+                places.first.administrativeArea.isNotEmpty) {
               nombreProvincia = places.first.administrativeArea;
+            }
             if (places.first.subLocality != null &&
-                places.first.subLocality.isNotEmpty)
+                places.first.subLocality.isNotEmpty) {
               nombreCiudad = places.first.subLocality;
-            else if (places.first.locality != null &&
-                places.first.locality.isNotEmpty)
+            } else if (places.first.locality != null &&
+                places.first.locality.isNotEmpty) {
               nombreCiudad = places.first.locality;
+            }
           }
           res = await Fetcher.post(
-            url: "/pois.json",
+            url: '/pois.json',
             throwError: true,
             body: {
               ...body,
-              "categoria_poi_id": _selectedCategory.id,
-              // "ciudad_id": _selectedCiudadPoi.id,
-              "nombre_provincia": nombreProvincia,
-              "nombre_ciudad": nombreCiudad,
-              "lat": _selectedLatitud,
-              "long": _selectedLongitud,
-              "direccion": _selectedDireccion,
+              'categoria_poi_id': _selectedCategory.id,
+              // 'ciudad_id': _selectedCiudadPoi.id,
+              'nombre_provincia': nombreProvincia,
+              'nombre_ciudad': nombreCiudad,
+              'lat': _selectedLatitud,
+              'long': _selectedLongitud,
+              'direccion': _selectedDireccion,
             },
           );
           break;
@@ -168,7 +170,7 @@ class _NewContentState extends State<NewContent> {
       if (res != null && res.status == 201) {
         print(
             '${widget.type.toString().split('.').last[0].toLowerCase()}${widget.type.toString().split('.').last.substring(1)}#${json.decode(res.body)['id']}');
-        Navigator.of(context).pushReplacement(
+        await Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => ShowPage(
               contentId: json.decode(res.body)['id'],
@@ -186,7 +188,7 @@ class _NewContentState extends State<NewContent> {
               (json.decode(res.body) as Map).values.expand((i) => i).join(',');
         } else {
           _errorMsg =
-              "Ocurrió un error, por favor intentalo nuevamente más tarde.";
+              'Ocurrió un error, por favor intentalo nuevamente más tarde.';
           _hideButtonVeryBadError = true;
         }
         if (mounted) setState(() {});
@@ -195,52 +197,44 @@ class _NewContentState extends State<NewContent> {
       print(e);
     }
 
-    if (mounted)
-      setState(() {
-        _sent = false;
-      });
+    _sent = false;
+    if (mounted) setState(() {});
   }
 
-  _setCategory(CategoryWrapper val) {
-    setState(() {
-      _selectedCategory = val;
-    });
+  void _setCategory(CategoryWrapper val) {
+    _selectedCategory = val;
+    if (mounted) setState(() {});
   }
 
-  _setCiudadPoi(CategoryWrapper ciudad) {
-    setState(() {
-      _selectedCiudadPoi = ciudad;
-    });
+  void _setCiudadPoi(CategoryWrapper ciudad) {
+    // _selectedCiudadPoi = ciudad;
+    // if (mounted) setState(() {});
   }
 
   // _setImages(List<Asset> val) {
-  _setImages(List<File> val) {
-    setState(() {
-      _images = val;
-    });
+  void _setImages(List<File> val) {
+    _images = val;
+    if (mounted) setState(() {});
   }
 
-  _removeImage(File asset) {
-    setState(() {
-      _images.remove(asset);
-    });
+  void _removeImage(File asset) {
+    _images.remove(asset);
+    if (mounted) setState(() {});
   }
 
-  _setDireccion(String val) {
-    setState(() {
-      _selectedDireccion = val;
-    });
+  void _setDireccion(String val) {
+    _selectedDireccion = val;
+    if (mounted) setState(() {});
   }
 
-  _setLatLng(double l1, double l2) {
-    setState(() {
-      _selectedLatitud = l1;
-      _selectedLongitud = l2;
-    });
+  void _setLatLng(double l1, double l2) {
+    _selectedLatitud = l1;
+    _selectedLongitud = l2;
+    if (mounted) setState(() {});
   }
 
   Future<int> _computeSize() async {
-    int pesos = (await Future.wait(
+    final pesos = (await Future.wait(
       _images.map(
         (i) => i.length(),
       ),
@@ -256,11 +250,11 @@ class _NewContentState extends State<NewContent> {
         future: _computeSize(),
         builder: (context, AsyncSnapshot<int> snapshot) {
           if (snapshot.hasData &&
-              snapshot.data >= MyGlobals.MUCHO_PESO_PUBLICACION)
+              snapshot.data >= MyGlobals.MUCHO_PESO_PUBLICACION) {
             return Padding(
               padding: const EdgeInsets.only(top: 15),
               child: Text(
-                "Estás subiendo archivos muy pesados, la creación puede tardar.",
+                'Estás subiendo archivos muy pesados, la creación puede tardar.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.blue,
@@ -268,11 +262,12 @@ class _NewContentState extends State<NewContent> {
                 ),
               ),
             );
+          }
           return Container();
         },
       );
 
-  _onStepContinue() {
+  void _onStepContinue() {
     switch (_currentStep) {
       case 0:
         if (_tituloController.text != null &&
@@ -289,11 +284,11 @@ class _NewContentState extends State<NewContent> {
               _currentStep = 2;
             });
           }
-        } else if (_images == null || _images.length == 0) {
-          _scaffoldKey.currentState.showSnackBar(
+        } else if (_images == null || _images.isEmpty) {
+          _scaffoldMessengerKey.currentState.showSnackBar(
             SnackBar(
               content: Text(
-                  "Es necesario añadir al menos una imagen para poder crear un contenido."),
+                  'Es necesario añadir al menos una imagen para poder crear un contenido.'),
             ),
           );
         } else {
@@ -302,7 +297,7 @@ class _NewContentState extends State<NewContent> {
 
         break;
       case 2:
-        if (_images != null && _images.length > 0) {
+        if (_images != null && _images.isNotEmpty) {
           if (widget.type != SectionType.pois) {
             _createContent();
           } else {
@@ -311,10 +306,10 @@ class _NewContentState extends State<NewContent> {
             });
           }
         } else {
-          _scaffoldKey.currentState.showSnackBar(
+          _scaffoldMessengerKey.currentState.showSnackBar(
             SnackBar(
               content: Text(
-                  "Es necesario añadir al menos una imagen para poder crear un contenido."),
+                  'Es necesario añadir al menos una imagen para poder crear un contenido.'),
             ),
           );
         }
@@ -340,120 +335,96 @@ class _NewContentState extends State<NewContent> {
             return false;
           }
           return true;
-        } else
+        } else {
           return false;
+        }
       },
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text(
-            "Crear ${MyGlobals.NOMBRES_CATEGORIAS_SINGULAR[widget.type].toLowerCase()}",
-            style: TextStyle(
-              color: Colors.black,
+      child: ScaffoldMessenger(
+        key: _scaffoldMessengerKey,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(
+              'Crear ${MyGlobals.NOMBRES_CATEGORIAS_SINGULAR[widget.type].toLowerCase()}',
+              style: TextStyle(
+                color: Colors.black,
+              ),
             ),
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
           ),
-          backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black),
-        ),
-        body: Stepper(
-          type: StepperType.horizontal,
-          currentStep: _currentStep,
-          controlsBuilder: (
-            BuildContext context, {
-            VoidCallback onStepContinue,
-            VoidCallback onStepCancel,
-          }) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  if (!_hideButtonVeryBadError)
-                    FlatButton(
-                      onPressed: _sent ? null : onStepContinue,
-                      child: _sent
-                          ? SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 1,
+          body: Stepper(
+            type: StepperType.horizontal,
+            currentStep: _currentStep,
+            controlsBuilder: (
+              BuildContext context, {
+              VoidCallback onStepContinue,
+              VoidCallback onStepCancel,
+            }) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    if (!_hideButtonVeryBadError)
+                      FlatButton(
+                        onPressed: _sent ? null : onStepContinue,
+                        child: _sent
+                            ? SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 1,
+                                ),
+                              )
+                            : Text(
+                                'Continuar',
                               ),
-                            )
-                          : Text(
-                              'Continuar',
-                            ),
-                    ),
-                ],
-              ),
-            );
-          },
-          onStepContinue: _onStepContinue,
-          steps: <Step>[
-            Step(
-              title: Container(),
-              isActive: _currentStep == 0,
-              content: StepGeneral(
-                tituloController: _tituloController,
-                cuerpoController: _cuerpoController,
-                introduccionController: _introduccionController,
-                ingredientesController: _ingredientesController,
-                instruccionesController: _instruccionesController,
-                formKey: _form1Key,
-                type: widget.type,
-              ),
-            ),
-            if (widget.type != SectionType.publicaciones)
+                      ),
+                  ],
+                ),
+              );
+            },
+            onStepContinue: _onStepContinue,
+            steps: <Step>[
               Step(
                 title: Container(),
-                isActive: _currentStep == 1,
-                content: StepCategoria(
+                isActive: _currentStep == 0,
+                content: StepGeneral(
+                  tituloController: _tituloController,
+                  cuerpoController: _cuerpoController,
+                  introduccionController: _introduccionController,
+                  ingredientesController: _ingredientesController,
+                  instruccionesController: _instruccionesController,
+                  formKey: _form1Key,
                   type: widget.type,
-                  selectedCategory: _selectedCategory,
-                  setCategory: _setCategory,
                 ),
               ),
-            Step(
-              title: Container(),
-              isActive: widget.type == SectionType.publicaciones
-                  ? _currentStep == 1
-                  : _currentStep == 2,
-              content: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  StepImagenes(
-                    images: _images,
-                    setImages: _setImages,
-                    removeImage: _removeImage,
+              if (widget.type != SectionType.publicaciones)
+                Step(
+                  title: Container(),
+                  isActive: _currentStep == 1,
+                  content: StepCategoria(
+                    type: widget.type,
+                    selectedCategory: _selectedCategory,
+                    setCategory: _setCategory,
                   ),
-                  if (widget.type != SectionType.pois && _errorMsg != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Text(
-                        _errorMsg,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                  if (widget.type != SectionType.pois) _muchoPesoArchivos(),
-                ],
-              ),
-            ),
-            if (widget.type == SectionType.pois)
+                ),
               Step(
                 title: Container(),
-                isActive: _currentStep == 3,
+                isActive: widget.type == SectionType.publicaciones
+                    ? _currentStep == 1
+                    : _currentStep == 2,
                 content: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    StepMapa(
-                      setCiudadPoi: _setCiudadPoi,
-                      setDireccion: _setDireccion,
-                      setLatLng: _setLatLng,
+                    StepImagenes(
+                      images: _images,
+                      setImages: _setImages,
+                      removeImage: _removeImage,
                     ),
-                    if (_errorMsg != null)
+                    if (widget.type != SectionType.pois && _errorMsg != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 15),
                         child: Text(
@@ -461,11 +432,38 @@ class _NewContentState extends State<NewContent> {
                           style: TextStyle(color: Colors.red),
                         ),
                       ),
-                    _muchoPesoArchivos(),
+                    if (widget.type != SectionType.pois) _muchoPesoArchivos(),
                   ],
                 ),
               ),
-          ],
+              if (widget.type == SectionType.pois)
+                Step(
+                  title: Container(),
+                  isActive: _currentStep == 3,
+                  content: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      StepMapa(
+                        setCiudadPoi: _setCiudadPoi,
+                        setDireccion: _setDireccion,
+                        setLatLng: _setLatLng,
+                      ),
+                      if (_errorMsg != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            _errorMsg,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      _muchoPesoArchivos(),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

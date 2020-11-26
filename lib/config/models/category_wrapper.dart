@@ -31,20 +31,20 @@ class CategoryWrapper {
 
   Map<String, dynamic> toJson() => _$CategoryWrapperToJson(this);
 
-  static loadCategories() async {
-    CategoryWrapper todos = CategoryWrapper(
+  static Future<void> loadCategories() async {
+    final todos = CategoryWrapper(
       id: -1,
-      nombre: "Todos",
+      nombre: 'Todos',
     );
 
-    GlobalSingleton gs = GlobalSingleton();
+    final gs = GlobalSingleton();
 
-    List<CategoryWrapper> categs = [];
+    var categs = <CategoryWrapper>[];
 
     try {
       //////
-      ResponseObject res0 = await Fetcher.get(
-        url: "/categoria_publicaciones.json",
+      final res0 = await Fetcher.get(
+        url: '/categoria_publicaciones.json',
       );
       if (res0 != null && res0.status == 200) {
         categs = (json.decode(res0.body) as List)
@@ -62,8 +62,8 @@ class CategoryWrapper {
       categs = [];
 
       //////
-      ResponseObject res1 = await Fetcher.get(
-        url: "/ciudades.json",
+      final res1 = await Fetcher.get(
+        url: '/ciudades.json',
       );
       if (res1 != null && res1.status == 200) {
         categs = (json.decode(res1.body) as List)
@@ -87,8 +87,8 @@ class CategoryWrapper {
       categs = [];
 
       //////
-      ResponseObject res2 = await Fetcher.get(
-        url: "/categoria_recetas.json",
+      final res2 = await Fetcher.get(
+        url: '/categoria_recetas.json',
       );
       if (res2 != null && res2.status == 200) {
         categs = (json.decode(res2.body) as List)
@@ -106,8 +106,8 @@ class CategoryWrapper {
       categs = [];
 
       //////
-      ResponseObject res3 = await Fetcher.get(
-        url: "/categoria_pois.json",
+      final res3 = await Fetcher.get(
+        url: '/categoria_pois.json',
       );
       if (res3 != null && res3.status == 200) {
         categs = (json.decode(res3.body) as List)
@@ -128,11 +128,15 @@ class CategoryWrapper {
     }
   }
 
-  static restoreSavedFilter(BuildContext context, SectionType type) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    int val = prefs.getInt(type.toString());
-    if (val != null)
+  static Future<void> restoreSavedFilter(
+    BuildContext context,
+    SectionType type,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final val = prefs.getInt(type.toString());
+    if (val != null) {
       Provider.of<ContentPageState>(context).setSavedFilter(type, val);
+    }
     if (type == SectionType.pois &&
         val == null &&
         GlobalSingleton().categories.isNotEmpty &&
@@ -143,50 +147,65 @@ class CategoryWrapper {
               orElse: () => null)
           ?.id;
 
-      if (id != null)
+      if (id != null) {
         Provider.of<MainState>(context).setSelectedCategoryHome(type, id);
-      else
+      } else {
         Provider.of<MainState>(context).setSelectedCategoryHome(type, -1);
+      }
     } else {
       Provider.of<MainState>(context).setSelectedCategoryHome(type, val ?? -1);
     }
   }
 
-  static saveFilter(BuildContext context, SectionType type, int val) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt(type.toString(), val);
+  static Future<void> saveFilter(
+    BuildContext context,
+    SectionType type,
+    int val,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(type.toString(), val);
     Provider.of<ContentPageState>(context).setSavedFilter(type, val);
   }
 
-  static saveContentHome(BuildContext context, List<SectionType> list) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-      "content-home",
+  static Future<void> saveContentHome(
+      BuildContext context, List<SectionType> list) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'content-home',
       json.encode(
-        list.map((i) => "$i").toList(),
+        list.map((i) => '$i').toList(),
       ),
     );
     Provider.of<MainState>(context).setContenidosHome(list);
   }
 
-  static restoreSavedShowMine(BuildContext context, SectionType type) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool val = prefs.getBool("${type.toString()}-show-mine");
-    if (val != null)
+  static Future<void> restoreSavedShowMine(
+    BuildContext context,
+    SectionType type,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    final val = prefs.getBool('${type.toString()}-show-mine');
+    if (val != null) {
       Provider.of<ContentPageState>(context).setShowMine(type, val);
-    Provider.of<ContentPageState>(context).setShowMine(type, false);
+    } else {
+      Provider.of<ContentPageState>(context).setShowMine(type, false);
+    }
   }
 
-  static saveShowMine(BuildContext context, SectionType type, bool val) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("${type.toString()}-show-mine", val);
+  static Future<void> saveShowMine(
+    BuildContext context,
+    SectionType type,
+    bool val,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('${type.toString()}-show-mine', val);
     Provider.of<ContentPageState>(context).setShowMine(type, val);
   }
 
-  static restoreContentHome(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.remove("content-home");
-    String contentHome = prefs.getString("content-home");
+  static Future<void> restoreContentHome(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    // prefs.remove('content-home');
+    final contentHome = prefs.getString('content-home');
     if (contentHome != null) {
       try {
         Provider.of<MainState>(context).setContenidosHome(
@@ -202,9 +221,9 @@ class CategoryWrapper {
 }
 
 final Map<String, SectionType> sectionTypeMapper = {
-  "SectionType.publicaciones": SectionType.publicaciones,
-  "SectionType.recetas": SectionType.recetas,
-  "SectionType.wiki": SectionType.wiki,
-  "SectionType.pois": SectionType.pois,
-  "SectionType.followed": SectionType.followed,
+  'SectionType.publicaciones': SectionType.publicaciones,
+  'SectionType.recetas': SectionType.recetas,
+  'SectionType.wiki': SectionType.wiki,
+  'SectionType.pois': SectionType.pois,
+  'SectionType.followed': SectionType.followed,
 };

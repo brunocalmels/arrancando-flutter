@@ -36,25 +36,25 @@ class _ShowPageState extends State<ShowPage> {
   ContentWrapper _content;
   bool _fetching = true;
   String _url;
-  String _categoryName = "";
+  // String _categoryName = '';
 
   Future<void> _fetchContent() async {
     switch (widget.type) {
       case SectionType.publicaciones:
-        _url = "/publicaciones";
+        _url = '/publicaciones';
         break;
       case SectionType.recetas:
-        _url = "/recetas";
+        _url = '/recetas';
         break;
       case SectionType.pois:
-        _url = "/pois";
+        _url = '/pois';
         break;
       default:
-        _url = "/publicaciones";
+        _url = '/publicaciones';
     }
 
-    ResponseObject resp = await Fetcher.get(
-      url: "$_url/${widget.contentId}.json",
+    final resp = await Fetcher.get(
+      url: '$_url/${widget.contentId}.json',
     );
 
     if (resp != null) {
@@ -76,9 +76,9 @@ class _ShowPageState extends State<ShowPage> {
           gs.categories[_content.type].isEmpty) {
         await CategoryWrapper.loadCategories();
       }
-      _categoryName = gs.categories[_content.type]
-          .firstWhere((c) => c.id == _content.categID)
-          .nombre;
+      // _categoryName = gs.categories[_content.type]
+      //     .firstWhere((c) => c.id == _content.categID)
+      //     .nombre;
       if (mounted) setState(() {});
     }
   }
@@ -121,7 +121,7 @@ class _ShowPageState extends State<ShowPage> {
               ? LoadingWidget(height: 200)
               : _content == null
                   ? Container(
-                      child: Text("Ocurrió un error"),
+                      child: Text('Ocurrió un error'),
                     )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,8 +179,8 @@ class _ShowPageState extends State<ShowPage> {
                                           color: Colors.white,
                                         ),
                                         onPressed: () async {
-                                          String url =
-                                              "https://api.whatsapp.com/send?phone=${_content.whatsapp}&text=Hola%2C%20los%20vi%20en%20Arrancando%20y%20quer%C3%ADa%20comunicarme%20directamente%20con%20ustedes.";
+                                          final url =
+                                              'https://api.whatsapp.com/send?phone=${_content.whatsapp}&text=Hola%2C%20los%20vi%20en%20Arrancando%20y%20quer%C3%ADa%20comunicarme%20directamente%20con%20ustedes.';
                                           if (await canLaunch(url)) {
                                             await launch(
                                               url,
@@ -195,7 +195,7 @@ class _ShowPageState extends State<ShowPage> {
                                     ),
                                     SizedBox(height: 7),
                                     Text(
-                                      "WHATSAPP",
+                                      'WHATSAPP',
                                       style: TextStyle(
                                         fontSize: 9,
                                       ),

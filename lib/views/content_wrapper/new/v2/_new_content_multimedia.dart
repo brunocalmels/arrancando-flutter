@@ -21,63 +21,64 @@ class NewContentMultimedia extends StatelessWidget {
 
   void _openFileExplorer(FileType type) async {
     if (Platform.isIOS) {
-      File _image;
+      PickedFile _image;
       try {
         if (type == FileType.video) {
-          _image = await ImagePicker.pickVideo(
+          _image = await ImagePicker().getVideo(
             source: ImageSource.gallery,
           );
         } else {
-          _image = await ImagePicker.pickImage(
+          _image = await ImagePicker().getImage(
             source: ImageSource.gallery,
           );
         }
       } catch (e) {
         print(e);
       }
-      if (_image != null) setImages([...images, _image]);
+      if (_image != null) setImages([...images, File(_image.path)]);
     } else {
       Map<String, String> _paths;
 
       try {
         _paths = await FilePicker.getMultiFilePath(type: type);
       } catch (e) {
-        print("Unsupported operation" + e.toString());
+        print('Unsupported operation' + e.toString());
       }
-      if (_paths != null && _paths.length > 0)
+      if (_paths != null && _paths.isNotEmpty) {
         setImages([...images, ..._paths.values.map((p) => File(p)).toList()]);
+      }
     }
   }
 
-  _addMultimedia(context) async {
+  Future<void> _addMultimedia(context) async {
     try {
-      String opcion = await showModalBottomSheet(
+      final opcion = await showModalBottomSheet(
         context: context,
         builder: (_) => BottomSheetMultimedia(),
       );
 
       switch (opcion) {
-        case "camara":
-          bool camaraPermisionDenied =
+        case 'camara':
+          final camaraPermisionDenied =
               await ActiveUser.cameraPermissionDenied();
           if (!camaraPermisionDenied) {
-            File image = await ImagePicker.pickImage(
+            final image = await ImagePicker().getImage(
               source: ImageSource.camera,
               imageQuality: 70,
               maxWidth: 1000,
             );
-            if (image != null) setImages([...images, image]);
+            if (image != null) setImages([...images, File(image.path)]);
           } else {
-            showDialog(
+            await showDialog(
               context: context,
               builder: (context) => PermissionDeniedDialog(
                 mensaje:
-                    "El permiso para la cámara fue denegado, para utilizar la cámara cambie los permisos desde la configuración de su dispositivo.",
+                    'El permiso para la cámara fue denegado, para utilizar la cámara cambie los permisos desde la configuración de su dispositivo.',
               ),
             );
           }
           break;
-        case "galeria":
+        case 'galeria':
           if (Platform.isLinux) {
             final result = await FilePickerCross.importMultipleFromStorage(
               type: FileTypeCross.any,
@@ -88,34 +89,34 @@ class NewContentMultimedia extends StatelessWidget {
               setImages([...images, ...paths]);
             }
           } else {
-            bool storagePermisionDenied = Platform.isIOS
+            final storagePermisionDenied = Platform.isIOS
                 ? await ActiveUser.photosPermissionDenied()
                 : await ActiveUser.cameraPermissionDenied();
             if (!storagePermisionDenied) {
               _openFileExplorer(FileType.image);
             } else {
-              showDialog(
+              await showDialog(
                 context: context,
                 builder: (context) => PermissionDeniedDialog(
                   mensaje:
-                      "El permiso para acceder a los archivos fue denegado, para acceder a los archivos cambie los permisos desde la configuración de su dispositivo.",
+                      'El permiso para acceder a los archivos fue denegado, para acceder a los archivos cambie los permisos desde la configuración de su dispositivo.',
                 ),
               );
             }
           }
           break;
-        case "video":
-          bool storagePermisionDenied = Platform.isIOS
+        case 'video':
+          final storagePermisionDenied = Platform.isIOS
               ? await ActiveUser.photosPermissionDenied()
               : await ActiveUser.cameraPermissionDenied();
           if (!storagePermisionDenied) {
             _openFileExplorer(FileType.video);
           } else {
-            showDialog(
+            await showDialog(
               context: context,
               builder: (context) => PermissionDeniedDialog(
                 mensaje:
-                    "El permiso para acceder a los archivos fue denegado, para acceder a los archivos cambie los permisos desde la configuración de su dispositivo.",
+                    'El permiso para acceder a los archivos fue denegado, para acceder a los archivos cambie los permisos desde la configuración de su dispositivo.',
               ),
             );
           }
@@ -135,7 +136,7 @@ class NewContentMultimedia extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text(
-          "Multimedia",
+          'Multimedia',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -172,7 +173,7 @@ class NewContentMultimedia extends StatelessWidget {
               TextFormField(
                 readOnly: true,
                 decoration: InputDecoration(
-                  hintText: "Subir imágenes o videos",
+                  hintText: 'Subir imágenes o videos',
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 10,
                     vertical: 12,

@@ -17,7 +17,7 @@ class RowCantComments extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text(
-          "${content.comentarios != null ? content.comentarios.length : 0}",
+          '${content.comentarios != null ? content.comentarios.length : 0}',
           style: TextStyle(
             color: textColor,
           ),

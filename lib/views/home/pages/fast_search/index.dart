@@ -3,14 +3,11 @@ import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/home/pages/fast_search/_data_group.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class FastSearchPage extends StatefulWidget {
   final TextEditingController searchController;
@@ -26,35 +23,33 @@ class FastSearchPage extends StatefulWidget {
 class _FastSearchPageState extends State<FastSearchPage> {
   String _lastSearchValue;
 
-  Map<String, List<ContentWrapper>> _items = {
-    "publicaciones": [],
-    "recetas": [],
-    "pois": [],
+  final _items = <String, List<ContentWrapper>>{
+    'publicaciones': [],
+    'recetas': [],
+    'pois': [],
   };
   Timer _debounce;
   List<Usuario> _usuarios = [];
 
-  Map<String, bool> _fetching = {
-    "publicaciones": false,
-    "recetas": false,
-    "pois": false,
-    "usuarios": false,
+  final _fetching = <String, bool>{
+    'publicaciones': false,
+    'recetas': false,
+    'pois': false,
+    'usuarios': false,
   };
 
-  _fetchContent(String type) async {
-    if (mounted)
-      setState(() {
-        _fetching[type] = true;
-      });
+  Future<void> _fetchContent(String type) async {
+    _fetching[type] = true;
+    if (mounted) setState(() {});
 
-    ResponseObject resp = await Fetcher.get(
+    final resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/$type/search.json?term=${Uri.encodeComponent(widget.searchController.text.replaceAll('@', ''))}&limit=3"
-          : "/$type.json",
+          ? '/$type/search.json?term=${Uri.encodeComponent(widget.searchController.text.replaceAll('@', ''))}&limit=3'
+          : '/$type.json',
     );
 
-    if (resp != null)
+    if (resp != null) {
       _items[type] = (json.decode(resp.body) as List)
           .map(
             (c) => ContentWrapper.fromJson(c),
@@ -62,7 +57,7 @@ class _FastSearchPageState extends State<FastSearchPage> {
           .where(
             (p) =>
                 (p.habilitado == null || p.habilitado) &&
-                (widget.searchController.text[0] == "@"
+                (widget.searchController.text[0] == '@'
                     ? p.user.username.toLowerCase().contains(widget
                         .searchController.text
                         .replaceAll('@', '')
@@ -70,43 +65,43 @@ class _FastSearchPageState extends State<FastSearchPage> {
                     : true),
           )
           .toList();
+    }
 
     _fetching[type] = false;
     if (mounted) setState(() {});
   }
 
-  _fetchUsuarios() async {
-    if (mounted)
-      setState(() {
-        _fetching["usuarios"] = true;
-      });
+  Future<void> _fetchUsuarios() async {
+    _fetching['usuarios'] = true;
+    if (mounted) setState(() {});
 
-    ResponseObject resp = await Fetcher.get(
+    final resp = await Fetcher.get(
       url: widget.searchController.text != null &&
               widget.searchController.text.isNotEmpty
-          ? "/users/usernames.json?search=${Uri.encodeComponent(widget.searchController.text.replaceAll('@', ''))}&limit=3"
-          : "/users/usernames.json?search=&limit=3",
+          ? '/users/usernames.json?search=${Uri.encodeComponent(widget.searchController.text.replaceAll('@', ''))}&limit=3'
+          : '/users/usernames.json?search=&limit=3',
     );
 
-    if (resp != null)
+    if (resp != null) {
       _usuarios = (json.decode(resp.body) as List)
           .map(
             (c) => Usuario.fromJson(c),
           )
           .toList();
+    }
 
-    _fetching["usuarios"] = false;
+    _fetching['usuarios'] = false;
     if (mounted) setState(() {});
   }
 
-  _onSearchChanged() {
+  void _onSearchChanged() {
     if (_lastSearchValue != widget.searchController.text) {
       if (_debounce?.isActive ?? false) _debounce.cancel();
       _debounce = Timer(const Duration(milliseconds: 1000), () {
         if (widget.searchController.text.isNotEmpty) {
-          _fetchContent("publicaciones");
-          _fetchContent("recetas");
-          _fetchContent("pois");
+          _fetchContent('publicaciones');
+          _fetchContent('recetas');
+          _fetchContent('pois');
           _fetchUsuarios();
           _lastSearchValue = widget.searchController.text;
           if (mounted) setState(() {});
@@ -131,14 +126,14 @@ class _FastSearchPageState extends State<FastSearchPage> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        await _fetchContent("publicaciones");
-        await _fetchContent("recetas");
-        await _fetchContent("pois");
+        await _fetchContent('publicaciones');
+        await _fetchContent('recetas');
+        await _fetchContent('pois');
         await _fetchUsuarios();
       },
       child: widget.searchController == null ||
               widget.searchController.text == null ||
-              widget.searchController.text == ""
+              widget.searchController.text == ''
           ? Container(
               child: Center(
                 child: Padding(
@@ -150,34 +145,34 @@ class _FastSearchPageState extends State<FastSearchPage> {
           : ListView(
               children: <Widget>[
                 DataGroup(
-                  fetching: _fetching["usuarios"],
+                  fetching: _fetching['usuarios'],
                   icon: Icons.account_circle,
-                  title: "Usuarios",
+                  title: 'Usuarios',
                   itemsUsuarios: _usuarios,
                   searchController: widget.searchController,
                   isUsers: true,
                 ),
                 DataGroup(
-                  fetching: _fetching["publicaciones"],
+                  fetching: _fetching['publicaciones'],
                   icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.publicaciones],
-                  title: "Publicaciones",
-                  items: _items["publicaciones"],
+                  title: 'Publicaciones',
+                  items: _items['publicaciones'],
                   type: SectionType.publicaciones,
                   searchController: widget.searchController,
                 ),
                 DataGroup(
-                  fetching: _fetching["recetas"],
+                  fetching: _fetching['recetas'],
                   icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.recetas],
-                  title: "Recetas",
-                  items: _items["recetas"],
+                  title: 'Recetas',
+                  items: _items['recetas'],
                   type: SectionType.recetas,
                   searchController: widget.searchController,
                 ),
                 DataGroup(
-                  fetching: _fetching["pois"],
+                  fetching: _fetching['pois'],
                   icon: MyGlobals.ICONOS_CATEGORIAS[SectionType.pois],
-                  title: "Market",
-                  items: _items["pois"],
+                  title: 'Market',
+                  items: _items['pois'],
                   type: SectionType.pois,
                   searchController: widget.searchController,
                 ),

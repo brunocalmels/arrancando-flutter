@@ -41,9 +41,7 @@ class _PoisMapState extends State<PoisMap> {
       child: FlutterMap(
         mapController: _controller,
         options: MapOptions(
-          onPositionChanged: widget.onPositionChanged == null
-              ? null
-              : widget.onPositionChanged,
+          onPositionChanged: widget.onPositionChanged,
           center: LatLng(
             widget.latitud,
             widget.longitud,
@@ -56,7 +54,7 @@ class _PoisMapState extends State<PoisMap> {
           // ),
           TileLayerOptions(
             urlTemplate:
-                "https://api.mapbox.com/styles/v1/ivaneidel/ckggw2wfg00ok19p8wgabmjlg/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
+                'https://api.mapbox.com/styles/v1/ivaneidel/ckggw2wfg00ok19p8wgabmjlg/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}',
             additionalOptions: {
               'accessToken':
                   'pk.eyJ1IjoiaXZhbmVpZGVsIiwiYSI6ImNqdGxxaTJoZzBnZjQzeXBobG84Mms5OTAifQ.HCfGRyJQCTuIW_vFr1eqiQ',

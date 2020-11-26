@@ -20,8 +20,6 @@ import 'package:arrancando/views/content_wrapper/new/v2/_scaffold.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_selector_categoria.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_selector_subcategoria.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
-import 'package:arrancando/views/content_wrapper/show/index.dart';
-import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 
 class RecetaForm extends StatefulWidget {
@@ -52,57 +50,58 @@ class RecetaFormState extends State<RecetaForm> {
   List<File> _images = [];
   List<String> _currentImages = [];
   Map<String, String> _currentVideoThumbs = {};
-  List<String> _imagesToRemove = [];
+  final _imagesToRemove = <String>[];
   int _id;
   bool _isEdit = false;
   bool _sent = false;
-  bool _hideButtonVeryBadError = false;
+  final _hideButtonVeryBadError = false;
   String _errorMsg;
 
-  _setImages(List<File> images) {
+  void _setImages(List<File> images) {
     _images = images;
     if (mounted) setState(() {});
   }
 
-  _removeImage(File asset) {
+  void _removeImage(File asset) {
     _images.remove(asset);
     if (mounted) setState(() {});
   }
 
-  _removeCurrentImage(String asset) {
-    if (_imagesToRemove.contains(asset))
+  void _removeCurrentImage(String asset) {
+    if (_imagesToRemove.contains(asset)) {
       _imagesToRemove.remove(asset);
-    else
+    } else {
       _imagesToRemove.add(asset);
+    }
     if (mounted) setState(() {});
   }
 
-  _setCategoria(CategoryWrapper categoria) {
+  void _setCategoria(CategoryWrapper categoria) {
     _categoria = categoria;
     if (mounted) setState(() {});
   }
 
-  _setSubCategorias(List<SubcategoriaReceta> subcategorias) {
+  void _setSubCategorias(List<SubcategoriaReceta> subcategorias) {
     _subcategorias = subcategorias;
     if (mounted) setState(() {});
   }
 
-  _setIngredientes(List<dynamic> ingredientes) {
+  void _setIngredientes(List<dynamic> ingredientes) {
     _ingredientes = ingredientes;
     if (mounted) setState(() {});
   }
 
-  _removeIngrediente(dynamic ingrediente) {
+  void _removeIngrediente(dynamic ingrediente) {
     if (_ingredientes.contains(ingrediente)) _ingredientes.remove(ingrediente);
     if (mounted) setState(() {});
   }
 
-  _setComplejidad(dynamic val) {
+  void _setComplejidad(dynamic val) {
     _complejidad = val;
     if (mounted) setState(() {});
   }
 
-  _crearReceta() async {
+  Future<void> _crearReceta() async {
     _errorMsg = null;
     if (_formKey.currentState.validate() &&
         ((_images != null && _images.isNotEmpty) ||
@@ -116,29 +115,29 @@ class RecetaFormState extends State<RecetaForm> {
       if (mounted) setState(() {});
 
       try {
-        Map<String, dynamic> body = {
-          "categoria_receta_id": _categoria.id,
-          "subcategoria_receta_ids": _subcategorias.map((s) => s.id).toList(),
-          "titulo": _tituloController.text,
-          "introduccion": _introduccionController.text,
-          "ingredientes_items": _ingredientes,
-          "instrucciones": _instruccionesController.text,
-          "duracion": _duracionController.text != null &&
+        final body = <String, dynamic>{
+          'categoria_receta_id': _categoria.id,
+          'subcategoria_receta_ids': _subcategorias.map((s) => s.id).toList(),
+          'titulo': _tituloController.text,
+          'introduccion': _introduccionController.text,
+          'ingredientes_items': _ingredientes,
+          'instrucciones': _instruccionesController.text,
+          'duracion': _duracionController.text != null &&
                   _duracionController.text.isNotEmpty
               ? int.tryParse(_duracionController.text.split('.')[0])
               : null,
-          "complejidad": _complejidad,
-          "imagenes": await Future.wait(
+          'complejidad': _complejidad,
+          'imagenes': await Future.wait(
             _images.map(
               (i) async => {
-                "file": i != null ? i.path.split('/').last : 'file',
-                "data": base64Encode(
+                'file': i != null ? i.path.split('/').last : 'file',
+                'data': base64Encode(
                   (await i.readAsBytes()).buffer.asUint8List(),
                 )
               },
             ),
           ),
-          "remove_imagenes": _imagesToRemove,
+          'remove_imagenes': _imagesToRemove,
         };
 
         Navigator.of(context).popUntil((route) => route.isFirst);
@@ -147,7 +146,7 @@ class RecetaFormState extends State<RecetaForm> {
           DeferredExecutor.execute(
             SectionType.recetas,
             Fetcher.put(
-              url: "/recetas/$_id.json",
+              url: '/recetas/$_id.json',
               throwError: true,
               body: {
                 ...body,
@@ -158,7 +157,7 @@ class RecetaFormState extends State<RecetaForm> {
           DeferredExecutor.execute(
             SectionType.recetas,
             Fetcher.post(
-              url: "/recetas.json",
+              url: '/recetas.json',
               throwError: true,
               body: {
                 ...body,
@@ -169,43 +168,43 @@ class RecetaFormState extends State<RecetaForm> {
       } catch (e) {
         print(e);
         _errorMsg =
-            "Ocurrió un error, por favor intentalo nuevamente más tarde.";
+            'Ocurrió un error, por favor intentalo nuevamente más tarde.';
       }
       _sent = false;
     } else if (!_formKey.currentState.validate()) {
       if (_tituloController.text == null || _tituloController.text.isEmpty) {
-        _errorMsg = "El título no puede estar vacio";
+        _errorMsg = 'El título no puede estar vacio';
       } else if (_introduccionController.text == null ||
           _introduccionController.text.isEmpty) {
-        _errorMsg = "La introducción no puede estar vacia";
+        _errorMsg = 'La introducción no puede estar vacia';
       } else if (_instruccionesController.text == null ||
           _instruccionesController.text.isEmpty) {
-        _errorMsg = "Las instrucciones no pueden estar vacias";
+        _errorMsg = 'Las instrucciones no pueden estar vacias';
       }
     } else if (!((_images != null && _images.isNotEmpty) ||
         (_currentImages != null && _currentImages.isNotEmpty))) {
-      _errorMsg = "Debes añadir al menos 1 imagen/video";
+      _errorMsg = 'Debes añadir al menos 1 imagen/video';
     } else if (!(_categoria != null &&
         _subcategorias != null &&
         _subcategorias.isNotEmpty)) {
-      _errorMsg = "Debes seleccionar 1 categoría y al menos 1 subcategoría";
+      _errorMsg = 'Debes seleccionar 1 categoría y al menos 1 subcategoría';
     } else if (!(_ingredientes != null && _ingredientes.isNotEmpty)) {
-      _errorMsg = "Debes añadir al menos 1 ingrediente";
+      _errorMsg = 'Debes añadir al menos 1 ingrediente';
     } else if (!([...(_images ?? []), ...(_currentImages ?? [])].length <= 6)) {
-      _errorMsg = "Podés subir como máximo 6 imágenes y/o videos";
+      _errorMsg = 'Podés subir como máximo 6 imágenes y/o videos';
     }
 
     if (mounted) setState(() {});
   }
 
-  _loadForEdit() {
+  void _loadForEdit() {
     if (widget.content != null && widget.content.id != null) {
       _isEdit = true;
       _id = widget.content.id;
       _tituloController.text = widget.content.titulo;
       _introduccionController.text = widget.content.introduccion;
       _ingredientes = widget.content.ingredientesItems != null &&
-              widget.content.ingredientesItems.length > 0
+              widget.content.ingredientesItems.isNotEmpty
           ? [...widget.content.ingredientesItems]
           : [];
       _instruccionesController.text = widget.content.instrucciones;
@@ -216,11 +215,11 @@ class RecetaFormState extends State<RecetaForm> {
         orElse: () => null,
       );
       _subcategorias = widget.content.subcategoriaRecetas != null &&
-              widget.content.subcategoriaRecetas.length > 0
+              widget.content.subcategoriaRecetas.isNotEmpty
           ? [...widget.content.subcategoriaRecetas]
           : [];
       _duracionController.text =
-          widget.content.duracion != null ? "${widget.content.duracion}" : null;
+          widget.content.duracion != null ? '${widget.content.duracion}' : null;
       _complejidad = widget.content.complejidad;
       if (mounted) setState(() {});
     }
@@ -237,48 +236,48 @@ class RecetaFormState extends State<RecetaForm> {
     return NewContentScaffold(
       scaffoldKey: _scaffoldKey,
       formKey: _formKey,
-      title: _isEdit ? "EDITAR RECETA" : "NUEVA RECETA",
+      title: _isEdit ? 'EDITAR RECETA' : 'NUEVA RECETA',
       children: [
         SelectorCategoria(
-          label: "Categoría",
+          label: 'Categoría',
           setCategoria: _setCategoria,
           categoria: _categoria,
         ),
         SelectorSubCategoria(
-          label: "Subcategorías",
+          label: 'Subcategorías',
           setSubCategorias: _setSubCategorias,
           subcategorias: _subcategorias,
         ),
         NewContentInput(
-          label: "Título",
+          label: 'Título',
           controller: _tituloController,
-          hint: "Merengue italiano",
+          hint: 'Merengue italiano',
           validator: (val) => val != null && val.isNotEmpty
               ? null
-              : "Este campo no puede estar vacío",
+              : 'Este campo no puede estar vacío',
         ),
         NewContentInput(
-          label: "Duración (minutos)",
+          label: 'Duración (minutos)',
           controller: _duracionController,
-          hint: "45 minutos",
+          hint: '45 minutos',
           keyboardType: TextInputType.number,
         ),
         DropdownSelect(
-          label: "Complejidad",
-          hint: "Seleccionar",
+          label: 'Complejidad',
+          hint: 'Seleccionar',
           onChanged: _setComplejidad,
           value: _complejidad,
           items: MyGlobals.COMPLEJIDAD,
         ),
         NewContentInput(
-          label: "Introducción",
+          label: 'Introducción',
           controller: _introduccionController,
-          hint: "Para hacer merengue...",
+          hint: 'Para hacer merengue...',
           multiline: true,
           addLinkButton: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
-              : "Este campo no puede estar vacío",
+              : 'Este campo no puede estar vacío',
         ),
         IngredientesTypeAhead(
           ingredientes: _ingredientes,
@@ -286,14 +285,14 @@ class RecetaFormState extends State<RecetaForm> {
           removeIngrediente: _removeIngrediente,
         ),
         NewContentInput(
-          label: "Instrucciones",
+          label: 'Instrucciones',
           controller: _instruccionesController,
-          hint: "- Se baten las claras a punto de nieve...",
+          hint: '- Se baten las claras a punto de nieve...',
           multiline: true,
           addLinkButton: true,
           validator: (val) => val != null && val.isNotEmpty
               ? null
-              : "Este campo no puede estar vacío",
+              : 'Este campo no puede estar vacío',
         ),
         NewContentMultimedia(
           images: _images,

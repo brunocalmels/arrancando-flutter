@@ -1,6 +1,4 @@
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/globals/index.dart';
-import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/views/general/type_ahead_publicaciones_recetas_pois.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +26,7 @@ class StepGeneral extends StatelessWidget {
     TextEditingController controller,
   ) =>
       Tooltip(
-        message: "Añadir link a publicación/receta/p. interés",
+        message: 'Añadir link a publicación/receta/p. interés',
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white70,
@@ -37,14 +35,14 @@ class StepGeneral extends StatelessWidget {
           child: IconButton(
             icon: Icon(Icons.insert_link),
             onPressed: () async {
-              ContentWrapper item = await showDialog(
+              final item = await showDialog(
                 context: context,
                 builder: (_) => TypeAheadPublicacionesRecetasPois(),
               );
 
               if (item != null) {
                 controller.text +=
-                    " https://arrancando.com.ar/${item.type == SectionType.publicaciones ? 'publicaciones' : item.type == SectionType.recetas ? 'recetas' : 'pois'}/${item.id}";
+                    ' https://arrancando.com.ar/${item.type == SectionType.publicaciones ? 'publicaciones' : item.type == SectionType.recetas ? 'recetas' : 'pois'}/${item.id}';
               }
             },
           ),
@@ -60,8 +58,8 @@ class StepGeneral extends StatelessWidget {
           TextFormField(
             textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
-              labelText: "Título",
-              hintText: "Título",
+              labelText: 'Título',
+              hintText: 'Título',
             ),
             controller: tituloController,
           ),
@@ -76,8 +74,8 @@ class StepGeneral extends StatelessWidget {
                   maxLines: 7,
                   decoration: InputDecoration(
                     alignLabelWithHint: true,
-                    labelText: "Cuerpo",
-                    hintText: "Cuerpo",
+                    labelText: 'Cuerpo',
+                    hintText: 'Cuerpo',
                   ),
                   controller: cuerpoController,
                 ),
@@ -99,8 +97,8 @@ class StepGeneral extends StatelessWidget {
                   maxLines: 7,
                   decoration: InputDecoration(
                     alignLabelWithHint: true,
-                    labelText: "Introducción",
-                    hintText: "Introducción",
+                    labelText: 'Introducción',
+                    hintText: 'Introducción',
                   ),
                   controller: introduccionController,
                 ),
@@ -122,8 +120,8 @@ class StepGeneral extends StatelessWidget {
                   maxLines: 7,
                   decoration: InputDecoration(
                     alignLabelWithHint: true,
-                    labelText: "Ingredientes",
-                    hintText: "Ingredientes",
+                    labelText: 'Ingredientes',
+                    hintText: 'Ingredientes',
                   ),
                   controller: ingredientesController,
                 ),
@@ -145,8 +143,8 @@ class StepGeneral extends StatelessWidget {
                   maxLines: 7,
                   decoration: InputDecoration(
                     alignLabelWithHint: true,
-                    labelText: "Instrucciones",
-                    hintText: "Instrucciones",
+                    labelText: 'Instrucciones',
+                    hintText: 'Instrucciones',
                   ),
                   controller: instruccionesController,
                 ),

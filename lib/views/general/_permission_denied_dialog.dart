@@ -10,7 +10,7 @@ class PermissionDeniedDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Permiso denegado"),
+      title: Text('Permiso denegado'),
       content: Text(
         mensaje,
       ),
@@ -19,7 +19,7 @@ class PermissionDeniedDialog extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Aceptar"),
+          child: Text('Aceptar'),
         )
       ],
     );

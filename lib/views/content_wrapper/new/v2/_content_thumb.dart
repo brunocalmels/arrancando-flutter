@@ -78,7 +78,7 @@ class ContentThumb extends StatelessWidget {
                     CachedNetworkImage(
                       fit: BoxFit.cover,
                       imageUrl:
-                          "${MyGlobals.SERVER_URL}${currentVideoThumbs[asset]}",
+                          '${MyGlobals.SERVER_URL}${currentVideoThumbs[asset]}',
                       placeholder: (context, url) => Center(
                         child: SizedBox(
                           width: 25,
@@ -100,7 +100,7 @@ class ContentThumb extends StatelessWidget {
                 )
           : CachedNetworkImage(
               fit: BoxFit.cover,
-              imageUrl: "${MyGlobals.SERVER_URL}$asset",
+              imageUrl: '${MyGlobals.SERVER_URL}$asset',
               placeholder: (context, url) => Center(
                 child: SizedBox(
                   width: 25,

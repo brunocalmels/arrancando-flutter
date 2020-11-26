@@ -21,8 +21,8 @@ class DevLogin extends StatelessWidget {
           // NECESITA EL CONTEXT PARA EL SNACKBAR
           builder: (context) => FlatButton(
             onPressed: () {
-              emailController.text = "i@m.c";
-              passwordController.text = "123456";
+              emailController.text = 'i@m.c';
+              passwordController.text = '123456';
               login(context);
             },
             child: Text(
@@ -34,8 +34,8 @@ class DevLogin extends StatelessWidget {
           // NECESITA EL CONTEXT PARA EL SNACKBAR
           builder: (context) => FlatButton(
             onPressed: () {
-              emailController.text = "b@m.c";
-              passwordController.text = "123456";
+              emailController.text = 'b@m.c';
+              passwordController.text = '123456';
               login(context);
             },
             child: Text(

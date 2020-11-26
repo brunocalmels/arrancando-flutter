@@ -19,32 +19,32 @@ class ContentPageState extends ChangeNotifier {
   };
   DeferredExecutorStatus deferredExecutorStatus = DeferredExecutorStatus.none;
 
-  setSearchPageVisible(bool val) {
+  void setSearchPageVisible(bool val) {
     showSearchPage = val;
     notifyListeners();
   }
 
-  setSearchResultsVisible(bool val) {
+  void setSearchResultsVisible(bool val) {
     showSearchResults = val;
     notifyListeners();
   }
 
-  setContentSortType(ContentSortType type) {
+  void setContentSortType(ContentSortType type) {
     sortContentBy = type;
     notifyListeners();
   }
 
-  setSavedFilter(SectionType type, int val) {
+  void setSavedFilter(SectionType type, int val) {
     savedFilters[type] = val;
     notifyListeners();
   }
 
-  setShowMine(SectionType type, bool val) {
+  void setShowMine(SectionType type, bool val) {
     showMine[type] = val;
     notifyListeners();
   }
 
-  setDeferredExecutorStatus(DeferredExecutorStatus val) {
+  void setDeferredExecutorStatus(DeferredExecutorStatus val) {
     deferredExecutorStatus = val;
     notifyListeners();
   }

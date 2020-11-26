@@ -45,11 +45,11 @@ class _ImagesSliderState extends State<ImagesSlider> {
             builder: (context, index, data) => SliderThumb(
               src: MyGlobals.VIDEO_FORMATS.contains(
                       widget.images[index].split('.').last.toLowerCase())
-                  ? "${MyGlobals.SERVER_URL}${widget.videoThumbs[widget.images[index]]}"
-                  : "${MyGlobals.SERVER_URL}${widget.images[index]}",
+                  ? '${MyGlobals.SERVER_URL}${widget.videoThumbs[widget.images[index]]}'
+                  : '${MyGlobals.SERVER_URL}${widget.images[index]}',
               esVideo: MyGlobals.VIDEO_FORMATS
                   .contains(widget.images[index].split('.').last.toLowerCase()),
-              originalSrc: "${MyGlobals.SERVER_URL}${widget.images[index]}",
+              originalSrc: '${MyGlobals.SERVER_URL}${widget.images[index]}',
             ),
             count: widget.images.length,
           ),
@@ -58,7 +58,7 @@ class _ImagesSliderState extends State<ImagesSlider> {
           height: 7,
         ),
         Text(
-          "$_activeImage/${widget.images.length}",
+          '$_activeImage/${widget.images.length}',
           style: TextStyle(
             fontSize: 12,
           ),

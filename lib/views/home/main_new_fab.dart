@@ -11,11 +11,9 @@ class _MainNewFabState extends State<MainNewFab>
     with SingleTickerProviderStateMixin {
   bool _showAll = false;
 
-  _toggleShow() {
-    if (mounted)
-      setState(() {
-        _showAll = !_showAll;
-      });
+  void _toggleShow() {
+    _showAll = !_showAll;
+    if (mounted) setState(() {});
   }
 
   @override
@@ -42,7 +40,7 @@ class _MainNewFabState extends State<MainNewFab>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     FloatingActionButton(
-                      heroTag: "new-publicaciones",
+                      heroTag: 'new-publicaciones',
                       onPressed: () {
                         _toggleShow();
                         Navigator.of(context).push(
@@ -64,7 +62,7 @@ class _MainNewFabState extends State<MainNewFab>
                     Column(
                       children: <Widget>[
                         FloatingActionButton(
-                          heroTag: "new-recetas",
+                          heroTag: 'new-recetas',
                           onPressed: () {
                             _toggleShow();
                             Navigator.of(context).push(
@@ -86,7 +84,7 @@ class _MainNewFabState extends State<MainNewFab>
                       width: 10,
                     ),
                     FloatingActionButton(
-                      heroTag: "new-pois",
+                      heroTag: 'new-pois',
                       onPressed: () {
                         _toggleShow();
                         Navigator.of(context).push(

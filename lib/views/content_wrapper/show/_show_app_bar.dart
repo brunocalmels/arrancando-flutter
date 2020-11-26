@@ -1,8 +1,4 @@
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
-import 'package:arrancando/views/content_wrapper/edit/index.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/publicacion.dart';
-import 'package:arrancando/views/content_wrapper/new/v2/receta.dart';
 import 'package:flutter/material.dart';
 
 class ShowAppBar extends StatelessWidget {

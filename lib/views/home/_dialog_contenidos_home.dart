@@ -11,34 +11,34 @@ class DialogContenidosHome extends StatefulWidget {
 class _DialogContenidosHomeState extends State<DialogContenidosHome> {
   final List _items = [
     // {
-    //   "type": SectionType.publicaciones,
-    //   "text": "Comunidad",
-    //   "icon": Icons.home,
+    //   'type': SectionType.publicaciones,
+    //   'text': 'Comunidad',
+    //   'icon': Icons.home,
     // },
     {
-      "type": SectionType.publicaciones,
-      "text": "Publicaciones",
-      "icon": Icons.home,
+      'type': SectionType.publicaciones,
+      'text': 'Publicaciones',
+      'icon': Icons.home,
     },
     {
-      "type": SectionType.recetas,
-      "text": "Recetas",
-      "icon": Icons.fastfood,
+      'type': SectionType.recetas,
+      'text': 'Recetas',
+      'icon': Icons.fastfood,
     },
     {
-      "type": SectionType.pois,
-      "text": "P. Interés",
-      "icon": Icons.location_on,
+      'type': SectionType.pois,
+      'text': 'P. Interés',
+      'icon': Icons.location_on,
     },
     {
-      "type": SectionType.followed,
-      "text": "Solo seguidos",
-      "icon": Icons.supervisor_account,
+      'type': SectionType.followed,
+      'text': 'Solo seguidos',
+      'icon': Icons.supervisor_account,
     },
     // {
-    //   "type": SectionType.wiki,
-    //   "text": "Wiki",
-    //   "icon": Icons.library_books,
+    //   'type': SectionType.wiki,
+    //   'text': 'Wiki',
+    //   'icon': Icons.library_books,
     // },
   ];
 
@@ -62,7 +62,7 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
         padding: const EdgeInsets.all(15),
         color: Theme.of(context).backgroundColor,
         child: Text(
-          "ELIGE EL TIPO DE CONTENIDO QUE DESEAS VER",
+          'ELIGE EL TIPO DE CONTENIDO QUE DESEAS VER',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 9,
@@ -106,11 +106,11 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text("CANCELAR"),
+          child: Text('CANCELAR'),
           onPressed: () => Navigator.of(context).pop(),
         ),
         FlatButton(
-          child: Text("ACEPTAR"),
+          child: Text('ACEPTAR'),
           onPressed: () => Navigator.of(context).pop(_contenidos),
         ),
       ],

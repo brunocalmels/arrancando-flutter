@@ -58,7 +58,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
           );
         },
         child: Image.asset(
-          "assets/images/content/index/plato-filtrar.png",
+          'assets/images/content/index/plato-filtrar.png',
           width: MediaQuery.of(context).size.width * 0.6,
         ),
       );
@@ -101,7 +101,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
               return widget.fetchContent(widget.type);
             },
             child: widget.items != null
-                ? widget.items.length > 0
+                ? widget.items.isNotEmpty
                     ? ListView.builder(
                         controller: _scrollController,
                         itemCount: widget.items.length,
@@ -112,7 +112,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
                               content: widget.items[index],
                             ),
                           );
-                          if (index == 0 && !widget.hideFilter)
+                          if (index == 0 && !widget.hideFilter) {
                             return Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
@@ -123,8 +123,9 @@ class _ContentCardPageState extends State<ContentCardPage> {
                                 item,
                               ],
                             );
+                          }
                           if (index == widget.items.length - 1) {
-                            if (!widget.noMore && widget.items.length > 1)
+                            if (!widget.noMore && widget.items.length > 1) {
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
@@ -140,7 +141,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
                                   ),
                                 ],
                               );
-                            else
+                            } else {
                               return Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
@@ -151,8 +152,10 @@ class _ContentCardPageState extends State<ContentCardPage> {
                                   ),
                                 ],
                               );
-                          } else
+                            }
+                          } else {
                             return item;
+                          }
                         },
                       )
                     : ListView(
@@ -169,7 +172,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             child: Text(
-                              "No hay elementos para mostrar",
+                              'No hay elementos para mostrar',
                               textAlign: TextAlign.center,
                             ),
                           )
@@ -180,12 +183,12 @@ class _ContentCardPageState extends State<ContentCardPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Text(
-                          "Ocurrió un error",
+                          'Ocurrió un error',
                           textAlign: TextAlign.center,
                         ),
                       ),
                       Text(
-                        "(Si el problema persiste, cerrá sesión y volvé a iniciar)",
+                        '(Si el problema persiste, cerrá sesión y volvé a iniciar)',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 10,

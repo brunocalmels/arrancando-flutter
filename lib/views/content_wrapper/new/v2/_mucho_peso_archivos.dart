@@ -13,7 +13,7 @@ class MuchoPesoArchivos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<int> _computeSize() async {
-      int pesos = (await Future.wait(
+      final pesos = (await Future.wait(
         images.map(
           (i) => i.length(),
         ),
@@ -29,11 +29,11 @@ class MuchoPesoArchivos extends StatelessWidget {
       future: _computeSize(),
       builder: (context, AsyncSnapshot<int> snapshot) {
         if (snapshot.hasData &&
-            snapshot.data >= MyGlobals.MUCHO_PESO_PUBLICACION)
+            snapshot.data >= MyGlobals.MUCHO_PESO_PUBLICACION) {
           return Padding(
             padding: const EdgeInsets.only(top: 15),
             child: Text(
-              "Estás subiendo archivos muy pesados, el proceso puede tardar.",
+              'Estás subiendo archivos muy pesados, el proceso puede tardar.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.blue,
@@ -41,6 +41,7 @@ class MuchoPesoArchivos extends StatelessWidget {
               ),
             ),
           );
+        }
         return Container();
       },
     );

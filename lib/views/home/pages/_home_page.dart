@@ -31,22 +31,23 @@ class _HomePageState extends State<HomePage> {
 
     print(Provider.of<MainState>(context).contenidosHome);
 
-    int lastLength = _items != null ? _items.length : 0;
-    List<String> contenidosHome = Provider.of<MainState>(context)
+    final lastLength = _items != null ? _items.length : 0;
+    final contenidosHome = Provider.of<MainState>(context)
         .contenidosHome
         .map((ch) => ch.toString().split('.').last.toLowerCase())
         .toList();
 
-    ResponseObject resp = await Fetcher.get(
+    final resp = await Fetcher.get(
       url:
-          "/content.json?page=$_page${contenidosHome != null && contenidosHome.isNotEmpty ? ('&contenidos_home=' + json.encode(contenidosHome)) : ''}",
+          '/content.json?page=$_page${contenidosHome != null && contenidosHome.isNotEmpty ? ('&contenidos_home=' + json.encode(contenidosHome)) : ''}',
     );
 
-    if (resp != null && resp.body != null)
+    if (resp != null && resp.body != null) {
       _items += (json.decode(resp.body) as List)
           .map((p) => ContentWrapper.fromJson(p))
           .where((p) => p.habilitado == null || p.habilitado)
           .toList();
+    }
 
     _page += 1;
     _noMore = false;
@@ -60,20 +61,20 @@ class _HomePageState extends State<HomePage> {
 
   Widget get _plato => GestureDetector(
         onTap: () async {
-          List<SectionType> _contenidos = await showDialog(
+          final _contenidos = await showDialog(
             context: context,
             builder: (_) => DialogContenidosHome(),
-          );
+          ) as List<SectionType>;
           if (_contenidos != null) {
             await CategoryWrapper.saveContentHome(
               context,
               _contenidos,
             );
-            _fetchContent(reset: true);
+            await _fetchContent(reset: true);
           }
         },
         child: Image.asset(
-          "assets/images/content/index/plato-personalizar.png",
+          'assets/images/content/index/plato-personalizar.png',
           width: MediaQuery.of(context).size.width * 0.6,
         ),
       );
@@ -96,14 +97,15 @@ class _HomePageState extends State<HomePage> {
           : RefreshIndicator(
               onRefresh: _fetchContent,
               child: _items != null
-                  ? _items.length > 0
+                  ? _items.isNotEmpty
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 7),
                           child: ListView.builder(
                             itemCount: _items.length,
                             itemBuilder: (context, index) {
-                              if (index == _items.length - 1 && !_noMore)
+                              if (index == _items.length - 1 && !_noMore) {
                                 _fetchContent();
+                              }
                               Widget item = Padding(
                                 padding: const EdgeInsets.only(
                                   bottom: 20,
@@ -115,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                                   content: _items[index],
                                 ),
                               );
-                              if (index == 0)
+                              if (index == 0) {
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
@@ -126,7 +128,8 @@ class _HomePageState extends State<HomePage> {
                                     item,
                                   ],
                                 );
-                              else if (index == _items.length - 1 && !_noMore)
+                              } else if (index == _items.length - 1 &&
+                                  !_noMore) {
                                 return Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
@@ -136,8 +139,9 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ],
                                 );
-                              else
+                              } else {
                                 return item;
+                              }
                             },
                           ),
                         )
@@ -154,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                             Padding(
                               padding: const EdgeInsets.all(15),
                               child: Text(
-                                "No hay elementos para mostrar",
+                                'No hay elementos para mostrar',
                                 textAlign: TextAlign.center,
                               ),
                             )
@@ -163,11 +167,11 @@ class _HomePageState extends State<HomePage> {
                   : ListView(
                       children: [
                         Text(
-                          "Ocurrió un error",
+                          'Ocurrió un error',
                           textAlign: TextAlign.center,
                         ),
                         Text(
-                          "(Si el problema persiste, cerrá sesión y volvé a iniciar)",
+                          '(Si el problema persiste, cerrá sesión y volvé a iniciar)',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 10,

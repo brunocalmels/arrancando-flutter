@@ -17,7 +17,7 @@ class DialogCategorySelect extends StatefulWidget {
   DialogCategorySelect({
     this.selectCity = false,
     this.allowDismiss = true,
-    this.titleText = "Cambiar filtro",
+    this.titleText = 'Cambiar filtro',
     this.insideProfile = false,
     this.pubCateg = false,
     this.poiCity = false,
@@ -31,7 +31,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
   final GlobalSingleton singleton = GlobalSingleton();
   int _selected;
 
-  _onItemTap(item) {
+  void _onItemTap(item) {
     _selected = item.id;
     CategoryWrapper.saveFilter(
       context,
@@ -73,7 +73,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 3),
                   child: Text(
-                    "Si tu ciudad no aparece en el listado, seleccioná Neuquén y contactate con nosotros a través de la sección de perfil para que la agregemos.",
+                    'Si tu ciudad no aparece en el listado, seleccioná Neuquén y contactate con nosotros a través de la sección de perfil para que la agregemos.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 11,
@@ -90,7 +90,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                       // height: 220,
                       child: Builder(
                         builder: (context) {
-                          List<CategoryWrapper> _lista = widget.pubCateg
+                          final _lista = widget.pubCateg
                               ? [
                                   ...singleton.categories[
                                       SectionType.publicaciones_categoria]
@@ -108,8 +108,9 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
 
                           if ((widget.selectCity && !widget.pubCateg) ||
                               Provider.of<MainState>(context).activePageHome ==
-                                  SectionType.pois)
+                                  SectionType.pois) {
                             _lista.removeWhere((c) => c.id == -1);
+                          }
 
                           return SingleChildScrollView(
                             child: Column(
@@ -118,7 +119,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                                 Padding(
                                   padding: const EdgeInsets.all(4),
                                   child: Text(
-                                    "(${_lista.length} items)",
+                                    '(${_lista.length} items)',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 10,

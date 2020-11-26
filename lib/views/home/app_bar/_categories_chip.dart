@@ -1,6 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
-import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_page_categorias.dart';
@@ -42,12 +41,12 @@ class _CategoriesChipState extends State<CategoriesChip> {
           children: <Widget>[
             singleton.categories == null ||
                     singleton.categories[mainState.activePageHome] == null ||
-                    singleton.categories[mainState.activePageHome].length == 0
+                    singleton.categories[mainState.activePageHome].isEmpty
                 ? Container()
                 : ChoiceChip(
                     onSelected: (val) async {
                       print(mainState.activePageHome == SectionType.recetas);
-                      int selected = await showDialog(
+                      final selected = await showDialog(
                         context: context,
                         builder: (_) =>
                             mainState.activePageHome == SectionType.recetas
@@ -96,17 +95,28 @@ class _CategoriesChipState extends State<CategoriesChip> {
                                             ? SectionType.pois_ciudad
                                             : mainState.activePageHome]
                                     .firstWhere(
-                                        (c) => mainState.selectedCategoryHome[widget.pubCateg ? SectionType.publicaciones_categoria : widget.poiCity ? SectionType.pois_ciudad : mainState.activePageHome] != null
-                                            ? c.id ==
-                                                mainState.selectedCategoryHome[
-                                                    widget.pubCateg
+                                        (c) => mainState
+                                                    .selectedCategoryHome[widget
+                                                        .pubCateg
+                                                    ? SectionType
+                                                        .publicaciones_categoria
+                                                    : widget.poiCity
                                                         ? SectionType
-                                                            .publicaciones_categoria
-                                                        : widget.poiCity
-                                                            ? SectionType
-                                                                .pois_ciudad
-                                                            : mainState
-                                                                .activePageHome]
+                                                            .pois_ciudad
+                                                        : mainState
+                                                            .activePageHome] !=
+                                                null
+                                            ? c.id ==
+                                                mainState
+                                                    .selectedCategoryHome[widget
+                                                        .pubCateg
+                                                    ? SectionType
+                                                        .publicaciones_categoria
+                                                    : widget.poiCity
+                                                        ? SectionType
+                                                            .pois_ciudad
+                                                        : mainState
+                                                            .activePageHome]
                                             : c.id ==
                                                 userState
                                                     .preferredCategories[widget
@@ -114,11 +124,13 @@ class _CategoriesChipState extends State<CategoriesChip> {
                                                     ? SectionType
                                                         .publicaciones_categoria
                                                     : widget.poiCity
-                                                        ? SectionType.pois_ciudad
-                                                        : mainState.activePageHome],
+                                                        ? SectionType
+                                                            .pois_ciudad
+                                                        : mainState
+                                                            .activePageHome],
                                         orElse: () => null)
                                     ?.nombre ??
-                                "",
+                                '',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.black,

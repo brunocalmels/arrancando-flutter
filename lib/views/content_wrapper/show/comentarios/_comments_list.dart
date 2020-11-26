@@ -25,7 +25,7 @@ class CommentsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: content.comentarios != null && content.comentarios.length > 0
+      child: content.comentarios != null && content.comentarios.isNotEmpty
           ? Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +45,7 @@ class CommentsList extends StatelessWidget {
                       ),
                       SizedBox(width: 5),
                       Text(
-                        "${content.comentarios.length} comentarios",
+                        '${content.comentarios.length} comentarios',
                         style: TextStyle(
                           fontSize: 12,
                         ),
@@ -104,7 +104,7 @@ class CommentsList extends StatelessWidget {
                                           backgroundImage: c.user != null &&
                                                   c.user.avatar != null
                                               ? CachedNetworkImageProvider(
-                                                  "${MyGlobals.SERVER_URL}${c.user.avatar}",
+                                                  '${MyGlobals.SERVER_URL}${c.user.avatar}',
                                                 )
                                               : null,
                                         ),
@@ -122,7 +122,7 @@ class CommentsList extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            "@${c.user.username}",
+                                            '@${c.user.username}',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: Provider.of<MainState>(
@@ -171,7 +171,7 @@ class CommentsList extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        Text("${c.puntajes.length}"),
+                                        Text('${c.puntajes.length}'),
                                         if (c.esOwner(context))
                                           Padding(
                                             padding:
@@ -206,12 +206,12 @@ class CommentsList extends StatelessWidget {
                                         },
                                         itemBuilder: (_) => [
                                           PopupMenuItem(
-                                            child: Text("Editar"),
-                                            value: "editar",
+                                            child: Text('Editar'),
+                                            value: 'editar',
                                           ),
                                           PopupMenuItem(
-                                            child: Text("Eliminar"),
-                                            value: "eliminar",
+                                            child: Text('Eliminar'),
+                                            value: 'eliminar',
                                           ),
                                         ],
                                       ),
@@ -250,7 +250,7 @@ class CommentsList extends StatelessWidget {
               ],
             )
           : Text(
-              "Aún no hay comentarios",
+              'Aún no hay comentarios',
               textAlign: TextAlign.center,
             ),
     );

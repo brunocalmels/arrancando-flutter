@@ -31,7 +31,7 @@ class NewContentSendBoton extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    isEdit ? "GUARDAR" : "CREAR",
+                    isEdit ? 'GUARDAR' : 'CREAR',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

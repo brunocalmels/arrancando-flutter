@@ -25,7 +25,7 @@ class RowPuntajes extends StatelessWidget {
           width: 3,
         ),
         Text(
-          "${content.puntajePromedio.toStringAsFixed(1)}",
+          '${content.puntajePromedio.toStringAsFixed(1)}',
           style: TextStyle(
             color: textColor,
           ),
@@ -34,13 +34,13 @@ class RowPuntajes extends StatelessWidget {
           width: 7,
         ),
         Text(
-          "(",
+          '(',
           style: TextStyle(
             color: textColor,
           ),
         ),
         Text(
-          "${content.puntajes != null ? content.puntajes.length : ''}",
+          '${content.puntajes != null ? content.puntajes.length : ''}',
           style: TextStyle(
             color: textColor,
           ),
@@ -51,7 +51,7 @@ class RowPuntajes extends StatelessWidget {
           size: 20,
         ),
         Text(
-          ")",
+          ')',
           style: TextStyle(
             color: textColor,
           ),

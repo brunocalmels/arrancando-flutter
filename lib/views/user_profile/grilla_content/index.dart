@@ -39,7 +39,7 @@ class GrillaContentUserProfile extends StatelessWidget {
                 : CachedNetworkImage(
                     fit: BoxFit.cover,
                     imageUrl:
-                        "${src.contains('http') ? '' : MyGlobals.SERVER_URL}$src",
+                        '${src.contains('http') ? '' : MyGlobals.SERVER_URL}$src',
                     placeholder: (context, url) => Center(
                       child: SizedBox(
                         width: 25,
@@ -117,7 +117,7 @@ class GrillaContentUserProfile extends StatelessWidget {
                       ),
                     )
                   : Text(
-                      "Cargar más",
+                      'Cargar más',
                       style: TextStyle(
                         fontSize: 11,
                         color: Theme.of(context).textTheme.bodyText1.color,

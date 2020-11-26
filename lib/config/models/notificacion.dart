@@ -32,12 +32,12 @@ class Notificacion {
 
   Map<String, dynamic> toJson() => _$NotificacionToJson(this);
 
-  get fecha =>
-      "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
+  String get fecha =>
+      '${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}';
 
   static Future<List<Notificacion>> fetchUnread() async {
-    ResponseObject resp = await Fetcher.get(
-      url: "/notificaciones/unread.json",
+    final resp = await Fetcher.get(
+      url: '/notificaciones/unread.json',
     );
     if (resp != null && resp.body != null) {
       return (json.decode(resp.body) as List)
@@ -47,12 +47,12 @@ class Notificacion {
     return [];
   }
 
-  markAsRead() async {
-    this.leido = true;
+  Future<void> markAsRead() async {
+    leido = true;
     await Fetcher.put(
-      url: "/notificaciones/${this.id}.json",
+      url: '/notificaciones/${id}.json',
       body: {
-        "leido": true,
+        'leido': true,
       },
     );
   }

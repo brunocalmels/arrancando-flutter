@@ -31,7 +31,7 @@ class SelectorCategoriaPoi extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "$label:",
+                    '$label:',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -50,7 +50,7 @@ class SelectorCategoriaPoi extends StatelessWidget {
                     child: Text(
                       categoria != null && categoria.nombre != null
                           ? categoria.nombre
-                          : "SELECCIONAR",
+                          : 'SELECCIONAR',
                     ),
                   ),
                 ],
@@ -68,8 +68,9 @@ class SelectorCategoriaPoi extends StatelessWidget {
                         builder: (_) => PageCategoriasPoi(),
                       ),
                     );
-                    if (selectedCategoria != null)
+                    if (selectedCategoria != null) {
                       setCategoria(selectedCategoria);
+                    }
                   },
                 ),
               ),

@@ -37,7 +37,7 @@ class FormSendComment extends StatelessWidget {
                                 .avatar !=
                             null
                     ? CachedNetworkImageProvider(
-                        "${MyGlobals.SERVER_URL}${Provider.of<UserState>(context, listen: false).activeUser.avatar}",
+                        '${MyGlobals.SERVER_URL}${Provider.of<UserState>(context, listen: false).activeUser.avatar}',
                       )
                     : null,
           ),
@@ -62,7 +62,7 @@ class FormSendComment extends StatelessWidget {
                       maxLines: 2,
                       decoration: InputDecoration(
                         alignLabelWithHint: true,
-                        hintText: "Comentario",
+                        hintText: 'Comentario',
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         hintStyle: TextStyle(
                           color: Colors.black54,
@@ -80,7 +80,7 @@ class FormSendComment extends StatelessWidget {
                   FlatButton(
                     onPressed: sent ? null : sendComentario,
                     child: Text(
-                      "COMENTAR",
+                      'COMENTAR',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,

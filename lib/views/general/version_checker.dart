@@ -14,8 +14,8 @@ class VersionChecker extends StatefulWidget {
 class _VersionCheckerState extends State<VersionChecker> {
   bool showNewVersionBanner = false;
 
-  _verifyVersion() async {
-    ResponseObject resp = await Fetcher.get(
+  Future<void> _verifyVersion() async {
+    final resp = await Fetcher.get(
       url: '/app-version.json',
     );
     if (resp != null && resp.body != null) {
@@ -29,8 +29,8 @@ class _VersionCheckerState extends State<VersionChecker> {
 
   @override
   void initState() {
+    _verifyVersion();
     super.initState();
-    this._verifyVersion();
   }
 
   @override
@@ -58,24 +58,25 @@ class _VersionCheckerState extends State<VersionChecker> {
                             ),
                           ),
                           Text(
-                              "Hay una nueva versión disponible de Arrancando!"),
+                              'Hay una nueva versión disponible de Arrancando!'),
                           FlatButton(
                             padding: const EdgeInsets.symmetric(
                               vertical: 7,
                               horizontal: 3,
                             ),
                             child: Text(
-                              "ACTUALIZAR",
+                              'ACTUALIZAR',
                               style: TextStyle(
                                 color: Colors.blue,
                               ),
                             ),
                             onPressed: () async {
-                              String url =
+                              var url =
                                   'https://play.google.com/store/apps/details?id=com.macherit.arrancando';
-                              if (Platform.isIOS)
+                              if (Platform.isIOS) {
                                 url =
                                     'https://apps.apple.com/us/app/arrancando/id1490590335?l=es';
+                              }
                               if (await canLaunch(url)) {
                                 await launch(url);
                               } else {

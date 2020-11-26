@@ -20,15 +20,16 @@ class _SavedContentPageState extends State<SavedContentPage> {
   bool _fetching = true;
 
   Future<void> _fetchContent() async {
-    ResponseObject resp = await Fetcher.get(
+    final resp = await Fetcher.get(
       url:
-          "/content/saved.json?data=${json.encode(Provider.of<UserState>(context, listen: false).savedContent)}",
+          '/content/saved.json?data=${json.encode(Provider.of<UserState>(context, listen: false).savedContent)}',
     );
 
-    if (resp?.body != null)
+    if (resp?.body != null) {
       _items = (json.decode(resp.body) as List)
           .map((p) => ContentWrapper.fromJson(p))
           .toList();
+    }
 
     _fetching = false;
     if (mounted) setState(() {});
@@ -51,13 +52,13 @@ class _SavedContentPageState extends State<SavedContentPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Guardadas",
+          'Guardadas',
         ),
       ),
       body: _fetching
           ? LoadingWidget()
           : _items != null
-              ? _items.length > 0
+              ? _items.isNotEmpty
                   ? RefreshIndicator(
                       onRefresh: _fetchContent,
                       child: Padding(
@@ -82,7 +83,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
                                               ),
                                             )
                                           : CachedNetworkImage(
-                                              imageUrl: "${p.thumbnail}",
+                                              imageUrl: '${p.thumbnail}',
                                               fit: BoxFit.cover,
                                               placeholder: (context, url) =>
                                                   Center(
@@ -126,7 +127,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
                                           ),
                                         ),
                                       );
-                                      _fetchContent();
+                                      await _fetchContent();
                                     },
                                   ),
                                 ),
@@ -139,7 +140,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
                       padding: const EdgeInsets.all(15),
                       width: MediaQuery.of(context).size.width,
                       child: Text(
-                        "No hay elementos guardados",
+                        'No hay elementos guardados',
                         textAlign: TextAlign.center,
                       ),
                     )
@@ -147,7 +148,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
                   padding: const EdgeInsets.all(15),
                   width: MediaQuery.of(context).size.width,
                   child: Text(
-                    "Ocurrió un error",
+                    'Ocurrió un error',
                     textAlign: TextAlign.center,
                   ),
                 ),

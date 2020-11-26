@@ -24,15 +24,15 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
   List _imagenes;
   bool _enlaceCopiado = false;
 
-  _shareGeneric({bool esFbk = false, bool esWpp = false}) async {
+  Future<void> _shareGeneric({bool esFbk = false, bool esWpp = false}) async {
     Uint8List imageBytes;
     if (_imagenes != null && _imagenes.isNotEmpty) {
       String i = _imagenes[_imagenNro];
 
       String url = _imagenes[_imagenNro].contains('http')
           ? _imagenes[_imagenNro]
-          : "${MyGlobals.SERVER_URL}${_imagenes[_imagenNro]}"
-              "${MyGlobals.SERVER_URL}";
+          : '${MyGlobals.SERVER_URL}${_imagenes[_imagenNro]}'
+              '${MyGlobals.SERVER_URL}';
 
       if (MyGlobals.VIDEO_FORMATS.contains(i.split('.').last.toLowerCase()) &&
           widget.content.videoThumbs[i] != null) {
@@ -40,15 +40,15 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
         url = widget.content.videoThumbs[i];
       }
 
-      url = url.contains('http') ? url : "${MyGlobals.SERVER_URL}$url";
+      url = url.contains('http') ? url : '${MyGlobals.SERVER_URL}$url';
 
-      http.Response response = await http.get(url);
+      final response = await http.get(url);
       imageBytes = response.bodyBytes;
     }
 
-    widget.content.sharedThisContent();
+    await widget.content.sharedThisContent();
 
-    widget.content.shareSelf(
+    await widget.content.shareSelf(
       esFull: _esFull,
       imageBytes: imageBytes,
       esWpp: esWpp,
@@ -56,12 +56,12 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
     );
   }
 
-  _shareLink() async {
+  Future<void> _shareLink() async {
     _enlaceCopiado = true;
     if (mounted) setState(() {});
 
     final url =
-        "https://arrancando.com.ar/${widget.content.type.toString().split('.').last}/${widget.content.id}";
+        'https://arrancando.com.ar/${widget.content.type.toString().split('.').last}/${widget.content.id}';
 
     await Clipboard.setData(
       ClipboardData(
@@ -79,7 +79,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
   void initState() {
     super.initState();
     _imagenes =
-        widget.content.imagenes != null && widget.content.imagenes.length > 0
+        widget.content.imagenes != null && widget.content.imagenes.isNotEmpty
             ? widget.content.imagenes
             : widget.content.thumbnail != null
                 ? [widget.content.thumbnail]
@@ -89,7 +89,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Compartir contenido"),
+      title: Text('Compartir contenido'),
       contentPadding: const EdgeInsets.all(3),
       content: Container(
         child: SingleChildScrollView(
@@ -102,20 +102,18 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text("Resumen"),
+                  Text('Resumen'),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Switch(
                       onChanged: (val) {
-                        if (mounted)
-                          setState(() {
-                            _esFull = val;
-                          });
+                        _esFull = val;
+                        if (mounted) setState(() {});
                       },
                       value: _esFull,
                     ),
                   ),
-                  Text("Completo"),
+                  Text('Completo'),
                 ],
               ),
               // if (widget.content.type == SectionType.recetas && _esFull)
@@ -133,7 +131,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
               //         },
               //       ),
               //       Text(
-              //         "Voy a compartir en WhatsApp",
+              //         'Voy a compartir en WhatsApp',
               //         style: TextStyle(
               //           fontSize: 12,
               //         ),
@@ -143,76 +141,104 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
               SizedBox(
                 height: 15,
               ),
-              if (_imagenes == null || _imagenes.length == 0)
+              if (_imagenes == null || _imagenes.isEmpty)
                 Text(
-                  "No hay imágenes para compartir",
+                  'No hay imágenes para compartir',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 11,
                   ),
-                ),
-              if (_imagenes != null && _imagenes.length > 0)
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 7,
-                  ),
-                  child: Text(
-                    "Seleccioná la imagen a compartir",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 11,
+                )
+              else if (_imagenes != null && _imagenes.isNotEmpty)
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 7,
+                      ),
+                      child: Text(
+                        'Seleccioná la imagen a compartir',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 11,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              if (_imagenes != null && _imagenes.length > 0)
-                Container(
-                  constraints: BoxConstraints(
-                    maxHeight:
-                        ((MediaQuery.of(context).size.width - 32) / 4) * 2.8,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      children: _imagenes
-                          .asMap()
-                          .map(
-                            (index, i) => MapEntry(
-                              index,
-                              Container(
-                                padding: const EdgeInsets.all(2),
-                                width:
-                                    (MediaQuery.of(context).size.width - 32) /
+                    Container(
+                      constraints: BoxConstraints(
+                        maxHeight:
+                            ((MediaQuery.of(context).size.width - 32) / 4) *
+                                2.8,
+                      ),
+                      child: SingleChildScrollView(
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          children: _imagenes
+                              .asMap()
+                              .map(
+                                (index, i) => MapEntry(
+                                  index,
+                                  Container(
+                                    padding: const EdgeInsets.all(2),
+                                    width: (MediaQuery.of(context).size.width -
+                                            32) /
                                         4,
-                                height:
-                                    (MediaQuery.of(context).size.width - 32) /
+                                    height: (MediaQuery.of(context).size.width -
+                                            32) /
                                         4,
-                                child: FlatButton(
-                                  color: Colors.black12,
-                                  padding: const EdgeInsets.all(0),
-                                  onPressed: () {
-                                    _imagenNro = index;
-                                    setState(() {});
-                                  },
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: <Widget>[
-                                      MyGlobals.VIDEO_FORMATS.contains(
-                                              i.split('.').last.toLowerCase())
-                                          ? widget.content.videoThumbs[i] ==
-                                                  null
-                                              ? SizedBox(
-                                                  height: 25,
-                                                  width: 25,
-                                                  child: Center(
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      strokeWidth: 2,
-                                                    ),
-                                                  ),
-                                                )
+                                    child: FlatButton(
+                                      color: Colors.black12,
+                                      padding: const EdgeInsets.all(0),
+                                      onPressed: () {
+                                        _imagenNro = index;
+                                        setState(() {});
+                                      },
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: <Widget>[
+                                          MyGlobals.VIDEO_FORMATS.contains(i
+                                                  .split('.')
+                                                  .last
+                                                  .toLowerCase())
+                                              ? widget.content.videoThumbs[i] ==
+                                                      null
+                                                  ? SizedBox(
+                                                      height: 25,
+                                                      width: 25,
+                                                      child: Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : CachedNetworkImage(
+                                                      imageUrl:
+                                                          '${MyGlobals.SERVER_URL}${widget.content.videoThumbs[i]}',
+                                                      placeholder:
+                                                          (context, url) =>
+                                                              Center(
+                                                        child: SizedBox(
+                                                          width: 25,
+                                                          height: 25,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            strokeWidth: 2,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      errorWidget: (context,
+                                                              url, error) =>
+                                                          Icon(Icons.error),
+                                                    )
+                                              // Image.file(
+                                              //     _videoThumbs[i],
+                                              //   )
                                               : CachedNetworkImage(
-                                                  imageUrl:
-                                                      "${MyGlobals.SERVER_URL}${widget.content.videoThumbs[i]}",
+                                                  imageUrl: i.contains('http')
+                                                      ? i
+                                                      : '${MyGlobals.SERVER_URL}$i',
                                                   placeholder: (context, url) =>
                                                       Center(
                                                     child: SizedBox(
@@ -227,49 +253,29 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
                                                   errorWidget:
                                                       (context, url, error) =>
                                                           Icon(Icons.error),
-                                                )
-                                          // Image.file(
-                                          //     _videoThumbs[i],
-                                          //   )
-                                          : CachedNetworkImage(
-                                              imageUrl: i.contains('http')
-                                                  ? i
-                                                  : "${MyGlobals.SERVER_URL}$i",
-                                              placeholder: (context, url) =>
-                                                  Center(
-                                                child: SizedBox(
-                                                  width: 25,
-                                                  height: 25,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    strokeWidth: 2,
-                                                  ),
+                                                ),
+                                          if (_imagenNro == index)
+                                            Container(
+                                              color: Colors.green.withAlpha(80),
+                                              child: Center(
+                                                child: Icon(
+                                                  Icons.share,
+                                                  color: Colors.white,
                                                 ),
                                               ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
                                             ),
-                                      if (_imagenNro == index)
-                                        Container(
-                                          color: Colors.green.withAlpha(80),
-                                          child: Center(
-                                            child: Icon(
-                                              Icons.share,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                    ],
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          )
-                          .values
-                          .toList(),
+                              )
+                              .values
+                              .toList(),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               SizedBox(
                 height: 15,
@@ -323,7 +329,7 @@ class _ShareContentWrapperState extends State<ShareContentWrapper> {
       actions: <Widget>[
         FlatButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text("Cancelar"),
+          child: Text('Cancelar'),
         ),
       ],
     );

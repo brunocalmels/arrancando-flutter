@@ -32,11 +32,11 @@ class Comentario {
 
   Map<String, dynamic> toJson() => _$ComentarioToJson(this);
 
-  get fecha =>
-      "${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}";
+  String get fecha =>
+      '${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}';
 
-  esOwner(BuildContext context) =>
-      this.user.id == Provider.of<UserState>(context).activeUser.id;
+  bool esOwner(BuildContext context) =>
+      user.id == Provider.of<UserState>(context).activeUser.id;
 
   int myPuntaje(int uid) =>
       puntajes
@@ -47,13 +47,13 @@ class Comentario {
           ?.puntaje ??
       0;
 
-  addMyPuntaje(Puntaje myPuntaje) {
+  void addMyPuntaje(Puntaje myPuntaje) {
     var oldPuntaje = puntajes?.indexWhere(
       (p) => p.usuario.id == myPuntaje.usuario.id,
     );
     if (oldPuntaje >= 0) {
       var ps = [];
-      int i = 0;
+      var i = 0;
       puntajes.forEach((p) {
         if (i == oldPuntaje) {
           ps.add(myPuntaje);

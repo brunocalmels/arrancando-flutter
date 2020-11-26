@@ -21,7 +21,7 @@ class SliderThumb extends StatelessWidget {
             width: 25,
             child: Center(
               child: Text(
-                ". . .",
+                '. . .',
                 style: TextStyle(color: Colors.white),
               ),
             ),

@@ -20,11 +20,11 @@ class _PageSubCategoriasState extends State<PageSubCategorias> {
   List<SubcategoriaReceta> _items;
   List<SubcategoriaReceta> _selectedSubcategorias = [];
 
-  _fetchSubcategorias() async {
+  Future<void> _fetchSubcategorias() async {
     if (mounted) setState(() {});
 
-    ResponseObject resp = await Fetcher.get(
-      url: "/subcategoria_recetas.json",
+    final resp = await Fetcher.get(
+      url: '/subcategoria_recetas.json',
     );
 
     if (resp != null && resp.body != null) {
@@ -52,7 +52,7 @@ class _PageSubCategoriasState extends State<PageSubCategorias> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "SELECCIONAR SUBCATEGORÍAS",
+          'SELECCIONAR SUBCATEGORÍAS',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
@@ -60,7 +60,7 @@ class _PageSubCategoriasState extends State<PageSubCategorias> {
         ),
       ),
       body: !_loading
-          ? _items != null && _items.length > 0
+          ? _items != null && _items.isNotEmpty
               ? SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -74,11 +74,12 @@ class _PageSubCategoriasState extends State<PageSubCategorias> {
                                       orElse: () => null) !=
                                   null,
                               onChanged: (val) {
-                                if (val)
+                                if (val) {
                                   _selectedSubcategorias.add(sc);
-                                else
+                                } else {
                                   _selectedSubcategorias
                                       .removeWhere((s) => s.id == sc.id);
+                                }
                                 if (mounted) setState(() {});
                               },
                             ),
@@ -94,7 +95,7 @@ class _PageSubCategoriasState extends State<PageSubCategorias> {
                               color: Theme.of(context).backgroundColor,
                               elevation: 10,
                               child: Text(
-                                "LISTO",
+                                'LISTO',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -118,7 +119,7 @@ class _PageSubCategoriasState extends State<PageSubCategorias> {
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        "Ocurrió un error",
+                        'Ocurrió un error',
                         textAlign: TextAlign.center,
                       ),
                     ),

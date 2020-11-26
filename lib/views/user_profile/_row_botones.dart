@@ -27,7 +27,7 @@ class RowBotonesUserProfile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "$numero",
+                    '$numero',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -37,7 +37,7 @@ class RowBotonesUserProfile extends StatelessWidget {
                   ),
                   SizedBox(height: 3),
                   Text(
-                    "$texto",
+                    '$texto',
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -63,22 +63,22 @@ class RowBotonesUserProfile extends StatelessWidget {
         children: <Widget>[
           _buildButton(
             count[SectionType.publicaciones],
-            "PUBLICACIONES",
+            'PUBLICACIONES',
             SectionType.publicaciones,
           ),
           _buildButton(
             count[SectionType.recetas],
-            "RECETAS",
+            'RECETAS',
             SectionType.recetas,
           ),
           _buildButton(
             count[SectionType.pois],
-            "P. INTERÉS",
+            'P. INTERÉS',
             SectionType.pois,
           ),
           // _buildButton(
           //   9,
-          //   "WIKI",
+          //   'WIKI',
           //   SectionType.wiki,
           // ),
         ],

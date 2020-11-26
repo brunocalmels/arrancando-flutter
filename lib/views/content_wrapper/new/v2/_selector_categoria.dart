@@ -31,7 +31,7 @@ class SelectorCategoria extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "$label:",
+                    '$label:',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -50,7 +50,7 @@ class SelectorCategoria extends StatelessWidget {
                     child: Text(
                       categoria != null && categoria.nombre != null
                           ? categoria.nombre
-                          : "SELECCIONAR",
+                          : 'SELECCIONAR',
                     ),
                   ),
                 ],
@@ -62,14 +62,14 @@ class SelectorCategoria extends StatelessWidget {
                 type: MaterialType.card,
                 child: InkWell(
                   onTap: () async {
-                    CategoryWrapper selectedCategoria =
-                        await Navigator.of(context).push(
+                    final selectedCategoria = await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => PageCategorias(),
                       ),
                     );
-                    if (selectedCategoria != null)
+                    if (selectedCategoria != null) {
                       setCategoria(selectedCategoria);
+                    }
                   },
                 ),
               ),

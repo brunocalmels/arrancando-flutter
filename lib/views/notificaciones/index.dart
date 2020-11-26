@@ -16,10 +16,10 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
   List<Notificacion> _notificaciones;
   bool _fetching = true;
 
-  _fetchNotificaciones() async {
+  Future<void> _fetchNotificaciones() async {
     _fetching = true;
     try {
-      ResponseObject resp = await Fetcher.get(url: "/notificaciones.json");
+      final resp = await Fetcher.get(url: '/notificaciones.json');
 
       if (resp != null && resp.body != null) {
         _notificaciones = (json.decode(resp.body) as List)
@@ -42,7 +42,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
     if (mounted) setState(() {});
   }
 
-  _markAllAsRead() async {
+  Future<void> _markAllAsRead() async {
     await Future.wait(
       _notificaciones.where((n) => !n.leido).map(
             (n) => n.markAsRead(),
@@ -55,7 +55,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
     if (mounted) setState(() {});
   }
 
-  _goToNotificationRef(Notificacion n) async {
+  Future<void> _goToNotificationRef(Notificacion n) async {
     try {
       if (!n.leido) {
         await n.markAsRead();
@@ -71,7 +71,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
         );
         if (mounted) setState(() {});
       }
-      DynamicLinks.parseURI(
+      await DynamicLinks.parseURI(
         Uri.tryParse(n.url),
         context,
       );
@@ -92,7 +92,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notificaciones"),
+        title: Text('Notificaciones'),
       ),
       body: RefreshIndicator(
         onRefresh: () => _fetchNotificaciones(),
@@ -103,7 +103,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: !_fetching
                 ? _notificaciones != null
-                    ? _notificaciones.length > 0
+                    ? _notificaciones.isNotEmpty
                         ? [
                             Padding(
                               padding: const EdgeInsets.all(10),
@@ -120,7 +120,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                                       FlatButton(
                                         onPressed: _markAllAsRead,
                                         child: Text(
-                                          "MARCAR TODAS LEIDAS",
+                                          'MARCAR TODAS LEIDAS',
                                           style: TextStyle(
                                             fontSize: 12,
                                             color: Theme.of(context)
@@ -195,7 +195,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height,
                               child: Center(
-                                child: Text("No hay notificaciónes"),
+                                child: Text('No hay notificaciónes'),
                               ),
                             ),
                           ]
@@ -204,7 +204,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
                           child: Center(
-                            child: Text("Ocurrió un error"),
+                            child: Text('Ocurrió un error'),
                           ),
                         ),
                       ]

@@ -29,7 +29,7 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
-  _fetchUnreadNotificaciones() async {
+  Future<void> _fetchUnreadNotificaciones() async {
     var unreadNotificaciones = await Notificacion.fetchUnread();
     Provider.of<MainState>(
       context,
@@ -83,7 +83,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                               null &&
                                           userState.activeUser.avatar != null
                                       ? CachedNetworkImageProvider(
-                                          "${MyGlobals.SERVER_URL}${userState.activeUser.avatar}",
+                                          '${MyGlobals.SERVER_URL}${userState.activeUser.avatar}',
                                         )
                                       : null,
                                 ),
@@ -91,13 +91,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                   height: 10,
                                 ),
                                 Text(userState.activeUser != null
-                                    ? "@${userState.activeUser.username}"
-                                    : ""),
+                                    ? '@${userState.activeUser.username}'
+                                    : ''),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 Text(
-                                  "Ver mi perfil",
+                                  'Ver mi perfil',
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontStyle: FontStyle.italic,
@@ -126,7 +126,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           ),
                           title: Text('Editar perfil'),
                           onTap: () async {
-                            Navigator.of(context).push(
+                            await Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => ProfilePage(),
                                 settings: RouteSettings(name: 'Profile'),
@@ -180,11 +180,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           title: Text('Buscar actualizaciones'),
                           // subtitle: Text('Enviá el link para que la descarguen.'),
                           onTap: () async {
-                            String url =
+                            var url =
                                 'https://play.google.com/store/apps/details?id=com.macherit.arrancando';
-                            if (Platform.isIOS)
+                            if (Platform.isIOS) {
                               url =
                                   'https://apps.apple.com/us/app/arrancando/id1490590335?l=es';
+                            }
                             if (await canLaunch(url)) {
                               await launch(url);
                             } else {
@@ -199,7 +200,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           ),
                           title: Text('Política de privacidad'),
                           onTap: () async {
-                            Navigator.of(context).push(
+                            await Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => PrivacyPolicyPage(),
                                 settings: RouteSettings(name: 'Privacy policy'),
@@ -244,7 +245,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           ),
                           title: Text('Contacto'),
                           subtitle: Text(
-                              "Contactate con nosotros por dudas o consultas."),
+                              'Contactate con nosotros por dudas o consultas.'),
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -289,13 +290,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                       .buffer
                                       .asUint8List();
 
-                                  Share.file(
+                                  await Share.file(
                                     'Compartir imagen',
                                     'imagen.jpg',
                                     img,
                                     'image/jpg',
                                     text:
-                                        "Bajate Arrancando y compartí tu pasión por el asado y el buen comer.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es",
+                                        'Bajate Arrancando y compartí tu pasión por el asado y el buen comer.\n\nAndroid: https://play.google.com/store/apps/details?id=com.macherit.arrancando\n\niOS: https://apps.apple.com/us/app/arrancando/id1490590335?l=es',
                                   );
                                 },
                               ),
@@ -319,11 +320,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           ),
                           title: Text('Cerrar sesión'),
                           onTap: () async {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            prefs.remove('activeUser');
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.remove('activeUser');
                             userState.setActiveUser(null);
-                            Navigator.of(context).pushAndRemoveUntil(
+                            await Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                 builder: (_) => LoginPage(),
                                 settings: RouteSettings(name: 'Login'),
@@ -339,7 +339,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                             Padding(
                               padding: const EdgeInsets.all(20),
                               child: Text(
-                                "Versión: ${MyGlobals.APP_VERSION}",
+                                'Versión: ${MyGlobals.APP_VERSION}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),

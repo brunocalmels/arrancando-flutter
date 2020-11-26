@@ -8,24 +8,24 @@ class MainBottomBar extends StatelessWidget {
   final Function setSearchVisibility;
   final Map<SectionType, Map<String, dynamic>> _items = {
     SectionType.home: {
-      "texto": "Home",
-      "icono": Icons.home,
+      'texto': 'Home',
+      'icono': Icons.home,
     },
     SectionType.publicaciones: {
-      "texto": "Pubs",
-      "icono": Icons.public,
+      'texto': 'Pubs',
+      'icono': Icons.public,
     },
     SectionType.recetas: {
-      "texto": "Recetas",
-      "icono": Icons.fastfood,
+      'texto': 'Recetas',
+      'icono': Icons.fastfood,
     },
     SectionType.pois: {
-      "texto": "Market",
-      "icono": Icons.location_on,
+      'texto': 'Market',
+      'icono': Icons.location_on,
     },
     SectionType.wiki: {
-      "texto": "Wiki",
-      "icono": Icons.library_books,
+      'texto': 'Wiki',
+      'icono': Icons.library_books,
     },
   };
 
@@ -42,7 +42,7 @@ class MainBottomBar extends StatelessWidget {
               Provider.of<MainState>(context, listen: false)
                   .setActivePageHome(type);
               MyGlobals.firebaseAnalyticsObserver.analytics.setCurrentScreen(
-                screenName: "Home/${_items[type]['texto']}",
+                screenName: 'Home/${_items[type]['texto']}',
               );
             },
             child: Column(
@@ -50,13 +50,13 @@ class MainBottomBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  _items[type]["icono"],
+                  _items[type]['icono'],
                   color: Provider.of<MainState>(context).activePageHome == type
                       ? Theme.of(context).accentColor
                       : null,
                 ),
                 Text(
-                  _items[type]["texto"],
+                  _items[type]['texto'],
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

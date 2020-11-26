@@ -57,7 +57,7 @@ class TilePoi extends StatelessWidget {
                     ),
                   )
                 : CachedNetworkImage(
-                    imageUrl: "${MyGlobals.SERVER_URL}${poi.thumbnail}",
+                    imageUrl: '${MyGlobals.SERVER_URL}${poi.thumbnail}',
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Center(
                       child: SizedBox(
@@ -89,7 +89,7 @@ class TilePoi extends StatelessWidget {
                 width: 3,
               ),
               Text(
-                "${poi.puntajePromedio.toStringAsFixed(1)}",
+                '${poi.puntajePromedio.toStringAsFixed(1)}',
                 style: TextStyle(
                     fontSize: 13,
                     color: Provider.of<MainState>(context).activeTheme ==
@@ -149,8 +149,8 @@ class TilePoi extends StatelessWidget {
                 width: 35,
                 child: GestureDetector(
                   onTap: () async {
-                    String url =
-                        "http://maps.google.com/maps?z=15&t=m&q=loc:${poi.latitud}+${poi.longitud}";
+                    final url =
+                        'http://maps.google.com/maps?z=15&t=m&q=loc:${poi.latitud}+${poi.longitud}';
                     if (await canLaunch(url)) {
                       await launch(
                         url,
@@ -162,7 +162,7 @@ class TilePoi extends StatelessWidget {
                     }
                   },
                   child: Image.asset(
-                    "assets/images/logo-google.png",
+                    'assets/images/logo-google.png',
                     width: 20,
                     height: 20,
                   ),

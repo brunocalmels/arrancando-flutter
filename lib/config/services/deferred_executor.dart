@@ -42,12 +42,12 @@ abstract class DeferredExecutor {
             .join(',');
       } else {
         lastFutureError =
-            "Ocurrió un error, por favor intentalo nuevamente más tarde.";
+            'Ocurrió un error, por favor intentalo nuevamente más tarde.';
       }
     } catch (e) {
       print(e);
       lastFutureError =
-          "Ocurrió un error, por favor intentalo nuevamente más tarde.";
+          'Ocurrió un error, por favor intentalo nuevamente más tarde.';
     }
     contentPageState.setDeferredExecutorStatus(
       DeferredExecutorStatus.failed,

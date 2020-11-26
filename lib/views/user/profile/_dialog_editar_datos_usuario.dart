@@ -26,57 +26,53 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
 
   Future _actualizarDato() async {
     try {
-      ResponseObject resp = await Fetcher.put(
-        url: "/users/${Provider.of<UserState>(context).activeUser.id}.json",
+      final resp = await Fetcher.put(
+        url: '/users/${Provider.of<UserState>(context).activeUser.id}.json',
         body: {
-          "${widget.campo == 'Instagram' ? 'url_instagram' : widget.campo == 'Nombre de usuario' ? 'username' : widget.campo.toLowerCase()}":
-              "${widget.campo == 'Instagram' ? 'https://instagram.com/${textoController.text}' : textoController.text}",
+          '${widget.campo == 'Instagram' ? 'url_instagram' : widget.campo == 'Nombre de usuario' ? 'username' : widget.campo.toLowerCase()}':
+              '${widget.campo == 'Instagram' ? 'https://instagram.com/${textoController.text}' : textoController.text}',
         },
       );
 
       if (resp?.status == 200) {
         return true;
       } else {
-        if (mounted)
-          setState(() {
-            _errorText = resp?.body != null ? resp.body : "Ocurrió un error";
-          });
-        throw "Error";
+        _errorText = resp?.body != null ? resp.body : 'Ocurrió un error';
+        if (mounted) setState(() {});
+        throw 'Error';
       }
     } catch (e) {
-      if (mounted)
-        setState(() {
-          _errorHappended = true;
-        });
+      _errorHappended = true;
+      if (mounted) setState(() {});
     }
     return false;
   }
 
-  usernameValidator(String value) {
+  String usernameValidator(String value) {
     if (value.isEmpty) {
-      return "El campo es obligatorio";
+      return 'El campo es obligatorio';
     } else {
       Pattern pattern =
           r'^(?=.{5,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$';
-      RegExp regex = new RegExp(pattern);
-      if (!regex.hasMatch(value) || value.contains(".")) {
-        return "Ingrese un nombre de usuario válido";
+      final regex = RegExp(pattern);
+      if (!regex.hasMatch(value) || value.contains('.')) {
+        return 'Ingrese un nombre de usuario válido';
       } else {
         return null;
       }
     }
   }
 
-  emailValidator(value) {
+  String emailValidator(value) {
     if (value.isEmpty) {
-      return "El campo es obligatorio";
+      return 'El campo es obligatorio';
     } else {
       Pattern pattern =
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,1}\.[0-9]{1,1}\.[0-9]{1,1}\.[0-9]{1,1}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{1,}))$';
       // r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-      RegExp regex = new RegExp(pattern);
+      final regex = RegExp(pattern);
       if (!regex.hasMatch(value)) {
-        return "Ingrese un email válido";
+        return 'Ingrese un email válido';
       } else {
         return null;
       }
@@ -104,27 +100,31 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
                   : TextCapitalization.sentences,
               keyboardType: widget.campo == 'Instagram'
                   ? TextInputType.url
-                  : widget.campo == 'Email' ? TextInputType.emailAddress : null,
+                  : widget.campo == 'Email'
+                      ? TextInputType.emailAddress
+                      : null,
               decoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                labelText: "${widget.campo}",
+                labelText: '${widget.campo}',
                 // prefixText:
-                //     widget.campo == 'Instagram' ? "https://in...com/ " : null,
+                //     widget.campo == 'Instagram' ? 'https://in...com/ ' : null,
                 // prefixStyle: widget.campo == 'Instagram'
                 //     ? TextStyle(fontSize: 10)
                 //     : null,
               ),
               controller: textoController,
-              validator: (value) => widget.campo == "Nombre de usuario"
+              validator: (value) => widget.campo == 'Nombre de usuario'
                   ? usernameValidator(value)
-                  : widget.campo == 'Email' ? emailValidator(value) : null,
+                  : widget.campo == 'Email'
+                      ? emailValidator(value)
+                      : null,
             ),
           ),
           if (widget.campo == 'Instagram')
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                "(Ingresá tu nombre de usuario de Instagram sin arroba)",
+                '(Ingresá tu nombre de usuario de Instagram sin arroba)',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 9,

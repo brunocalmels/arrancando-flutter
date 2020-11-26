@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -19,10 +18,10 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
   Timer _debounce;
   bool _searching = false;
 
-  _fetchResults() async {
+  Future<void> _fetchResults() async {
     if (_searchController.text != null && _searchController.text.length >= 3) {
-      ResponseObject resp = await Fetcher.get(
-        url: "/users/usernames.json?search=${_searchController.text}",
+      final resp = await Fetcher.get(
+        url: '/users/usernames.json?search=${_searchController.text}',
       );
 
       _items = [];
@@ -42,7 +41,7 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
     if (mounted) setState(() {});
   }
 
-  _searchTerm(text) {
+  void _searchTerm(text) {
     if (text != null && text.isNotEmpty && text.length >= 3) {
       _searching = true;
       if (mounted) setState(() {});
@@ -55,7 +54,7 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        "Buscar nombres de usuario para añadir link",
+        'Buscar nombres de usuario para añadir link',
         style: TextStyle(
           fontSize: 13,
         ),
@@ -71,7 +70,7 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
                 children: <Widget>[
                   TextField(
                     decoration: InputDecoration(
-                      hintText: "Buscar",
+                      hintText: 'Buscar',
                     ),
                     controller: _searchController,
                     onChanged: _searchTerm,
@@ -100,18 +99,18 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
                     ),
                   ),
                 ),
-              if (_items != null && _items.length > 0)
+              if (_items != null && _items.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(7),
                   child: Text(
-                    "(${_items.length} items)",
+                    '(${_items.length} items)',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 10,
                     ),
                   ),
                 ),
-              if (_items != null && _items.length > 0)
+              if (_items != null && _items.isNotEmpty)
                 Container(
                   color: Colors.black12.withAlpha(9),
                   child: Column(
@@ -137,7 +136,7 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
                                       backgroundImage:
                                           item != null && item.avatar != null
                                               ? CachedNetworkImageProvider(
-                                                  "${MyGlobals.SERVER_URL}${item.avatar}",
+                                                  '${MyGlobals.SERVER_URL}${item.avatar}',
                                                 )
                                               : null,
                                     ),
@@ -146,7 +145,7 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
                                     ),
                                     Expanded(
                                       child: Text(
-                                        "@${item.username}",
+                                        '@${item.username}',
                                         style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
@@ -162,7 +161,7 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
                         .toList(),
                   ),
                 ),
-              if (_items != null && _items.length == 0)
+              if (_items != null && _items.isEmpty)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(
@@ -178,7 +177,7 @@ class _TypeAheadUsersState extends State<TypeAheadUsers> {
       ),
       actions: <Widget>[
         FlatButton(
-          child: Text("Cancelar"),
+          child: Text('Cancelar'),
           onPressed: () {
             Navigator.of(context).pop();
           },

@@ -16,13 +16,13 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  _trigger() async {
+  Future<void> _trigger() async {
     if (widget.loadData != null) await widget.loadData();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool firstTime = prefs.getBool("firstTime");
+    final prefs = await SharedPreferences.getInstance();
+    final firstTime = prefs.getBool('firstTime');
     if (firstTime == null || firstTime == true) {
       await Future.delayed(Duration(seconds: 5));
-      prefs.setBool("firstTime", false);
+      await prefs.setBool('firstTime', false);
     }
     if (widget.toggleStart != null) widget.toggleStart();
   }
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
           //       width: 200,
           //       height: 200,
           //       child: Image.asset(
-          //         "assets/images/icon.png",
+          //         'assets/images/icon.png',
           //       ),
           //     ),
           //     Positioned(
@@ -59,8 +59,8 @@ class _SplashScreenState extends State<SplashScreen> {
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.width * 0.8,
             child: FlareActor(
-              // "assets/flare/fuego.flr",
-              "assets/flare/logo.flr",
+              // 'assets/flare/fuego.flr',
+              'assets/flare/logo.flr',
               // animation: 'Fuegando',
               animation: 'Splash2',
             ),

@@ -49,8 +49,8 @@ class _Painter extends CustomPainter {
       canvas.translate(d, 0);
     }
 
-    double angle = initialAngle;
-    for (int i = 0; i < text.length; i++) {
+    var angle = initialAngle;
+    for (var i = 0; i < text.length; i++) {
       angle = _drawLetter(canvas, text[i], angle);
     }
   }
@@ -62,8 +62,8 @@ class _Painter extends CustomPainter {
       maxWidth: double.maxFinite,
     );
 
-    final double d = _textPainter.width;
-    final double alpha = 2 * math.asin(d / (2 * radius));
+    final d = _textPainter.width;
+    final alpha = 2 * math.asin(d / (2 * radius));
 
     final newAngle = _calculateRotationAngle(prevAngle, alpha);
     canvas.rotate(newAngle);

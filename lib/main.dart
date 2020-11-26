@@ -23,7 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   var sentry = SentryClient(
     dsn:
-        "https://b6b7f8734d044fe4b3f424207df9462f@o418745.ingest.sentry.io/5370030",
+        'https://b6b7f8734d044fe4b3f424207df9462f@o418745.ingest.sentry.io/5370030',
   );
 
   FlutterError.onError = (details, {bool forceReport = false}) {
@@ -85,10 +85,10 @@ class _MyAppState extends State<MyApp> {
   bool _loaded = false;
   bool _isLoggedIn = false;
 
-  _loadUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String activeUser = prefs.getString("activeUser");
-    int preferredCiudadId = prefs.getInt("preferredCiudadId");
+  Future<void> _loadUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final activeUser = prefs.getString('activeUser');
+    final preferredCiudadId = prefs.getInt('preferredCiudadId');
     if (activeUser != null) {
       Provider.of<UserState>(context, listen: false).setActiveUser(
         ActiveUser.fromJson(
@@ -106,9 +106,9 @@ class _MyAppState extends State<MyApp> {
     if (mounted) setState(() {});
   }
 
-  _initApp() async {
-    Utils.restoreThemeMode(context);
-    DynamicLinks.initUniLinks(
+  Future<void> _initApp() async {
+    await Utils.restoreThemeMode(context);
+    await DynamicLinks.initUniLinks(
       context: context,
     );
     await _loadUser();
@@ -199,13 +199,13 @@ class _MyAppState extends State<MyApp> {
           ? SplashScreen(
               loadData: _initApp,
               toggleStart: () {
-                if (mounted)
-                  setState(() {
-                    _loaded = true;
-                  });
+                _loaded = true;
+                if (mounted) setState(() {});
               },
             )
-          : _isLoggedIn ? MainScaffold() : LoginPage(),
+          : _isLoggedIn
+              ? MainScaffold()
+              : LoginPage(),
       navigatorObservers: [
         MyGlobals.firebaseAnalyticsObserver,
       ],

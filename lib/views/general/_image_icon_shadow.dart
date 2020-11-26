@@ -14,15 +14,15 @@ class ImageIconShadowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double opacity = 0.1;
-    double opacity2 = 0.01;
-    double opacity3 = 0.01;
-    double dimens = 0;
-    double dimens2 = 0;
-    double dimens3 = 0;
-    Color _shadowColor = icon.color;
+    var opacity = 0.1;
+    var opacity2 = 0.01;
+    var opacity3 = 0.01;
+    var dimens = 0.0;
+    var dimens2 = 0.0;
+    var dimens3 = 0.0;
+    var _shadowColor = icon.color;
     if (shadowColor != null) _shadowColor = shadowColor;
-    List<Widget> list = new List();
+    final list = <Widget>[];
     if (showShadow) {
       list.addAll([
         Positioned(
@@ -216,7 +216,7 @@ class ImageIconShadowWidget extends StatelessWidget {
 
     list.add(ClipRect(
         child: BackdropFilter(
-      filter: new ui.ImageFilter.blur(sigmaX: 0.1, sigmaY: 0.1),
+      filter: ui.ImageFilter.blur(sigmaX: 0.1, sigmaY: 0.1),
       child: IconTheme(data: IconThemeData(opacity: 1.0), child: icon),
     )));
 

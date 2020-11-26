@@ -19,9 +19,9 @@ class StepImagenes extends StatelessWidget {
   });
   void _openFileExplorer(FileType type) async {
     if (Platform.isIOS) {
-      File _image;
+      PickedFile _image;
       try {
-        _image = await ImagePicker.pickImage(
+        _image = await ImagePicker().getImage(
           source: ImageSource.gallery,
         );
       } catch (e) {
@@ -34,10 +34,11 @@ class StepImagenes extends StatelessWidget {
       try {
         _paths = await FilePicker.getMultiFilePath(type: type);
       } catch (e) {
-        print("Unsupported operation" + e.toString());
+        print('Unsupported operation' + e.toString());
       }
-      if (_paths != null && _paths.length > 0)
+      if (_paths != null && _paths.isNotEmpty) {
         setImages([...images, ..._paths.values.map((p) => File(p)).toList()]);
+      }
     }
   }
 
@@ -55,7 +56,7 @@ class StepImagenes extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                if (images.length == 0)
+                if (images.isEmpty)
                   Text(
                     'No hay imágenes seleccionadas',
                     textAlign: TextAlign.center,
@@ -64,7 +65,7 @@ class StepImagenes extends StatelessWidget {
                   // onPressed: () => _openFileExplorer(FileType.IMAGE),
                   onPressed: () async {
                     try {
-                      String opcion = await showModalBottomSheet(
+                      final opcion = await showModalBottomSheet(
                         builder: (BuildContext context) {
                           return Container(
                             height: 100,
@@ -73,7 +74,7 @@ class StepImagenes extends StatelessWidget {
                                 Expanded(
                                   child: FlatButton(
                                     onPressed: () {
-                                      Navigator.of(context).pop("camara");
+                                      Navigator.of(context).pop('camara');
                                     },
                                     child: Column(
                                       crossAxisAlignment:
@@ -82,7 +83,7 @@ class StepImagenes extends StatelessWidget {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Icon(Icons.camera_alt),
-                                        Text("Cámara"),
+                                        Text('Cámara'),
                                       ],
                                     ),
                                   ),
@@ -90,7 +91,7 @@ class StepImagenes extends StatelessWidget {
                                 Expanded(
                                   child: FlatButton(
                                     onPressed: () {
-                                      Navigator.of(context).pop("galeria");
+                                      Navigator.of(context).pop('galeria');
                                     },
                                     child: Column(
                                       crossAxisAlignment:
@@ -99,7 +100,7 @@ class StepImagenes extends StatelessWidget {
                                           MainAxisAlignment.center,
                                       children: <Widget>[
                                         Icon(Icons.filter),
-                                        Text("Galería"),
+                                        Text('Galería'),
                                       ],
                                     ),
                                   ),
@@ -112,37 +113,37 @@ class StepImagenes extends StatelessWidget {
                       );
 
                       switch (opcion) {
-                        case "camara":
-                          bool camaraPermisionDenied =
+                        case 'camara':
+                          final camaraPermisionDenied =
                               await ActiveUser.cameraPermissionDenied();
                           if (!camaraPermisionDenied) {
-                            File image = await ImagePicker.pickImage(
+                            final image = await ImagePicker().getImage(
                               source: ImageSource.camera,
                               imageQuality: 70,
                               maxWidth: 1000,
                             );
                             if (image != null) setImages([...images, image]);
                           } else {
-                            showDialog(
+                            await showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: Text("Permiso denegado"),
+                                title: Text('Permiso denegado'),
                                 content: Text(
-                                  "El permiso para la cámara fue denegado, para utilizar la cámara cambie los permisos desde la configuración de su dispositivo.",
+                                  'El permiso para la cámara fue denegado, para utilizar la cámara cambie los permisos desde la configuración de su dispositivo.',
                                 ),
                                 actions: <Widget>[
                                   FlatButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text("Aceptar"),
+                                    child: Text('Aceptar'),
                                   )
                                 ],
                               ),
                             );
                           }
                           break;
-                        case "galeria":
+                        case 'galeria':
                           _openFileExplorer(FileType.image);
                           break;
                         default:
@@ -151,17 +152,17 @@ class StepImagenes extends StatelessWidget {
                       print(e);
                     }
                   },
-                  child: Text("SELECCIONAR IMÁGENES"),
+                  child: Text('SELECCIONAR IMÁGENES'),
                 ),
                 FlatButton(
                   onPressed: () => _openFileExplorer(FileType.video),
-                  child: Text("SELECCIONAR VIDEOS"),
+                  child: Text('SELECCIONAR VIDEOS'),
                 ),
               ],
             ),
           ),
         ),
-        if (images.length > 0)
+        if (images.isNotEmpty)
           Wrap(
             direction: Axis.horizontal,
             children: images

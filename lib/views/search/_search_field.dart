@@ -1,4 +1,3 @@
-import 'package:arrancando/views/home/app_bar/_categories_chip.dart';
 import 'package:flutter/material.dart';
 
 class SearchField extends StatefulWidget {
@@ -29,7 +28,7 @@ class _SearchFieldState extends State<SearchField> {
               onChanged: widget.onChanged,
               decoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.never,
-                hintText: "Buscar",
+                hintText: 'Buscar',
               ),
               controller: widget.searchController,
             ),

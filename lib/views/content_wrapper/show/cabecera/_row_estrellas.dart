@@ -53,27 +53,27 @@ class RowEstrellas extends StatelessWidget {
 
                           switch (content.type) {
                             case SectionType.publicaciones:
-                              _url = "/publicaciones";
+                              _url = '/publicaciones';
                               break;
                             case SectionType.recetas:
-                              _url = "/recetas";
+                              _url = '/recetas';
                               break;
                             case SectionType.pois:
-                              _url = "/pois";
+                              _url = '/pois';
                               break;
                             default:
-                              _url = "/publicaciones";
+                              _url = '/publicaciones';
                           }
 
                           state.setMyPuntuacion(
-                            "${content.type}-${content.id}",
+                            '${content.type}-${content.id}',
                             p,
                           );
 
                           await Fetcher.put(
-                            url: "$_url/${content.id}/puntuar.json",
+                            url: '$_url/${content.id}/puntuar.json',
                             body: {
-                              "puntaje": p,
+                              'puntaje': p,
                             },
                           );
                           fetchContent();

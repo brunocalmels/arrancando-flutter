@@ -6,10 +6,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Fetcher {
-  static _getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String activeUser = prefs.getString("activeUser");
-    String token;
+  static Future<String> _getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final activeUser = prefs.getString('activeUser');
+    var token;
     if (activeUser != null) token = json.decode(activeUser)['auth_token'];
     return token;
   }
@@ -19,14 +19,14 @@ abstract class Fetcher {
     bool throwError = false,
   }) async {
     try {
-      String token = await _getToken();
-      if (token == null) throw "Token null";
+      final token = await _getToken();
+      if (token == null) throw 'Token null';
 
-      http.Response resp = await http.get(
-        "${MyGlobals.SERVER_URL}$url",
+      final resp = await http.get(
+        '${MyGlobals.SERVER_URL}$url',
         headers: {
-          "Authorization": token,
-          "Content-type": "application/json",
+          'Authorization': token,
+          'Content-type': 'application/json',
         },
       );
 
@@ -41,10 +41,11 @@ abstract class Fetcher {
     } catch (e) {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
-      if (throwError)
+      if (throwError) {
         return ResponseObject(body: e.body.body.toString());
-      else
+      } else {
         return null;
+      }
     }
   }
 
@@ -55,17 +56,17 @@ abstract class Fetcher {
     bool unauthenticated = false,
   }) async {
     try {
-      String token = "";
+      var token = '';
       if (!unauthenticated) {
         token = await _getToken();
-        if (token == null) throw "Token null";
+        if (token == null) throw 'Token null';
       }
 
-      http.Response resp = await http.post(
-        "${MyGlobals.SERVER_URL}$url",
+      final resp = await http.post(
+        '${MyGlobals.SERVER_URL}$url',
         headers: {
-          "Authorization": unauthenticated ? "" : token,
-          "Content-type": "application/json",
+          'Authorization': unauthenticated ? '' : token,
+          'Content-type': 'application/json',
         },
         body: json.encode(body),
       );
@@ -81,12 +82,13 @@ abstract class Fetcher {
     } catch (e) {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
-      if (throwError)
+      if (throwError) {
         return ResponseObject(
           body: e.body.toString(),
         );
-      else
+      } else {
         return null;
+      }
     }
   }
 
@@ -96,14 +98,14 @@ abstract class Fetcher {
     bool throwError = false,
   }) async {
     try {
-      String token = await _getToken();
-      if (token == null) throw "Token null";
+      final token = await _getToken();
+      if (token == null) throw 'Token null';
 
-      http.Response resp = await http.put(
-        "${MyGlobals.SERVER_URL}$url",
+      final resp = await http.put(
+        '${MyGlobals.SERVER_URL}$url',
         headers: {
-          "Authorization": token,
-          "Content-type": "application/json",
+          'Authorization': token,
+          'Content-type': 'application/json',
         },
         body: json.encode(body),
       );
@@ -119,12 +121,13 @@ abstract class Fetcher {
     } catch (e) {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
-      if (throwError)
+      if (throwError) {
         return ResponseObject(
           body: e.body.toString(),
         );
-      else
+      } else {
         return null;
+      }
     }
   }
 
@@ -133,14 +136,14 @@ abstract class Fetcher {
     bool throwError = false,
   }) async {
     try {
-      String token = await _getToken();
-      if (token == null) throw "Token null";
+      final token = await _getToken();
+      if (token == null) throw 'Token null';
 
-      http.Response resp = await http.delete(
-        "${MyGlobals.SERVER_URL}$url",
+      final resp = await http.delete(
+        '${MyGlobals.SERVER_URL}$url',
         headers: {
-          "Authorization": token,
-          "Content-type": "application/json",
+          'Authorization': token,
+          'Content-type': 'application/json',
         },
       );
 
@@ -155,12 +158,13 @@ abstract class Fetcher {
     } catch (e) {
       if (e is String) print(e);
       if (e is http.Response) print(e.body);
-      if (throwError)
+      if (throwError) {
         return ResponseObject(
           body: e.body.toString(),
         );
-      else
+      } else {
         return null;
+      }
     }
   }
 }

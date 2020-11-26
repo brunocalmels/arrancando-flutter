@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
-import 'package:arrancando/views/general/type_ahead_ciudad.dart';
 import 'package:arrancando/views/home/pages/_pois_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -38,15 +37,14 @@ class _StepMapaState extends State<StepMapa> {
   bool _searching = false;
   bool _locating = false;
   Timer _debounce;
-  CategoryWrapper _selectedCiudadPoi;
 
-  _fetchPlaceByName() async {
+  Future<void> _fetchPlaceByName() async {
     if (mounted) {
       setState(() {
         _locating = true;
       });
       try {
-        List<Placemark> placemarks =
+        final placemarks =
             await Geolocator().placemarkFromAddress(_direccionController.text);
 
         _latitud = placemarks.first.position.latitude;
@@ -74,7 +72,7 @@ class _StepMapaState extends State<StepMapa> {
     }
   }
 
-  _searchLocation(String text) {
+  void _searchLocation(String text) {
     if (text != null && text.isNotEmpty) {
       setState(() {
         _searching = true;
@@ -84,14 +82,13 @@ class _StepMapaState extends State<StepMapa> {
     }
   }
 
-  _setMyLocation() async {
-    if (mounted)
-      setState(() {
-        _locating = true;
-      });
-    bool locationDenied = await ActiveUser.locationPermissionDenied();
+  Future<void> _setMyLocation() async {
+    _locating = true;
+    if (mounted) setState(() {});
+
+    final locationDenied = await ActiveUser.locationPermissionDenied();
     if (!locationDenied) {
-      Position currentPosition = await Geolocator().getCurrentPosition(
+      final currentPosition = await Geolocator().getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
       _latitud = currentPosition.latitude;
@@ -106,8 +103,8 @@ class _StepMapaState extends State<StepMapa> {
   @override
   void initState() {
     super.initState();
-    _latitud = widget.latitud != null ? widget.latitud : _latitud;
-    _longitud = widget.longitud != null ? widget.longitud : _longitud;
+    _latitud = widget.latitud ?? _latitud;
+    _longitud = widget.longitud ?? _longitud;
     if (widget.direccion != null) _direccionController.text = widget.direccion;
   }
 
@@ -118,24 +115,24 @@ class _StepMapaState extends State<StepMapa> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        // Text("Ciudad"),
+        // Text('Ciudad'),
         // Container(
         //   height: 150,
         //   child: SingleChildScrollView(
         //     child: TypeAheadCiudad(
         //       insideEdit: true,
         //       onItemTap: (CategoryWrapper ciudad) {
-        //         _selectedCiudadPoi = ciudad;
+        //          = ciudad;
         //         widget.setCiudadPoi(ciudad);
         //         if (mounted) setState(() {});
         //       },
         //     ),
         //   ),
         // ),
-        // if (_selectedCiudadPoi != null)
+        // if ( != null)
         //   Padding(
         //     padding: const EdgeInsets.all(15),
-        //     child: Text("Ciudad: ${_selectedCiudadPoi.nombre}"),
+        //     child: Text('Ciudad: ${.nombre}'),
         //   ),
         Container(
           height: 200,
@@ -148,10 +145,8 @@ class _StepMapaState extends State<StepMapa> {
                 longitud: _longitud,
                 zoom: 15,
                 buildCallback: (MapController controller) {
-                  if (mounted)
-                    setState(() {
-                      _mapController = controller;
-                    });
+                  _mapController = controller;
+                  if (mounted) setState(() {});
                   _setMyLocation();
                 },
                 onPositionChanged: (MapPosition position, bool changed) {
@@ -183,7 +178,7 @@ class _StepMapaState extends State<StepMapa> {
           height: 5,
         ),
         Text(
-          "Arrastrá con 2 dedos el mapa para ajustar el marcador.",
+          'Arrastrá con 2 dedos el mapa para ajustar el marcador.',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 11,
@@ -197,7 +192,7 @@ class _StepMapaState extends State<StepMapa> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(
-                labelText: "Dirección, Ciudad, Provincia",
+                labelText: 'Dirección, Ciudad, Provincia',
               ),
               controller: _direccionController,
               onChanged: _searchLocation,

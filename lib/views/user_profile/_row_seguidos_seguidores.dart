@@ -25,7 +25,7 @@ class RowSeguidosSeguidores extends StatelessWidget {
                     context: context,
                     builder: (_) => DialogSeguidosSeguidores(
                       userId: userId,
-                      isSeguidores: texto.toLowerCase().contains("seguidor"),
+                      isSeguidores: texto.toLowerCase().contains('seguidor'),
                     ),
                   );
                 }
@@ -38,7 +38,7 @@ class RowSeguidosSeguidores extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "$numero",
+                  '$numero',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: numero > 0
@@ -50,7 +50,7 @@ class RowSeguidosSeguidores extends StatelessWidget {
                 ),
                 SizedBox(height: 3),
                 Text(
-                  "$texto",
+                  '$texto',
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -77,13 +77,13 @@ class RowSeguidosSeguidores extends StatelessWidget {
         children: <Widget>[
           _buildButton(
             seguidos,
-            seguidos == 1 ? "SEGUIDO" : "SEGUIDOS",
+            seguidos == 1 ? 'SEGUIDO' : 'SEGUIDOS',
             context,
           ),
           SizedBox(width: 3),
           _buildButton(
             seguidores,
-            seguidores == 1 ? "SEGUIDOR" : "SEGUIDORES",
+            seguidores == 1 ? 'SEGUIDOR' : 'SEGUIDORES',
             context,
           ),
         ],
