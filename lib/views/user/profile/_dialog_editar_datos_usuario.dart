@@ -27,7 +27,7 @@ class _DialogEditarDatosUsuarioState extends State<DialogEditarDatosUsuario> {
   Future _actualizarDato() async {
     try {
       final resp = await Fetcher.put(
-        url: '/users/${Provider.of<UserState>(context).activeUser.id}.json',
+        url: '/users/${context.read<UserState>().activeUser.id}.json',
         body: {
           '${widget.campo == 'Instagram' ? 'url_instagram' : widget.campo == 'Nombre de usuario' ? 'username' : widget.campo.toLowerCase()}':
               '${widget.campo == 'Instagram' ? 'https://instagram.com/${textoController.text}' : textoController.text}',

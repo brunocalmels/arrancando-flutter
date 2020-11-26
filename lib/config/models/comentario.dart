@@ -1,3 +1,4 @@
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/puntaje.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/state/user.dart';
@@ -36,7 +37,8 @@ class Comentario {
       '${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}';
 
   bool esOwner(BuildContext context) =>
-      user.id == Provider.of<UserState>(context).activeUser.id;
+      user.id ==
+      context.select<UserState, ActiveUser>((value) => value.activeUser).id;
 
   int myPuntaje(int uid) =>
       puntajes

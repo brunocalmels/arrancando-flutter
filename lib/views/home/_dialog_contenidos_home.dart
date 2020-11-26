@@ -48,7 +48,7 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _contenidos = [...Provider.of<MainState>(context).contenidosHome];
+      _contenidos = [...context.read<MainState>().contenidosHome];
       if (mounted) setState(() {});
     });
   }

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 abstract class NotificacionesService {
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  static Future<void> initFirebaseNotifications(context) async {
+  static Future<void> initFirebaseNotifications(BuildContext context) async {
     if (Platform.isIOS) {
       await _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(

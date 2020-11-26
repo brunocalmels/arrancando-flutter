@@ -29,10 +29,9 @@ class _HomePageState extends State<HomePage> {
       _noMore = false;
     }
 
-    print(Provider.of<MainState>(context).contenidosHome);
-
     final lastLength = _items != null ? _items.length : 0;
-    final contenidosHome = Provider.of<MainState>(context)
+    final contenidosHome = context
+        .read<MainState>()
         .contenidosHome
         .map((ch) => ch.toString().split('.').last.toLowerCase())
         .toList();

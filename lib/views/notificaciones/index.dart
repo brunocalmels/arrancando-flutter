@@ -28,12 +28,9 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
             )
             .toList();
 
-        Provider.of<MainState>(
-          context,
-          listen: false,
-        ).setUnreadNotifications(
-          _notificaciones.where((element) => !element.leido).length,
-        );
+        context.read<MainState>().setUnreadNotifications(
+              _notificaciones.where((element) => !element.leido).length,
+            );
       }
     } catch (e) {
       print(e);
@@ -48,10 +45,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
             (n) => n.markAsRead(),
           ),
     );
-    Provider.of<MainState>(
-      context,
-      listen: false,
-    ).setUnreadNotifications(0);
+    context.read<MainState>().setUnreadNotifications(0);
     if (mounted) setState(() {});
   }
 
@@ -59,16 +53,9 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
     try {
       if (!n.leido) {
         await n.markAsRead();
-        Provider.of<MainState>(
-          context,
-          listen: false,
-        ).setUnreadNotifications(
-          Provider.of<MainState>(
-                context,
-                listen: false,
-              ).unreadNotifications -
-              1,
-        );
+        context.read<MainState>().setUnreadNotifications(
+              context.read<MainState>().unreadNotifications - 1,
+            );
         if (mounted) setState(() {});
       }
       await DynamicLinks.parseURI(

@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Utils {
   static Future<void> restoreThemeMode(BuildContext context) async {
-    final mainState = Provider.of<MainState>(context);
+    final mainState = context.read<MainState>();
     final prefs = await SharedPreferences.getInstance();
     final themeDark = prefs.getBool('theme-dark');
     if (themeDark != null) {
@@ -17,7 +17,7 @@ abstract class Utils {
   }
 
   static Future<void> toggleThemeMode(BuildContext context) async {
-    final mainState = Provider.of<MainState>(context);
+    final mainState = context.read<MainState>();
     var newTheme = ThemeMode.dark;
     if (mainState.activeTheme == ThemeMode.dark) newTheme = ThemeMode.light;
     mainState.setActiveTheme(newTheme);
@@ -30,4 +30,9 @@ abstract class Utils {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     FocusManager.instance.primaryFocus.unfocus();
   }
+
+  static ThemeMode activeTheme(BuildContext context) =>
+      context.select<MainState, ThemeMode>(
+        (value) => value.activeTheme,
+      );
 }

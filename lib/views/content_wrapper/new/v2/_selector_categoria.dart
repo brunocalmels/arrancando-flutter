@@ -1,8 +1,7 @@
 import 'package:arrancando/config/models/category_wrapper.dart';
-import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_page_categorias.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SelectorCategoria extends StatelessWidget {
   final String label;
@@ -43,8 +42,7 @@ class SelectorCategoria extends StatelessWidget {
                   ),
                   Container(
                     padding: const EdgeInsets.all(5),
-                    color: Color(Provider.of<MainState>(context).activeTheme ==
-                            ThemeMode.light
+                    color: Color(Utils.activeTheme(context) == ThemeMode.light
                         ? 0xffcccccc
                         : 0xff262a3d),
                     child: Text(

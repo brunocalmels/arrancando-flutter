@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,14 +36,17 @@ class SavedContent {
       )
           .forEach(
         (sc) {
-          Provider.of<UserState>(context).toggleSavedContent(sc);
+          context.read<UserState>().toggleSavedContent(sc);
         },
       );
     }
   }
 
-  static bool isSaved(ContentWrapper content, BuildContext context) =>
-      Provider.of<UserState>(context)
+  static bool isSaved(
+    ContentWrapper content,
+  ) =>
+      MyGlobals.mainNavigatorKey.currentContext
+          .read<UserState>()
           .savedContent
           .any((sc) => sc.id == content.id && sc.type == content.type);
 
@@ -50,14 +54,14 @@ class SavedContent {
     ContentWrapper content,
     BuildContext context,
   ) async {
-    Provider.of<UserState>(context).toggleSavedContent(
-      SavedContent(content.id, content.type),
-    );
+    context.read<UserState>().toggleSavedContent(
+          SavedContent(content.id, content.type),
+        );
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
       'savedContent',
-      json.encode(Provider.of<UserState>(context).savedContent),
+      json.encode(context.read<UserState>().savedContent),
     );
-    await content.setSaved(isSaved(content, context));
+    await content.setSaved(isSaved(content));
   }
 }

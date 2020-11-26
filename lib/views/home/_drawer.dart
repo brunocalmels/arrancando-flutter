@@ -31,10 +31,9 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
   Future<void> _fetchUnreadNotificaciones() async {
     var unreadNotificaciones = await Notificacion.fetchUnread();
-    Provider.of<MainState>(
-      context,
-      listen: false,
-    ).setUnreadNotifications(unreadNotificaciones.length);
+    context
+        .read<MainState>()
+        .setUnreadNotifications(unreadNotificaciones.length);
   }
 
   @override

@@ -1,7 +1,8 @@
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/comentario.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
-import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/textos/index.dart';
 import 'package:arrancando/views/user_profile/index.dart';
@@ -71,8 +72,7 @@ class CommentsList extends StatelessWidget {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: Color(0x99161a25),
-                                  boxShadow: Provider.of<MainState>(context)
-                                              .activeTheme ==
+                                  boxShadow: Utils.activeTheme(context) ==
                                           ThemeMode.dark
                                       ? [
                                           BoxShadow(
@@ -125,12 +125,11 @@ class CommentsList extends StatelessWidget {
                                             '@${c.user.username}',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              color: Provider.of<MainState>(
-                                                              context)
-                                                          .activeTheme ==
-                                                      ThemeMode.dark
-                                                  ? null
-                                                  : Colors.white,
+                                              color:
+                                                  Utils.activeTheme(context) ==
+                                                          ThemeMode.dark
+                                                      ? null
+                                                      : Colors.white,
                                             ),
                                           ),
                                           SizedBox(
@@ -223,10 +222,11 @@ class CommentsList extends StatelessWidget {
                                           child: Padding(
                                             padding: const EdgeInsets.all(5),
                                             child: Icon(
-                                              c.myPuntaje(Provider.of<
-                                                                  UserState>(
-                                                              context)
-                                                          .activeUser
+                                              c.myPuntaje(context
+                                                          .select<UserState,
+                                                                  ActiveUser>(
+                                                              (value) => value
+                                                                  .activeUser)
                                                           .id) >
                                                       0
                                                   ? Icons.favorite

@@ -3,9 +3,8 @@ import 'dart:convert';
 
 import 'package:arrancando/config/models/ingrediente.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class IngredientesTypeAhead extends StatefulWidget {
   final List<dynamic> ingredientes;
@@ -140,15 +139,13 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
             color: Colors.transparent,
             boxShadow: [
               BoxShadow(
-                color: Color(Provider.of<MainState>(context).activeTheme ==
-                        ThemeMode.light
+                color: Color(Utils.activeTheme(context) == ThemeMode.light
                     ? 0xffcccccc
                     : 0xff1a1c28),
                 offset: Offset(0.0, 0.0),
               ),
               BoxShadow(
-                color: Color(Provider.of<MainState>(context).activeTheme ==
-                        ThemeMode.light
+                color: Color(Utils.activeTheme(context) == ThemeMode.light
                     ? 0xffeeeeee
                     : 0xff2d3548),
                 offset: Offset(0.0, 0.0),
@@ -201,10 +198,9 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
           ),
         if (_items != null && _items.isNotEmpty)
           Material(
-            color: Color(
-                Provider.of<MainState>(context).activeTheme == ThemeMode.light
-                    ? 0xffcccccc
-                    : 0x991a1c28),
+            color: Color(Utils.activeTheme(context) == ThemeMode.light
+                ? 0xffcccccc
+                : 0x991a1c28),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -254,10 +250,9 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
             _searchController.text != null &&
             _searchController.text.isNotEmpty)
           Material(
-            color: Color(
-                Provider.of<MainState>(context).activeTheme == ThemeMode.light
-                    ? 0xffcccccc
-                    : 0x991a1c28),
+            color: Color(Utils.activeTheme(context) == ThemeMode.light
+                ? 0xffcccccc
+                : 0x991a1c28),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -299,10 +294,9 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
             _searchController.text != null &&
             _searchController.text.isNotEmpty)
           Material(
-            color: Color(
-                Provider.of<MainState>(context).activeTheme == ThemeMode.light
-                    ? 0xffcccccc
-                    : 0x991a1c28),
+            color: Color(Utils.activeTheme(context) == ThemeMode.light
+                ? 0xffcccccc
+                : 0x991a1c28),
             child: Padding(
               padding: const EdgeInsets.all(4),
               child: Row(
@@ -324,16 +318,14 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                         boxShadow: [
                           BoxShadow(
                             color: Color(
-                                Provider.of<MainState>(context).activeTheme ==
-                                        ThemeMode.light
+                                Utils.activeTheme(context) == ThemeMode.light
                                     ? 0xffcccccc
                                     : 0xff1a1c28),
                             offset: Offset(0.0, 0.0),
                           ),
                           BoxShadow(
                             color: Color(
-                                Provider.of<MainState>(context).activeTheme ==
-                                        ThemeMode.light
+                                Utils.activeTheme(context) == ThemeMode.light
                                     ? 0xffeeeeee
                                     : 0xff2d3548),
                             offset: Offset(0.0, 0.0),
@@ -367,16 +359,14 @@ class _IngredientesTypeAheadState extends State<IngredientesTypeAhead> {
                         boxShadow: [
                           BoxShadow(
                             color: Color(
-                                Provider.of<MainState>(context).activeTheme ==
-                                        ThemeMode.light
+                                Utils.activeTheme(context) == ThemeMode.light
                                     ? 0xffcccccc
                                     : 0xff1a1c28),
                             offset: Offset(0.0, 0.0),
                           ),
                           BoxShadow(
                             color: Color(
-                                Provider.of<MainState>(context).activeTheme ==
-                                        ThemeMode.light
+                                Utils.activeTheme(context) == ThemeMode.light
                                     ? 0xffeeeeee
                                     : 0xff2d3548),
                             offset: Offset(0.0, 0.0),

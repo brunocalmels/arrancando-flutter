@@ -2,9 +2,8 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
-import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PageCategorias extends StatelessWidget {
   final GlobalSingleton gs = GlobalSingleton();
@@ -80,8 +79,7 @@ class PageCategorias extends StatelessWidget {
                                   gradient: LinearGradient(
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
-                                    colors: Provider.of<MainState>(context)
-                                                .activeTheme ==
+                                    colors: Utils.activeTheme(context) ==
                                             ThemeMode.light
                                         ? [Color(0xffcccccc), Color(0xffeeeeee)]
                                         : [

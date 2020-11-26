@@ -6,14 +6,13 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/user_profile/_row_botones.dart';
 import 'package:arrancando/views/user_profile/_row_seguidos_seguidores.dart';
 import 'package:arrancando/views/user_profile/cabecera/index.dart';
 import 'package:arrancando/views/user_profile/grilla_content/index.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -269,8 +268,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 child: Container(
                                   width: 1.5,
                                   height: 20,
-                                  color: Provider.of<MainState>(context)
-                                              .activeTheme ==
+                                  color: Utils.activeTheme(context) ==
                                           ThemeMode.dark
                                       ? Colors.white
                                       : Colors.black54,

@@ -1,8 +1,7 @@
-import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_add_link_button.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_add_user_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class NewContentInput extends StatelessWidget {
   final String label;
@@ -54,15 +53,13 @@ class NewContentInput extends StatelessWidget {
                 color: Colors.transparent,
                 boxShadow: [
                   BoxShadow(
-                    color: Color(Provider.of<MainState>(context).activeTheme ==
-                            ThemeMode.light
+                    color: Color(Utils.activeTheme(context) == ThemeMode.light
                         ? 0xffcccccc
                         : 0xff1a1c28),
                     offset: Offset(0.0, 0.0),
                   ),
                   BoxShadow(
-                    color: Color(Provider.of<MainState>(context).activeTheme ==
-                            ThemeMode.light
+                    color: Color(Utils.activeTheme(context) == ThemeMode.light
                         ? 0xffeeeeee
                         : 0xff2d3548),
                     offset: Offset(0.0, 0.0),

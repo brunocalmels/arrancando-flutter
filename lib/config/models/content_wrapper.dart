@@ -196,8 +196,11 @@ class ContentWrapper {
           ? categoriaRecetaId
           : categoriaPoiId;
 
-  bool esOwner(BuildContext context) =>
-      user.id == Provider.of<UserState>(context).activeUser.id;
+  bool esOwner(
+    BuildContext context,
+  ) =>
+      user.id ==
+      context.select<UserState, ActiveUser>((value) => value.activeUser).id;
 
   String distanciaToH() {
     if (localDistance != null) {
@@ -370,12 +373,12 @@ class ContentWrapper {
     String search,
     int page = 0,
     int categoryId,
-    BuildContext context,
     ContentSortType sortBy,
+    BuildContext context,
   }) async {
-    final mainState = Provider.of<MainState>(context);
-    final userState = Provider.of<UserState>(context);
-    final contentPageState = Provider.of<ContentPageState>(context);
+    final mainState = context.read<MainState>();
+    final userState = context.read<UserState>();
+    final contentPageState = context.read<ContentPageState>();
 
     var rootURL = '/publicaciones';
     var categoryParamName = 'ciudad_id';

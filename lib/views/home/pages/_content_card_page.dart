@@ -44,9 +44,7 @@ class _ContentCardPageState extends State<ContentCardPage> {
             builder: (_) => FilterBottomSheet(
               fetchContent: () {
                 widget.resetLimit();
-                widget.fetchContent(
-                  Provider.of<MainState>(context).activePageHome,
-                );
+                widget.fetchContent(context.read<MainState>().activePageHome);
               },
             ),
             shape: RoundedRectangleBorder(
@@ -73,7 +71,8 @@ class _ContentCardPageState extends State<ContentCardPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ContentPageState>(context)
+      context
+          .read<ContentPageState>()
           .setContentSortType(ContentSortType.fecha_creacion);
       widget.resetLimit();
       widget.fetchContent(widget.type);

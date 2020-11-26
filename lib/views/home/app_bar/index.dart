@@ -66,14 +66,8 @@ class _MainAppBarState extends State<MainAppBar> {
               IconButton(
                 icon: Icon(Icons.share),
                 onPressed: () {
-                  final userState = Provider.of<UserState>(
-                    context,
-                    listen: false,
-                  );
-                  final contentPageState = Provider.of<ContentPageState>(
-                    context,
-                    listen: false,
-                  );
+                  final userState = context.read<UserState>();
+                  final contentPageState = context.read<ContentPageState>();
 
                   var type = mainState.activePageHome;
 

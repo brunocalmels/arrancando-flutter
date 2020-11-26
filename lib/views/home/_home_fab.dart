@@ -35,7 +35,7 @@ class HomeFab extends StatelessWidget {
           onPressed: () {
             Widget page;
 
-            switch (Provider.of<MainState>(context).activePageHome) {
+            switch (context.read<MainState>().activePageHome) {
               case SectionType.home:
                 page = PublicacionForm();
                 break;
@@ -69,7 +69,8 @@ class HomeFab extends StatelessWidget {
                 Positioned.fill(
                   child: Icon(
                     sectionTypeIconMapper[
-                        Provider.of<MainState>(context).activePageHome],
+                        context.select<MainState, SectionType>(
+                            (value) => value.activePageHome)],
                     color: Colors.white,
                     size: 20,
                   ),

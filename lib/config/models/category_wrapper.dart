@@ -4,7 +4,7 @@ import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:provider/provider.dart';
@@ -135,7 +135,7 @@ class CategoryWrapper {
     final prefs = await SharedPreferences.getInstance();
     final val = prefs.getInt(type.toString());
     if (val != null) {
-      Provider.of<ContentPageState>(context).setSavedFilter(type, val);
+      context.read<ContentPageState>().setSavedFilter(type, val);
     }
     if (type == SectionType.pois &&
         val == null &&
@@ -148,12 +148,12 @@ class CategoryWrapper {
           ?.id;
 
       if (id != null) {
-        Provider.of<MainState>(context).setSelectedCategoryHome(type, id);
+        context.read<MainState>().setSelectedCategoryHome(type, id);
       } else {
-        Provider.of<MainState>(context).setSelectedCategoryHome(type, -1);
+        context.read<MainState>().setSelectedCategoryHome(type, -1);
       }
     } else {
-      Provider.of<MainState>(context).setSelectedCategoryHome(type, val ?? -1);
+      context.read<MainState>().setSelectedCategoryHome(type, val ?? -1);
     }
   }
 
@@ -164,11 +164,13 @@ class CategoryWrapper {
   ) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(type.toString(), val);
-    Provider.of<ContentPageState>(context).setSavedFilter(type, val);
+    context.read<ContentPageState>().setSavedFilter(type, val);
   }
 
   static Future<void> saveContentHome(
-      BuildContext context, List<SectionType> list) async {
+    BuildContext context,
+    List<SectionType> list,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
       'content-home',
@@ -176,7 +178,7 @@ class CategoryWrapper {
         list.map((i) => '$i').toList(),
       ),
     );
-    Provider.of<MainState>(context).setContenidosHome(list);
+    context.read<MainState>().setContenidosHome(list);
   }
 
   static Future<void> restoreSavedShowMine(
@@ -186,33 +188,32 @@ class CategoryWrapper {
     final prefs = await SharedPreferences.getInstance();
     final val = prefs.getBool('${type.toString()}-show-mine');
     if (val != null) {
-      Provider.of<ContentPageState>(context).setShowMine(type, val);
+      context.read<ContentPageState>().setShowMine(type, val);
     } else {
-      Provider.of<ContentPageState>(context).setShowMine(type, false);
+      context.read<ContentPageState>().setShowMine(type, false);
     }
   }
 
   static Future<void> saveShowMine(
-    BuildContext context,
-    SectionType type,
-    bool val,
-  ) async {
+      BuildContext context, SectionType type, bool val) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('${type.toString()}-show-mine', val);
-    Provider.of<ContentPageState>(context).setShowMine(type, val);
+    context.read<ContentPageState>().setShowMine(type, val);
   }
 
-  static Future<void> restoreContentHome(BuildContext context) async {
+  static Future<void> restoreContentHome(
+    BuildContext context,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('content-home');
     final contentHome = prefs.getString('content-home');
     if (contentHome != null) {
       try {
-        Provider.of<MainState>(context).setContenidosHome(
-          (json.decode(contentHome) as List)
-              .map((i) => sectionTypeMapper[i])
-              .toList(),
-        );
+        context.read<MainState>().setContenidosHome(
+              (json.decode(contentHome) as List)
+                  .map((i) => sectionTypeMapper[i])
+                  .toList(),
+            );
       } catch (e) {
         print(e);
       }

@@ -1,3 +1,4 @@
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/cabecera/_avatar_bubble.dart';
@@ -63,8 +64,9 @@ class CabeceraUserProfile extends StatelessWidget {
                 showAvatar: true,
               ),
               SizedBox(height: 7),
-              if (Provider.of<UserState>(context, listen: false)
-                      .activeUser
+              if (context
+                      .select<UserState, ActiveUser>(
+                          (value) => value.activeUser)
                       .id !=
                   user.id)
                 ButtonTheme(

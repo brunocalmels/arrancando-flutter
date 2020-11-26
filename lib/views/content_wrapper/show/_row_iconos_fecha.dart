@@ -67,7 +67,7 @@ class RowIconosFecha extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: Icon(
-                  SavedContent.isSaved(content, context)
+                  SavedContent.isSaved(content)
                       ? Icons.bookmark
                       : Icons.bookmark_border,
                   color: Theme.of(context).accentColor,

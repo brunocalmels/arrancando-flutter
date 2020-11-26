@@ -48,18 +48,9 @@ class _MainScaffoldState extends State<MainScaffold> {
   bool _inited = false;
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
-    final mainState = Provider.of<MainState>(
-      context,
-      listen: false,
-    );
-    final userState = Provider.of<UserState>(
-      context,
-      listen: false,
-    );
-    final contentPageState = Provider.of<ContentPageState>(
-      context,
-      listen: false,
-    );
+    final mainState = context.read<MainState>();
+    final userState = context.read<UserState>();
+    final contentPageState = context.read<ContentPageState>();
 
     final lastLength = _itemsMap[mainState.activePageHome] != null
         ? _itemsMap[mainState.activePageHome].length
@@ -118,7 +109,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   }
 
   void _resetLimit({bool keepNumber = false}) {
-    _itemsMap[Provider.of<MainState>(context).activePageHome] = null;
+    _itemsMap[context.read<MainState>().activePageHome] = null;
     _fetching = true;
     _noMore = false;
     if (!keepNumber) _page = 1;
@@ -140,7 +131,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   }
 
   void _setSearchVisibility(bool val) {
-    final cps = Provider.of<ContentPageState>(context);
+    final cps = context.read<ContentPageState>();
     cps.setSearchPageVisible(val);
     cps.setSearchResultsVisible(val);
     if (!val) _searchController.clear();
@@ -148,7 +139,8 @@ class _MainScaffoldState extends State<MainScaffold> {
   }
 
   Widget _getPage(SectionType type) {
-    if (!Provider.of<ContentPageState>(context).showSearchResults) {
+    if (!context
+        .select<ContentPageState, bool>((value) => value.showSearchResults)) {
       switch (type) {
         case SectionType.home:
           return HomePage();
@@ -203,15 +195,14 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   Future<void> _fetchUnreadNotificaciones() async {
     var unreadNotificaciones = await Notificacion.fetchUnread();
-    Provider.of<MainState>(
-      context,
-      listen: false,
-    ).setUnreadNotifications(unreadNotificaciones.length);
+    context
+        .read<MainState>()
+        .setUnreadNotifications(unreadNotificaciones.length);
   }
 
   Future<void> _initUserInfo() async {
     await ActiveUser.verifyCorrectLogin(context);
-    if (Provider.of<UserState>(context).activeUser != null) {
+    if (context.read<UserState>().activeUser != null) {
       await ActiveUser.updateUserMetadata(context);
       await Future.wait(
         SectionType.values.map(
@@ -278,7 +269,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                 fetchContent: () {
                   _resetLimit();
                   _fetchContent(
-                    Provider.of<MainState>(context).activePageHome,
+                    context.read<MainState>().activePageHome,
                     keepPage: true,
                   );
                 },
@@ -291,10 +282,12 @@ class _MainScaffoldState extends State<MainScaffold> {
                     fit: StackFit.expand,
                     children: [
                       _getPage(
-                        Provider.of<MainState>(context).activePageHome,
+                        context.select<MainState, SectionType>(
+                            (value) => value.activePageHome),
                       ),
-                      if (Provider.of<ContentPageState>(context)
-                              .deferredExecutorStatus !=
+                      if (context
+                              .select<ContentPageState, DeferredExecutorStatus>(
+                                  (value) => value.deferredExecutorStatus) !=
                           DeferredExecutorStatus.none)
                         DeferredExecutorTile(),
                     ],
@@ -304,11 +297,13 @@ class _MainScaffoldState extends State<MainScaffold> {
                   ),
 
             extendBody: true,
-            floatingActionButton: (Provider.of<ContentPageState>(context)
-                        .deferredExecutorStatus ==
-                    DeferredExecutorStatus.none)
-                ? HomeFab()
-                : null,
+            floatingActionButton:
+                (context.select<ContentPageState, DeferredExecutorStatus>(
+                          (value) => value.deferredExecutorStatus,
+                        ) ==
+                        DeferredExecutorStatus.none)
+                    ? HomeFab()
+                    : null,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: MainBottomBar(

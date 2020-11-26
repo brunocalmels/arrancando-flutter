@@ -3,7 +3,6 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/utils.dart';
-import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/home/pages/fast_search/_content_tile.dart';
 import 'package:arrancando/views/search/_search_users.dart';
@@ -11,7 +10,6 @@ import 'package:arrancando/views/search/index.dart';
 import 'package:arrancando/views/user_profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class DataGroup extends StatelessWidget {
   final bool fetching;
@@ -174,8 +172,7 @@ class DataGroup extends StatelessWidget {
                             child: Text(
                               'VER MÁS',
                               style: TextStyle(
-                                color: Provider.of<MainState>(context)
-                                            .activeTheme ==
+                                color: Utils.activeTheme(context) ==
                                         ThemeMode.light
                                     ? null
                                     : Theme.of(context).accentColor,

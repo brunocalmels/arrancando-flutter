@@ -52,7 +52,8 @@ class _PoiPageState extends State<PoiPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      Provider.of<ContentPageState>(context)
+      context
+          .read<ContentPageState>()
           .setContentSortType(ContentSortType.puntuacion);
       widget.setLocationDenied();
       widget.resetLimit();
@@ -118,6 +119,11 @@ class _PoiPageState extends State<PoiPage> {
                 zoom: _zoom,
                 buildCallback: (MapController controller) {
                   _mapController = controller;
+                },
+                showCloseMap: true,
+                closeMap: () {
+                  _showMap = false;
+                  if (mounted) setState(() {});
                 },
               ),
             ),

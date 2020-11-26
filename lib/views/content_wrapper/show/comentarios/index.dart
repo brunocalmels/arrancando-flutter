@@ -164,10 +164,7 @@ class _ComentariosSectionState extends State<ComentariosSection> {
           url = '/comentario_publicaciones/${comentario.id}/puntuar.json';
       }
 
-      var usuario = Provider.of<UserState>(
-        context,
-        listen: false,
-      ).activeUser.getUsuario;
+      var usuario = context.read<UserState>().activeUser.getUsuario;
 
       var puntaje = comentario.puntajes.firstWhere(
         (p) => p.usuario.id == usuario.id,

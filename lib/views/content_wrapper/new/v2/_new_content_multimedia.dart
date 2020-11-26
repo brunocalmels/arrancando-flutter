@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:arrancando/config/models/active_user.dart';
-import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_bottom_sheet_multimedia.dart';
 import 'package:arrancando/views/general/_permission_denied_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 
 class NewContentMultimedia extends StatelessWidget {
@@ -21,14 +20,14 @@ class NewContentMultimedia extends StatelessWidget {
 
   void _openFileExplorer(FileType type) async {
     if (Platform.isIOS) {
-      PickedFile _image;
+      File _image;
       try {
         if (type == FileType.video) {
-          _image = await ImagePicker().getVideo(
+          _image = await ImagePicker.pickVideo(
             source: ImageSource.gallery,
           );
         } else {
-          _image = await ImagePicker().getImage(
+          _image = await ImagePicker.pickImage(
             source: ImageSource.gallery,
           );
         }
@@ -62,7 +61,7 @@ class NewContentMultimedia extends StatelessWidget {
           final camaraPermisionDenied =
               await ActiveUser.cameraPermissionDenied();
           if (!camaraPermisionDenied) {
-            final image = await ImagePicker().getImage(
+            final image = await ImagePicker.pickImage(
               source: ImageSource.camera,
               imageQuality: 70,
               maxWidth: 1000,
@@ -151,15 +150,13 @@ class NewContentMultimedia extends StatelessWidget {
             color: Colors.transparent,
             boxShadow: [
               BoxShadow(
-                color: Color(Provider.of<MainState>(context).activeTheme ==
-                        ThemeMode.light
+                color: Color(Utils.activeTheme(context) == ThemeMode.light
                     ? 0xffcccccc
                     : 0xff1a1c28),
                 offset: Offset(0.0, 0.0),
               ),
               BoxShadow(
-                color: Color(Provider.of<MainState>(context).activeTheme ==
-                        ThemeMode.light
+                color: Color(Utils.activeTheme(context) == ThemeMode.light
                     ? 0xffeeeeee
                     : 0xff2d3548),
                 offset: Offset(0.0, 0.0),
@@ -188,8 +185,7 @@ class NewContentMultimedia extends StatelessWidget {
                 right: 0,
                 top: 0,
                 child: Container(
-                  color: Color(Provider.of<MainState>(context).activeTheme ==
-                          ThemeMode.light
+                  color: Color(Utils.activeTheme(context) == ThemeMode.light
                       ? 0xffcccccc
                       : 0xff1a1c28),
                   width: 80,

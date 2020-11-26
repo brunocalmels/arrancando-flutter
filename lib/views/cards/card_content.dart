@@ -386,7 +386,7 @@ class CardContent extends StatelessWidget {
                       GestureDetector(
                         onTap: () => SavedContent.toggleSave(content, context),
                         child: Icon(
-                          SavedContent.isSaved(content, context)
+                          SavedContent.isSaved(content)
                               ? Icons.bookmark
                               : Icons.bookmark_border,
                           color: Theme.of(context).accentColor,

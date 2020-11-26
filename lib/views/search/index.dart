@@ -37,18 +37,9 @@ class _SearchPageState extends State<SearchPage> {
   final _calculatedDistance = <int, double>{};
 
   Future<void> _fetchContent(type, {bool keepLimit = false}) async {
-    final mainState = Provider.of<MainState>(
-      context,
-      listen: false,
-    );
-    final userState = Provider.of<UserState>(
-      context,
-      listen: false,
-    );
-    final contentPageState = Provider.of<ContentPageState>(
-      context,
-      listen: false,
-    );
+    final mainState = context.read<MainState>();
+    final userState = context.read<UserState>();
+    final contentPageState = context.read<ContentPageState>();
 
     final lastLength = _items != null ? _items.length : 0;
 

@@ -18,7 +18,7 @@ class AvatarPicker extends StatefulWidget {
 }
 
 class _AvatarPickerState extends State<AvatarPicker> {
-  PickedFile _image;
+  File _image;
 
   @override
   Widget build(BuildContext context) {
@@ -91,14 +91,14 @@ class _AvatarPickerState extends State<AvatarPicker> {
 
                         switch (opcion) {
                           case 'camara':
-                            _image = await ImagePicker().getImage(
+                            _image = await ImagePicker.pickImage(
                               source: ImageSource.camera,
                               imageQuality: 70,
                               maxWidth: 1000,
                             );
                             break;
                           case 'galeria':
-                            _image = await ImagePicker().getImage(
+                            _image = await ImagePicker.pickImage(
                               source: ImageSource.gallery,
                             );
                             break;

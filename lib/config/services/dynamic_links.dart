@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 
 abstract class DynamicLinks {
-  static Future<void> buildUserOAuth(context, path) async {
+  static Future<void> buildUserOAuth(BuildContext context, path) async {
     if (context != null) {
       String base64Data = path[1];
       final prefs = await SharedPreferences.getInstance();
@@ -26,7 +26,8 @@ abstract class DynamicLinks {
         'activeUser',
         '$body',
       );
-      Provider.of<UserState>(context, listen: false)
+      context
+          .read<UserState>()
           .setActiveUser(ActiveUser.fromJson(json.decode(body)));
 
       await CategoryWrapper.loadCategories();
@@ -48,10 +49,10 @@ abstract class DynamicLinks {
             .first
             .id;
         if (ciudadId != null) {
-          Provider.of<UserState>(context, listen: false).setPreferredCategories(
-            SectionType.publicaciones,
-            ciudadId,
-          );
+          context.read<UserState>().setPreferredCategories(
+                SectionType.publicaciones,
+                ciudadId,
+              );
           final prefs = await SharedPreferences.getInstance();
           await prefs.setInt('preferredCiudadId', ciudadId);
         }
@@ -69,7 +70,7 @@ abstract class DynamicLinks {
     }
   }
 
-  static Future<void> parseURI(Uri uri, context) async {
+  static Future<void> parseURI(Uri uri, BuildContext context) async {
     if (uri != null) {
       try {
         final path = uri.path.split('/');
@@ -163,14 +164,8 @@ abstract class DynamicLinks {
           } else if (context != null) {
             // TODO: SHOULDN'T USE DELAY
             await Future.delayed(Duration(seconds: 1));
-            final mainState = Provider.of<MainState>(
-              context,
-              listen: false,
-            );
-            final contentPageState = Provider.of<ContentPageState>(
-              context,
-              listen: false,
-            );
+            final mainState = context.read<MainState>();
+            final contentPageState = context.read<ContentPageState>();
             var q = uri.queryParameters;
 
             switch (q['sorted_by']) {
@@ -276,7 +271,7 @@ abstract class DynamicLinks {
     }
   }
 
-  static Future<void> initUniLinks({BuildContext context}) async {
+  static Future<void> initUniLinks(BuildContext context) async {
     //Parse the uri that started the app
     final uri = await getInitialUri();
     if (uri != null) print(uri.path);

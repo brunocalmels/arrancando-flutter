@@ -134,7 +134,7 @@ class _TypeAheadCiudadState extends State<TypeAheadCiudad> {
                                       !widget.insideEdit) {
                                     await Fetcher.put(
                                       url:
-                                          '/users/${Provider.of<UserState>(context).activeUser.id}.json',
+                                          '/users/${context.read<UserState>().activeUser.id}.json',
                                       body: {
                                         'user': {
                                           'ciudad_id': '${item.id}',

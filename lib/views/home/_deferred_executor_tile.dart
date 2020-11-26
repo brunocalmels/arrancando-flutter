@@ -6,6 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DeferredExecutorTile extends StatelessWidget {
+  DeferredExecutorStatus _deferredExecutorStatus(BuildContext context) =>
+      context.select<ContentPageState, DeferredExecutorStatus>(
+        (value) => value.deferredExecutorStatus,
+      );
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -15,11 +20,10 @@ class DeferredExecutorTile extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         height: kToolbarHeight * 1.25,
         decoration: BoxDecoration(
-          color: Provider.of<ContentPageState>(context)
-                      .deferredExecutorStatus ==
+          color: _deferredExecutorStatus(context) ==
                   DeferredExecutorStatus.executing
               ? Colors.blueGrey[800]
-              : Provider.of<ContentPageState>(context).deferredExecutorStatus ==
+              : _deferredExecutorStatus(context) ==
                       DeferredExecutorStatus.failed
                   ? Colors.red
                   : Theme.of(context).accentColor,
@@ -37,8 +41,7 @@ class DeferredExecutorTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (Provider.of<ContentPageState>(context)
-                      .deferredExecutorStatus ==
+              if (_deferredExecutorStatus(context) ==
                   DeferredExecutorStatus.executing)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -55,8 +58,7 @@ class DeferredExecutorTile extends StatelessWidget {
                     ),
                   ],
                 )
-              else if (Provider.of<ContentPageState>(context)
-                      .deferredExecutorStatus ==
+              else if (_deferredExecutorStatus(context) ==
                   DeferredExecutorStatus.failed)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

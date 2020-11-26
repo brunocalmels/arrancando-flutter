@@ -10,8 +10,8 @@ import 'package:arrancando/views/user/login/index.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 part 'active_user.g.dart';
 
@@ -134,10 +134,10 @@ class ActiveUser {
     return false;
   }
 
-  static Future<void> logout(context) async {
+  static Future<void> logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('activeUser');
-    Provider.of<UserState>(context, listen: false).setActiveUser(null);
+    context.read<UserState>().setActiveUser(null);
     await Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => LoginPage(),
@@ -147,7 +147,7 @@ class ActiveUser {
     );
   }
 
-  static Future<void> verifyCorrectLogin(context) async {
+  static Future<void> verifyCorrectLogin(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     final activeUser = prefs.getString('activeUser');
     // Verify active user defined
@@ -191,9 +191,9 @@ class ActiveUser {
     }
   }
 
-  static Future<void> updateUserMetadata(context) async {
+  static Future<void> updateUserMetadata(BuildContext context) async {
     await Fetcher.put(
-      url: '/users/${Provider.of<UserState>(context).activeUser.id}.json',
+      url: '/users/${context.read<UserState>().activeUser.id}.json',
       body: {
         'user': {
           'app_version': '${MyGlobals.APP_VERSION}',

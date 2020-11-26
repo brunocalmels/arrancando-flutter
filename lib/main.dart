@@ -46,15 +46,15 @@ void main() {
   runZoned(
     () => runApp(
       MultiProvider(
-        providers: <SingleChildCloneableWidget>[
+        providers: [
           ChangeNotifierProvider(
-            create: (BuildContext context) => MainState(),
+            create: (context) => MainState(),
           ),
           ChangeNotifierProvider(
-            create: (BuildContext context) => UserState(),
+            create: (context) => UserState(),
           ),
           ChangeNotifierProvider(
-            create: (BuildContext context) => ContentPageState(),
+            create: (context) => ContentPageState(),
           ),
         ],
         child: MyApp(),
@@ -91,18 +91,18 @@ class _MyAppState extends State<MyApp> {
     final activeUser = prefs.getString('activeUser');
     final preferredCiudadId = prefs.getInt('preferredCiudadId');
     if (activeUser != null) {
-      Provider.of<UserState>(context, listen: false).setActiveUser(
-        ActiveUser.fromJson(
-          json.decode(activeUser),
-        ),
-      );
+      context.read<UserState>().setActiveUser(
+            ActiveUser.fromJson(
+              json.decode(activeUser),
+            ),
+          );
       _isLoggedIn = true;
     }
     if (preferredCiudadId != null) {
-      Provider.of<UserState>(context, listen: false).setPreferredCategories(
-        SectionType.publicaciones,
-        preferredCiudadId,
-      );
+      context.read<UserState>().setPreferredCategories(
+            SectionType.publicaciones,
+            preferredCiudadId,
+          );
     }
     if (mounted) setState(() {});
   }
@@ -110,9 +110,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> _initApp() async {
     await Utils.restoreThemeMode(context);
     if (!Platform.isLinux) {
-      await DynamicLinks.initUniLinks(
-        context: context,
-      );
+      await DynamicLinks.initUniLinks(context);
     }
     await _loadUser();
     if (_isLoggedIn) {
@@ -127,7 +125,7 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: MyGlobals.mainNavigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Arrancando',
-      themeMode: Provider.of<MainState>(context).activeTheme ?? ThemeMode.dark,
+      themeMode: Utils.activeTheme(context) ?? ThemeMode.dark,
       theme: ThemeData(
         fontFamily: 'Monserrat',
         backgroundColor: Colors.grey,

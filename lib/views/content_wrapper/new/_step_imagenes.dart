@@ -19,9 +19,9 @@ class StepImagenes extends StatelessWidget {
   });
   void _openFileExplorer(FileType type) async {
     if (Platform.isIOS) {
-      PickedFile _image;
+      File _image;
       try {
-        _image = await ImagePicker().getImage(
+        _image = await ImagePicker.pickImage(
           source: ImageSource.gallery,
         );
       } catch (e) {
@@ -117,7 +117,7 @@ class StepImagenes extends StatelessWidget {
                           final camaraPermisionDenied =
                               await ActiveUser.cameraPermissionDenied();
                           if (!camaraPermisionDenied) {
-                            final image = await ImagePicker().getImage(
+                            final image = await ImagePicker.pickImage(
                               source: ImageSource.camera,
                               imageQuality: 70,
                               maxWidth: 1000,

@@ -39,8 +39,7 @@ class MainBottomBar extends StatelessWidget {
           type: MaterialType.circle,
           child: InkWell(
             onTap: () {
-              Provider.of<MainState>(context, listen: false)
-                  .setActivePageHome(type);
+              context.read<MainState>().setActivePageHome(type);
               MyGlobals.firebaseAnalyticsObserver.analytics.setCurrentScreen(
                 screenName: 'Home/${_items[type]['texto']}',
               );
@@ -51,7 +50,9 @@ class MainBottomBar extends StatelessWidget {
               children: <Widget>[
                 Icon(
                   _items[type]['icono'],
-                  color: Provider.of<MainState>(context).activePageHome == type
+                  color: context.select<MainState, SectionType>(
+                              (value) => value.activePageHome) ==
+                          type
                       ? Theme.of(context).accentColor
                       : null,
                 ),
@@ -60,10 +61,11 @@ class MainBottomBar extends StatelessWidget {
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color:
-                        Provider.of<MainState>(context).activePageHome == type
-                            ? Theme.of(context).accentColor
-                            : null,
+                    color: context.select<MainState, SectionType>(
+                                (value) => value.activePageHome) ==
+                            type
+                        ? Theme.of(context).accentColor
+                        : null,
                   ),
                 ),
               ],

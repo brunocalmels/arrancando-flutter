@@ -27,8 +27,7 @@ class _SearchBarState extends State<SearchBar> {
         onChanged: (val) async {
           if (val != null && val.isNotEmpty) {
             widget.setSearchVisibility(true);
-            Provider.of<ContentPageState>(context)
-                .setSearchResultsVisible(true);
+            context.read<ContentPageState>().setSearchResultsVisible(true);
             await Future.delayed(Duration(seconds: 3));
           }
         },

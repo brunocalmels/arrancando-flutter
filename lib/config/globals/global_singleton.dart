@@ -16,10 +16,7 @@ class GlobalSingleton {
 
   void setCategories(SectionType type, List<CategoryWrapper> list) {
     categories[type] = list;
-    final st = Provider.of<UserState>(
-      MyGlobals.mainNavigatorKey.currentContext,
-      listen: false,
-    );
+    final st = MyGlobals.mainNavigatorKey.currentContext.read<UserState>();
     if (st.preferredCategories[type] == null) {
       if (type == SectionType.pois) {
         final verdulerias = list.firstWhere(

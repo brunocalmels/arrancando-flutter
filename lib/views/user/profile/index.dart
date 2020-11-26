@@ -38,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (resp?.status == 200 && resp?.body != null) {
       final prefs = await SharedPreferences.getInstance();
 
-      final au = Provider.of<UserState>(context, listen: false).activeUser;
+      final au = context.read<UserState>().activeUser;
 
       au.avatar = json.decode(resp.body)['avatar'];
 
@@ -47,20 +47,19 @@ class _ProfilePageState extends State<ProfilePage> {
         '${json.encode(au.toJson())}',
       );
 
-      Provider.of<UserState>(context, listen: false).setActiveUser(
-        ActiveUser.fromJson(au.toJson()),
-      );
+      context.read<UserState>().setActiveUser(
+            ActiveUser.fromJson(au.toJson()),
+          );
     }
 
     _sent = false;
     if (mounted) setState(() {});
   }
 
-  Future<void> _updateActiveUser(context, campo, valor) async {
+  Future<void> _updateActiveUser(BuildContext context, campo, valor) async {
     final prefs = await SharedPreferences.getInstance();
 
-    final _activeUser =
-        Provider.of<UserState>(context, listen: false).activeUser;
+    final _activeUser = context.read<UserState>().activeUser;
 
     switch (campo) {
       case 'Nombre':
@@ -81,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
       default:
     }
 
-    Provider.of<UserState>(context, listen: false).setActiveUser(_activeUser);
+    context.read<UserState>().setActiveUser(_activeUser);
 
     await prefs.setString('activeUser', json.encode(_activeUser));
   }

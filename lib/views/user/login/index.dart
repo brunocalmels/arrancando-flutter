@@ -111,9 +111,9 @@ class _LoginPageState extends State<LoginPage> {
       'activeUser',
       '${json.encode(body)}',
     );
-    Provider.of<UserState>(context, listen: false).setActiveUser(
-      ActiveUser.fromJson(body),
-    );
+    context.read<UserState>().setActiveUser(
+          ActiveUser.fromJson(body),
+        );
 
     await CategoryWrapper.loadCategories();
 
@@ -131,10 +131,10 @@ class _LoginPageState extends State<LoginPage> {
           ?.first
           ?.id;
       if (ciudadId != null) {
-        Provider.of<UserState>(context, listen: false).setPreferredCategories(
-          SectionType.publicaciones,
-          ciudadId,
-        );
+        context.read<UserState>().setPreferredCategories(
+              SectionType.publicaciones,
+              ciudadId,
+            );
         final prefs = await SharedPreferences.getInstance();
         await prefs.setInt('preferredCiudadId', ciudadId);
       }

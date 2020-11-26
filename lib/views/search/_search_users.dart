@@ -78,7 +78,8 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _resetLimit();
       _fetchContent();
-      Provider.of<ContentPageState>(context)
+      context
+          .read<ContentPageState>()
           .setContentSortType(ContentSortType.fecha_creacion);
       _scrollController.addListener(
         () {

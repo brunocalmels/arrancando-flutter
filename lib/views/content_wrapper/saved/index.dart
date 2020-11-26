@@ -22,7 +22,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
   Future<void> _fetchContent() async {
     final resp = await Fetcher.get(
       url:
-          '/content/saved.json?data=${json.encode(Provider.of<UserState>(context, listen: false).savedContent)}',
+          '/content/saved.json?data=${json.encode(context.read<UserState>().savedContent)}',
     );
 
     if (resp?.body != null) {
@@ -108,7 +108,7 @@ class _SavedContentPageState extends State<SavedContentPage> {
                                         _fetchContent();
                                       },
                                       icon: Icon(
-                                        SavedContent.isSaved(p, context)
+                                        SavedContent.isSaved(p)
                                             ? Icons.bookmark
                                             : Icons.bookmark_border,
                                         color: Theme.of(context).accentColor,

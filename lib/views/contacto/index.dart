@@ -42,9 +42,6 @@ class _ContactPageState extends State<ContactPage> {
             SnackBar(
               content: Text(
                 'Mensaje enviado correctamente, nos contactatemos a la brevedad.',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                ),
               ),
             ),
           );

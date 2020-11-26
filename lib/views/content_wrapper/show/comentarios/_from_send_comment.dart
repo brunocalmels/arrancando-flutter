@@ -1,4 +1,5 @@
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -29,17 +30,18 @@ class FormSendComment extends StatelessWidget {
         children: <Widget>[
           CircleAvatar(
             radius: 25,
-            backgroundImage:
-                Provider.of<UserState>(context, listen: false).activeUser !=
-                            null &&
-                        Provider.of<UserState>(context, listen: false)
-                                .activeUser
-                                .avatar !=
-                            null
-                    ? CachedNetworkImageProvider(
-                        '${MyGlobals.SERVER_URL}${Provider.of<UserState>(context, listen: false).activeUser.avatar}',
-                      )
-                    : null,
+            backgroundImage: context.select<UserState, ActiveUser>(
+                            (value) => value.activeUser) !=
+                        null &&
+                    context
+                            .select<UserState, ActiveUser>(
+                                (value) => value.activeUser)
+                            .avatar !=
+                        null
+                ? CachedNetworkImageProvider(
+                    '${MyGlobals.SERVER_URL}${context.select<UserState, ActiveUser>((value) => value.activeUser).avatar}',
+                  )
+                : null,
           ),
           SizedBox(
             width: 7,

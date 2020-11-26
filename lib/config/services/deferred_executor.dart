@@ -13,7 +13,7 @@ abstract class DeferredExecutor {
 
   static void execute(SectionType sectionType, Future future) async {
     final context = MyGlobals.mainNavigatorKey.currentContext;
-    final contentPageState = Provider.of<ContentPageState>(context);
+    final contentPageState = context.read<ContentPageState>();
     contentPageState.setDeferredExecutorStatus(
       DeferredExecutorStatus.executing,
     );
@@ -63,7 +63,7 @@ abstract class DeferredExecutor {
     lastFuture = null;
     lastFutureError = null;
     final context = MyGlobals.mainNavigatorKey.currentContext;
-    final contentPageState = Provider.of<ContentPageState>(context);
+    final contentPageState = context.read<ContentPageState>();
     contentPageState.setDeferredExecutorStatus(
       DeferredExecutorStatus.none,
     );

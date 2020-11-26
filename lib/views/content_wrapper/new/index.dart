@@ -95,11 +95,10 @@ class _NewContentState extends State<NewContent> {
             }
 
             if (ciudadId != null) {
-              Provider.of<UserState>(context, listen: false)
-                  .setPreferredCategories(
-                SectionType.publicaciones,
-                ciudadId,
-              );
+              context.read<UserState>().setPreferredCategories(
+                    SectionType.publicaciones,
+                    ciudadId,
+                  );
               final prefs = await SharedPreferences.getInstance();
               await prefs.setInt('preferredCiudadId', ciudadId);
               preferredCiudadId = ciudadId;

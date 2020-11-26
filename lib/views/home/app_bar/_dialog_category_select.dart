@@ -39,7 +39,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
           ? SectionType.publicaciones_categoria
           : widget.poiCity
               ? SectionType.pois_ciudad
-              : Provider.of<MainState>(context).activePageHome,
+              : context.read<MainState>().activePageHome,
       _selected,
     );
     if (mounted) setState(() {});
@@ -101,13 +101,14 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                                           .categories[SectionType.publicaciones]
                                     ]
                                   : [
-                                      ...singleton.categories[
-                                          Provider.of<MainState>(context)
-                                              .activePageHome]
+                                      ...singleton.categories[context
+                                          .select<MainState, SectionType>(
+                                              (value) => value.activePageHome)]
                                     ];
 
                           if ((widget.selectCity && !widget.pubCateg) ||
-                              Provider.of<MainState>(context).activePageHome ==
+                              context.select<MainState, SectionType>(
+                                      (value) => value.activePageHome) ==
                                   SectionType.pois) {
                             _lista.removeWhere((c) => c.id == -1);
                           }

@@ -2,11 +2,10 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
-import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TilePoi extends StatelessWidget {
@@ -50,8 +49,7 @@ class TilePoi extends StatelessWidget {
                 ? Center(
                     child: Icon(
                       Icons.photo_camera,
-                      color: Provider.of<MainState>(context).activeTheme ==
-                              ThemeMode.dark
+                      color: Utils.activeTheme(context) == ThemeMode.dark
                           ? Colors.white38
                           : Colors.black38,
                     ),
@@ -92,8 +90,7 @@ class TilePoi extends StatelessWidget {
                 '${poi.puntajePromedio.toStringAsFixed(1)}',
                 style: TextStyle(
                     fontSize: 13,
-                    color: Provider.of<MainState>(context).activeTheme ==
-                            ThemeMode.dark
+                    color: Utils.activeTheme(context) == ThemeMode.dark
                         ? Colors.white
                         : Colors.black),
               ),
@@ -113,8 +110,7 @@ class TilePoi extends StatelessWidget {
                   poi.localDistance != null ? poi.distanciaToH() : '',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Provider.of<MainState>(context).activeTheme ==
-                            ThemeMode.dark
+                    color: Utils.activeTheme(context) == ThemeMode.dark
                         ? Colors.white
                         : Colors.black,
                   ),
@@ -134,8 +130,7 @@ class TilePoi extends StatelessWidget {
                 '${poi.vistas}',
                 style: TextStyle(
                   fontSize: 13,
-                  color: Provider.of<MainState>(context).activeTheme ==
-                          ThemeMode.dark
+                  color: Utils.activeTheme(context) == ThemeMode.dark
                       ? Colors.white
                       : Colors.black,
                 ),
@@ -174,7 +169,7 @@ class TilePoi extends StatelessWidget {
                   onPressed: () => SavedContent.toggleSave(poi, context),
                   color: Theme.of(context).accentColor,
                   icon: Icon(
-                    SavedContent.isSaved(poi, context)
+                    SavedContent.isSaved(poi)
                         ? Icons.bookmark
                         : Icons.bookmark_border,
                   ),
