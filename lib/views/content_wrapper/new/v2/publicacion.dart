@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/deferred_executor.dart';
 import 'package:arrancando/config/services/fetcher.dart';
@@ -13,6 +14,7 @@ import 'package:arrancando/views/content_wrapper/new/v2/_new_content_multimedia.
 import 'package:arrancando/views/content_wrapper/new/v2/_scaffold.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 
 class PublicacionForm extends StatefulWidget {
@@ -88,7 +90,7 @@ class _PublicacionFormState extends State<PublicacionForm> {
           "ciudad_id": 1,
         };
 
-        Navigator.of(context).pop();
+        Navigator.of(context).popUntil((route) => route.isFirst);
 
         if (_isEdit && _id != null) {
           DeferredExecutor.execute(

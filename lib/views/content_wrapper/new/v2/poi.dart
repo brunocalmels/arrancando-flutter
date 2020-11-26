@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/services/deferred_executor.dart';
@@ -17,6 +18,7 @@ import 'package:arrancando/views/content_wrapper/new/v2/_scaffold.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_selector_categoria_poi.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -140,7 +142,7 @@ class _PoiFormState extends State<PoiForm> {
           "remove_imagenes": _imagesToRemove,
         };
 
-        Navigator.of(context).pop();
+        Navigator.of(context).popUntil((route) => route.isFirst);
 
         if (_isEdit && _id != null) {
           DeferredExecutor.execute(

@@ -21,6 +21,7 @@ import 'package:arrancando/views/content_wrapper/new/v2/_selector_categoria.dart
 import 'package:arrancando/views/content_wrapper/new/v2/_selector_subcategoria.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_send_boton.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
+import 'package:arrancando/views/home/index.dart';
 import 'package:flutter/material.dart';
 
 class RecetaForm extends StatefulWidget {
@@ -140,7 +141,7 @@ class RecetaFormState extends State<RecetaForm> {
           "remove_imagenes": _imagesToRemove,
         };
 
-        Navigator.of(context).pop();
+        Navigator.of(context).popUntil((route) => route.isFirst);
 
         if (_isEdit && _id != null) {
           DeferredExecutor.execute(
