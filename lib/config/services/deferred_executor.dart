@@ -6,11 +6,12 @@ import 'package:arrancando/config/state/content_page.dart';
 import 'package:provider/provider.dart';
 
 abstract class DeferredExecutor {
+  static SectionType lastItemSectionType;
   static int lastItemId;
   static Future lastFuture;
   static String lastFutureError;
 
-  void execute(Future future) async {
+  static void execute(SectionType sectionType, Future future) async {
     final context = MyGlobals.mainNavigatorKey.currentContext;
     final contentPageState = Provider.of<ContentPageState>(context);
     contentPageState.setDeferredExecutorStatus(
@@ -18,6 +19,7 @@ abstract class DeferredExecutor {
     );
 
     lastFuture = future;
+    lastItemSectionType = sectionType;
 
     try {
       final response = await future;
@@ -52,7 +54,18 @@ abstract class DeferredExecutor {
     );
   }
 
-  void reExecuteLastFuture() {
-    execute(lastFuture);
+  static void reExecuteLastFuture() {
+    execute(lastItemSectionType, lastFuture);
+  }
+
+  static void cancelExecution() {
+    lastItemId = null;
+    lastFuture = null;
+    lastFutureError = null;
+    final context = MyGlobals.mainNavigatorKey.currentContext;
+    final contentPageState = Provider.of<ContentPageState>(context);
+    contentPageState.setDeferredExecutorStatus(
+      DeferredExecutorStatus.none,
+    );
   }
 }

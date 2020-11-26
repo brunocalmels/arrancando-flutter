@@ -5,6 +5,7 @@ import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/services/deferred_executor.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_error_message.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_mucho_peso_archivos.dart';
@@ -92,7 +93,7 @@ class _PoiFormState extends State<PoiForm> {
         (_latitud != null && _longitud != null) &&
         ((_images != null && _images.isNotEmpty) ||
             (_currentImages != null && _currentImages.isNotEmpty)) &&
-        [...(_images ?? []), _currentImages ?? []].length <= 6) {
+        [...(_images ?? []), ...(_currentImages ?? [])].length <= 6) {
       _sent = true;
       if (mounted) setState(() {});
 
@@ -139,49 +140,30 @@ class _PoiFormState extends State<PoiForm> {
           "remove_imagenes": _imagesToRemove,
         };
 
-        ResponseObject res;
+        Navigator.of(context).pop();
 
-        if (_isEdit && _id != null)
-          res = await Fetcher.put(
-            url: "/pois/$_id.json",
-            throwError: true,
-            body: {
-              ...body,
-            },
-          );
-        else
-          res = await Fetcher.post(
-            url: "/pois.json",
-            throwError: true,
-            body: {
-              ...body,
-            },
-          );
-
-        if (res != null && (res.status == 201 || res.status == 200)) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => ShowPage(
-                contentId: json.decode(res.body)['id'],
-                type: SectionType.pois,
-              ),
-              settings: RouteSettings(
-                name: 'Pois#${json.decode(res.body)['id']}',
-              ),
+        if (_isEdit && _id != null) {
+          DeferredExecutor.execute(
+            SectionType.pois,
+            Fetcher.put(
+              url: "/pois/$_id.json",
+              throwError: true,
+              body: {
+                ...body,
+              },
             ),
           );
         } else {
-          if (res != null && res.body != null) {
-            _errorMsg = (json.decode(res.body) as Map)
-                .values
-                .expand((i) => i)
-                .join(',');
-          } else {
-            _errorMsg =
-                "Ocurrió un error, por favor intentalo nuevamente más tarde.";
-            _hideButtonVeryBadError = true;
-          }
-          if (mounted) setState(() {});
+          DeferredExecutor.execute(
+            SectionType.pois,
+            Fetcher.post(
+              url: "/pois.json",
+              throwError: true,
+              body: {
+                ...body,
+              },
+            ),
+          );
         }
       } catch (e) {
         print(e);
@@ -205,7 +187,7 @@ class _PoiFormState extends State<PoiForm> {
     } else if (!((_images != null && _images.isNotEmpty) ||
         (_currentImages != null && _currentImages.isNotEmpty))) {
       _errorMsg = "Debes añadir al menos 1 imagen/video";
-    } else if (!([...(_images ?? []), _currentImages ?? []].length <= 6)) {
+    } else if (!([...(_images ?? []), ...(_currentImages ?? [])].length <= 6)) {
       _errorMsg = "Podés subir como máximo 6 imágenes y/o videos";
     }
 

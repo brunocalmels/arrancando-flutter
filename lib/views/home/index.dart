@@ -12,6 +12,7 @@ import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/general/version_checker.dart';
+import 'package:arrancando/views/home/_deferred_executor_tile.dart';
 import 'package:arrancando/views/home/_dialog_confirm_leave.dart';
 import 'package:arrancando/views/home/_drawer.dart';
 import 'package:arrancando/views/home/_home_fab.dart';
@@ -292,15 +293,10 @@ class _MainScaffoldState extends State<MainScaffold> {
                       _getPage(
                         Provider.of<MainState>(context).activePageHome,
                       ),
-                      Positioned(
-                        left: 0,
-                        bottom: kBottomNavigationBarHeight * 1.25,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: kToolbarHeight * 1.5,
-                          color: Colors.red,
-                        ),
-                      ),
+                      if (Provider.of<ContentPageState>(context)
+                              .deferredExecutorStatus !=
+                          DeferredExecutorStatus.none)
+                        DeferredExecutorTile(),
                     ],
                   )
                 : Center(
@@ -308,7 +304,11 @@ class _MainScaffoldState extends State<MainScaffold> {
                   ),
 
             extendBody: true,
-            floatingActionButton: false ? HomeFab() : null,
+            floatingActionButton: (Provider.of<ContentPageState>(context)
+                        .deferredExecutorStatus ==
+                    DeferredExecutorStatus.none)
+                ? HomeFab()
+                : null,
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             bottomNavigationBar: MainBottomBar(

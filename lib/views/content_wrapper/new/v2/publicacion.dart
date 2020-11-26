@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
+import 'package:arrancando/config/services/deferred_executor.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_error_message.dart';
 import 'package:arrancando/views/content_wrapper/new/v2/_mucho_peso_archivos.dart';
@@ -60,10 +61,11 @@ class _PublicacionFormState extends State<PublicacionForm> {
 
   _crearPublicacion() async {
     _errorMsg = null;
+
     if (_formKey.currentState.validate() &&
         ((_images != null && _images.isNotEmpty) ||
             (_currentImages != null && _currentImages.isNotEmpty)) &&
-        [...(_images ?? []), _currentImages ?? []].length <= 6) {
+        [...(_images ?? []), ...(_currentImages ?? [])].length <= 6) {
       _sent = true;
       if (mounted) setState(() {});
 
@@ -86,49 +88,30 @@ class _PublicacionFormState extends State<PublicacionForm> {
           "ciudad_id": 1,
         };
 
-        ResponseObject res;
+        Navigator.of(context).pop();
 
-        if (_isEdit && _id != null)
-          res = await Fetcher.put(
-            url: "/publicaciones/$_id.json",
-            throwError: true,
-            body: {
-              ...body,
-            },
-          );
-        else
-          res = await Fetcher.post(
-            url: "/publicaciones.json",
-            throwError: true,
-            body: {
-              ...body,
-            },
-          );
-
-        if (res != null && (res.status == 201 || res.status == 200)) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => ShowPage(
-                contentId: json.decode(res.body)['id'],
-                type: SectionType.publicaciones,
-              ),
-              settings: RouteSettings(
-                name: 'Publicaciones#${json.decode(res.body)['id']}',
-              ),
+        if (_isEdit && _id != null) {
+          DeferredExecutor.execute(
+            SectionType.publicaciones,
+            Fetcher.put(
+              url: "/publicaciones/$_id.json",
+              throwError: true,
+              body: {
+                ...body,
+              },
             ),
           );
         } else {
-          if (res != null && res.body != null) {
-            _errorMsg = (json.decode(res.body) as Map)
-                .values
-                .expand((i) => i)
-                .join(',');
-          } else {
-            _errorMsg =
-                "Ocurrió un error, por favor intentalo nuevamente más tarde.";
-            _hideButtonVeryBadError = true;
-          }
-          if (mounted) setState(() {});
+          DeferredExecutor.execute(
+            SectionType.publicaciones,
+            Fetcher.post(
+              url: "/publicaciones.json",
+              throwError: true,
+              body: {
+                ...body,
+              },
+            ),
+          );
         }
       } catch (e) {
         print(e);
@@ -146,7 +129,7 @@ class _PublicacionFormState extends State<PublicacionForm> {
     } else if (!((_images != null && _images.isNotEmpty) ||
         (_currentImages != null && _currentImages.isNotEmpty))) {
       _errorMsg = "Debes añadir al menos 1 imagen/video";
-    } else if (!([...(_images ?? []), _currentImages ?? []].length <= 6)) {
+    } else if (!([...(_images ?? []), ...(_currentImages ?? [])].length <= 6)) {
       _errorMsg = "Podés subir como máximo 6 imágenes y/o videos";
     }
 
