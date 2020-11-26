@@ -10,7 +10,7 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MainAppBar extends StatelessWidget {
+class MainAppBar extends StatefulWidget {
   final Function(bool) setSearchVisibility;
   final Function fetchContent;
   final TextEditingController searchController;
@@ -24,6 +24,13 @@ class MainAppBar extends StatelessWidget {
   });
 
   @override
+  _MainAppBarState createState() => _MainAppBarState();
+}
+
+class _MainAppBarState extends State<MainAppBar> {
+  bool _showSearchBar = false;
+
+  @override
   Widget build(BuildContext context) {
     return Consumer2<MainState, ContentPageState>(
       builder: (context, mainState, contentState, child) {
@@ -35,11 +42,25 @@ class MainAppBar extends StatelessWidget {
               child: Image.asset('assets/images/icon.png'),
             ),
           ),
-          title: SearchBar(
-            searchController: searchController,
-            setSearchVisibility: setSearchVisibility,
-          ),
+          title: _showSearchBar
+              ? SearchBar(
+                  searchController: widget.searchController,
+                  setSearchVisibility: widget.setSearchVisibility,
+                )
+              : null,
           actions: <Widget>[
+            if (!_showSearchBar || widget.searchController.text.isEmpty)
+              IconButton(
+                icon: Icon(
+                  (_showSearchBar && widget.searchController.text.isEmpty)
+                      ? Icons.close
+                      : Icons.search,
+                ),
+                onPressed: () {
+                  _showSearchBar = !_showSearchBar;
+                  if (mounted) setState(() {});
+                },
+              ),
             if (!contentState.showSearchPage &&
                 mainState.activePageHome != SectionType.home)
               IconButton(
@@ -139,8 +160,10 @@ class MainAppBar extends StatelessWidget {
             if (contentState.showSearchPage)
               IconButton(
                 onPressed: () {
-                  setSearchVisibility(false);
+                  widget.setSearchVisibility(false);
                   Utils.unfocus(context);
+                  _showSearchBar = false;
+                  if (mounted) setState(() {});
                 },
                 icon: Icon(Icons.close),
               ),

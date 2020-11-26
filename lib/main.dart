@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
@@ -108,9 +109,11 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _initApp() async {
     await Utils.restoreThemeMode(context);
-    await DynamicLinks.initUniLinks(
-      context: context,
-    );
+    if (!Platform.isLinux) {
+      await DynamicLinks.initUniLinks(
+        context: context,
+      );
+    }
     await _loadUser();
     if (_isLoggedIn) {
       await CategoryWrapper.loadCategories();
@@ -206,9 +209,11 @@ class _MyAppState extends State<MyApp> {
           : _isLoggedIn
               ? MainScaffold()
               : LoginPage(),
-      navigatorObservers: [
-        MyGlobals.firebaseAnalyticsObserver,
-      ],
+      navigatorObservers: Platform.isLinux
+          ? []
+          : [
+              MyGlobals.firebaseAnalyticsObserver,
+            ],
     );
   }
 }

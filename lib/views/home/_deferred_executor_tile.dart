@@ -13,9 +13,16 @@ class DeferredExecutorTile extends StatelessWidget {
       bottom: kBottomNavigationBarHeight * 1.25,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: kToolbarHeight * 1.5,
+        height: kToolbarHeight * 1.25,
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Provider.of<ContentPageState>(context)
+                      .deferredExecutorStatus ==
+                  DeferredExecutorStatus.executing
+              ? Colors.blueGrey[800]
+              : Provider.of<ContentPageState>(context).deferredExecutorStatus ==
+                      DeferredExecutorStatus.failed
+                  ? Colors.red
+                  : Theme.of(context).accentColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black54,
@@ -23,138 +30,163 @@ class DeferredExecutorTile extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (Provider.of<ContentPageState>(context).deferredExecutorStatus ==
-                DeferredExecutorStatus.executing)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Se está ejecutando la operación.'),
-                  SizedBox(width: 15),
-                  SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (Provider.of<ContentPageState>(context)
+                      .deferredExecutorStatus ==
+                  DeferredExecutorStatus.executing)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Se está ejecutando la operación.'),
+                    SizedBox(width: 15),
+                    SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
                     ),
-                  ),
-                ],
-              )
-            else if (Provider.of<ContentPageState>(context)
-                    .deferredExecutorStatus ==
-                DeferredExecutorStatus.failed)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'La operación falló.',
-                    style: TextStyle(
-                      color: Colors.red,
+                  ],
+                )
+              else if (Provider.of<ContentPageState>(context)
+                      .deferredExecutorStatus ==
+                  DeferredExecutorStatus.failed)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        'La operación falló.',
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  Material(
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: InkWell(
-                        onTap: DeferredExecutor.reExecuteLastFuture,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.refresh),
-                            Text(
-                              'Reintentar',
-                              style: TextStyle(
-                                fontSize: 10,
+                    SizedBox(width: 15),
+                    Material(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: InkWell(
+                          onTap: DeferredExecutor.reExecuteLastFuture,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.refresh),
+                              Text(
+                                'Reintentar',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  Material(
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: InkWell(
-                        onTap: DeferredExecutor.cancelExecution,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.close),
-                            Text(
-                              'Cancelar',
-                              style: TextStyle(
-                                fontSize: 10,
+                    SizedBox(width: 10),
+                    Material(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: InkWell(
+                          onTap: DeferredExecutor.cancelExecution,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.close),
+                              Text(
+                                'Cancelar',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            else
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'La operación se ejecutó con éxito.',
-                    style: TextStyle(
-                      color: Theme.of(context).accentColor,
+                  ],
+                )
+              else
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        'La operación se ejecutó con éxito.',
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  Material(
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: InkWell(
-                        onTap: () {
-                          final id = DeferredExecutor.lastItemId;
-                          final type = DeferredExecutor.lastItemSectionType;
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ShowPage(
-                                contentId: id,
-                                type: type,
+                    SizedBox(width: 15),
+                    Material(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: InkWell(
+                          onTap: () {
+                            final id = DeferredExecutor.lastItemId;
+                            final type = DeferredExecutor.lastItemSectionType;
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ShowPage(
+                                  contentId: id,
+                                  type: type,
+                                ),
                               ),
-                            ),
-                          );
-                          DeferredExecutor.cancelExecution();
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(Icons.arrow_right_alt),
-                            Text(
-                              'Ver item',
-                              style: TextStyle(
-                                fontSize: 10,
+                            );
+                            DeferredExecutor.cancelExecution();
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.arrow_right_alt),
+                              Text(
+                                'Ver item',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-          ],
+                    SizedBox(width: 10),
+                    Material(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: InkWell(
+                          onTap: DeferredExecutor.cancelExecution,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.close),
+                              Text(
+                                'Cerrar',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );
