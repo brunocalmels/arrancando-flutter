@@ -4,7 +4,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 abstract class MyGlobals {
-  static const APP_VERSION = '2.1.5+62';
+  static const APP_VERSION = '2.1.5+63';
 
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
@@ -41,14 +41,14 @@ abstract class MyGlobals {
     SectionType.home: 'Inicio',
     SectionType.publicaciones: 'Publicaciones',
     SectionType.recetas: 'Recetas',
-    SectionType.pois: 'Ptos. Interés',
+    SectionType.pois: 'Tiendas',
   };
 
   static const NOMBRES_CATEGORIAS_SINGULAR = {
     SectionType.home: 'Inicio',
     SectionType.publicaciones: 'Publicación',
     SectionType.recetas: 'Receta',
-    SectionType.pois: 'Pto. Interés',
+    SectionType.pois: 'Tienda',
   };
 
   static final GlobalKey<NavigatorState> mainNavigatorKey =

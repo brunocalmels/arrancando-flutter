@@ -222,13 +222,18 @@ class CommentsList extends StatelessWidget {
                                           child: Padding(
                                             padding: const EdgeInsets.all(5),
                                             child: Icon(
-                                              c.myPuntaje(context
-                                                          .select<UserState,
+                                              context.select<UserState,
                                                                   ActiveUser>(
                                                               (value) => value
-                                                                  .activeUser)
-                                                          .id) >
-                                                      0
+                                                                  .activeUser) !=
+                                                          null &&
+                                                      c.myPuntaje(context
+                                                              .select<UserState,
+                                                                      ActiveUser>(
+                                                                  (value) => value
+                                                                      .activeUser)
+                                                              .id) >
+                                                          0
                                                   ? Icons.favorite
                                                   : Icons.favorite_border,
                                               color:

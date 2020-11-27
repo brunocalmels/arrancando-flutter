@@ -15,7 +15,7 @@ class AddLinkButton extends StatelessWidget {
       type: MaterialType.circle,
       color: Colors.transparent,
       child: Tooltip(
-        message: 'Añadir link a publicación/receta/p. interés',
+        message: 'Añadir link a publicación/receta/tienda',
         child: IconButton(
           icon: Icon(
             Icons.insert_link,

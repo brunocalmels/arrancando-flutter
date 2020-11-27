@@ -85,7 +85,7 @@ class RowBotonesUserProfile extends StatelessWidget {
           _buildButton(
             context,
             count[SectionType.pois],
-            'P. INTERÉS',
+            'TIENDAS',
             SectionType.pois,
           ),
           // _buildButton(

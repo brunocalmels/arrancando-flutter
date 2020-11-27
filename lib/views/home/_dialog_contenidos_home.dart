@@ -27,7 +27,7 @@ class _DialogContenidosHomeState extends State<DialogContenidosHome> {
     },
     {
       'type': SectionType.pois,
-      'text': 'P. Interés',
+      'text': 'Tiendas',
       'icon': Icons.location_on,
     },
     {

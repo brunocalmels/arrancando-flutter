@@ -229,7 +229,7 @@ class _PoiFormState extends State<PoiForm> {
     return NewContentScaffold(
       scaffoldKey: _scaffoldKey,
       formKey: _formKey,
-      title: _isEdit ? 'EDITAR P. INTERÉS' : 'NUEVO P. INTERÉS',
+      title: _isEdit ? 'EDITAR TIENDA' : 'NUEVA TIENDA',
       children: [
         SelectorCategoriaPoi(
           label: 'Categoría',

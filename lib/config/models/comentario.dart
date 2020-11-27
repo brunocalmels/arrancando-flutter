@@ -37,8 +37,11 @@ class Comentario {
       '${createdAt.toLocal().day.toString().padLeft(2, '0')}/${createdAt.toLocal().month.toString().padLeft(2, '0')}${createdAt.toLocal().year == DateTime.now().year ? ' ' + createdAt.toLocal().hour.toString().padLeft(2, '0') + ':' + createdAt.toLocal().minute.toString().padLeft(2, '0') : '/' + createdAt.toLocal().year.toString()}';
 
   bool esOwner(BuildContext context) =>
+      user != null &&
+      context.select<UserState, ActiveUser>((value) => value.activeUser) !=
+          null &&
       user.id ==
-      context.select<UserState, ActiveUser>((value) => value.activeUser).id;
+          context.select<UserState, ActiveUser>((value) => value.activeUser).id;
 
   int myPuntaje(int uid) =>
       puntajes

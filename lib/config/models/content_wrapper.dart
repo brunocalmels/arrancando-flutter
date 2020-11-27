@@ -200,8 +200,11 @@ class ContentWrapper {
   bool esOwner(
     BuildContext context,
   ) =>
+      user != null &&
+      context.select<UserState, ActiveUser>((value) => value.activeUser) !=
+          null &&
       user.id ==
-      context.select<UserState, ActiveUser>((value) => value.activeUser).id;
+          context.select<UserState, ActiveUser>((value) => value.activeUser).id;
 
   String distanciaToH() {
     if (localDistance != null) {

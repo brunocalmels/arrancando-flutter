@@ -42,7 +42,9 @@ class RowEstrellas extends StatelessWidget {
                   ),
                   color: color,
                   disabledColor: color,
-                  onPressed: state.activeUser.id != content.user.id
+                  onPressed: state.activeUser != null &&
+                          content.user != null &&
+                          state.activeUser.id != content.user.id
                       ? () async {
                           var usuario = state.activeUser.getUsuario;
 

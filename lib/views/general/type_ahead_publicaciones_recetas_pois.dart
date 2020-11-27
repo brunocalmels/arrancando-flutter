@@ -91,7 +91,7 @@ class _TypeAheadPublicacionesRecetasPoisState
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'Buscar publicación/receta/p. interés para añadir link',
+        'Buscar publicación/receta/tienda para añadir link',
         style: TextStyle(
           fontSize: 13,
         ),

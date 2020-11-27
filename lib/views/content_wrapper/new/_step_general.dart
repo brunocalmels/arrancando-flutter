@@ -26,7 +26,7 @@ class StepGeneral extends StatelessWidget {
     TextEditingController controller,
   ) =>
       Tooltip(
-        message: 'Añadir link a publicación/receta/p. interés',
+        message: 'Añadir link a publicación/receta/tienda',
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white70,
