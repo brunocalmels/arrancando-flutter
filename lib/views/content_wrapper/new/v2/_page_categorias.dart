@@ -60,10 +60,22 @@ class PageCategorias extends StatelessWidget {
                                 child: MyGlobals.IMAGENES_CATEGORIAS_RECETAS[
                                             c.nombre] !=
                                         null
-                                    ? Image.asset(
-                                        MyGlobals.IMAGENES_CATEGORIAS_RECETAS[
-                                            c.nombre],
-                                        fit: BoxFit.fitHeight,
+                                    ? Container(
+                                        decoration: c.id == -1
+                                            ? BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black12,
+                                                    blurRadius: 2,
+                                                  ),
+                                                ],
+                                              )
+                                            : null,
+                                        child: Image.asset(
+                                          MyGlobals.IMAGENES_CATEGORIAS_RECETAS[
+                                              c.nombre],
+                                          fit: BoxFit.fitHeight,
+                                        ),
                                       )
                                     : Container(),
                               ),

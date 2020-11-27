@@ -71,9 +71,10 @@ class _ContentCardPageState extends State<ContentCardPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context
-          .read<ContentPageState>()
-          .setContentSortType(ContentSortType.fecha_creacion);
+      context.read<ContentPageState>().setContentSortType(
+            context.read<ContentPageState>().sortContentBy ??
+                ContentSortType.fecha_creacion,
+          );
       widget.resetLimit();
       widget.fetchContent(widget.type);
       _scrollController.addListener(

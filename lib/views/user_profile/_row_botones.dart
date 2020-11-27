@@ -1,4 +1,5 @@
 import 'package:arrancando/config/globals/enums.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:flutter/material.dart';
 
 class RowBotonesUserProfile extends StatelessWidget {
@@ -12,7 +13,13 @@ class RowBotonesUserProfile extends StatelessWidget {
     @required this.count,
   });
 
-  Widget _buildButton(int numero, String texto, SectionType type) => Expanded(
+  Widget _buildButton(
+    BuildContext context,
+    int numero,
+    String texto,
+    SectionType type,
+  ) =>
+      Expanded(
         child: FlatButton(
           onPressed: () {
             setActiveSection(type);
@@ -30,7 +37,9 @@ class RowBotonesUserProfile extends StatelessWidget {
                     '$numero',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Utils.activeTheme(context) == ThemeMode.dark
+                          ? Colors.white
+                          : Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
@@ -62,16 +71,19 @@ class RowBotonesUserProfile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildButton(
+            context,
             count[SectionType.publicaciones],
             'PUBLICACIONES',
             SectionType.publicaciones,
           ),
           _buildButton(
+            context,
             count[SectionType.recetas],
             'RECETAS',
             SectionType.recetas,
           ),
           _buildButton(
+            context,
             count[SectionType.pois],
             'P. INTERÉS',
             SectionType.pois,

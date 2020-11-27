@@ -122,7 +122,7 @@ class TextosShow extends StatelessWidget {
                                           .bodyText2
                                           .color
                                           .withAlpha(150)
-                                      : Colors.white,
+                                      : Colors.black,
                                   fontFamily: 'Monserrat',
                                   fontSize: fontSize,
                                 )

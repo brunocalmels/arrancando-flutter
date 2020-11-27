@@ -76,7 +76,6 @@ abstract class DynamicLinks {
         final path = uri.path.split('/');
         path.retainWhere((p) => p != null && p.isNotEmpty);
 
-        print('Adentro');
         if (uri != null) print(uri.path);
 
         var _invalidUser = false;
@@ -169,6 +168,10 @@ abstract class DynamicLinks {
             var q = uri.queryParameters;
 
             switch (q['sorted_by']) {
+              case 'fecha':
+                contentPageState
+                    .setContentSortType(ContentSortType.fecha_actualizacion);
+                break;
               case 'fecha_creacion':
                 contentPageState
                     .setContentSortType(ContentSortType.fecha_creacion);
@@ -189,21 +192,37 @@ abstract class DynamicLinks {
               default:
             }
 
+            final categoryHome = {
+              SectionType.publicaciones:
+                  q['ciudad_id'] != null ? int.tryParse(q['ciudad_id']) : null,
+              SectionType.publicaciones_categoria:
+                  q['categoria_publicacion_id'] != null
+                      ? int.tryParse(q['categoria_publicacion_id'])
+                      : null,
+              SectionType.recetas: q['categoria_receta_id'] != null
+                  ? int.tryParse(q['categoria_receta_id'])
+                  : null,
+              SectionType.pois: q['categoria_poi_id'] != null
+                  ? int.tryParse(q['categoria_poi_id'])
+                  : null,
+              SectionType.pois_ciudad:
+                  q['ciudad_id'] != null ? int.tryParse(q['ciudad_id']) : null,
+            };
+
             switch (path[0]) {
               case 'publicaciones':
                 if (context != null && !_invalidUser) {
-                  mainState.setSelectedCategoryHome(
+                  await CategoryWrapper.saveFilter(
+                    context,
                     SectionType.publicaciones,
-                    q['ciudad_id'] != null
-                        ? int.tryParse(q['ciudad_id'])
-                        : null,
+                    categoryHome[SectionType.publicaciones],
                   );
-                  mainState.setSelectedCategoryHome(
+                  await CategoryWrapper.saveFilter(
+                    context,
                     SectionType.publicaciones_categoria,
-                    q['categoria_publicacion_id'] != null
-                        ? int.tryParse(q['categoria_publicacion_id'])
-                        : null,
+                    categoryHome[SectionType.publicaciones_categoria],
                   );
+
                   mainState.setActivePageHome(SectionType.publicaciones);
                   await Navigator.of(context).push(
                     MaterialPageRoute(
@@ -218,12 +237,12 @@ abstract class DynamicLinks {
                 break;
               case 'recetas':
                 if (context != null && !_invalidUser) {
-                  mainState.setSelectedCategoryHome(
+                  await CategoryWrapper.saveFilter(
+                    context,
                     SectionType.recetas,
-                    q['categoria_receta_id'] != null
-                        ? int.tryParse(q['categoria_receta_id'])
-                        : null,
+                    categoryHome[SectionType.recetas],
                   );
+
                   mainState.setActivePageHome(SectionType.recetas);
                   await Navigator.of(context).push(
                     MaterialPageRoute(
@@ -238,18 +257,17 @@ abstract class DynamicLinks {
                 break;
               case 'pois':
                 if (context != null && !_invalidUser) {
-                  mainState.setSelectedCategoryHome(
+                  await CategoryWrapper.saveFilter(
+                    context,
                     SectionType.pois,
-                    q['categoria_poi_id'] != null
-                        ? int.tryParse(q['categoria_poi_id'])
-                        : null,
+                    categoryHome[SectionType.pois],
                   );
-                  mainState.setSelectedCategoryHome(
+                  await CategoryWrapper.saveFilter(
+                    context,
                     SectionType.pois_ciudad,
-                    q['ciudad_id'] != null
-                        ? int.tryParse(q['ciudad_id'])
-                        : null,
+                    categoryHome[SectionType.pois_ciudad],
                   );
+
                   mainState.setActivePageHome(SectionType.pois);
                   await Navigator.of(context).push(
                     MaterialPageRoute(

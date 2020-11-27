@@ -49,15 +49,14 @@ class _MainAppBarState extends State<MainAppBar> {
                 )
               : null,
           actions: <Widget>[
-            if (!_showSearchBar || widget.searchController.text.isEmpty)
+            if (!_showSearchBar)
               IconButton(
                 icon: Icon(
-                  (_showSearchBar && widget.searchController.text.isEmpty)
-                      ? Icons.close
-                      : Icons.search,
+                  Icons.search,
                 ),
                 onPressed: () {
-                  _showSearchBar = !_showSearchBar;
+                  _showSearchBar = true;
+                  widget.setSearchVisibility(true);
                   if (mounted) setState(() {});
                 },
               ),

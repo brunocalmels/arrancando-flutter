@@ -97,8 +97,13 @@ class CabeceraShow extends StatelessWidget {
                   children: [
                     Text(
                       GlobalSingleton()
-                          .categories[content.type][content.categoriaPoiId]
-                          .nombre,
+                              .categories[content.type]
+                              .firstWhere(
+                                (c) => c.id == content.categoriaPoiId,
+                                orElse: () => null,
+                              )
+                              ?.nombre ??
+                          '',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 13,

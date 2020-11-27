@@ -1,3 +1,4 @@
+import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/views/user_profile/_dialog_seguidos_seguidores.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,9 @@ class RowSeguidosSeguidores extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: numero > 0
-                        ? Theme.of(context).primaryColor
+                        ? Utils.activeTheme(context) == ThemeMode.dark
+                            ? Theme.of(context).primaryColor
+                            : Colors.black87
                         : Colors.white30,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -55,7 +58,9 @@ class RowSeguidosSeguidores extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: numero > 0
-                        ? Theme.of(context).primaryColor
+                        ? Utils.activeTheme(context) == ThemeMode.dark
+                            ? Theme.of(context).primaryColor
+                            : Colors.black87
                         : Colors.white30,
                     fontWeight: FontWeight.bold,
                     fontSize: 10,

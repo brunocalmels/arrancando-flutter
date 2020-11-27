@@ -171,7 +171,8 @@ class CardContent extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Expanded(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -199,6 +200,9 @@ class CardContent extends StatelessWidget {
                         ],
                       ),
                     ),
+                  ),
+                  Expanded(
+                    child: Container(),
                   ),
                   SizedBox(
                     width: 150,
@@ -244,6 +248,9 @@ class CardContent extends StatelessWidget {
                               ),
                       ),
                     ),
+                  ),
+                  Expanded(
+                    child: Container(),
                   ),
                   SizedBox(
                     height: 30,
