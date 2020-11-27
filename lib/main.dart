@@ -124,7 +124,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (kReleaseMode) {
+      if (!Platform.isLinux) {
         await Firebase.initializeApp();
       }
     });

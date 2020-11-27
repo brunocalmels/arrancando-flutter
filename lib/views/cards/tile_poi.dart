@@ -118,30 +118,39 @@ class TilePoi extends StatelessWidget {
               SizedBox(
                 width: 5,
               ),
-              Icon(
-                Icons.remove_red_eye,
-                color: Theme.of(context).accentColor,
-                size: 14,
-              ),
-              SizedBox(
-                width: 3,
-              ),
-              Text(
-                '${poi.vistas}',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Utils.activeTheme(context) == ThemeMode.dark
-                      ? Colors.white
-                      : Colors.black,
+              if (poi.vistas != null)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.remove_red_eye,
+                      color: Theme.of(context).accentColor,
+                      size: 14,
+                    ),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Flexible(
+                      child: Text(
+                        '${poi.vistas}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Utils.activeTheme(context) == ThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
             ],
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(
-                width: 35,
+                width: 30,
                 child: GestureDetector(
                   onTap: () async {
                     final url =
@@ -164,7 +173,7 @@ class TilePoi extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 35,
+                width: 30,
                 child: IconButton(
                   onPressed: () => SavedContent.toggleSave(poi, context),
                   color: Theme.of(context).accentColor,
@@ -176,7 +185,7 @@ class TilePoi extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 35,
+                width: 30,
                 child: IconButton(
                   onPressed: onTap,
                   color: Theme.of(context).accentColor,

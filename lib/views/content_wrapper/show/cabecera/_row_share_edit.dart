@@ -26,26 +26,29 @@ class RowShareEdit extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(width: 10),
-              Text(
-                '${content.vistas}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+          if (content.vistas != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(width: 10),
+                Text(
+                  '${content.vistas}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).accentColor,
+                  ),
+                ),
+                SizedBox(width: 5),
+                Icon(
+                  Icons.remove_red_eye,
+                  size: 20,
                   color: Theme.of(context).accentColor,
                 ),
-              ),
-              SizedBox(width: 5),
-              Icon(
-                Icons.remove_red_eye,
-                size: 20,
-                color: Theme.of(context).accentColor,
-              ),
-            ],
-          ),
+              ],
+            )
+          else
+            Container(),
           Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
