@@ -191,28 +191,34 @@ class _PoiPageState extends State<PoiPage> {
                                             child: Column(
                                               children: <Widget>[
                                                 if (!widget.noMore)
-                                                  RaisedButton(
-                                                    color: Colors.white,
-                                                    onPressed: widget
-                                                            .loadingMore
-                                                        ? null
-                                                        : () async {
-                                                            widget
-                                                                .setLoadingMore(
-                                                              true,
-                                                            );
-                                                            widget
-                                                                .increasePage();
-                                                            await widget
-                                                                .fetchContent(
-                                                              SectionType.pois,
-                                                            );
-                                                            widget
-                                                                .setLoadingMore(
-                                                              false,
-                                                            );
-                                                          },
-                                                    child: Text('Cargar más'),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            bottom: 50),
+                                                    child: RaisedButton(
+                                                      color: Colors.white,
+                                                      onPressed:
+                                                          widget.loadingMore
+                                                              ? null
+                                                              : () async {
+                                                                  widget
+                                                                      .setLoadingMore(
+                                                                    true,
+                                                                  );
+                                                                  widget
+                                                                      .increasePage();
+                                                                  await widget
+                                                                      .fetchContent(
+                                                                    SectionType
+                                                                        .pois,
+                                                                  );
+                                                                  widget
+                                                                      .setLoadingMore(
+                                                                    false,
+                                                                  );
+                                                                },
+                                                      child: Text('Cargar más'),
+                                                    ),
                                                   ),
                                                 if (widget.loadingMore)
                                                   Padding(

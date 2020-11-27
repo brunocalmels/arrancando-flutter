@@ -139,6 +139,11 @@ class _MainScaffoldState extends State<MainScaffold> {
     if (mounted) setState(() {});
   }
 
+  bool _isSearchVisible() {
+    final cps = context.read<ContentPageState>();
+    return cps.showSearchPage || cps.showSearchResults;
+  }
+
   Widget _getPage(SectionType type) {
     if (!context
         .select<ContentPageState, bool>((value) => value.showSearchResults)) {
@@ -235,9 +240,11 @@ class _MainScaffoldState extends State<MainScaffold> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _setSearchVisibility(false);
         Utils.unfocus(context);
         if (MyGlobals.mainScaffoldKey.currentState.isEndDrawerOpen) {
+          return true;
+        } else if (_isSearchVisible()) {
+          _setSearchVisibility(false);
           return true;
         } else {
           final leave = await showDialog(
