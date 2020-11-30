@@ -47,6 +47,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   final _calculatedDistance = <int, double>{};
   // List<Notificacion> _unreadNotificaciones;
   bool _inited = false;
+  Function(bool) _setShowSearchBar;
 
   Future<void> _fetchContent(type, {bool keepPage = false}) async {
     final mainState = context.read<MainState>();
@@ -245,7 +246,8 @@ class _MainScaffoldState extends State<MainScaffold> {
           return true;
         } else if (_isSearchVisible()) {
           _setSearchVisibility(false);
-          return true;
+          _setShowSearchBar(false);
+          return false;
         } else {
           final leave = await showDialog(
             context: context,
@@ -283,6 +285,10 @@ class _MainScaffoldState extends State<MainScaffold> {
                 },
                 // unreadNotificaciones: _unreadNotificaciones != null &&
                 //     _unreadNotificaciones.length > 0,
+                setInnerShowSearchBar: (Function(bool) setShowSearchBar) {
+                  _setShowSearchBar = setShowSearchBar;
+                  if (mounted) setState(() {});
+                },
               ),
             ),
             body: _inited

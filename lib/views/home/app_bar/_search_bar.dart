@@ -36,6 +36,7 @@ class _SearchBarState extends State<SearchBar> {
           hintText: 'Buscar',
         ),
         controller: widget.searchController,
+        autofocus: true,
       ),
     );
   }

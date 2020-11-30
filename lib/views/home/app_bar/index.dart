@@ -15,12 +15,14 @@ class MainAppBar extends StatefulWidget {
   final Function fetchContent;
   final TextEditingController searchController;
   final Function(PersistentBottomSheetController) setBottomSheetController;
+  final Function(Function(bool)) setInnerShowSearchBar;
 
   MainAppBar({
     this.setSearchVisibility,
     this.fetchContent,
     this.searchController,
     this.setBottomSheetController,
+    this.setInnerShowSearchBar,
   });
 
   @override
@@ -29,6 +31,17 @@ class MainAppBar extends StatefulWidget {
 
 class _MainAppBarState extends State<MainAppBar> {
   bool _showSearchBar = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.setInnerShowSearchBar((bool val) {
+        _showSearchBar = val;
+        if (mounted) setState(() {});
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
