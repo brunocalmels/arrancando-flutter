@@ -4,6 +4,7 @@ import 'package:arrancando/config/models/notificacion.dart';
 import 'package:arrancando/config/services/dynamic_links.dart';
 import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/main.dart';
+import 'package:arrancando/views/notificaciones/_notification_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,16 +14,30 @@ class NotificacionesPage extends StatefulWidget {
 }
 
 class _NotificacionesPageState extends State<NotificacionesPage> {
+  final _scrollController = ScrollController();
   List<Notificacion> _notificaciones;
   bool _fetching = true;
+  bool _noMore = false;
+  int _page = 1;
 
-  Future<void> _fetchNotificaciones() async {
-    _fetching = true;
+  Future<void> _fetchNotificaciones({bool reset = false}) async {
+    if (reset) {
+      _noMore = false;
+      _page = 1;
+      _notificaciones = [];
+    }
+
+    print(_page);
+
     try {
-      final resp = await Fetcher.get(url: '/notificaciones.json');
+      final resp = await Fetcher.get(
+        url: '/notificaciones.json?page=$_page',
+      );
 
       if (resp != null && resp.body != null) {
-        _notificaciones = (json.decode(resp.body) as List)
+        final previousNotificationsLength = _notificaciones.length;
+
+        _notificaciones += (json.decode(resp.body) as List)
             .map(
               (n) => Notificacion.fromJson(n),
             )
@@ -31,20 +46,24 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
         context.read<MainState>().setUnreadNotifications(
               _notificaciones.where((element) => !element.leido).length,
             );
+
+        _page++;
+
+        if (_notificaciones.length <= previousNotificationsLength) {
+          _noMore = true;
+        }
       }
     } catch (e) {
       print(e);
     }
+
     _fetching = false;
     if (mounted) setState(() {});
   }
 
   Future<void> _markAllAsRead() async {
-    await Future.wait(
-      _notificaciones.where((n) => !n.leido).map(
-            (n) => n.markAsRead(),
-          ),
-    );
+    await Notificacion.markAllRead();
+    await _fetchNotificaciones(reset: true);
     context.read<MainState>().setUnreadNotifications(0);
     if (mounted) setState(() {});
   }
@@ -71,8 +90,24 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchNotificaciones();
+      _fetchNotificaciones(reset: true);
+      _scrollController.addListener(
+        () {
+          if (_scrollController.offset >=
+                  _scrollController.position.maxScrollExtent &&
+              !_scrollController.position.outOfRange &&
+              !_noMore) {
+            _fetchNotificaciones();
+          }
+        },
+      );
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -82,8 +117,9 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
         title: Text('Notificaciones'),
       ),
       body: RefreshIndicator(
-        onRefresh: () => _fetchNotificaciones(),
+        onRefresh: () => _fetchNotificaciones(reset: true),
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,60 +155,32 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                                       )
                                     ],
                                   ),
-                                  ..._notificaciones
-                                      .map(
-                                        (n) => Container(
-                                          decoration: BoxDecoration(
-                                            border: Border(
-                                                bottom: BorderSide(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2
-                                                  .color
-                                                  .withAlpha(50),
-                                              width: 1,
-                                            )),
-                                          ),
-                                          child: ListTile(
-                                            contentPadding:
-                                                const EdgeInsets.all(10),
-                                            title: Text(
-                                              n.titulo,
-                                              style: TextStyle(
-                                                fontWeight: !n.leido
-                                                    ? FontWeight.bold
-                                                    : null,
+                                  for (var notificacion in _notificaciones)
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        NotificationTile(
+                                          notificacion: notificacion,
+                                          goToNotification:
+                                              _goToNotificationRef,
+                                        ),
+                                        if (_notificaciones
+                                                    .indexOf(notificacion) ==
+                                                _notificaciones.length - 1 &&
+                                            !_noMore)
+                                          Container(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(15),
+                                              child: SizedBox(
+                                                width: 30,
+                                                height: 30,
+                                                child:
+                                                    CircularProgressIndicator(),
                                               ),
                                             ),
-                                            subtitle: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                if (n.cuerpo != null)
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 3),
-                                                    child: Text(
-                                                      n.cuerpo,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      maxLines: 1,
-                                                    ),
-                                                  ),
-                                                Text(n.fecha),
-                                              ],
-                                            ),
-                                            onTap: n.url != null
-                                                ? () => _goToNotificationRef(n)
-                                                : null,
-                                          ),
-                                        ),
-                                      )
-                                      .toList(),
+                                          )
+                                      ],
+                                    ),
                                 ],
                               ),
                             ),

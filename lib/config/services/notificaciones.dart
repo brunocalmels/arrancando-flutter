@@ -14,7 +14,7 @@ abstract class NotificacionesService {
       if (message != null && message.data != null) {
         if (message.data['url'] != null) {
           DynamicLinks.parseURI(
-            message.data['url'],
+            Uri.tryParse(message.data['url']),
             context,
           );
         }

@@ -7,7 +7,6 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
-import 'package:arrancando/config/services/dynamic_links.dart';
 import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
@@ -110,9 +109,6 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _initApp() async {
     await Utils.restoreThemeMode(context);
-    if (!Platform.isLinux) {
-      await DynamicLinks.initUniLinks(context);
-    }
     await _loadUser();
     if (_isLoggedIn) {
       await CategoryWrapper.loadCategories();

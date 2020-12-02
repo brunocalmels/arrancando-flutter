@@ -91,7 +91,7 @@ class _MainAppBarState extends State<MainAppBar> {
                     final categoryId = mainState.selectedCategoryHome[type] ??
                         userState.preferredCategories[type];
 
-                    var sortBy = contentPageState.sortContentBy;
+                    var sortBy = contentPageState.sortContentBy[type];
 
                     var rootURL = '/publicaciones';
                     var categoryParamName = 'ciudad_id';

@@ -1,7 +1,9 @@
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/_heart_plus5.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RowIconosFecha extends StatelessWidget {
   final ContentWrapper content;
@@ -67,7 +69,10 @@ class RowIconosFecha extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: Icon(
-                  SavedContent.isSaved(content)
+                  context.watch<UserState>().savedContent.any(
+                            (sc) =>
+                                sc.id == content.id && sc.type == content.type,
+                          )
                       ? Icons.bookmark
                       : Icons.bookmark_border,
                   color: Theme.of(context).accentColor,

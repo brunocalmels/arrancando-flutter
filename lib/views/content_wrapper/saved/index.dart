@@ -108,7 +108,14 @@ class _SavedContentPageState extends State<SavedContentPage> {
                                         _fetchContent();
                                       },
                                       icon: Icon(
-                                        SavedContent.isSaved(p)
+                                        context
+                                                .watch<UserState>()
+                                                .savedContent
+                                                .any(
+                                                  (sc) =>
+                                                      sc.id == p.id &&
+                                                      sc.type == p.type,
+                                                )
                                             ? Icons.bookmark
                                             : Icons.bookmark_border,
                                         color: Theme.of(context).accentColor,

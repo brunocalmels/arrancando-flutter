@@ -72,7 +72,8 @@ class _ContentCardPageState extends State<ContentCardPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ContentPageState>().setContentSortType(
-            context.read<ContentPageState>().sortContentBy ??
+            widget.type,
+            context.read<ContentPageState>().sortContentBy[widget.type] ??
                 ContentSortType.fecha_creacion,
           );
       widget.resetLimit();

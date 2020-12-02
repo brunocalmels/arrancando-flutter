@@ -167,29 +167,46 @@ abstract class DynamicLinks {
             final contentPageState = context.read<ContentPageState>();
             var q = uri.queryParameters;
 
-            switch (q['sorted_by']) {
-              case 'fecha':
-                contentPageState
-                    .setContentSortType(ContentSortType.fecha_actualizacion);
-                break;
-              case 'fecha_creacion':
-                contentPageState
-                    .setContentSortType(ContentSortType.fecha_creacion);
-                break;
-              case 'fecha_actualizacion':
-                contentPageState
-                    .setContentSortType(ContentSortType.fecha_actualizacion);
-                break;
-              case 'proximidad':
-                contentPageState.setContentSortType(ContentSortType.proximidad);
-                break;
-              case 'puntuacion':
-                contentPageState.setContentSortType(ContentSortType.puntuacion);
-                break;
-              case 'vistas':
-                contentPageState.setContentSortType(ContentSortType.vistas);
-                break;
-              default:
+            void _setContentSortType(SectionType type) {
+              switch (q['sorted_by']) {
+                case 'fecha':
+                  contentPageState.setContentSortType(
+                    type,
+                    ContentSortType.fecha_actualizacion,
+                  );
+                  break;
+                case 'fecha_creacion':
+                  contentPageState.setContentSortType(
+                    type,
+                    ContentSortType.fecha_creacion,
+                  );
+                  break;
+                case 'fecha_actualizacion':
+                  contentPageState.setContentSortType(
+                    type,
+                    ContentSortType.fecha_actualizacion,
+                  );
+                  break;
+                case 'proximidad':
+                  contentPageState.setContentSortType(
+                    type,
+                    ContentSortType.proximidad,
+                  );
+                  break;
+                case 'puntuacion':
+                  contentPageState.setContentSortType(
+                    type,
+                    ContentSortType.puntuacion,
+                  );
+                  break;
+                case 'vistas':
+                  contentPageState.setContentSortType(
+                    type,
+                    ContentSortType.vistas,
+                  );
+                  break;
+                default:
+              }
             }
 
             final categoryHome = {
@@ -212,6 +229,8 @@ abstract class DynamicLinks {
             switch (path[0]) {
               case 'publicaciones':
                 if (context != null && !_invalidUser) {
+                  _setContentSortType(SectionType.publicaciones);
+
                   await CategoryWrapper.saveFilter(
                     context,
                     SectionType.publicaciones,
@@ -224,11 +243,6 @@ abstract class DynamicLinks {
                   );
 
                   mainState.setActivePageHome(SectionType.publicaciones);
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => MainScaffold(),
-                    ),
-                  );
                   await MyGlobals.firebaseAnalyticsObserver.analytics
                       .setCurrentScreen(
                     screenName: 'Home/Publicaciones',
@@ -237,6 +251,8 @@ abstract class DynamicLinks {
                 break;
               case 'recetas':
                 if (context != null && !_invalidUser) {
+                  _setContentSortType(SectionType.recetas);
+
                   await CategoryWrapper.saveFilter(
                     context,
                     SectionType.recetas,
@@ -244,11 +260,6 @@ abstract class DynamicLinks {
                   );
 
                   mainState.setActivePageHome(SectionType.recetas);
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => MainScaffold(),
-                    ),
-                  );
                   await MyGlobals.firebaseAnalyticsObserver.analytics
                       .setCurrentScreen(
                     screenName: 'Home/Recetas',
@@ -257,6 +268,8 @@ abstract class DynamicLinks {
                 break;
               case 'pois':
                 if (context != null && !_invalidUser) {
+                  _setContentSortType(SectionType.pois);
+
                   await CategoryWrapper.saveFilter(
                     context,
                     SectionType.pois,
@@ -269,11 +282,6 @@ abstract class DynamicLinks {
                   );
 
                   mainState.setActivePageHome(SectionType.pois);
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => MainScaffold(),
-                    ),
-                  );
                   await MyGlobals.firebaseAnalyticsObserver.analytics
                       .setCurrentScreen(
                     screenName: 'Home/Pois',
@@ -290,12 +298,12 @@ abstract class DynamicLinks {
   }
 
   static Future<void> initUniLinks(BuildContext context) async {
-    //Parse the uri that started the app
+    // Parse the uri that started the app
     final uri = await getInitialUri();
     if (uri != null) print(uri.path);
     await DynamicLinks.parseURI(uri, context);
     final streamURI = getUriLinksStream();
-    //Parse the uri when the app is started but the user leaves it and comes back
+    // Parse the uri when the app is started but the user leaves it and comes back
     streamURI.listen(
       (Uri uri) => DynamicLinks.parseURI(uri, context),
       onError: (e) {

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:arrancando/config/globals/enums.dart';
-import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,10 +43,10 @@ class SavedContent {
 
   static bool isSaved(
     ContentWrapper content,
+    BuildContext context,
   ) =>
-      MyGlobals.mainNavigatorKey.currentContext
-          .read<UserState>()
-          .savedContent
+      context
+          .select<UserState, List<SavedContent>>((value) => value.savedContent)
           .any((sc) => sc.id == content.id && sc.type == content.type);
 
   static Future<void> toggleSave(
@@ -62,6 +61,6 @@ class SavedContent {
       'savedContent',
       json.encode(context.read<UserState>().savedContent),
     );
-    await content.setSaved(isSaved(content));
+    await content.setSaved(isSaved(content, context));
   }
 }

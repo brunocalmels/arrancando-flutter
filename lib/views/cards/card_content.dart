@@ -4,12 +4,14 @@ import 'package:arrancando/config/globals/global_singleton.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/dialog/share.dart';
 import 'package:arrancando/views/content_wrapper/show/_heart_plus5.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/user_profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CardContent extends StatelessWidget {
   final GlobalSingleton gs = GlobalSingleton();
@@ -19,7 +21,7 @@ class CardContent extends StatelessWidget {
     @required this.content,
   });
 
-  Widget _contentBehind(context) => Padding(
+  Widget _contentBehind(BuildContext context) => Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
           children: <Widget>[
@@ -263,7 +265,7 @@ class CardContent extends StatelessWidget {
         ),
       );
 
-  Widget _contentFront(context) => Padding(
+  Widget _contentFront(BuildContext context) => Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
           children: <Widget>[
@@ -393,7 +395,11 @@ class CardContent extends StatelessWidget {
                       GestureDetector(
                         onTap: () => SavedContent.toggleSave(content, context),
                         child: Icon(
-                          SavedContent.isSaved(content)
+                          context.watch<UserState>().savedContent.any(
+                                    (sc) =>
+                                        sc.id == content.id &&
+                                        sc.type == content.type,
+                                  )
                               ? Icons.bookmark
                               : Icons.bookmark_border,
                           color: Theme.of(context).accentColor,

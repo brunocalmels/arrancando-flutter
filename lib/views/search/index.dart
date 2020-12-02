@@ -56,7 +56,7 @@ class _SearchPageState extends State<SearchPage> {
 
     _items = await ContentWrapper.sortItems(
       _items,
-      contentPageState.sortContentBy,
+      contentPageState.sortContentBy[type],
       calculatedDistance: _calculatedDistance,
     );
 

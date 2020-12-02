@@ -1,16 +1,13 @@
 import 'dart:convert';
 
-import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/views/home/pages/_loading_widget.dart';
 import 'package:arrancando/views/search/_search_field.dart';
 import 'package:arrancando/views/user_profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class SearchPageUsers extends StatefulWidget {
   final String originalSearch;
@@ -78,9 +75,9 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _resetLimit();
       _fetchContent();
-      context
-          .read<ContentPageState>()
-          .setContentSortType(ContentSortType.fecha_creacion);
+      // context
+      //     .read<ContentPageState>()
+      //     .setContentSortType(SectionType.publicaciones,  ContentSortType.fecha_creacion);
       _scrollController.addListener(
         () {
           if (_scrollController.offset >=

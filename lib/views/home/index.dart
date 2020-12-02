@@ -6,6 +6,7 @@ import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/notificacion.dart';
+import 'package:arrancando/config/services/dynamic_links.dart';
 import 'package:arrancando/config/services/notificaciones.dart';
 import 'package:arrancando/config/services/permissions.dart';
 import 'package:arrancando/config/services/utils.dart';
@@ -70,15 +71,15 @@ class _MainScaffoldState extends State<MainScaffold> {
       search: _searchController.text,
       categoryId: selectedCategory,
       page: _page,
-      sortBy: contentPageState.sortContentBy,
+      sortBy: contentPageState.sortContentBy[type],
       context: context,
     );
 
     if (type == SectionType.pois &&
-        contentPageState.sortContentBy == ContentSortType.proximidad) {
+        contentPageState.sortContentBy[type] == ContentSortType.proximidad) {
       _itemsMap[mainState.activePageHome] = await ContentWrapper.sortItems(
         _itemsMap[mainState.activePageHome],
-        contentPageState.sortContentBy,
+        contentPageState.sortContentBy[type],
         calculatedDistance: _calculatedDistance,
       );
     }
@@ -102,7 +103,8 @@ class _MainScaffoldState extends State<MainScaffold> {
     if (mounted) setState(() {});
 
     if (type == SectionType.pois &&
-        contentPageState.sortContentBy != ContentSortType.proximidad &&
+        contentPageState.sortContentBy[mainState.activePageHome] !=
+            ContentSortType.proximidad &&
         _itemsMap[mainState.activePageHome] != null) {
       await Future.wait(
           _itemsMap[mainState.activePageHome].map((item) => item.distancia));
@@ -232,8 +234,11 @@ class _MainScaffoldState extends State<MainScaffold> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initUserInfo();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _initUserInfo();
+      if (!Platform.isLinux) {
+        await DynamicLinks.initUniLinks(context);
+      }
     });
   }
 

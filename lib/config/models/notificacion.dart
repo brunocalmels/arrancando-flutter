@@ -56,4 +56,11 @@ class Notificacion {
       },
     );
   }
+
+  static Future<void> markAllRead() async {
+    await Fetcher.post(
+      url: '/notificaciones/mark_all_as_read.json',
+      body: {},
+    );
+  }
 }

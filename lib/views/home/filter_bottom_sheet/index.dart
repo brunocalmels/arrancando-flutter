@@ -105,9 +105,13 @@ class FilterBottomSheet extends StatelessWidget {
                           ),
                           child: DropdownButton<ContentSortType>(
                             isExpanded: true,
-                            value: contentState.sortContentBy,
+                            value: contentState
+                                .sortContentBy[mainState.activePageHome],
                             onChanged: (type) {
-                              contentState.setContentSortType(type);
+                              contentState.setContentSortType(
+                                mainState.activePageHome,
+                                type,
+                              );
                               if (fetchContent != null) fetchContent();
                             },
                             items: <DropdownMenuItem<ContentSortType>>[
@@ -117,7 +121,8 @@ class FilterBottomSheet extends StatelessWidget {
                                   child: Text(
                                     'Fecha de creación',
                                     style: TextStyle(
-                                      color: contentState.sortContentBy ==
+                                      color: contentState.sortContentBy[
+                                                  mainState.activePageHome] ==
                                               ContentSortType.fecha_creacion
                                           ? Theme.of(context).accentColor
                                           : Theme.of(context)
@@ -134,7 +139,7 @@ class FilterBottomSheet extends StatelessWidget {
                                   child: Text(
                                     'Fecha de actualización',
                                     style: TextStyle(
-                                      color: contentState.sortContentBy ==
+                                      color: contentState.sortContentBy[mainState.activePageHome] ==
                                               ContentSortType
                                                   .fecha_actualizacion
                                           ? Theme.of(context).accentColor
@@ -152,7 +157,7 @@ class FilterBottomSheet extends StatelessWidget {
                                   child: Text(
                                     'Proximidad',
                                     style: TextStyle(
-                                      color: contentState.sortContentBy ==
+                                      color: contentState.sortContentBy[mainState.activePageHome] ==
                                               ContentSortType.proximidad
                                           ? Theme.of(context).accentColor
                                           : Theme.of(context)
@@ -168,7 +173,7 @@ class FilterBottomSheet extends StatelessWidget {
                                 child: Text(
                                   'Puntuación',
                                   style: TextStyle(
-                                    color: contentState.sortContentBy ==
+                                    color: contentState.sortContentBy[mainState.activePageHome] ==
                                             ContentSortType.puntuacion
                                         ? Theme.of(context).accentColor
                                         : Theme.of(context)
@@ -184,7 +189,7 @@ class FilterBottomSheet extends StatelessWidget {
                                 child: Text(
                                   'Vistas',
                                   style: TextStyle(
-                                    color: contentState.sortContentBy ==
+                                    color: contentState.sortContentBy[mainState.activePageHome] ==
                                             ContentSortType.vistas
                                         ? Theme.of(context).accentColor
                                         : Theme.of(context)

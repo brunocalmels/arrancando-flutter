@@ -3,10 +3,12 @@ import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/content_wrapper.dart';
 import 'package:arrancando/config/models/saved_content.dart';
 import 'package:arrancando/config/services/utils.dart';
+import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 
 class TilePoi extends StatelessWidget {
   final ContentWrapper poi;
@@ -178,7 +180,9 @@ class TilePoi extends StatelessWidget {
                   onPressed: () => SavedContent.toggleSave(poi, context),
                   color: Theme.of(context).accentColor,
                   icon: Icon(
-                    SavedContent.isSaved(poi)
+                    context.watch<UserState>().savedContent.any(
+                              (sc) => sc.id == poi.id && sc.type == poi.type,
+                            )
                         ? Icons.bookmark
                         : Icons.bookmark_border,
                   ),
