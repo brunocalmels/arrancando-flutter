@@ -80,6 +80,7 @@ class CategoryWrapper {
       gs.setCategories(
         SectionType.pois_ciudad,
         [
+          todos,
           ...categs,
         ],
       );

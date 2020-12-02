@@ -88,54 +88,51 @@ class _CategoriesChipState extends State<CategoriesChip> {
                           constraints: BoxConstraints(
                             maxWidth: widget.small ? 20 : 150,
                           ),
-                          child: Text(
-                            singleton.categories[widget.pubCateg
-                                        ? SectionType.publicaciones_categoria
-                                        : widget.poiCity
-                                            ? SectionType.pois_ciudad
-                                            : mainState.activePageHome]
-                                    .firstWhere(
-                                        (c) => mainState
-                                                    .selectedCategoryHome[widget
-                                                        .pubCateg
-                                                    ? SectionType
-                                                        .publicaciones_categoria
-                                                    : widget.poiCity
-                                                        ? SectionType
-                                                            .pois_ciudad
-                                                        : mainState
-                                                            .activePageHome] !=
-                                                null
-                                            ? c.id ==
-                                                mainState
-                                                    .selectedCategoryHome[widget
-                                                        .pubCateg
-                                                    ? SectionType
-                                                        .publicaciones_categoria
-                                                    : widget.poiCity
-                                                        ? SectionType
-                                                            .pois_ciudad
-                                                        : mainState
-                                                            .activePageHome]
-                                            : c.id ==
-                                                userState
-                                                    .preferredCategories[widget
-                                                        .pubCateg
-                                                    ? SectionType
-                                                        .publicaciones_categoria
-                                                    : widget.poiCity
-                                                        ? SectionType
-                                                            .pois_ciudad
-                                                        : mainState
-                                                            .activePageHome],
-                                        orElse: () => null)
-                                    ?.nombre ??
-                                '',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: widget.small ? 10 : 14,
-                            ),
+                          child: Builder(
+                            builder: (context) {
+                              final category =
+                                  singleton.categories[widget.pubCateg
+                                          ? SectionType.publicaciones_categoria
+                                          : widget.poiCity
+                                              ? SectionType.pois_ciudad
+                                              : mainState.activePageHome]
+                                      .firstWhere(
+                                (c) => mainState.selectedCategoryHome[widget
+                                                .pubCateg
+                                            ? SectionType
+                                                .publicaciones_categoria
+                                            : widget.poiCity
+                                                ? SectionType.pois_ciudad
+                                                : mainState.activePageHome] !=
+                                        null
+                                    ? c.id ==
+                                        mainState.selectedCategoryHome[
+                                            widget.pubCateg
+                                                ? SectionType
+                                                    .publicaciones_categoria
+                                                : widget.poiCity
+                                                    ? SectionType.pois_ciudad
+                                                    : mainState.activePageHome]
+                                    : c.id ==
+                                        userState.preferredCategories[
+                                            widget.pubCateg
+                                                ? SectionType
+                                                    .publicaciones_categoria
+                                                : widget.poiCity
+                                                    ? SectionType.pois_ciudad
+                                                    : mainState.activePageHome],
+                                orElse: () => null,
+                              );
+
+                              return Text(
+                                category?.nombre ?? 'Seleccionar',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: widget.small ? 10 : 14,
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],

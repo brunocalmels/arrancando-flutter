@@ -84,7 +84,7 @@ class _DialogCategorySelectState extends State<DialogCategorySelect> {
                   ? TypeAheadCiudad(
                       onItemTap: _onItemTap,
                       insideProfile: widget.insideProfile,
-                      insideEdit: widget.poiCity,
+                      // insideEdit: widget.poiCity,
                     )
                   : Container(
                       // height: 220,
