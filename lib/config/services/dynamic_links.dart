@@ -93,63 +93,81 @@ abstract class DynamicLinks {
           _invalidUser = true;
         }
 
+        Future<bool> _isSameRoute(String newRoute) async {
+          var sameRoute = false;
+          await MyGlobals.mainNavigatorKey.currentState.popUntil((route) {
+            sameRoute = newRoute == route.settings.name;
+            return true;
+          });
+          return sameRoute;
+        }
+
         if (path.isNotEmpty) {
           if (path.length >= 2) {
             switch (path[0]) {
               case 'publicaciones':
                 if (context != null && !_invalidUser) {
                   final id = int.parse(path[1]);
-                  await MyGlobals.mainNavigatorKey.currentState.push(
-                    MaterialPageRoute(
-                      builder: (_) => ShowPage(
-                        contentId: id,
-                        type: SectionType.publicaciones,
+                  if (!(await _isSameRoute('Publicaciones#$id'))) {
+                    await MyGlobals.mainNavigatorKey.currentState.push(
+                      MaterialPageRoute(
+                        builder: (_) => ShowPage(
+                          contentId: id,
+                          type: SectionType.publicaciones,
+                        ),
+                        settings: RouteSettings(name: 'Publicaciones#$id'),
                       ),
-                      settings: RouteSettings(name: 'Publicaciones#$id'),
-                    ),
-                  );
+                    );
+                  }
                 }
                 break;
               case 'recetas':
                 if (context != null && !_invalidUser) {
                   final id = int.parse(path[1]);
-                  await MyGlobals.mainNavigatorKey.currentState.push(
-                    MaterialPageRoute(
-                      builder: (_) => ShowPage(
-                        contentId: id,
-                        type: SectionType.recetas,
+                  if (!(await _isSameRoute('Recetas#$id'))) {
+                    await MyGlobals.mainNavigatorKey.currentState.push(
+                      MaterialPageRoute(
+                        builder: (_) => ShowPage(
+                          contentId: id,
+                          type: SectionType.recetas,
+                        ),
+                        settings: RouteSettings(name: 'Recetas#$id'),
                       ),
-                      settings: RouteSettings(name: 'Recetas#$id'),
-                    ),
-                  );
+                    );
+                  }
                 }
                 break;
               case 'pois':
                 if (context != null && !_invalidUser) {
                   final id = int.parse(path[1]);
-                  await MyGlobals.mainNavigatorKey.currentState.push(
-                    MaterialPageRoute(
-                      builder: (_) => ShowPage(
-                        contentId: id,
-                        type: SectionType.pois,
+                  if (!(await _isSameRoute('Pois#$id'))) {
+                    await MyGlobals.mainNavigatorKey.currentState.push(
+                      MaterialPageRoute(
+                        builder: (_) => ShowPage(
+                          contentId: id,
+                          type: SectionType.pois,
+                        ),
+                        settings: RouteSettings(name: 'Pois#$id'),
                       ),
-                      settings: RouteSettings(name: 'Pois#$id'),
-                    ),
-                  );
+                    );
+                  }
                 }
                 break;
               case 'usuarios':
                 if (context != null && !_invalidUser) {
                   final username = path[1];
-                  await MyGlobals.mainNavigatorKey.currentState.push(
-                    MaterialPageRoute(
-                      builder: (_) => UserProfilePage(
-                        user: null,
-                        username: username,
+                  if (!(await _isSameRoute('UserProfilePage#$username'))) {
+                    await MyGlobals.mainNavigatorKey.currentState.push(
+                      MaterialPageRoute(
+                        builder: (_) => UserProfilePage(
+                          user: null,
+                          username: username,
+                        ),
+                        settings:
+                            RouteSettings(name: 'UserProfilePage#$username'),
                       ),
-                      settings: RouteSettings(name: 'UserProfilePage'),
-                    ),
-                  );
+                    );
+                  }
                 }
                 break;
               case 'google-signin':

@@ -19,6 +19,7 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
   bool _fetching = true;
   bool _noMore = false;
   int _page = 1;
+  bool _markingAllAsRead = false;
 
   Future<void> _fetchNotificaciones({bool reset = false}) async {
     if (reset) {
@@ -62,9 +63,12 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
   }
 
   Future<void> _markAllAsRead() async {
+    _markingAllAsRead = true;
+    if (mounted) setState(() {});
     await Notificacion.markAllRead();
     await _fetchNotificaciones(reset: true);
     context.read<MainState>().setUnreadNotifications(0);
+    _markingAllAsRead = false;
     if (mounted) setState(() {});
   }
 
@@ -141,17 +145,28 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: <Widget>[
                                       FlatButton(
-                                        onPressed: _markAllAsRead,
-                                        child: Text(
-                                          'MARCAR TODAS LEIDAS',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2
-                                                .color,
-                                          ),
-                                        ),
+                                        onPressed: _markingAllAsRead
+                                            ? null
+                                            : _markAllAsRead,
+                                        child: _markingAllAsRead
+                                            ? SizedBox(
+                                                width: 15,
+                                                height: 15,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  strokeWidth: 1,
+                                                ),
+                                              )
+                                            : Text(
+                                                'MARCAR TODAS LEIDAS',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2
+                                                      .color,
+                                                ),
+                                              ),
                                       )
                                     ],
                                   ),

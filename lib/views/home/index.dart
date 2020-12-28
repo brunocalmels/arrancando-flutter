@@ -212,7 +212,7 @@ class _MainScaffoldState extends State<MainScaffold> {
   Future<void> _initUserInfo() async {
     await ActiveUser.verifyCorrectLogin(context);
     if (context.read<UserState>().activeUser != null) {
-      // await ActiveUser.updateUserMetadata(context);
+      await ActiveUser.updateUserMetadata(context);
       await Future.wait(
         SectionType.values.map(
           (t) async {
@@ -225,7 +225,7 @@ class _MainScaffoldState extends State<MainScaffold> {
       if (!Platform.isLinux) {
         await NotificacionesService.initFirebaseNotifications(context);
       }
-      // await _fetchUnreadNotificaciones();
+      await _fetchUnreadNotificaciones();
     }
     _inited = true;
     if (mounted) setState(() {});
