@@ -14,6 +14,7 @@ import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/general/splash.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user/login/index.dart';
+import 'package:desktop_window/desktop_window.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,9 @@ import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   var sentry = SentryClient(
     dsn:
         'https://b6b7f8734d044fe4b3f424207df9462f@o418745.ingest.sentry.io/5370030',
@@ -42,6 +45,11 @@ void main() {
       FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
     }
   };
+
+  if (Platform.isLinux) {
+    await DesktopWindow.setMaxWindowSize(Size(350, 600));
+    await DesktopWindow.setWindowSize(Size(350, 600));
+  }
 
   runZoned(
     () => runApp(

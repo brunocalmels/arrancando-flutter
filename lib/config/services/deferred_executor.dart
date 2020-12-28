@@ -23,7 +23,9 @@ abstract class DeferredExecutor {
 
     try {
       final response = await future;
+      print(response.status);
       if (response != null &&
+          response.status != null &&
           (response.status == 201 || response.status == 200)) {
         final decoded = json.decode(response.body);
         if (decoded['id'] != null) {
@@ -45,7 +47,7 @@ abstract class DeferredExecutor {
             'Ocurrió un error, por favor intentalo nuevamente más tarde.';
       }
     } catch (e) {
-      print(e);
+      // print(e);
       lastFutureError =
           'Ocurrió un error, por favor intentalo nuevamente más tarde.';
     }

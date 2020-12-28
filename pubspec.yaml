@@ -51,6 +51,7 @@ dependencies:
   firebase_core: 0.5.2+1
   firebase_messaging: 8.0.0-dev.9
   firebase_analytics: 6.2.0
+  desktop_window: 0.3.0
 
 dev_dependencies:
   flutter_test:
