@@ -145,9 +145,9 @@ class RecetaFormState extends State<RecetaForm> {
         if (_isEdit && _id != null) {
           DeferredExecutor.execute(
             SectionType.recetas,
-            Fetcher.put(
+            LastFuture(
+              function: Fetcher.put,
               url: '/recetas/$_id.json',
-              throwError: true,
               body: {
                 ...body,
               },
@@ -156,9 +156,9 @@ class RecetaFormState extends State<RecetaForm> {
         } else {
           DeferredExecutor.execute(
             SectionType.recetas,
-            Fetcher.post(
+            LastFuture(
+              function: Fetcher.post,
               url: '/recetas.json',
-              throwError: true,
               body: {
                 ...body,
               },

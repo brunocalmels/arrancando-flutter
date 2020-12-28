@@ -119,7 +119,7 @@ class _MyAppState extends State<MyApp> {
     await Utils.restoreThemeMode(context);
     await _loadUser();
     if (_isLoggedIn) {
-      await CategoryWrapper.loadCategories();
+      // await CategoryWrapper.loadCategories();
       await SavedContent.initSaved(context);
     }
   }

@@ -93,9 +93,9 @@ class _PublicacionFormState extends State<PublicacionForm> {
         if (_isEdit && _id != null) {
           DeferredExecutor.execute(
             SectionType.publicaciones,
-            Fetcher.put(
+            LastFuture(
+              function: Fetcher.put,
               url: '/publicaciones/$_id.json',
-              throwError: true,
               body: {
                 ...body,
               },
@@ -104,9 +104,9 @@ class _PublicacionFormState extends State<PublicacionForm> {
         } else {
           DeferredExecutor.execute(
             SectionType.publicaciones,
-            Fetcher.post(
+            LastFuture(
+              function: Fetcher.post,
               url: '/publicaciones.json',
-              throwError: true,
               body: {
                 ...body,
               },

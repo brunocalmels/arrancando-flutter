@@ -3,27 +3,32 @@ import 'dart:convert';
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/content_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 
 abstract class DeferredExecutor {
   static SectionType lastItemSectionType;
   static int lastItemId;
-  static Future lastFuture;
+  static LastFuture lastFuture;
   static String lastFutureError;
 
-  static void execute(SectionType sectionType, Future future) async {
+  static void execute(SectionType sectionType, LastFuture _lastFuture) async {
     final context = MyGlobals.mainNavigatorKey.currentContext;
     final contentPageState = context.read<ContentPageState>();
     contentPageState.setDeferredExecutorStatus(
       DeferredExecutorStatus.executing,
     );
 
-    lastFuture = future;
+    lastFuture = _lastFuture;
     lastItemSectionType = sectionType;
 
     try {
-      final response = await future;
-      print(response.status);
+      final response = await _lastFuture.function(
+        url: _lastFuture.url,
+        body: _lastFuture.body,
+        throwError: true,
+      );
+
       if (response != null &&
           response.status != null &&
           (response.status == 201 || response.status == 200)) {
@@ -31,7 +36,7 @@ abstract class DeferredExecutor {
         if (decoded['id'] != null) {
           lastItemId = decoded['id'];
         }
-        lastFuture = null;
+        _lastFuture = null;
         contentPageState.setDeferredExecutorStatus(
           DeferredExecutorStatus.success,
         );
@@ -47,7 +52,7 @@ abstract class DeferredExecutor {
             'Ocurrió un error, por favor intentalo nuevamente más tarde.';
       }
     } catch (e) {
-      // print(e);
+      print(e);
       lastFutureError =
           'Ocurrió un error, por favor intentalo nuevamente más tarde.';
     }
@@ -70,4 +75,16 @@ abstract class DeferredExecutor {
       DeferredExecutorStatus.none,
     );
   }
+}
+
+class LastFuture {
+  final Function function;
+  final String url;
+  final dynamic body;
+
+  LastFuture({
+    @required this.function,
+    @required this.url,
+    @required this.body,
+  });
 }

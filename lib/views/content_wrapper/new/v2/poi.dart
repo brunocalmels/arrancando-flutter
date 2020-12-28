@@ -147,9 +147,9 @@ class _PoiFormState extends State<PoiForm> {
         if (_isEdit && _id != null) {
           DeferredExecutor.execute(
             SectionType.pois,
-            Fetcher.put(
+            LastFuture(
+              function: Fetcher.put,
               url: '/pois/$_id.json',
-              throwError: true,
               body: {
                 ...body,
               },
@@ -158,9 +158,9 @@ class _PoiFormState extends State<PoiForm> {
         } else {
           DeferredExecutor.execute(
             SectionType.pois,
-            Fetcher.post(
+            LastFuture(
+              function: Fetcher.post,
               url: '/pois.json',
-              throwError: true,
               body: {
                 ...body,
               },
