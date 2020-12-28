@@ -5,6 +5,7 @@ import 'package:arrancando/config/models/notificacion.dart';
 import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/chat/grupo/index.dart';
 import 'package:arrancando/views/comunidad/index.dart';
 import 'package:arrancando/views/contacto/index.dart';
 import 'package:arrancando/views/content_wrapper/saved/index.dart';
@@ -171,6 +172,27 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           },
                         ),
                         ListTile(
+                          leading: Icon(
+                            Icons.people,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          title: Text('Comunidad'),
+                          onTap: () {
+                            // Navigator.of(context).push(
+                            //   MaterialPageRoute(
+                            //     builder: (_) => ComunidadPage(),
+                            //     settings: RouteSettings(name: 'Comunidad'),
+                            //   ),
+                            // );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => GrupoChatPage(),
+                                settings: RouteSettings(name: 'GrupoChatPage'),
+                              ),
+                            );
+                          },
+                        ),
+                        ListTile(
                           // leading: Icon(Icons.share, color: Theme.of(context).accentColor,),
                           leading: Icon(
                             Icons.update,
@@ -203,21 +225,6 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               MaterialPageRoute(
                                 builder: (_) => PrivacyPolicyPage(),
                                 settings: RouteSettings(name: 'Privacy policy'),
-                              ),
-                            );
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(
-                            Icons.people,
-                            color: Theme.of(context).accentColor,
-                          ),
-                          title: Text('Comunidad Arrancando'),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => ComunidadPage(),
-                                settings: RouteSettings(name: 'Comunidad'),
                               ),
                             );
                           },
