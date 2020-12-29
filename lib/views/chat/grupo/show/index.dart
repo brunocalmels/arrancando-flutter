@@ -1,13 +1,16 @@
+import 'dart:convert';
+
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/chat/grupo.dart';
 import 'package:arrancando/config/models/chat/mensaje.dart';
-import 'package:arrancando/config/models/usuario.dart';
+import 'package:arrancando/config/services/fetcher.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/chat/grupo/show/mensajes_list/index.dart';
 import 'package:arrancando/views/chat/grupo/show/send_mensaje_field/index.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:web_socket_channel/io.dart';
 
 class GrupoChatShowPage extends StatefulWidget {
   final GrupoChat grupo;
@@ -23,87 +26,129 @@ class GrupoChatShowPage extends StatefulWidget {
 
 class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   final _mensajeController = TextEditingController();
+  final _mensajeFocusNode = FocusNode();
   final _scrollController = ScrollController();
+  final _firstItemGlobalKey = GlobalKey();
+  ActiveUser _activeUser;
+  int _page = 1;
   List<MensajeChat> _mensajes = [];
   bool _loading = true;
   bool _sending = false;
   bool _scrollOnNew = true;
+  bool _noMore = false;
+  IOWebSocketChannel _channel;
 
   Future<void> _fetchMensajes() async {
-    _loading = true;
-    if (mounted) setState(() {});
-
-    // try {
-    //   final response = await Fetcher.get(url: '/grupos/${widget.grupo.id}.json');
-
-    //   if (response != null && response.status == 200) {
-    //     _mensajes = (json.decode(response.body) as List)
-    //         .map<MensajeChat>((grupo) => MensajeChat.fromJson(grupo))
-    //         .toList();
-    //   }
-    // } catch (e) {
-    //   print(e);
-    // }
-
-    final usuario = Usuario(
-      1,
-      'https://www.purina-latam.com/sites/g/files/auxxlc391/files/styles/facebook_share/public/Purina%C2%AE%20La%20llegada%20del%20gatito%20a%20casa.jpg?itok=6QG07anP',
-      'Ivan',
-      'Eidel',
-      'egre2806@gmail.com',
-      'DaCook',
-      null,
-    );
-
-    final mensajes = [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-      'Nam imperdiet nulla et aliquam convallis',
-      'Proin elementum enim non magna sollicitudin, id sollicitudin dui tincidunt',
-      'Aliquam maximus quam lectus, ut tempor dolor rhoncus eu',
-      'Donec quis diam lectus',
-      'Proin accumsan ac ipsum et congue',
-      'Mauris vitae lorem odio',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-      'Aenean tincidunt eros at purus ultricies aliquet',
-      'Curabitur viverra metus venenatis quam ultricies, sit amet efficitur magna elementum',
-    ];
-
-    for (var mensaje in mensajes) {
-      _mensajes.add(
-        MensajeChat(
-          1,
-          widget.grupo.id,
-          usuario,
-          DateTime.now(),
-          DateTime.now(),
-          mensaje,
-        ),
+    try {
+      final response = await Fetcher.get(
+        url: '/grupo_chats/${widget.grupo.id}.json?page=$_page',
       );
+
+      if (response != null && response.status == 200) {
+        final previousLength = _mensajes.length;
+
+        _mensajes = [
+          ...(json.decode(response.body)['mensajes'] as List)
+              .map<MensajeChat>((grupo) => MensajeChat.fromJson(grupo))
+              .toList()
+              .reversed
+              .toList(),
+          ..._mensajes,
+        ];
+
+        _page++;
+
+        if (previousLength == _mensajes.length) {
+          _noMore = true;
+        }
+      }
+    } catch (e) {
+      print(e);
     }
 
     _loading = false;
     if (mounted) setState(() {});
   }
 
+  void _subscribeToGrupoChat() {
+    _channel = IOWebSocketChannel.connect(MyGlobals.WEB_SOCKET_URL);
+
+    final token = _activeUser.authToken;
+
+    final message = json.encode({
+      'command': 'subscribe',
+      'identifier': json.encode({
+        'channel': 'GrupoChatChannel',
+        'token': 'Bearer $token',
+        'grupo_chat_id': '${widget.grupo.id}',
+      }),
+    });
+
+    _channel.sink.add(message);
+
+    _channel.stream.listen((event) {
+      if (event != null) {
+        try {
+          final data = json.decode(event) as Map<String, dynamic>;
+          if (data['type'] == null || data['type'] == 'Mensaje grupal') {
+            _mensajes.add(MensajeChat.fromJson(data['message']));
+            if (mounted) setState(() {});
+          }
+          _scrollToBottom();
+        } catch (e) {
+          // Ignore
+        }
+      }
+    });
+  }
+
+  void _unsubscribeToGrupoChat() {
+    if (_channel != null) {
+      final token = _activeUser.authToken;
+
+      final message = json.encode({
+        'command': 'unsubscribe',
+        'identifier': json.encode({
+          'channel': 'GrupoChatChannel',
+          'token': 'Bearer $token',
+          'grupo_chat_id': '${widget.grupo.id}',
+        }),
+      });
+
+      _channel.sink.add(message);
+
+      _channel.sink.close();
+
+      _channel = null;
+    }
+  }
+
   Future<void> _enviarMensaje() async {
-    _sending = true;
-    if (mounted) setState(() {});
-    _mensajes.add(
-      MensajeChat(
-        1,
-        widget.grupo.id,
-        context.read<UserState>().activeUser.getUsuario,
-        DateTime.now(),
-        DateTime.now(),
-        _mensajeController.text,
-      ),
-    );
-    _mensajeController.clear();
-    if (mounted) setState(() {});
-    await Future.delayed(Duration(milliseconds: 100));
-    _scrollToBottom();
-    _sending = false;
-    if (mounted) setState(() {});
+    if (_channel != null) {
+      _sending = true;
+      if (mounted) setState(() {});
+
+      final token = _activeUser.authToken;
+
+      final message = json.encode({
+        'command': 'message',
+        'data': json.encode({
+          'mensaje': _mensajeController.text,
+        }),
+        'identifier': json.encode({
+          'channel': 'GrupoChatChannel',
+          'token': 'Bearer $token',
+          'grupo_chat_id': '${widget.grupo.id}',
+        }),
+      });
+
+      _channel.sink.add(message);
+
+      _mensajeController.clear();
+      FocusScope.of(context).requestFocus(_mensajeFocusNode);
+      _sending = false;
+      if (mounted) setState(() {});
+    }
   }
 
   void _scrollToBottom({bool force = false, bool animate = true}) {
@@ -132,13 +177,18 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
           _scrollOnNew = false;
         }
         if (mounted) setState(() {});
+
+        if (_scrollController.offset == 0 && _mensajes.isNotEmpty && !_noMore) {
+          _fetchMensajes();
+        }
       },
     );
   }
 
   Future<void> _initScreen() async {
-    await _fetchMensajes();
     _initScrollController();
+    await _fetchMensajes();
+    _subscribeToGrupoChat();
     _scrollToBottom(animate: false);
   }
 
@@ -146,12 +196,17 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   void initState() {
     super.initState();
     _initScreen();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _activeUser = context.read<UserState>().activeUser;
+      if (mounted) setState(() {});
+    });
   }
 
   @override
   void dispose() {
     _mensajeController?.dispose();
     _scrollController?.dispose();
+    _unsubscribeToGrupoChat();
     super.dispose();
   }
 
@@ -176,33 +231,39 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
                   ),
                 ),
               )
-            : _mensajes.isEmpty
-                ? Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Center(
-                      child: Text(
-                        'No hay mensajes aún',
-                        textAlign: TextAlign.center,
+            : Column(
+                children: [
+                  if (_mensajes.isEmpty)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Center(
+                          child: Text(
+                            'No hay mensajes aún',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
                     ),
-                  )
-                : Column(
-                    children: [
-                      MensajesList(
-                        scrollController: _scrollController,
-                        mensajes: _mensajes,
-                        grupo: widget.grupo,
-                        scrollOnNew: _scrollOnNew,
-                        sending: _sending,
-                        scrollToBottom: _scrollToBottom,
-                      ),
-                      SendMensajeField(
-                        mensajeController: _mensajeController,
-                        sending: _sending,
-                        enviarMensaje: _enviarMensaje,
-                      ),
-                    ],
+                  if (_mensajes.isNotEmpty)
+                    MensajesList(
+                      scrollController: _scrollController,
+                      firstItemGlobalKey: _firstItemGlobalKey,
+                      mensajes: _mensajes,
+                      grupo: widget.grupo,
+                      scrollOnNew: _scrollOnNew,
+                      sending: _sending,
+                      scrollToBottom: _scrollToBottom,
+                      activeUser: _activeUser,
+                    ),
+                  SendMensajeField(
+                    mensajeController: _mensajeController,
+                    mensajeFocusNode: _mensajeFocusNode,
+                    sending: _sending,
+                    enviarMensaje: _enviarMensaje,
                   ),
+                ],
+              ),
       ),
     );
   }

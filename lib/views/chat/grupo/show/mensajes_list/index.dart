@@ -1,27 +1,31 @@
 import 'package:arrancando/config/globals/index.dart';
+import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/chat/grupo.dart';
 import 'package:arrancando/config/models/chat/mensaje.dart';
-import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/config/services/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class MensajesList extends StatelessWidget {
   final ScrollController scrollController;
+  final GlobalKey firstItemGlobalKey;
   final List<MensajeChat> mensajes;
   final GrupoChat grupo;
   final bool scrollOnNew;
   final bool sending;
   final Function scrollToBottom;
+  final ActiveUser activeUser;
 
   const MensajesList({
     Key key,
     @required this.scrollController,
+    @required this.firstItemGlobalKey,
     @required this.mensajes,
     @required this.grupo,
     @required this.scrollOnNew,
     @required this.sending,
     @required this.scrollToBottom,
+    @required this.activeUser,
   }) : super(key: key);
 
   @override
@@ -36,27 +40,54 @@ class MensajesList extends StatelessWidget {
               controller: scrollController,
               itemCount: mensajes.length,
               itemBuilder: (context, index) {
-                final activeUserId = context.read<UserState>().activeUser.id;
-                final isMine = mensajes[index].usuario.id == activeUserId;
+                final mensaje = mensajes[index];
+
+                if (mensaje.type != null &&
+                    mensaje.type == 'Mensaje grupal' &&
+                    mensaje.mensaje != null) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Colors.white.withAlpha(10),
+                        ),
+                        child: Text(
+                          mensaje.mensaje,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
+                final activeUserId = activeUser.id;
+                final isMine = mensaje.usuario.id == activeUserId;
 
                 final avatar = Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
                   child: CircleAvatar(
                     radius: 13,
-                    backgroundImage: mensajes[index]?.usuario?.avatar != null
+                    backgroundImage: mensaje?.usuario?.avatar != null
                         ? CachedNetworkImageProvider(
-                            mensajes[index].usuario.avatar.contains('http')
-                                ? '${mensajes[index]?.usuario?.avatar}'
-                                : '${MyGlobals.SERVER_URL}${mensajes[index]?.usuario?.avatar}',
+                            mensaje.usuario.avatar.contains('http')
+                                ? '${mensaje?.usuario?.avatar}'
+                                : '${MyGlobals.SERVER_URL}${mensaje?.usuario?.avatar}',
                           )
                         : null,
                   ),
                 );
 
                 return Container(
+                  key: index == 0 ? firstItemGlobalKey : null,
                   width: MediaQuery.of(context).size.width,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
+                    padding: const EdgeInsets.symmetric(vertical: 7.5),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +115,7 @@ class MensajesList extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                '@${mensajes[index].usuario.username}',
+                                '@${mensaje.usuario.username}',
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.bold,
@@ -93,9 +124,18 @@ class MensajesList extends StatelessWidget {
                               ),
                               SizedBox(height: 5),
                               Text(
-                                mensajes[index].mensaje,
+                                mensaje.mensaje,
                                 style: TextStyle(
                                   fontSize: 13,
+                                ),
+                              ),
+                              SizedBox(height: 3),
+                              Text(
+                                Utils.formatDate(mensaje.createdAt),
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  color: Colors.white.withAlpha(150),
+                                  fontStyle: FontStyle.italic,
                                 ),
                               ),
                             ],

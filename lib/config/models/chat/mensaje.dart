@@ -14,6 +14,7 @@ class MensajeChat {
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
   final String mensaje;
+  String type;
 
   MensajeChat(
     this.id,
@@ -21,8 +22,9 @@ class MensajeChat {
     this.usuario,
     this.createdAt,
     this.updatedAt,
-    this.mensaje,
-  );
+    this.mensaje, [
+    this.type,
+  ]);
 
   factory MensajeChat.fromJson(Map<String, dynamic> json) =>
       _$MensajeChatFromJson(json);

@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Utils {
+  static String formatDate(DateTime date) =>
+      '${date.toLocal().day.toString().padLeft(2, '0')}/${date.toLocal().month.toString().padLeft(2, '0')}${date.toLocal().year == DateTime.now().year ? ' ' + date.toLocal().hour.toString().padLeft(2, '0') + ':' + date.toLocal().minute.toString().padLeft(2, '0') : '/' + date.toLocal().year.toString()}';
+
   static Future<void> restoreThemeMode(BuildContext context) async {
     final mainState = context.read<MainState>();
     final prefs = await SharedPreferences.getInstance();

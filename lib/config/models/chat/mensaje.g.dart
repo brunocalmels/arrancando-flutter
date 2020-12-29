@@ -20,6 +20,7 @@ MensajeChat _$MensajeChatFromJson(Map<String, dynamic> json) {
         ? null
         : DateTime.parse(json['updated_at'] as String),
     json['mensaje'] as String,
+    json['type'] as String,
   );
 }
 
@@ -31,4 +32,5 @@ Map<String, dynamic> _$MensajeChatToJson(MensajeChat instance) =>
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
       'mensaje': instance.mensaje,
+      'type': instance.type,
     };

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class SendMensajeField extends StatefulWidget {
   final TextEditingController mensajeController;
+  final FocusNode mensajeFocusNode;
   final bool sending;
   final Function enviarMensaje;
 
   const SendMensajeField({
     Key key,
     @required this.mensajeController,
+    @required this.mensajeFocusNode,
     @required this.sending,
     @required this.enviarMensaje,
   }) : super(key: key);
@@ -37,6 +39,7 @@ class _SendMensajeFieldState extends State<SendMensajeField> {
           Expanded(
             child: TextField(
               controller: widget.mensajeController,
+              focusNode: widget.mensajeFocusNode,
               decoration: InputDecoration(
                 hintText: 'Mensaje',
                 alignLabelWithHint: true,

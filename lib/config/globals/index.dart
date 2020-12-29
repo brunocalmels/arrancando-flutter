@@ -9,12 +9,16 @@ abstract class MyGlobals {
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
 
-  // static const String SERVER_URL = 'http://192.168.43.138:3000';
-  // static const String SERVER_URL = 'http://192.168.0.11:5000';
-  // static const String SERVER_URL = 'http://192.168.43.138:5000';
-  // static const String SERVER_URL = 'http://192.168.1.3:5000';
-  static const String SERVER_URL = 'https://arrancando.herokuapp.com';
-  // static const String SERVER_URL = 'https://arrancando-staging.herokuapp.com';
+  // static const String BASE_URL = '192.168.43.138:3000';
+  // static const String BASE_URL = '192.168.0.11:5000';
+  // static const String BASE_URL = '192.168.43.138:5000';
+  // static const String BASE_URL = '192.168.1.3:5000';
+  // static const String BASE_URL = 'arrancando.herokuapp.com';
+  static const String BASE_URL = 'arrancando-staging.herokuapp.com';
+
+  static const String SERVER_URL = 'https://${BASE_URL}';
+
+  static const String WEB_SOCKET_URL = 'wss://${BASE_URL}/cable';
 
   static const GOOGLE_CLIENT_ID =
       '585563708448-5n5f3dg0ptbbm4p3eoh1l0c4u7fhrbrl.apps.googleusercontent.com';
