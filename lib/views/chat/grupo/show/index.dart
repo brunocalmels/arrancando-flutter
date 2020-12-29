@@ -1,7 +1,10 @@
+import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/models/chat/grupo.dart';
 import 'package:arrancando/config/models/chat/mensaje.dart';
 import 'package:arrancando/config/models/usuario.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/chat/grupo/show/mensajes_list/index.dart';
+import 'package:arrancando/views/chat/grupo/show/send_mensaje_field/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -103,13 +106,19 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
     if (mounted) setState(() {});
   }
 
-  void _scrollToBottom({bool force = false}) {
+  void _scrollToBottom({bool force = false, bool animate = true}) {
     if (_scrollOnNew || force) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        curve: Curves.easeIn,
-        duration: Duration(milliseconds: 100),
-      );
+      if (animate) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          curve: Curves.easeIn,
+          duration: Duration(milliseconds: 100),
+        );
+      } else {
+        _scrollController.jumpTo(
+          _scrollController.position.maxScrollExtent,
+        );
+      }
     }
   }
 
@@ -130,7 +139,7 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   Future<void> _initScreen() async {
     await _fetchMensajes();
     _initScrollController();
-    _scrollToBottom();
+    _scrollToBottom(animate: false);
   }
 
   @override
@@ -179,186 +188,18 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
                   )
                 : Column(
                     children: [
-                      Expanded(
-                        child: Stack(
-                          fit: StackFit.passthrough,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: ListView.builder(
-                                controller: _scrollController,
-                                itemCount: _mensajes.length,
-                                itemBuilder: (context, index) {
-                                  final isMine = index % 3 == 0;
-
-                                  final avatar = Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 3),
-                                    child: CircleAvatar(
-                                      radius: 13,
-                                      backgroundImage:
-                                          _mensajes[index]?.usuario?.avatar !=
-                                                  null
-                                              ? CachedNetworkImageProvider(
-                                                  '${_mensajes[index]?.usuario?.avatar}',
-                                                )
-                                              : null,
-                                    ),
-                                  );
-
-                                  return Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 15),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment: isMine
-                                            ? MainAxisAlignment.end
-                                            : MainAxisAlignment.start,
-                                        children: [
-                                          if (!isMine) avatar,
-                                          Container(
-                                            padding: const EdgeInsets.all(5),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.7,
-                                            decoration: BoxDecoration(
-                                              color: widget.grupo.toColor,
-                                              borderRadius: BorderRadius.only(
-                                                topRight: isMine
-                                                    ? Radius.zero
-                                                    : Radius.circular(10),
-                                                topLeft: isMine
-                                                    ? Radius.circular(10)
-                                                    : Radius.zero,
-                                                bottomRight:
-                                                    Radius.circular(10),
-                                                bottomLeft: Radius.circular(10),
-                                              ),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  '@${_mensajes[index].usuario.username}',
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white
-                                                        .withAlpha(185),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 5),
-                                                Text(
-                                                  _mensajes[index].mensaje,
-                                                  style: TextStyle(
-                                                    fontSize: 13,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          if (isMine) avatar,
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child: AnimatedOpacity(
-                                duration: Duration(milliseconds: 400),
-                                curve: Curves.easeInOutBack,
-                                opacity: !_scrollOnNew && !_sending ? 1 : 0,
-                                child: Material(
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                  elevation: 6,
-                                  type: MaterialType.circle,
-                                  child: InkWell(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(3),
-                                      child: Icon(Icons.arrow_downward),
-                                    ),
-                                    onTap: () => !_scrollOnNew && !_sending
-                                        ? _scrollToBottom(force: true)
-                                        : null,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      MensajesList(
+                        scrollController: _scrollController,
+                        mensajes: _mensajes,
+                        grupo: widget.grupo,
+                        scrollOnNew: _scrollOnNew,
+                        sending: _sending,
+                        scrollToBottom: _scrollToBottom,
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 3,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _mensajeController,
-                                decoration: InputDecoration(
-                                  hintText: 'Mensaje',
-                                  alignLabelWithHint: true,
-                                  floatingLabelBehavior:
-                                      FloatingLabelBehavior.never,
-                                ),
-                                onSubmitted: (val) => val.isEmpty || _sending
-                                    ? null
-                                    : _enviarMensaje(),
-                                onChanged: (val) {
-                                  if (mounted) setState(() {});
-                                },
-                              ),
-                            ),
-                            Material(
-                              color: Colors.transparent,
-                              child: _sending
-                                  ? SizedBox(
-                                      width: 48,
-                                      height: 48,
-                                      child: Center(
-                                        child: SizedBox(
-                                          width: 15,
-                                          height: 15,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 1,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : IconButton(
-                                      icon: Icon(Icons.send),
-                                      onPressed:
-                                          _mensajeController.text.isEmpty ||
-                                                  _sending
-                                              ? null
-                                              : _enviarMensaje,
-                                    ),
-                            ),
-                          ],
-                        ),
+                      SendMensajeField(
+                        mensajeController: _mensajeController,
+                        sending: _sending,
+                        enviarMensaje: _enviarMensaje,
                       ),
                     ],
                   ),

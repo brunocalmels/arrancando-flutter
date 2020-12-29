@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:arrancando/config/models/chat/grupo.dart';
 import 'package:arrancando/config/services/fetcher.dart';
-import 'package:arrancando/views/chat/grupo/show/index.dart';
+import 'package:arrancando/views/chat/grupo/_grupo_tile.dart';
 import 'package:flutter/material.dart';
 
 class GrupoChatPage extends StatefulWidget {
@@ -91,40 +91,7 @@ class _GrupoChatPageState extends State<GrupoChatPage> {
                     child: ListView(
                       children: _grupos
                           .map(
-                            (grupo) => ListTile(
-                              leading: Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: grupo.toColor,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    grupo.simbolo.toUpperCase(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              title: Text(grupo.nombre),
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => GrupoChatShowPage(
-                                      grupo: grupo,
-                                    ),
-                                    settings: RouteSettings(
-                                      name: 'GrupoChatShowPage#${grupo.id}',
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                            (grupo) => GrupoTile(grupo: grupo),
                           )
                           .toList(),
                     ),
