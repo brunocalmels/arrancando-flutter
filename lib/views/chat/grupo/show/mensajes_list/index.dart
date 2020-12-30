@@ -3,12 +3,12 @@ import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/chat/grupo.dart';
 import 'package:arrancando/config/models/chat/mensaje.dart';
 import 'package:arrancando/config/services/utils.dart';
+import 'package:arrancando/views/chat/grupo/show/mensajes_list/_first_item_indicator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MensajesList extends StatelessWidget {
   final ScrollController scrollController;
-  final GlobalKey firstItemGlobalKey;
   final List<MensajeChat> mensajes;
   final GrupoChat grupo;
   final bool scrollOnNew;
@@ -19,7 +19,6 @@ class MensajesList extends StatelessWidget {
   const MensajesList({
     Key key,
     @required this.scrollController,
-    @required this.firstItemGlobalKey,
     @required this.mensajes,
     @required this.grupo,
     @required this.scrollOnNew,
@@ -52,7 +51,11 @@ class MensajesList extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
-                          color: Colors.white.withAlpha(10),
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .color
+                              .withAlpha(10),
                         ),
                         child: Text(
                           mensaje.mensaje,
@@ -83,68 +86,82 @@ class MensajesList extends StatelessWidget {
                   ),
                 );
 
-                return Container(
-                  key: index == 0 ? firstItemGlobalKey : null,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 7.5),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: isMine
-                          ? MainAxisAlignment.end
-                          : MainAxisAlignment.start,
-                      children: [
-                        if (!isMine) avatar,
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          decoration: BoxDecoration(
-                            color: grupo.toColor,
-                            borderRadius: BorderRadius.only(
-                              topRight:
-                                  isMine ? Radius.zero : Radius.circular(10),
-                              topLeft:
-                                  isMine ? Radius.circular(10) : Radius.zero,
-                              bottomRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 7.5),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: isMine
+                              ? MainAxisAlignment.end
+                              : MainAxisAlignment.start,
+                          children: [
+                            if (!isMine) avatar,
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              decoration: BoxDecoration(
+                                color: grupo.toColor.withAlpha(100),
+                                borderRadius: BorderRadius.only(
+                                  topRight: isMine
+                                      ? Radius.zero
+                                      : Radius.circular(10),
+                                  topLeft: isMine
+                                      ? Radius.circular(10)
+                                      : Radius.zero,
+                                  bottomRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '@${mensaje.usuario.username}',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .color
+                                          .withAlpha(185),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    mensaje.mensaje,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  SizedBox(height: 3),
+                                  Text(
+                                    Utils.formatDate(mensaje.createdAt),
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .color
+                                          .withAlpha(150),
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                '@${mensaje.usuario.username}',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white.withAlpha(185),
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                mensaje.mensaje,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                              SizedBox(height: 3),
-                              Text(
-                                Utils.formatDate(mensaje.createdAt),
-                                style: TextStyle(
-                                  fontSize: 9,
-                                  color: Colors.white.withAlpha(150),
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ],
-                          ),
+                            if (isMine) avatar,
+                          ],
                         ),
-                        if (isMine) avatar,
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 );
               },
             ),

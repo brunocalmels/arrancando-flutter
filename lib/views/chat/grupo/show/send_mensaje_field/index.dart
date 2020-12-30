@@ -24,7 +24,7 @@ class _SendMensajeFieldState extends State<SendMensajeField> {
     return Container(
       padding: const EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.1,
+      // height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
@@ -40,6 +40,7 @@ class _SendMensajeFieldState extends State<SendMensajeField> {
             child: TextField(
               controller: widget.mensajeController,
               focusNode: widget.mensajeFocusNode,
+              maxLength: 5000,
               decoration: InputDecoration(
                 hintText: 'Mensaje',
                 alignLabelWithHint: true,

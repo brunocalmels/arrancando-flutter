@@ -4,7 +4,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 abstract class MyGlobals {
-  static const APP_VERSION = '2.1.5+70';
+  static const APP_VERSION = '2.2.0-beta+71';
 
   static const bool SHOW_DEV_LOGIN = false;
   // static const bool SHOW_DEV_LOGIN = true;
@@ -13,8 +13,8 @@ abstract class MyGlobals {
   // static const String BASE_URL = '192.168.0.11:5000';
   // static const String BASE_URL = '192.168.43.138:5000';
   // static const String BASE_URL = '192.168.1.3:5000';
-  // static const String BASE_URL = 'arrancando.herokuapp.com';
-  static const String BASE_URL = 'arrancando-staging.herokuapp.com';
+  static const String BASE_URL = 'arrancando.herokuapp.com';
+  // static const String BASE_URL = 'arrancando-staging.herokuapp.com';
 
   static const String SERVER_URL = 'https://${BASE_URL}';
 

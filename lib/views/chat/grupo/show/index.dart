@@ -28,7 +28,6 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   final _mensajeController = TextEditingController();
   final _mensajeFocusNode = FocusNode();
   final _scrollController = ScrollController();
-  final _firstItemGlobalKey = GlobalKey();
   ActiveUser _activeUser;
   int _page = 1;
   List<MensajeChat> _mensajes = [];
@@ -39,6 +38,8 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   IOWebSocketChannel _channel;
 
   Future<void> _fetchMensajes() async {
+    double oldOffsetFromBottom;
+    double newOffsetFromBottom;
     try {
       final response = await Fetcher.get(
         url: '/grupo_chats/${widget.grupo.id}.json?page=$_page',
@@ -46,6 +47,10 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
 
       if (response != null && response.status == 200) {
         final previousLength = _mensajes.length;
+
+        if (_scrollController.hasClients) {
+          oldOffsetFromBottom = _scrollController.position.maxScrollExtent;
+        }
 
         _mensajes = [
           ...(json.decode(response.body)['mensajes'] as List)
@@ -68,6 +73,20 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
 
     _loading = false;
     if (mounted) setState(() {});
+
+    await Future.delayed(Duration(milliseconds: 50));
+
+    if (_scrollController.hasClients) {
+      newOffsetFromBottom = _scrollController.position.maxScrollExtent;
+    }
+
+    if (oldOffsetFromBottom != null && newOffsetFromBottom != null) {
+      await _scrollController.animateTo(
+        newOffsetFromBottom - oldOffsetFromBottom,
+        curve: Curves.easeIn,
+        duration: Duration(milliseconds: 500),
+      );
+    }
   }
 
   void _subscribeToGrupoChat() {
@@ -152,7 +171,7 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   }
 
   void _scrollToBottom({bool force = false, bool animate = true}) {
-    if (_scrollOnNew || force) {
+    if (_scrollController.hasClients && (_scrollOnNew || force)) {
       if (animate) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
@@ -195,10 +214,10 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   @override
   void initState() {
     super.initState();
-    _initScreen();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _activeUser = context.read<UserState>().activeUser;
       if (mounted) setState(() {});
+      _initScreen();
     });
   }
 
@@ -214,6 +233,7 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: widget.grupo.toColor,
         title: Text('${widget.grupo.nombre}'),
       ),
       body: Container(
@@ -248,7 +268,6 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
                   if (_mensajes.isNotEmpty)
                     MensajesList(
                       scrollController: _scrollController,
-                      firstItemGlobalKey: _firstItemGlobalKey,
                       mensajes: _mensajes,
                       grupo: widget.grupo,
                       scrollOnNew: _scrollOnNew,

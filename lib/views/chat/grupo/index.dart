@@ -18,32 +18,19 @@ class _GrupoChatPageState extends State<GrupoChatPage> {
     _loading = true;
     if (mounted) setState(() {});
 
-    // try {
-    //   final response = await Fetcher.get(url: '/grupos.json');
+    try {
+      final response = await Fetcher.get(url: '/grupo_chats.json');
 
-    //   if (response != null && response.status == 200) {
-    //     _grupos = (json.decode(response.body) as List)
-    //         .map<GrupoChat>((grupo) => GrupoChat.fromJson(grupo))
-    //         .toList();
-    //   }
-    // } catch (e) {
-    //   print(e);
-    // }
+      if (response != null && response.status == 200) {
+        _grupos = (json.decode(response.body) as List)
+            .map<GrupoChat>((grupo) => GrupoChat.fromJson(grupo))
+            .toList();
 
-    _grupos = [
-      GrupoChat(
-        1,
-        'VEG',
-        '#A3287E',
-        'Veganos',
-      ),
-      GrupoChat(
-        2,
-        'ASA',
-        '#36A328',
-        'Asadores',
-      ),
-    ];
+        _grupos.sort((g1, g2) => g1.nombre.compareTo(g2.nombre));
+      }
+    } catch (e) {
+      print(e);
+    }
 
     _loading = false;
     if (mounted) setState(() {});
