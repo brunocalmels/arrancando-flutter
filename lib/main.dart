@@ -223,7 +223,7 @@ class _MyAppState extends State<MyApp> {
           : _isLoggedIn
               ? MainScaffold()
               : LoginPage(),
-      navigatorObservers: Platform.isLinux
+      navigatorObservers: !(Platform.isAndroid || Platform.isIOS)
           ? []
           : [
               MyGlobals.firebaseAnalyticsObserver,

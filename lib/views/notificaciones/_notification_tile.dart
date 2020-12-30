@@ -39,8 +39,6 @@ class NotificationTile extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 3),
                 child: Text(
                   notificacion.cuerpo,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
                 ),
               ),
             Text(notificacion.fecha),

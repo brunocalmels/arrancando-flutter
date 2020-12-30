@@ -50,7 +50,8 @@ class _NotificacionesPageState extends State<NotificacionesPage> {
 
         _page++;
 
-        if (_notificaciones.length <= previousNotificationsLength) {
+        if (_notificaciones.length <= previousNotificationsLength ||
+            _notificaciones.length < 20) {
           _noMore = true;
         }
       }

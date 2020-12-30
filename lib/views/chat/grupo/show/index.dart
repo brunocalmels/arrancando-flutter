@@ -13,11 +13,11 @@ import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 
 class GrupoChatShowPage extends StatefulWidget {
-  final GrupoChat grupo;
+  final int grupoId;
 
   const GrupoChatShowPage({
     Key key,
-    @required this.grupo,
+    @required this.grupoId,
   }) : super(key: key);
 
   @override
@@ -28,6 +28,7 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   final _mensajeController = TextEditingController();
   final _mensajeFocusNode = FocusNode();
   final _scrollController = ScrollController();
+  GrupoChat _grupo;
   ActiveUser _activeUser;
   int _page = 1;
   List<MensajeChat> _mensajes = [];
@@ -36,16 +37,19 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   bool _scrollOnNew = true;
   bool _noMore = false;
   IOWebSocketChannel _channel;
+  int _cantidadUsuarios = 0;
 
   Future<void> _fetchMensajes() async {
     double oldOffsetFromBottom;
     double newOffsetFromBottom;
     try {
       final response = await Fetcher.get(
-        url: '/grupo_chats/${widget.grupo.id}.json?page=$_page',
+        url: '/grupo_chats/${widget.grupoId}.json?page=$_page',
       );
 
       if (response != null && response.status == 200) {
+        _grupo = GrupoChat.fromJson(json.decode(response.body));
+
         final previousLength = _mensajes.length;
 
         if (_scrollController.hasClients) {
@@ -99,7 +103,7 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
       'identifier': json.encode({
         'channel': 'GrupoChatChannel',
         'token': 'Bearer $token',
-        'grupo_chat_id': '${widget.grupo.id}',
+        'grupo_chat_id': '${_grupo.id}',
       }),
     });
 
@@ -109,8 +113,13 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
       if (event != null) {
         try {
           final data = json.decode(event) as Map<String, dynamic>;
-          if (data['type'] == null || data['type'] == 'Mensaje grupal') {
-            _mensajes.add(MensajeChat.fromJson(data['message']));
+          if (data['type'] == null) {
+            final mensaje = MensajeChat.fromJson(data['message']);
+            if (mensaje.type == 'Cantidad usuarios') {
+              _cantidadUsuarios = int.tryParse(mensaje.mensaje) ?? 0;
+            } else {
+              _mensajes.add(mensaje);
+            }
             if (mounted) setState(() {});
           }
           _scrollToBottom();
@@ -130,7 +139,7 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
         'identifier': json.encode({
           'channel': 'GrupoChatChannel',
           'token': 'Bearer $token',
-          'grupo_chat_id': '${widget.grupo.id}',
+          'grupo_chat_id': '${_grupo.id}',
         }),
       });
 
@@ -157,7 +166,7 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
         'identifier': json.encode({
           'channel': 'GrupoChatChannel',
           'token': 'Bearer $token',
-          'grupo_chat_id': '${widget.grupo.id}',
+          'grupo_chat_id': '${_grupo.id}',
         }),
       });
 
@@ -233,8 +242,23 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: widget.grupo.toColor,
-        title: Text('${widget.grupo.nombre}'),
+        backgroundColor: _grupo?.toColor,
+        title: Text('${_grupo?.nombre ?? ''}'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.person),
+                SizedBox(width: 2),
+                Text('$_cantidadUsuarios'),
+              ],
+            ),
+          ),
+        ],
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -269,7 +293,7 @@ class _GrupoChatShowPageState extends State<GrupoChatShowPage> {
                     MensajesList(
                       scrollController: _scrollController,
                       mensajes: _mensajes,
-                      grupo: widget.grupo,
+                      grupo: _grupo,
                       scrollOnNew: _scrollOnNew,
                       sending: _sending,
                       scrollToBottom: _scrollToBottom,

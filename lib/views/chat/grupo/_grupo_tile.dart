@@ -37,7 +37,7 @@ class GrupoTile extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => GrupoChatShowPage(
-              grupo: grupo,
+              grupoId: grupo.id,
             ),
             settings: RouteSettings(
               name: 'GrupoChatShowPage#${grupo.id}',

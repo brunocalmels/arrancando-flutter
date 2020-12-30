@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/global_singleton.dart';
@@ -8,6 +9,7 @@ import 'package:arrancando/config/models/category_wrapper.dart';
 import 'package:arrancando/config/state/content_page.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
+import 'package:arrancando/views/chat/grupo/show/index.dart';
 import 'package:arrancando/views/content_wrapper/show/index.dart';
 import 'package:arrancando/views/home/index.dart';
 import 'package:arrancando/views/user_profile/index.dart';
@@ -170,6 +172,21 @@ abstract class DynamicLinks {
                   }
                 }
                 break;
+              case 'grupo_chats':
+                if (context != null && !_invalidUser) {
+                  final id = int.parse(path[1]);
+                  if (!(await _isSameRoute('GrupoChatShowPage#$id'))) {
+                    await MyGlobals.mainNavigatorKey.currentState.push(
+                      MaterialPageRoute(
+                        builder: (_) => GrupoChatShowPage(
+                          grupoId: id,
+                        ),
+                        settings: RouteSettings(name: 'GrupoChatShowPage#$id'),
+                      ),
+                    );
+                  }
+                }
+                break;
               case 'google-signin':
                 await buildUserOAuth(context, path);
                 break;
@@ -261,10 +278,12 @@ abstract class DynamicLinks {
                   );
 
                   mainState.setActivePageHome(SectionType.publicaciones);
-                  await MyGlobals.firebaseAnalyticsObserver.analytics
-                      .setCurrentScreen(
-                    screenName: 'Home/Publicaciones',
-                  );
+                  if (Platform.isAndroid || Platform.isIOS) {
+                    await MyGlobals.firebaseAnalyticsObserver.analytics
+                        .setCurrentScreen(
+                      screenName: 'Home/Publicaciones',
+                    );
+                  }
                 }
                 break;
               case 'recetas':
@@ -278,10 +297,12 @@ abstract class DynamicLinks {
                   );
 
                   mainState.setActivePageHome(SectionType.recetas);
-                  await MyGlobals.firebaseAnalyticsObserver.analytics
-                      .setCurrentScreen(
-                    screenName: 'Home/Recetas',
-                  );
+                  if (Platform.isAndroid || Platform.isIOS) {
+                    await MyGlobals.firebaseAnalyticsObserver.analytics
+                        .setCurrentScreen(
+                      screenName: 'Home/Recetas',
+                    );
+                  }
                 }
                 break;
               case 'pois':
@@ -300,10 +321,12 @@ abstract class DynamicLinks {
                   );
 
                   mainState.setActivePageHome(SectionType.pois);
-                  await MyGlobals.firebaseAnalyticsObserver.analytics
-                      .setCurrentScreen(
-                    screenName: 'Home/Pois',
-                  );
+                  if (Platform.isAndroid || Platform.isIOS) {
+                    await MyGlobals.firebaseAnalyticsObserver.analytics
+                        .setCurrentScreen(
+                      screenName: 'Home/Pois',
+                    );
+                  }
                 }
                 break;
             }

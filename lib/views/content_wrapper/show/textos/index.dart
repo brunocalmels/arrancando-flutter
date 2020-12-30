@@ -22,63 +22,6 @@ class TextosShow extends StatelessWidget {
     this.paddingZero = false,
   });
 
-  List<dynamic> _parseTexto(String cuerpo) {
-    var urlPattern =
-        r'(https://?|http://?)([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?';
-
-    final chunks2 = <dynamic>[];
-
-    var outTexto = '';
-    void _saveAndClear() {
-      chunks2.add({
-        'tipo': 'texto',
-        'texto': outTexto,
-      });
-      outTexto = '';
-    }
-
-    cuerpo
-        .replaceAll('\r', '')
-        .replaceAll('\n', ' \n ')
-        .split(' ')
-        .forEach((piece) {
-      if (piece != null && piece.isNotEmpty) {
-        if (piece[0] == '@') {
-          _saveAndClear();
-          chunks2.add({
-            'tipo': 'username',
-            'texto': '$piece ',
-          });
-        } else if (piece[0] == '#') {
-          _saveAndClear();
-          chunks2.add({
-            'tipo': 'hashtag',
-            'texto': '$piece ',
-          });
-        } else if (RegExp(
-          urlPattern,
-          caseSensitive: false,
-        ).allMatches(piece).isNotEmpty) {
-          _saveAndClear();
-          chunks2.add({
-            'tipo': 'link',
-            'texto': '$piece ',
-          });
-        } else {
-          if (piece == '\n') {
-            outTexto += '$piece';
-          } else {
-            outTexto += '$piece ';
-          }
-        }
-      }
-    });
-
-    if (outTexto != '') _saveAndClear();
-
-    return chunks2;
-  }
-
   Widget _buildTexto(BuildContext context, String texto, {String label}) =>
       Padding(
         padding: EdgeInsets.only(
@@ -107,7 +50,7 @@ class TextosShow extends StatelessWidget {
               ),
             RichText(
               text: TextSpan(
-                children: _parseTexto(texto)
+                children: Utils.parseTexto(texto)
                     .map(
                       (chunk) => TextSpan(
                           text: chunk['texto'],

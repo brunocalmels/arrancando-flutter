@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:arrancando/config/globals/enums.dart';
 import 'package:arrancando/config/globals/index.dart';
 import 'package:arrancando/config/state/main.dart';
@@ -40,9 +42,11 @@ class MainBottomBar extends StatelessWidget {
           child: InkWell(
             onTap: () {
               context.read<MainState>().setActivePageHome(type);
-              MyGlobals.firebaseAnalyticsObserver.analytics.setCurrentScreen(
-                screenName: 'Home/${_items[type]['texto']}',
-              );
+              if (Platform.isAndroid || Platform.isIOS) {
+                MyGlobals.firebaseAnalyticsObserver.analytics.setCurrentScreen(
+                  screenName: 'Home/${_items[type]['texto']}',
+                );
+              }
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

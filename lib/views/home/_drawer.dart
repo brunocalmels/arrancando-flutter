@@ -6,7 +6,6 @@ import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/config/state/main.dart';
 import 'package:arrancando/config/state/user.dart';
 import 'package:arrancando/views/chat/grupo/index.dart';
-import 'package:arrancando/views/comunidad/index.dart';
 import 'package:arrancando/views/contacto/index.dart';
 import 'package:arrancando/views/content_wrapper/saved/index.dart';
 import 'package:arrancando/views/general/_badge_wrapper.dart';

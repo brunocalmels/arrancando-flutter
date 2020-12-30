@@ -3,7 +3,7 @@ import 'package:arrancando/config/models/active_user.dart';
 import 'package:arrancando/config/models/chat/grupo.dart';
 import 'package:arrancando/config/models/chat/mensaje.dart';
 import 'package:arrancando/config/services/utils.dart';
-import 'package:arrancando/views/chat/grupo/show/mensajes_list/_first_item_indicator.dart';
+import 'package:arrancando/views/chat/grupo/show/mensajes_list/_complex_mensaje.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -134,11 +134,9 @@ class MensajesList extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(height: 5),
-                                  Text(
-                                    mensaje.mensaje,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                    ),
+                                  ComplexMensaje(
+                                    texto: mensaje.mensaje,
+                                    fontSize: 13,
                                   ),
                                   SizedBox(height: 3),
                                   Text(
