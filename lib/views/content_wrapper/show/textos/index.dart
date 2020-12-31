@@ -105,7 +105,9 @@ class TextosShow extends StatelessWidget {
                                                 .replaceAll('@', ''),
                                           ),
                                           settings: RouteSettings(
-                                              name: 'UserProfilePage'),
+                                            name:
+                                                'UserProfilePage#${chunk['texto'].replaceAll('@', '')}',
+                                          ),
                                         ),
                                       );
                                     })

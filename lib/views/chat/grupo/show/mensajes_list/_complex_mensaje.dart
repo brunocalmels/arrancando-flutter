@@ -91,7 +91,8 @@ class ComplexMensaje extends StatelessWidget {
                                               .replaceAll('@', ''),
                                         ),
                                         settings: RouteSettings(
-                                            name: 'UserProfilePage'),
+                                            name:
+                                                'UserProfilePage#${chunk['texto'].replaceAll('@', '')}'),
                                       ),
                                     );
                                   })

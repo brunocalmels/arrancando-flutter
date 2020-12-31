@@ -128,7 +128,8 @@ class _SearchPageUsersState extends State<SearchPageUsers> {
                                           user: _items[index],
                                         ),
                                         settings: RouteSettings(
-                                          name: 'UserProfilePage',
+                                          name:
+                                              'UserProfilePage#${_items[index].username}',
                                         ),
                                       ),
                                     );

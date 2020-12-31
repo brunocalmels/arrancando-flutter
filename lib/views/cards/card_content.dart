@@ -288,7 +288,8 @@ class CardContent extends StatelessWidget {
                                   user: content.user,
                                 ),
                                 settings: RouteSettings(
-                                  name: 'UserProfilePage',
+                                  name:
+                                      'UserProfilePage#${content.user.username}',
                                 ),
                               ),
                             );

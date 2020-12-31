@@ -92,7 +92,8 @@ class DataGroup extends StatelessWidget {
                                               user: i,
                                             ),
                                             settings: RouteSettings(
-                                              name: 'UserProfilePage',
+                                              name:
+                                                  'UserProfilePage#${i.username}',
                                             ),
                                           ),
                                         );

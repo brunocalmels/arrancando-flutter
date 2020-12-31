@@ -66,8 +66,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
                                 builder: (_) => UserProfilePage(
                                   user: userState?.activeUser?.getUsuario,
                                 ),
-                                settings:
-                                    RouteSettings(name: 'UserProfilePage'),
+                                settings: RouteSettings(
+                                  name:
+                                      'UserProfilePage#${userState?.activeUser?.getUsuario?.username}',
+                                ),
                               ),
                             );
                           },

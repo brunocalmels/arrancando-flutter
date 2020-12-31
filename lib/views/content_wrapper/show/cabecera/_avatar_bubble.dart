@@ -53,7 +53,7 @@ class AvatarBubble extends StatelessWidget {
                             user: user,
                           ),
                           settings: RouteSettings(
-                            name: 'UserProfilePage',
+                            name: 'UserProfilePage#${user.username}',
                           ),
                         ),
                       );

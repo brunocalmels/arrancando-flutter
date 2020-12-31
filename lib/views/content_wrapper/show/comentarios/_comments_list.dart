@@ -95,7 +95,9 @@ class CommentsList extends StatelessWidget {
                                                 user: c.user,
                                               ),
                                               settings: RouteSettings(
-                                                  name: 'UserProfilePage'),
+                                                name:
+                                                    'UserProfilePage#${c.user}',
+                                              ),
                                             ),
                                           );
                                         },

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:arrancando/config/fonts/arrancando_icons_icons.dart';
@@ -12,7 +13,9 @@ import 'package:arrancando/views/user_profile/_row_botones.dart';
 import 'package:arrancando/views/user_profile/_row_seguidos_seguidores.dart';
 import 'package:arrancando/views/user_profile/cabecera/index.dart';
 import 'package:arrancando/views/user_profile/grilla_content/index.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -222,6 +225,33 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ? null
           : AppBar(
               title: _user != null ? Text('@${_user.username}') : null,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.share,
+                  ),
+                  onPressed: _user != null
+                      ? () async {
+                          final url =
+                              'https://arrancando.com.ar/usuarios/${_user.username}';
+
+                          if (Platform.isAndroid || Platform.isIOS) {
+                            Share.text(
+                              'Compartir usuario',
+                              'Mirá el perfil de este usuario en Arrancando:\n\n$url',
+                              'text/plain',
+                            );
+                          } else {
+                            await Clipboard.setData(
+                              ClipboardData(
+                                text: url,
+                              ),
+                            );
+                          }
+                        }
+                      : null,
+                ),
+              ],
             ),
       body: _initialLoad
           ? SafeArea(child: LoadingWidget())
