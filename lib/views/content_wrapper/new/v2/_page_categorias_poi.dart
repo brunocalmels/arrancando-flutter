@@ -37,49 +37,66 @@ class _PageCategoriasStatePoi extends State<PageCategoriasPoi> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ...gs.categories[SectionType.pois]
-                .where((c) => c.id > 0)
-                .map(
-                  (c) => RadioListTile(
-                    groupValue: _categoria != null ? _categoria.id : null,
-                    title: Text(c.nombre),
-                    value: c.id,
-                    onChanged: (val) {
-                      _categoria = c;
-                      if (mounted) setState(() {});
-                    },
-                  ),
-                )
-                .toList(),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  RaisedButton(
-                    color: Theme.of(context).backgroundColor,
-                    elevation: 10,
-                    child: Text(
-                      'LISTO',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop(_categoria);
-                    },
-                  ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ...gs.categories[SectionType.pois]
+                      .where((c) => c.id > 0)
+                      .map(
+                        (c) => RadioListTile(
+                          groupValue: _categoria != null ? _categoria.id : null,
+                          title: Text(c.nombre),
+                          value: c.id,
+                          onChanged: (val) {
+                            _categoria = c;
+                            if (mounted) setState(() {});
+                          },
+                        ),
+                      )
+                      .toList(),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 3,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                RaisedButton(
+                  color: Theme.of(context).backgroundColor,
+                  elevation: 10,
+                  child: Text(
+                    'LISTO',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: _categoria == null
+                      ? null
+                      : () {
+                          Navigator.of(context).pop(_categoria);
+                        },
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

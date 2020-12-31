@@ -93,29 +93,36 @@ class _PoiFormState extends State<PoiForm> {
         (_latitud != null && _longitud != null) &&
         ((_images != null && _images.isNotEmpty) ||
             (_currentImages != null && _currentImages.isNotEmpty)) &&
-        [...(_images ?? []), ...(_currentImages ?? [])].length <= 6) {
+        [...(_images ?? []), ...(_currentImages ?? [])].length <= 6 &&
+        _categoria != null) {
       _sent = true;
       if (mounted) setState(() {});
 
       try {
         String nombreProvincia;
         String nombreCiudad;
-        final places = await placemarkFromCoordinates(
-          _latitud,
-          _longitud,
-        );
-        if (places != null && places.isNotEmpty) {
-          if (places.first.administrativeArea != null &&
-              places.first.administrativeArea.isNotEmpty) {
-            nombreProvincia = places.first.administrativeArea;
+
+        if (Platform.isAndroid || Platform.isIOS) {
+          final places = await placemarkFromCoordinates(
+            _latitud,
+            _longitud,
+          );
+          if (places != null && places.isNotEmpty) {
+            if (places.first.administrativeArea != null &&
+                places.first.administrativeArea.isNotEmpty) {
+              nombreProvincia = places.first.administrativeArea;
+            }
+            if (places.first.subLocality != null &&
+                places.first.subLocality.isNotEmpty) {
+              nombreCiudad = places.first.subLocality;
+            } else if (places.first.locality != null &&
+                places.first.locality.isNotEmpty) {
+              nombreCiudad = places.first.locality;
+            }
           }
-          if (places.first.subLocality != null &&
-              places.first.subLocality.isNotEmpty) {
-            nombreCiudad = places.first.subLocality;
-          } else if (places.first.locality != null &&
-              places.first.locality.isNotEmpty) {
-            nombreCiudad = places.first.locality;
-          }
+        } else {
+          nombreProvincia = 'Neuquén';
+          nombreCiudad = 'Neuquén';
         }
 
         final body = <String, dynamic>{
@@ -141,6 +148,8 @@ class _PoiFormState extends State<PoiForm> {
           ),
           'remove_imagenes': _imagesToRemove,
         };
+
+        print(body);
 
         Navigator.of(context).popUntil((route) => route.isFirst);
 
@@ -191,6 +200,8 @@ class _PoiFormState extends State<PoiForm> {
       _errorMsg = 'Debes añadir al menos 1 imagen/video';
     } else if (!([...(_images ?? []), ...(_currentImages ?? [])].length <= 6)) {
       _errorMsg = 'Podés subir como máximo 6 imágenes y/o videos';
+    } else if (_categoria == null) {
+      _errorMsg = 'Debés seleccionar 1 categoría antes de continuar.';
     }
 
     if (mounted) setState(() {});

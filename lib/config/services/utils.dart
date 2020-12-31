@@ -32,7 +32,10 @@ abstract class Utils {
         .forEach((piece) {
       var _piece = piece;
       if (_piece != null && _piece.isNotEmpty) {
-        _piece = badEndingCharacters.contains(_piece[_piece.length - 1])
+        _piece = _piece != null &&
+                _piece.isNotEmpty &&
+                _piece.length > 1 &&
+                badEndingCharacters.contains(_piece[_piece.length - 1])
             ? _piece.substring(0, _piece.length - 1)
             : _piece;
 

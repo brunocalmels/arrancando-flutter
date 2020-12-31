@@ -4,6 +4,7 @@ import 'package:arrancando/config/models/chat/grupo.dart';
 import 'package:arrancando/config/models/chat/mensaje.dart';
 import 'package:arrancando/config/services/utils.dart';
 import 'package:arrancando/views/chat/grupo/show/mensajes_list/_complex_mensaje.dart';
+import 'package:arrancando/views/user_profile/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -72,16 +73,37 @@ class MensajesList extends StatelessWidget {
                 final activeUserId = activeUser.id;
                 final isMine = mensaje.usuario.id == activeUserId;
 
-                final avatar = Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: CircleAvatar(
-                    radius: 13,
-                    backgroundImage: mensaje?.usuario?.avatar != null
-                        ? CachedNetworkImageProvider(
-                            mensaje.usuario.avatar.contains('http')
-                                ? '${mensaje?.usuario?.avatar}'
-                                : '${MyGlobals.SERVER_URL}${mensaje?.usuario?.avatar}',
-                          )
+                final avatar = Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3),
+                      child: CircleAvatar(
+                        radius: 13,
+                        backgroundImage: mensaje?.usuario?.avatar != null
+                            ? CachedNetworkImageProvider(
+                                mensaje.usuario.avatar.contains('http')
+                                    ? '${mensaje?.usuario?.avatar}'
+                                    : '${MyGlobals.SERVER_URL}${mensaje?.usuario?.avatar}',
+                              )
+                            : null,
+                      ),
+                    ),
+                    onTap: mensaje.usuario.username != null
+                        ? () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => UserProfilePage(
+                                  user: null,
+                                  username: mensaje.usuario.username,
+                                ),
+                                settings: RouteSettings(
+                                  name:
+                                      'UserProfilePage#${mensaje.usuario.username}',
+                                ),
+                              ),
+                            );
+                          }
                         : null,
                   ),
                 );
