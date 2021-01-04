@@ -232,7 +232,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         ),
                         ListTile(
                           leading: Icon(
-                            Icons.security,
+                            Icons.library_books,
                             color: Theme.of(context).accentColor,
                           ),
                           title: Text('Reglas'),

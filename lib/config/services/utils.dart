@@ -32,20 +32,24 @@ abstract class Utils {
         .forEach((piece) {
       var _piece = piece;
       if (_piece != null && _piece.isNotEmpty) {
-        _piece = _piece != null &&
-                _piece.isNotEmpty &&
-                _piece.length > 1 &&
-                badEndingCharacters.contains(_piece[_piece.length - 1])
-            ? _piece.substring(0, _piece.length - 1)
-            : _piece;
+        void _fixBadEndingCharacters() {
+          _piece = _piece != null &&
+                  _piece.isNotEmpty &&
+                  _piece.length > 1 &&
+                  badEndingCharacters.contains(_piece[_piece.length - 1])
+              ? _piece.substring(0, _piece.length - 1)
+              : _piece;
+        }
 
         if (_piece[0] == '@') {
+          _fixBadEndingCharacters();
           _saveAndClear();
           chunks2.add({
             'tipo': 'username',
             'texto': '$_piece ',
           });
         } else if (_piece[0] == '#') {
+          _fixBadEndingCharacters();
           _saveAndClear();
           chunks2.add({
             'tipo': 'hashtag',
@@ -55,6 +59,7 @@ abstract class Utils {
           urlPattern,
           caseSensitive: false,
         ).allMatches(_piece).isNotEmpty) {
+          _fixBadEndingCharacters();
           _saveAndClear();
           chunks2.add({
             'tipo': 'link',
